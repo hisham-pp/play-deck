@@ -1,0 +1,26 @@
+{
+  "name": "playdeck-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "PlayDeck - A modern game hub foundation",
+  "scripts": {
+    "dev": "pnpm --filter @playdeck/web dev",
+    "build": "pnpm --filter @playdeck/web build",
+    "lint": "pnpm --filter @playdeck/web lint",
+    "clean": "rm -rf node_modules apps/*/node_modules packages/*/node_modules .next apps/*/.next"
+  },
+  "packageManager": "pnpm@11.1.2",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp",
+      "unrs-resolver"
+    ]
+  },
+  "devDependencies": {
+    "prettier": "^3.5.0",
+    "typescript": "^5.7.3"
+  }
+}
