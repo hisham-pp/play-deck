@@ -12,6 +12,7 @@
     "@playdeck/game-core": "workspace:*",
     "@playdeck/game-types": "workspace:*",
     "@playdeck/shared": "workspace:*",
+    "@playdeck/ui": "workspace:*",
     "clsx": "^2.1.1",
     "dexie": "^4.0.11",
     "lucide-react": "^0.475.0",
