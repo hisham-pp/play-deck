@@ -14,37 +14,43 @@ PlayDeck is organized as a **frontend-first, domain-driven pnpm monorepo**:
 playdeck/
 ├── apps/
 │   └── web/                               # Next.js 15 App Router Frontend
-│       ├── app/
-│       │   ├── (public)/
-│       │   │   ├── page.tsx               # Home ("Play Something" + intentional empty shelf)
-│       │   │   ├── games/
-│       │   │   │   ├── page.tsx           # Game Discovery catalog (tabs, search, varied cards)
-│       │   │   │   └── [gameId]/page.tsx  # Game Overview shell
-│       │   │   ├── library/page.tsx       # Player shelf & session history
-│       │   │   └── profile/page.tsx       # Player identity, avatar & storage diagnostic
-│       │   ├── play/
-│       │   │   └── [gameId]/page.tsx      # Game launcher shell & session stage
-│       │   ├── layout.tsx                 # Root layout & theme initialization
-│       │   └── globals.css                # Arcade theme tokens & CSS variables
+│       ├── src/
+│       │   ├── app/
+│       │   │   ├── (public)/
+│       │   │   │   ├── page.tsx           # Home ("Play Something" + intentional empty shelf)
+│       │   │   │   ├── games/
+│       │   │   │   │   ├── page.tsx       # Game Discovery catalog (tabs, search, varied cards)
+│       │   │   │   │   └── [gameId]/page.tsx # Game Overview shell
+│       │   │   │   ├── library/page.tsx   # Player shelf & session history
+│       │   │   │   └── profile/page.tsx   # Player identity, avatar & storage diagnostic
+│       │   │   ├── play/
+│       │   │   │   └── [gameId]/page.tsx  # Game launcher shell & session stage
+│       │   │   ├── layout.tsx             # Root layout & theme initialization
+│       │   │   └── globals.css            # Arcade theme tokens & CSS variables
+│       │   │
+│       │   ├── components/
+│       │   │   ├── ui/                    # Re-export boundary for @playdeck/ui
+│       │   │   ├── layout/                # Navbar, Footer, ThemeToggle
+│       │   │   └── game/                  # GameCard, GameAreaShell, EmptyShelf
+│       │   │
+│       │   ├── features/
+│       │   │   ├── games/                 # Services, catalog repository, registry
+│       │   │   ├── player/                # Player identity & stats
+│       │   │   └── multiplayer/           # Reserved contracts for lobby, room & transport
+│       │   │
+│       │   ├── lib/
+│       │   │   ├── storage/               # Storage abstraction (IndexedDB + LocalStorage)
+│       │   │   ├── api/                   # Future API boundary
+│       │   │   └── utils/                 # cn, formatting helpers
+│       │   │
+│       │   ├── data/games/                # Static game definitions & mock registry
+│       │   └── stores/                    # Separated Zustand stores
 │       │
-│       ├── components/
-│       │   ├── ui/                        # Button, Card, Badge, Input primitives
-│       │   ├── layout/                    # Navbar, Footer, ThemeToggle
-│       │   └── game/                      # GameCard, GameAreaShell, EmptyShelf
-│       │
-│       ├── features/
-│       │   ├── games/                     # Services, catalog repository, registry
-│       │   ├── player/                    # Player identity & stats
-│       │   └── multiplayer/               # Reserved contracts for lobby, room & transport
-│       │
-│       ├── lib/
-│       │   ├── storage/                   # Storage abstraction (IndexedDB + LocalStorage)
-│       │   ├── api/                       # Future API boundary
-│       │   ├── utils/                     # cn, formatting helpers
-│       │   └── constants/                 # Storage keys, routes
-│       │
-│       ├── data/games/                    # Static game definitions & mock registry
-│       └── stores/                        # Separated Zustand stores
+│       ├── next.config.ts
+│       ├── tailwind.config.ts
+│       ├── tsconfig.json
+│       ├── vercel.json
+│       └── package.json
 │
 ├── packages/
 │   ├── ui/                                # Shared core component design system (@playdeck/ui)
@@ -71,7 +77,7 @@ playdeck/
 ### Rule 1: Storage Abstraction (NEVER call `localStorage` directly)
 
 - **Never** call `window.localStorage` or `window.indexedDB` directly from feature components or game engines.
-- Always access storage via `StorageService` (`apps/web/lib/storage/storage.ts`) or implement against `StorageAdapter` (`@playdeck/game-types`).
+- Always access storage via `StorageService` (`apps/web/src/lib/storage/storage.ts`) or implement against `StorageAdapter` (`@playdeck/game-types`).
 - **IndexedDB via Dexie** is the primary client storage engine because games store structured sessions, preferences, statistics, and save states.
 - When migrating to a remote database (PostgreSQL/Supabase/NestJS), only the adapter or repository changes—never the React components.
 
@@ -165,7 +171,7 @@ Always use `pnpm` inside this repository:
   - Services: `kebab-case.ts` (e.g. `game-repository.ts`).
   - Schemas: `name.schema.ts`.
 - **Path Aliases**:
-  - `@/*` maps to `apps/web/*`.
+  - `@/*` maps to `apps/web/src/*`.
   - Workspace packages referenced via `@playdeck/ui`, `@playdeck/game-types`, `@playdeck/game-core`, `@playdeck/shared`.
 
 ---

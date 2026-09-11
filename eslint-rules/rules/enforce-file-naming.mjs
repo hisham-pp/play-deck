@@ -26,7 +26,7 @@ const rule = {
     }
 
     // Only enforce for files under packages/*/src/
-    if (!fullPath.includes('/src/')) {
+    if (!fullPath.includes('/packages/') || !fullPath.includes('/src/')) {
       return {};
     }
 

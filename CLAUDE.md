@@ -6,7 +6,7 @@ This file is read by AI tools at the start of every session. Keep it current.
 
 ## Critical Architecture Invariants
 
-- **Storage**: Never call `localStorage` or `indexedDB` directly in UI or engine code. Use `StorageService` (`apps/web/lib/storage/storage.ts`) with `STORAGE_KEYS`.
+- **Storage**: Never call `localStorage` or `indexedDB` directly in UI or engine code. Use `StorageService` (`apps/web/src/lib/storage/storage.ts`) with `STORAGE_KEYS`.
 - **State**: Keep stores strictly separated (`player.store`, `library.store`, `game-session.store`, `preferences.store`, `multiplayer.store`). No monolithic stores.
 - **Game Engine**: Game logic is framework-agnostic and implements `GameDefinition` from `@playdeck/game-types`.
 - **API Boundary**: Catalog calls must route through `GameRepository`.
