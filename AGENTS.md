@@ -47,15 +47,18 @@ playdeck/
 │       └── stores/                        # Separated Zustand stores
 │
 ├── packages/
+│   ├── ui/                                # Shared core component design system (@playdeck/ui)
 │   ├── game-types/                        # Pure TypeScript domain interfaces
 │   ├── game-core/                         # Framework-agnostic session & registry engines
 │   └── shared/                            # Zod schemas, validation, ID generators
 │
 ├── public/
+├── eslint-rules/                          # Custom monorepo quality & boundary rules
 ├── pnpm-workspace.yaml
 ├── AGENTS.md
 ├── CLAUDE.md
 ├── .mcp.json
+├── lefthook.yml
 └── package.json
 ```
 
@@ -163,4 +166,29 @@ Always use `pnpm` inside this repository:
   - Schemas: `name.schema.ts`.
 - **Path Aliases**:
   - `@/*` maps to `apps/web/*`.
-  - Workspace packages referenced via `@playdeck/game-types`, `@playdeck/game-core`, `@playdeck/shared`.
+  - Workspace packages referenced via `@playdeck/ui`, `@playdeck/game-types`, `@playdeck/game-core`, `@playdeck/shared`.
+
+---
+
+## 6. Shared Core Components (`@playdeck/ui`)
+
+All foundational UI primitives live in the shared workspace package `packages/ui` (`@playdeck/ui`):
+
+- `Button` & `IconButton`: Tactile arcade styling with loading states and size variants.
+- `Badge`: Category and status indicators with arcade accents.
+- `Card`: Multi-part container (`Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter`).
+- `Input`: ForwardRef text input with icon prefix/suffix, error labels, and helper text.
+- `Modal`: Accessible dialog shell with backdrop blur and escape-to-close.
+- `Tabs`: Arcade styled `Tabs`, `TabList`, `TabTrigger`, `TabContent`.
+- `Avatar`: Player avatar with status indicators and fallback.
+- `Tooltip`: Hover tooltips.
+- `Skeleton`: Loading placeholders.
+- `Divider`: Shelf scanline dividers.
+
+Components can be imported across any package or app via:
+
+```ts
+import { Button, Card, Badge, Input, Modal, Tabs, Avatar } from '@playdeck/ui';
+```
+
+Or inside `apps/web` via the re-export boundary `@/components/ui`.
