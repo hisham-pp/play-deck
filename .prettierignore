@@ -10,3 +10,5 @@ pnpm-lock.yaml
 tmp/
 .next/
 out/
+**/next-env.d.ts
+
