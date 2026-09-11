@@ -13,6 +13,7 @@ playdeck/
 ├── apps/
 │   └── web/                   # Next.js 15 App Router application
 ├── packages/
+│   ├── ui/                    # Shared core component design system (@playdeck/ui)
 │   ├── game-types/            # Pure TypeScript domain interfaces
 │   ├── game-core/             # Abstract game engine & session lifecycle
 │   └── shared/                # Zod schemas and validation
@@ -55,11 +56,25 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
 
 ---
 
+## Deployment (Vercel)
+
+PlayDeck is pre-configured for zero-friction Vercel deployments:
+
+1. **Import Repository**: In the Vercel Dashboard, import the repository.
+2. **Preset**: Vercel automatically detects Next.js.
+3. **Configuration**:
+   - **From Monorepo Root (Recommended)**: The root `vercel.json` automatically manages build and output directory (`apps/web/.next`).
+   - **Alternative (Root Directory = `apps/web`)**: If configuring `apps/web` as the root directory in project settings, `apps/web/vercel.json` provides seamless fallback.
+4. **Deploy**: Click **Deploy**. No special environment variables are required for base local play.
+
+---
+
 ## Available Scripts
 
 - `pnpm dev`: Starts the Next.js development server.
 - `pnpm build`: Builds all workspace packages and production bundle.
 - `pnpm lint`: Runs ESLint across all files.
+- `pnpm format`: Runs Prettier to format the codebase.
 - `pnpm clean`: Cleans build artifacts and caches.
 
 ---

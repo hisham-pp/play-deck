@@ -5,12 +5,12 @@
   "description": "PlayDeck - A modern game hub foundation",
   "scripts": {
     "dev": "pnpm --filter @playdeck/web dev",
-    "build": "pnpm --filter \"@playdeck/*\" build",
+    "build": "pnpm --filter @playdeck/web build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "lefthook install",
+    "prepare": "lefthook install || true",
     "clean": "rm -rf node_modules apps/*/node_modules packages/*/node_modules .next apps/*/.next"
   },
   "packageManager": "pnpm@11.1.2",
