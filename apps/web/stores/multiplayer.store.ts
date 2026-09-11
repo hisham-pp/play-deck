@@ -24,7 +24,10 @@ export const useMultiplayerStore = create<MultiplayerState>((set) => ({
     set({ connectionStatus: 'connecting', errorMessage: null });
     // Reserved for WebSockets / WebRTC transport in Phase 2
     setTimeout(() => {
-      set({ connectionStatus: 'disconnected', errorMessage: 'Multiplayer servers launching in Phase 2.' });
+      set({
+        connectionStatus: 'disconnected',
+        errorMessage: 'Multiplayer servers launching in Phase 2.',
+      });
     }, 400);
   },
 

@@ -12,7 +12,7 @@ export function Card({ className, hoverable = false, children, ...props }: CardP
         'rounded-lg bg-surface-raised border border-surface-border transition-all duration-200',
         hoverable &&
           'hover:border-surface-borderHover hover:shadow-card hover:-translate-y-0.5 cursor-pointer',
-        className
+        className,
       )}
       {...props}
     >

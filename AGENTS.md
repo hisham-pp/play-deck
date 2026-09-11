@@ -66,10 +66,11 @@ playdeck/
 ## 2. Core Architectural Principles (CRITICAL)
 
 ### Rule 1: Storage Abstraction (NEVER call `localStorage` directly)
-* **Never** call `window.localStorage` or `window.indexedDB` directly from feature components or game engines.
-* Always access storage via `StorageService` (`apps/web/lib/storage/storage.ts`) or implement against `StorageAdapter` (`@playdeck/game-types`).
-* **IndexedDB via Dexie** is the primary client storage engine because games store structured sessions, preferences, statistics, and save states.
-* When migrating to a remote database (PostgreSQL/Supabase/NestJS), only the adapter or repository changes—never the React components.
+
+- **Never** call `window.localStorage` or `window.indexedDB` directly from feature components or game engines.
+- Always access storage via `StorageService` (`apps/web/lib/storage/storage.ts`) or implement against `StorageAdapter` (`@playdeck/game-types`).
+- **IndexedDB via Dexie** is the primary client storage engine because games store structured sessions, preferences, statistics, and save states.
+- When migrating to a remote database (PostgreSQL/Supabase/NestJS), only the adapter or repository changes—never the React components.
 
 ```ts
 // GOOD:
@@ -82,6 +83,7 @@ localStorage.setItem('sessions', JSON.stringify(updatedSessions)); // FORBIDDEN
 ```
 
 ### Rule 2: State Separation (NEVER create one monolithic store)
+
 Do **not** create a single giant `useGameStore()` or `useAppStore()`. Separate state into dedicated stores:
 
 1. `stores/player.store.ts`: Active player profile, display name, avatar, win/loss stats.
@@ -91,9 +93,10 @@ Do **not** create a single giant `useGameStore()` or `useAppStore()`. Separate s
 5. `stores/multiplayer.store.ts`: Connection state, room codes, presence (reserved for Phase 2).
 
 ### Rule 3: Games as Modular Plugins (Framework-Agnostic)
-* Games must adhere to the `GameDefinition` contract defined in `@playdeck/game-types`.
-* Game logic (rules, board state, winning conditions) must remain decoupled from React and Next.js.
-* Games communicate with the platform via `SessionManager` and `GameSession` state.
+
+- Games must adhere to the `GameDefinition` contract defined in `@playdeck/game-types`.
+- Game logic (rules, board state, winning conditions) must remain decoupled from React and Next.js.
+- Games communicate with the platform via `SessionManager` and `GameSession` state.
 
 ```ts
 export interface GameDefinition<TState = unknown> {
@@ -109,21 +112,22 @@ export interface GameDefinition<TState = unknown> {
 ```
 
 ### Rule 4: API Abstraction from Day One
-* All game catalog queries run through `GameRepository` (`features/games/services/game-repository.ts`).
-* Today: `LocalGameRepository` queries static catalog definitions in `data/games/`.
-* Future: `ApiGameRepository` queries the backend API without breaking any UI component.
+
+- All game catalog queries run through `GameRepository` (`features/games/services/game-repository.ts`).
+- Today: `LocalGameRepository` queries static catalog definitions in `data/games/`.
+- Future: `ApiGameRepository` queries the backend API without breaking any UI component.
 
 ---
 
 ## 3. UI & Design Direction
 
-* **Aesthetic**: Premium arcade / gaming library aesthetic.
-* **Palette**: Rich dark canvas (`#090d16`), layered surface elevations (`#111827`, `#1c2438`), warm amber/gold tactical accents (`#f59e0b`), subtle crisp borders (`#232f45`).
-* **Avoid**:
+- **Aesthetic**: Premium arcade / gaming library aesthetic.
+- **Palette**: Rich dark canvas (`#090d16`), layered surface elevations (`#111827`, `#1c2438`), warm amber/gold tactical accents (`#f59e0b`), subtle crisp borders (`#232f45`).
+- **Avoid**:
   - Generic SaaS layouts (giant bloated marketing hero with generic cards).
   - Excessive floating glassmorphism and purple AI glowing gradients.
   - Making every single section a floating card.
-* **Intentional Empty States**:
+- **Intentional Empty States**:
   When the player has no saved sessions, present the intentional shelf state:
   ```text
                       ✦
@@ -131,7 +135,7 @@ export interface GameDefinition<TState = unknown> {
       Games will appear here as they're added.
                [ Explore games ]
   ```
-* **Discovery Layouts**:
+- **Discovery Layouts**:
   Use varied card layouts on `/games` (featured wide hero cards, compact row items, standard arcade cards), not a monotone grid.
 
 ---
@@ -140,23 +144,23 @@ export interface GameDefinition<TState = unknown> {
 
 Always use `pnpm` inside this repository:
 
-* `pnpm install`: Install and link monorepo packages.
-* `pnpm approve-builds --all`: Approve trusted native build scripts (`sharp`, `unrs-resolver`).
-* `pnpm dev`: Start Next.js App Router on `http://localhost:3000`.
-* `pnpm build`: Build all workspace packages and Next.js production bundles.
-* `pnpm lint`: Run ESLint checks.
-* `pnpm clean`: Clean all `node_modules` and `.next` caches.
+- `pnpm install`: Install and link monorepo packages.
+- `pnpm approve-builds --all`: Approve trusted native build scripts (`sharp`, `unrs-resolver`).
+- `pnpm dev`: Start Next.js App Router on `http://localhost:3000`.
+- `pnpm build`: Build all workspace packages and Next.js production bundles.
+- `pnpm lint`: Run ESLint checks.
+- `pnpm clean`: Clean all `node_modules` and `.next` caches.
 
 ---
 
 ## 5. Coding Conventions
 
-* **TypeScript**: Strict mode enabled across all packages. Avoid `any`—use `unknown` or generic type parameters for arbitrary game state (`GameDefinition<TState>`).
-* **File Naming**:
+- **TypeScript**: Strict mode enabled across all packages. Avoid `any`—use `unknown` or generic type parameters for arbitrary game state (`GameDefinition<TState>`).
+- **File Naming**:
   - React components: `PascalCase.tsx` (e.g. `GameCard.tsx`, `EmptyShelf.tsx`).
   - Stores: `name.store.ts` (e.g. `player.store.ts`).
   - Services: `kebab-case.ts` (e.g. `game-repository.ts`).
   - Schemas: `name.schema.ts`.
-* **Path Aliases**:
+- **Path Aliases**:
   - `@/*` maps to `apps/web/*`.
   - Workspace packages referenced via `@playdeck/game-types`, `@playdeck/game-core`, `@playdeck/shared`.

@@ -2,10 +2,7 @@
   "mcpServers": {
     "playdeck-dev": {
       "command": "node",
-      "args": [
-        "-e",
-        "console.log('PlayDeck MCP Server running in workspace')"
-      ]
+      "args": ["-e", "console.log('PlayDeck MCP Server running in workspace')"]
     }
   }
 }

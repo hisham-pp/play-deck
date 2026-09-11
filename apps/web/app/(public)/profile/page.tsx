@@ -1,10 +1,10 @@
 'use client';
 
+import { Trophy, Database, Check } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
-import { usePlayerStore } from '@/stores/player.store';
 import { Button } from '@/components/ui/Button';
 import { StorageService } from '@/lib/storage/storage';
-import { User, Trophy, Database, Check } from 'lucide-react';
+import { usePlayerStore } from '@/stores/player.store';
 
 const AVATARS = ['🕹️', '👾', '🚀', '♟️', '🎲', '🎯', '⚡', '🐉', '🦊'];
 
@@ -120,15 +120,11 @@ export default function ProfilePage() {
             <p className="text-xs text-deck-400 mt-1">Games Played</p>
           </div>
           <div className="p-4 rounded-lg bg-surface-overlay border border-surface-border">
-            <span className="text-2xl font-black text-emerald-500 font-display">
-              {stats.wins}
-            </span>
+            <span className="text-2xl font-black text-emerald-500 font-display">{stats.wins}</span>
             <p className="text-xs text-deck-400 mt-1">Victories</p>
           </div>
           <div className="p-4 rounded-lg bg-surface-overlay border border-surface-border">
-            <span className="text-2xl font-black text-rose-500 font-display">
-              {stats.losses}
-            </span>
+            <span className="text-2xl font-black text-rose-500 font-display">{stats.losses}</span>
             <p className="text-xs text-deck-400 mt-1">Defeats</p>
           </div>
         </div>

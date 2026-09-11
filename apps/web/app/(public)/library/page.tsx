@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import Link from 'next/link';
-import { useLibraryStore } from '@/stores/library.store';
-import { Button } from '@/components/ui/Button';
-import { EmptyShelf } from '@/components/game/EmptyShelf';
 import { Trash2, History, Play } from 'lucide-react';
+import Link from 'next/link';
+import React, { useEffect } from 'react';
+import { EmptyShelf } from '@/components/game/EmptyShelf';
+import { Button } from '@/components/ui/Button';
+import { useLibraryStore } from '@/stores/library.store';
 
 export default function LibraryPage() {
   const { recentSessions, initLibrary, clearHistory } = useLibraryStore();
@@ -69,15 +69,11 @@ export default function LibraryPage() {
                   <h4 className="text-lg font-bold text-deck-950 dark:text-white capitalize mb-1">
                     {session.gameId}
                   </h4>
-                  <p className="text-xs text-deck-500 font-mono">
-                    ID: {session.id}
-                  </p>
+                  <p className="text-xs text-deck-500 font-mono">ID: {session.id}</p>
                 </div>
 
                 <div className="mt-4 pt-4 border-t border-surface-border flex items-center justify-between">
-                  <span className="text-xs text-deck-500">
-                    Players: {session.players.length}
-                  </span>
+                  <span className="text-xs text-deck-500">Players: {session.players.length}</span>
                   <Link href={`/play/${session.gameId}`}>
                     <Button variant="primary" size="sm" className="gap-1.5">
                       <Play className="w-3.5 h-3.5 fill-current" />

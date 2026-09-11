@@ -18,7 +18,8 @@ export function Badge({
     outline: 'border-surface-border text-deck-600 dark:text-deck-400 bg-surface-overlay',
     success: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
     warning: 'bg-amber-500/10 text-amber-500 border-amber-500/30',
-    neutral: 'bg-deck-200/50 text-deck-700 dark:bg-deck-800/60 dark:text-deck-300 border-surface-border',
+    neutral:
+      'bg-deck-200/50 text-deck-700 dark:bg-deck-800/60 dark:text-deck-300 border-surface-border',
   };
 
   const sizes = {
@@ -32,7 +33,7 @@ export function Badge({
         'inline-flex items-center rounded border transition-colors',
         variants[variant],
         sizes[size],
-        className
+        className,
       )}
       {...props}
     >

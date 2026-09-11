@@ -22,6 +22,7 @@ playdeck/
 ```
 
 ### Key Highlights
+
 1. **Clean Storage Abstraction**: IndexedDB via Dexie is the primary client storage adapter, exposed behind a unified `StorageAdapter` interface. Zero hardcoded `localStorage` calls.
 2. **Modular Game Registry**: Games are plugins conforming to the `GameDefinition` contract. Game rules do not depend on React.
 3. **Decoupled State Management**: Five specialized Zustand stores (`player`, `library`, `game-session`, `preferences`, `multiplayer`).
@@ -33,10 +34,12 @@ playdeck/
 ## Quick Start
 
 ### Prerequisites
+
 - Node.js >= 20
 - pnpm >= 10
 
 ### Installation
+
 ```bash
 # Clone the repository and install dependencies
 pnpm install

@@ -1,10 +1,10 @@
 'use client';
 
-import React, { use, useEffect, useState } from 'react';
 import { notFound } from 'next/navigation';
-import { gameService } from '@/features/games/services/game-service';
-import { GameAreaShell } from '@/components/game/GameAreaShell';
+import React, { use, useEffect, useState } from 'react';
 import { GameDefinition } from '@playdeck/game-types';
+import { GameAreaShell } from '@/components/game/GameAreaShell';
+import { gameService } from '@/features/games/services/game-service';
 
 interface PageProps {
   params: Promise<{ gameId: string }>;

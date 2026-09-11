@@ -1,9 +1,4 @@
-export type SessionStatus =
-  | 'waiting'
-  | 'playing'
-  | 'paused'
-  | 'completed'
-  | 'abandoned';
+export type SessionStatus = 'waiting' | 'playing' | 'paused' | 'completed' | 'abandoned';
 
 export interface GameSessionPlayer {
   id: string;

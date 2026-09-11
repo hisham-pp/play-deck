@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import './globals.css';
-import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import { Navbar } from '@/components/layout/Navbar';
+import './globals.css';
 
 export const metadata: Metadata = {
   title: 'PlayDeck — Modern Game Hub',

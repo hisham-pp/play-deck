@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { GameSession, GameDefinition, Player, GameResult } from '@playdeck/game-types';
 import { SessionManager } from '@playdeck/game-core';
+import { GameSession, GameDefinition, Player, GameResult } from '@playdeck/game-types';
 
 interface GameSessionState {
   currentSession: GameSession | null;
@@ -72,7 +72,7 @@ export const useGameSessionStore = create<GameSessionState>((set, get) => ({
     const { session: finalizedSession, result } = SessionManager.finalizeSession(
       session,
       winnerId,
-      isDraw
+      isDraw,
     );
 
     set({

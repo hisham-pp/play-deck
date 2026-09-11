@@ -1,18 +1,18 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { ArrowRight, Compass, Sparkles, Trophy } from 'lucide-react';
 import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
 import { GameDefinition } from '@playdeck/game-types';
-import { gameService } from '@/features/games/services/game-service';
-import { useLibraryStore } from '@/stores/library.store';
-import { Button } from '@/components/ui/Button';
 import { EmptyShelf } from '@/components/game/EmptyShelf';
 import { GameCard } from '@/components/game/GameCard';
-import { ArrowRight, Compass, Sparkles, Trophy } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
+import { gameService } from '@/features/games/services/game-service';
+import { useLibraryStore } from '@/stores/library.store';
 
 export default function HomePage() {
   const [featuredGames, setFeaturedGames] = useState<GameDefinition[]>([]);
-  const { recentSessions, initLibrary, isInitialized } = useLibraryStore();
+  const { recentSessions, initLibrary } = useLibraryStore();
 
   useEffect(() => {
     initLibrary();
@@ -119,7 +119,8 @@ export default function HomePage() {
                     {session.gameId}
                   </h4>
                   <p className="text-xs text-deck-500">
-                    Session: <span className="font-mono text-[11px]">{session.id.slice(0, 14)}...</span>
+                    Session:{' '}
+                    <span className="font-mono text-[11px]">{session.id.slice(0, 14)}...</span>
                   </p>
                 </div>
                 <div className="mt-4 pt-3 border-t border-surface-border flex items-center justify-between">

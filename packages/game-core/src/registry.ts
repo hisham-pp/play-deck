@@ -47,7 +47,7 @@ export class GameRegistry {
         (g) =>
           g.name.toLowerCase().includes(term) ||
           g.description.toLowerCase().includes(term) ||
-          g.tags.some((t) => t.toLowerCase().includes(term))
+          g.tags.some((t) => t.toLowerCase().includes(term)),
       );
     }
 

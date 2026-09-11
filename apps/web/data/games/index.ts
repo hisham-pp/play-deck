@@ -1,5 +1,8 @@
 import { GameDefinition } from '@playdeck/game-types';
 
+const STATUS_COMING_SOON = 'coming-soon';
+const BADGE_COMING_SOON = 'Coming Soon';
+
 export const GAME_DEFINITIONS: GameDefinition[] = [
   {
     id: 'tic-tac-toe',
@@ -28,10 +31,10 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
       'The timeless game of kings, pawns, and strategic mastery. Outthink your opponent and deliver checkmate.',
     category: 'board',
     players: { min: 2, max: 2 },
-    status: 'coming-soon',
+    status: STATUS_COMING_SOON,
     tags: ['Grandmaster', 'Tactics', 'Board', 'Multiplayer Ready'],
     featured: true,
-    badge: 'Coming Soon',
+    badge: BADGE_COMING_SOON,
     releaseDate: 'Q4 2026',
   },
   {
@@ -42,9 +45,9 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
       'Navigate the neon serpent, harvest energy pellets, and survive ever-accelerating speeds without biting your tail.',
     category: 'arcade',
     players: { min: 1, max: 1 },
-    status: 'coming-soon',
+    status: STATUS_COMING_SOON,
     tags: ['Arcade', 'Reflexes', 'Retro', 'High Score'],
-    badge: 'Coming Soon',
+    badge: BADGE_COMING_SOON,
     releaseDate: 'Q4 2026',
   },
   {
@@ -55,9 +58,9 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
       'A vertical drop duel. Align four consecutive discs while blocking counterattacks from your adversary.',
     category: 'puzzle',
     players: { min: 1, max: 2 },
-    status: 'coming-soon',
+    status: STATUS_COMING_SOON,
     tags: ['Casual', 'Strategy', 'Tabletop'],
-    badge: 'Coming Soon',
+    badge: BADGE_COMING_SOON,
     releaseDate: 'Q1 2027',
   },
   {
@@ -68,9 +71,9 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
       'Test your cognitive recall across ancient glowing sigils. Flip pairs to clear the board in minimum turns.',
     category: 'puzzle',
     players: { min: 1, max: 2 },
-    status: 'coming-soon',
+    status: STATUS_COMING_SOON,
     tags: ['Brain Training', 'Memory', 'Solitaire', 'Relaxing'],
-    badge: 'Coming Soon',
+    badge: BADGE_COMING_SOON,
     releaseDate: 'Q1 2027',
   },
 ];

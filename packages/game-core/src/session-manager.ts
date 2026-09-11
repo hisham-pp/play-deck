@@ -10,7 +10,7 @@ import { generateId } from '@playdeck/shared';
 export class SessionManager {
   static createSession<TState = unknown>(
     game: GameDefinition<TState>,
-    hostPlayer: Player
+    hostPlayer: Player,
   ): GameSession<TState> {
     const now = new Date().toISOString();
     const hostSessionPlayer: GameSessionPlayer = {
@@ -60,7 +60,7 @@ export class SessionManager {
   static finalizeSession(
     session: GameSession,
     winnerPlayerId?: string,
-    isDraw?: boolean
+    isDraw?: boolean,
   ): { session: GameSession; result: GameResult } {
     const now = new Date().toISOString();
     const startTime = new Date(session.createdAt).getTime();

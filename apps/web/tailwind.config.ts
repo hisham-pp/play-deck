@@ -36,17 +36,17 @@ const config: Config = {
           emerald: '#10b981',
           indigo: '#6366f1',
           rose: '#f43f5e',
-        }
+        },
       },
       fontFamily: {
         sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
         display: ['var(--font-display)', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
-        'arcade': '0 8px 30px rgba(0, 0, 0, 0.25)',
-      }
+        subtle: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        card: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
+        arcade: '0 8px 30px rgba(0, 0, 0, 0.25)',
+      },
     },
   },
   plugins: [],

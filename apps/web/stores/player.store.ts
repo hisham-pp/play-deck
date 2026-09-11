@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { Player, PlayerStats, GameCategory } from '@playdeck/game-types';
 import { generateId } from '@playdeck/shared';
-import { StorageService } from '@/lib/storage/storage';
 import { STORAGE_KEYS } from '@/lib/storage/keys';
+import { StorageService } from '@/lib/storage/storage';
 
 interface PlayerState {
   player: Player | null;
@@ -41,7 +41,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
 
     try {
       const stored = await StorageService.get<{ player: Player; stats: PlayerStats }>(
-        STORAGE_KEYS.PLAYER
+        STORAGE_KEYS.PLAYER,
       );
 
       if (stored && stored.player) {

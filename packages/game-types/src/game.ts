@@ -1,11 +1,4 @@
-export type GameCategory =
-  | 'all'
-  | 'puzzle'
-  | 'strategy'
-  | 'arcade'
-  | 'board'
-  | 'card'
-  | 'casual';
+export type GameCategory = 'all' | 'puzzle' | 'strategy' | 'arcade' | 'board' | 'card' | 'casual';
 
 export type GameStatus = 'available' | 'coming-soon' | 'maintenance';
 

@@ -1,5 +1,5 @@
-import { GameDefinition, GameFilter, GameCategory } from '@playdeck/game-types';
 import { GameRegistry } from '@playdeck/game-core';
+import { GameDefinition, GameFilter, GameCategory } from '@playdeck/game-types';
 import { GAME_DEFINITIONS } from '@/data/games';
 
 export interface GameRepository {

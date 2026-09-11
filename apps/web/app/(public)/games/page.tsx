@@ -1,10 +1,10 @@
 'use client';
 
+import { Search, SlidersHorizontal } from 'lucide-react';
 import React, { useState, useEffect, useMemo } from 'react';
 import { GameDefinition, GameCategory } from '@playdeck/game-types';
-import { gameService } from '@/features/games/services/game-service';
 import { GameCard } from '@/components/game/GameCard';
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { gameService } from '@/features/games/services/game-service';
 import { cn } from '@/lib/utils';
 
 const CATEGORIES: { id: GameCategory; label: string }[] = [
@@ -15,11 +15,14 @@ const CATEGORIES: { id: GameCategory; label: string }[] = [
   { id: 'board', label: 'Board' },
 ];
 
+const LAYOUT_GRID = 'grid';
+const LAYOUT_COMPACT = 'compact';
+
 export default function GamesCatalogPage() {
   const [games, setGames] = useState<GameDefinition[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<GameCategory>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [layoutMode, setLayoutMode] = useState<'grid' | 'compact'>('grid');
+  const [layoutMode, setLayoutMode] = useState<'grid' | 'compact'>(LAYOUT_GRID);
 
   useEffect(() => {
     gameService.listGames().then(setGames);
@@ -27,8 +30,7 @@ export default function GamesCatalogPage() {
 
   const filteredGames = useMemo(() => {
     return games.filter((g) => {
-      const matchesCategory =
-        selectedCategory === 'all' || g.category === selectedCategory;
+      const matchesCategory = selectedCategory === 'all' || g.category === selectedCategory;
       const matchesSearch =
         searchQuery.trim() === '' ||
         g.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -62,7 +64,7 @@ export default function GamesCatalogPage() {
                 'px-3.5 py-1.5 rounded-md text-xs font-semibold transition-colors flex-shrink-0',
                 selectedCategory === cat.id
                   ? 'bg-amber-500 text-slate-950 shadow-sm'
-                  : 'bg-surface-raised border border-surface-border text-deck-600 dark:text-deck-400 hover:text-deck-950 dark:hover:text-white hover:bg-surface-overlay'
+                  : 'bg-surface-raised border border-surface-border text-deck-600 dark:text-deck-400 hover:text-deck-950 dark:hover:text-white hover:bg-surface-overlay',
               )}
             >
               {cat.label}
@@ -84,7 +86,7 @@ export default function GamesCatalogPage() {
           </div>
 
           <button
-            onClick={() => setLayoutMode((m) => (m === 'grid' ? 'compact' : 'grid'))}
+            onClick={() => setLayoutMode((m) => (m === LAYOUT_GRID ? LAYOUT_COMPACT : LAYOUT_GRID))}
             className="p-1.5 rounded-md border border-surface-border bg-surface-raised hover:bg-surface-overlay text-deck-500 transition-colors"
             title="Toggle card layout"
             aria-label="Toggle layout"
@@ -99,7 +101,7 @@ export default function GamesCatalogPage() {
         <div className="text-center py-16 text-deck-500 text-sm">
           No games match your search or filter.
         </div>
-      ) : layoutMode === 'grid' ? (
+      ) : layoutMode === LAYOUT_GRID ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredGames.map((game) => (
             <GameCard key={game.id} game={game} layout="standard" />

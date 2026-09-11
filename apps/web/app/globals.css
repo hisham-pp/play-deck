@@ -53,5 +53,11 @@ body {
 /* Game Shelf subtle rack line */
 .shelf-line {
   height: 2px;
-  background: linear-gradient(90deg, transparent 0%, var(--surface-border) 20%, var(--surface-border) 80%, transparent 100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--surface-border) 20%,
+    var(--surface-border) 80%,
+    transparent 100%
+  );
 }

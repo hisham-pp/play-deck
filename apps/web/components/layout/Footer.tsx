@@ -1,5 +1,5 @@
-import React from 'react';
 import { Gamepad2, ShieldCheck, Terminal } from 'lucide-react';
+import React from 'react';
 
 export function Footer() {
   return (

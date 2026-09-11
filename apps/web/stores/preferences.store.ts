@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { PlayerPreferences } from '@playdeck/game-types';
-import { StorageService } from '@/lib/storage/storage';
 import { STORAGE_KEYS } from '@/lib/storage/keys';
+import { StorageService } from '@/lib/storage/storage';
 
 interface PreferencesState extends PlayerPreferences {
   isInitialized: boolean;
@@ -12,8 +12,10 @@ interface PreferencesState extends PlayerPreferences {
   toggleAutoSave: () => Promise<void>;
 }
 
+const THEME_DARK = 'dark';
+
 const DEFAULT_PREFERENCES: PlayerPreferences = {
-  theme: 'dark',
+  theme: THEME_DARK,
   soundEnabled: true,
   reducedMotion: false,
   autoSave: true,
@@ -23,12 +25,12 @@ function applyThemeClass(theme: 'dark' | 'light' | 'system') {
   if (typeof window === 'undefined') return;
   const root = document.documentElement;
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const isDark = theme === 'dark' || (theme === 'system' && prefersDark);
+  const isDark = theme === THEME_DARK || (theme === 'system' && prefersDark);
 
   if (isDark) {
-    root.classList.add('dark');
+    root.classList.add(THEME_DARK);
   } else {
-    root.classList.remove('dark');
+    root.classList.remove(THEME_DARK);
   }
 }
 
@@ -45,7 +47,7 @@ export const usePreferencesStore = create<PreferencesState>((set, get) => ({
       applyThemeClass(preferences.theme);
     } catch {
       set({ ...DEFAULT_PREFERENCES, isInitialized: true });
-      applyThemeClass('dark');
+      applyThemeClass(THEME_DARK);
     }
   },
 

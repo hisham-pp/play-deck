@@ -1,10 +1,10 @@
-import React from 'react';
+import { ArrowLeft, Users, Play, Calendar, Tag, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { GAME_DEFINITIONS } from '@/data/games';
-import { ArrowLeft, Users, Play, Calendar, Tag, ShieldCheck } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
+import React from 'react';
 import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
+import { GAME_DEFINITIONS } from '@/data/games';
 
 export async function generateStaticParams() {
   return GAME_DEFINITIONS.map((game) => ({

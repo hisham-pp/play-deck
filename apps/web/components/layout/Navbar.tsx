@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import { Gamepad2, Compass, Library, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Gamepad2, Compass, Library, User } from 'lucide-react';
-import { ThemeToggle } from './ThemeToggle';
-import { usePlayerStore } from '@/stores/player.store';
+import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { usePlayerStore } from '@/stores/player.store';
+import { ThemeToggle } from './ThemeToggle';
 
 const NAV_LINKS = [
   { href: '/games', label: 'Games', icon: Compass },
@@ -50,7 +50,7 @@ export function Navbar() {
                   'flex items-center gap-2 px-3.5 py-1.5 rounded-md text-sm font-medium transition-colors',
                   isActive
                     ? 'text-deck-950 dark:text-white bg-surface-overlay border border-surface-border'
-                    : 'text-deck-600 dark:text-deck-400 hover:text-deck-900 dark:hover:text-white hover:bg-surface-raised'
+                    : 'text-deck-600 dark:text-deck-400 hover:text-deck-900 dark:hover:text-white hover:bg-surface-raised',
                 )}
               >
                 <Icon className="w-4 h-4 opacity-70" />
