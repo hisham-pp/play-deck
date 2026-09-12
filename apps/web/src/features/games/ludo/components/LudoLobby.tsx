@@ -1,6 +1,7 @@
 'use client';
 
-import { Users, Wifi } from 'lucide-react';
+import { ArrowLeft, Users, Wifi } from 'lucide-react';
+import Link from 'next/link';
 import { Card } from '@playdeck/ui';
 
 interface LudoLobbyProps {
@@ -11,6 +12,16 @@ interface LudoLobbyProps {
 export function LudoLobby({ onSelectOffline, onSelectOnline }: LudoLobbyProps) {
   return (
     <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-6 py-4">
+      <div className="w-full">
+        <Link
+          href="/games"
+          className="inline-flex items-center gap-2 text-xs font-medium text-deck-500 hover:text-deck-900 dark:hover:text-white transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Back to games</span>
+        </Link>
+      </div>
+
       <div className="text-center flex flex-col gap-1">
         <h1 className="text-3xl font-black tracking-tight text-deck-950 dark:text-white font-display">
           Ludo

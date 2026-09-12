@@ -1,6 +1,7 @@
 'use client';
 
-import { Trophy, RefreshCw, LogOut, ArrowRight } from 'lucide-react';
+import { Trophy, RefreshCw, LogOut, ArrowRight, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { Button, Card, CardContent } from '@playdeck/ui';
 import { usePlayerStore } from '@/stores/player.store';
@@ -154,12 +155,22 @@ export function LudoGame() {
 
       <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-3 sm:p-5">
         {/* Top Row: Header */}
-        <div className="pointer-events-auto self-start">
-          <LudoGameHeader
-            state={state}
-            configuredPlayers={configuredPlayers}
-            localSeatIndex={localSeatIndex}
-          />
+        <div className="flex items-start gap-3">
+          <Link
+            href="/games"
+            className="pointer-events-auto inline-flex items-center gap-2 rounded-lg border border-slate-700/70 bg-slate-900/80 px-3 py-2 text-xs font-medium text-slate-400 backdrop-blur-md transition-colors hover:text-slate-100"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span className="hidden sm:inline">Back to games</span>
+          </Link>
+
+          <div className="pointer-events-auto">
+            <LudoGameHeader
+              state={state}
+              configuredPlayers={configuredPlayers}
+              localSeatIndex={localSeatIndex}
+            />
+          </div>
         </div>
 
         {/* Bottom Row: Full Width Layout */}
