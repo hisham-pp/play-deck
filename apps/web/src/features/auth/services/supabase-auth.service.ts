@@ -2,6 +2,7 @@ import type { Player } from '@playdeck/game-types';
 import { generateId } from '@playdeck/shared';
 import { getSupabaseClient, isSupabaseConfigured } from '@/lib/supabase/client';
 import { DEFAULT_AVATAR, DEFAULT_PLAYER_NAME, USERS_TABLE } from '../auth.constants';
+import { hashPassword, verifyPassword } from '../utils/password.utils';
 import { PlayerTableService } from './player-table.service';
 
 export interface AuthResult {
@@ -33,6 +34,7 @@ export class SupabaseAuthService {
       const cleanEmail = email.trim().toLowerCase();
       const cleanName = displayName?.trim() || cleanEmail.split('@')[0] || DEFAULT_PLAYER_NAME;
       const now = new Date().toISOString();
+      const hashedPassword = await hashPassword(pass);
 
       const { data: existing } = await supabase
         .from(USERS_TABLE)
@@ -45,7 +47,7 @@ export class SupabaseAuthService {
           await supabase
             .from(USERS_TABLE)
             .update({
-              password: pass,
+              password: hashedPassword,
               display_name: cleanName,
               last_sign_in_at: now,
               updated_at: now,
@@ -71,7 +73,7 @@ export class SupabaseAuthService {
       const { error } = await supabase.from(USERS_TABLE).insert({
         id: playerId,
         email: cleanEmail,
-        password: pass,
+        password: hashedPassword,
         display_name: cleanName,
         avatar: DEFAULT_AVATAR,
         is_guest: false,
@@ -119,14 +121,13 @@ export class SupabaseAuthService {
         return { success: false, error: 'No account found with this email' };
       }
 
-      if (data.password !== pass) {
+      const isValid = await verifyPassword(pass, data.password);
+      if (!isValid) {
         return { success: false, error: 'Incorrect password' };
       }
 
-      await supabase
-        .from(USERS_TABLE)
-        .update({ last_sign_in_at: new Date().toISOString() })
-        .eq('id', data.id);
+      const now = new Date().toISOString();
+      await supabase.from(USERS_TABLE).update({ last_sign_in_at: now }).eq('id', data.id);
 
       return {
         success: true,
@@ -136,7 +137,7 @@ export class SupabaseAuthService {
           avatar: data.avatar || DEFAULT_AVATAR,
           email: data.email,
           isGuest: false,
-          createdAt: data.created_at || new Date().toISOString(),
+          createdAt: data.created_at || now,
         },
       };
     } catch (err: unknown) {
