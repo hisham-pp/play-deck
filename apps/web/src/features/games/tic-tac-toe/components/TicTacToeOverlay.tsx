@@ -111,7 +111,7 @@ export function TicTacToeOverlay({
       role="dialog"
       aria-modal="true"
       aria-label="Round Result"
-      className="absolute inset-0 bg-surface-base/85 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center p-6 text-center z-20 animate-in fade-in zoom-in-95 duration-200"
+      className="absolute inset-0 bg-surface-base/85 backdrop-blur-sm rounded-2xl md:rounded-3xl flex flex-col items-center justify-center p-6 text-center z-20 animate-in fade-in zoom-in-95 duration-200"
     >
       <div className="w-14 h-14 rounded-2xl bg-surface-raised border border-surface-border flex items-center justify-center mb-3 shadow-lg">
         {isDraw ? (

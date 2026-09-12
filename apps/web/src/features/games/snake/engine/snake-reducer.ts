@@ -88,7 +88,7 @@ export function advanceSnakeTick(state: SnakeState): SnakeState {
       score: newScore,
       highScore: newHighScore,
       isNewHighScore,
-      speedMs: calculateSpeed(newScore),
+      speedMs: calculateSpeed(newScore, state.baseSpeedMs),
       status: nextFood.x === -1 ? STATUS_GAME_OVER : state.status,
     };
   }
@@ -126,8 +126,24 @@ export function snakeReducer(state: SnakeState, action: SnakeAction): SnakeState
 
     case 'RESTART':
       return {
-        ...createInitialSnakeState(state.highScore, state.gridSize),
+        ...createInitialSnakeState(
+          state.highScore,
+          state.gridSize,
+          state.baseSpeedMs,
+          state.difficulty,
+        ),
         status: STATUS_COUNTDOWN,
+      };
+
+    case 'CONFIGURE':
+      return {
+        ...createInitialSnakeState(
+          state.highScore,
+          action.gridSize,
+          action.baseSpeedMs,
+          action.difficulty,
+        ),
+        status: STATUS_IDLE,
       };
 
     case 'SET_HIGH_SCORE':

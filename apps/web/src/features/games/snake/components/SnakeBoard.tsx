@@ -121,22 +121,24 @@ export function SnakeBoard({ snake, food, gridSize, direction }: SnakeBoardProps
     if (!canvas || !container) return;
 
     const render = () => {
-      const width = container.clientWidth;
-      if (width === 0) return;
+      const clientW = container.clientWidth;
+      const clientH = container.clientHeight;
+      const size = clientH > 0 ? Math.min(clientW, clientH) : clientW;
+      if (size === 0) return;
       const dpr = window.devicePixelRatio || 1;
-      canvas.width = width * dpr;
-      canvas.height = width * dpr;
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${width}px`;
+      canvas.width = Math.floor(size * dpr);
+      canvas.height = Math.floor(size * dpr);
+      canvas.style.width = `${size}px`;
+      canvas.style.height = `${size}px`;
 
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
 
       ctx.scale(dpr, dpr);
       ctx.fillStyle = COLOR_CANVAS_BG;
-      ctx.fillRect(0, 0, width, width);
+      ctx.fillRect(0, 0, size, size);
 
-      const cellSize = width / gridSize;
+      const cellSize = size / gridSize;
       drawGrid(ctx, gridSize, cellSize);
       drawFood(ctx, food, cellSize);
       drawSnake(ctx, snake, cellSize, direction);
@@ -152,9 +154,9 @@ export function SnakeBoard({ snake, food, gridSize, direction }: SnakeBoardProps
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-full aspect-square rounded-xl overflow-hidden border border-surface-border shadow-2xl bg-surface-base"
+      className="relative w-full h-full aspect-square rounded-2xl overflow-hidden border border-surface-border shadow-2xl bg-surface-base flex items-center justify-center"
     >
-      <canvas ref={canvasRef} className="block w-full h-full" />
+      <canvas ref={canvasRef} className="block" />
     </div>
   );
 }

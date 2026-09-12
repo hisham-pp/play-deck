@@ -1,5 +1,5 @@
 import type { BaseGameEngine } from '@playdeck/game-types';
-import type { Direction, SnakeAction, SnakeState } from '../types/snake.types';
+import type { Direction, SnakeAction, SnakeDifficulty, SnakeState } from '../types/snake.types';
 import { GRID_SIZE, STATUS_GAME_OVER } from './snake-constants';
 import { snakeReducer } from './snake-reducer';
 import { createInitialSnakeState } from './snake-state';
@@ -62,6 +62,10 @@ export class SnakeEngine implements BaseGameEngine<SnakeState, SnakeAction> {
 
   setHighScore(highScore: number): void {
     this.dispatch({ type: 'SET_HIGH_SCORE', highScore });
+  }
+
+  configure(gridSize: number, baseSpeedMs: number, difficulty: SnakeDifficulty): void {
+    this.dispatch({ type: 'CONFIGURE', gridSize, baseSpeedMs, difficulty });
   }
 
   isGameOver(): boolean {

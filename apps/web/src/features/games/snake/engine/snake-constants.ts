@@ -21,6 +21,13 @@ export const MIN_SPEED_MS = 65;
 export const SPEED_STEP_MS = 5;
 export const POINTS_PER_FOOD = 10;
 export const POINTS_PER_SPEED_STEP = 30;
+
+export const DIFFICULTY_SPEEDS = {
+  easy: 175,
+  normal: 140,
+  hard: 105,
+  insane: 75,
+} as const;
 export const COUNTDOWN_SECONDS = 3;
 export const MAX_PENDING_DIRECTIONS = 2;
 

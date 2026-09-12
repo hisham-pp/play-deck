@@ -37,7 +37,7 @@ export function TicTacToeCell({
       }`}
       tabIndex={isFocused ? 0 : -1}
       className={cn(
-        'relative aspect-square w-full rounded-xl border flex items-center justify-center select-none font-display font-black text-4xl sm:text-5xl md:text-6xl transition-all duration-150 touch-manipulation',
+        'relative aspect-square w-full rounded-xl md:rounded-2xl border flex items-center justify-center select-none font-display font-black text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl transition-all duration-150 touch-manipulation',
         // Default base style
         'bg-surface-base/80 border-surface-border text-deck-100',
         // Hover and interactive states when empty and playable

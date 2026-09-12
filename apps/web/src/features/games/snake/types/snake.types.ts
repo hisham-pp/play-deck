@@ -7,6 +7,8 @@ export interface Coordinate {
 
 export type SnakeGameStatus = 'idle' | 'countdown' | 'playing' | 'paused' | 'game-over';
 
+export type SnakeDifficulty = 'easy' | 'normal' | 'hard' | 'insane';
+
 export interface SnakeState {
   status: SnakeGameStatus;
   snake: Coordinate[];
@@ -16,6 +18,8 @@ export interface SnakeState {
   score: number;
   highScore: number;
   speedMs: number;
+  baseSpeedMs: number;
+  difficulty: SnakeDifficulty;
   countdown: number;
   isNewHighScore: boolean;
   gridSize: number;
@@ -29,7 +33,8 @@ export type SnakeAction =
   | { type: 'PAUSE' }
   | { type: 'RESUME' }
   | { type: 'RESTART' }
-  | { type: 'SET_HIGH_SCORE'; highScore: number };
+  | { type: 'SET_HIGH_SCORE'; highScore: number }
+  | { type: 'CONFIGURE'; gridSize: number; baseSpeedMs: number; difficulty: SnakeDifficulty };
 
 export interface SnakeStats {
   highScore: number;

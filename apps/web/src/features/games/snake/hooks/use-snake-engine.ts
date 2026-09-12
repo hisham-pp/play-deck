@@ -3,7 +3,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { SnakeEngine } from '../engine/snake-engine';
 import { snakeStatsRepository } from '../services/snake-stats-repository';
-import type { Direction, SnakeGameStatus, SnakeState, SnakeStats } from '../types/snake.types';
+import type {
+  Direction,
+  SnakeDifficulty,
+  SnakeGameStatus,
+  SnakeState,
+  SnakeStats,
+} from '../types/snake.types';
 
 function useAutoPause(engine: SnakeEngine) {
   useEffect(() => {
@@ -100,6 +106,12 @@ export function useSnakeEngine(onGameOverCallback?: (score: number) => void) {
   const resumeGame = useCallback(() => engine.resume(), [engine]);
   const restartGame = useCallback(() => engine.restart(), [engine]);
   const changeDirection = useCallback((dir: Direction) => engine.changeDirection(dir), [engine]);
+  const configureGame = useCallback(
+    (gridSize: number, baseSpeedMs: number, difficulty: SnakeDifficulty) => {
+      engine.configure(gridSize, baseSpeedMs, difficulty);
+    },
+    [engine],
+  );
 
   return {
     state,
@@ -109,5 +121,6 @@ export function useSnakeEngine(onGameOverCallback?: (score: number) => void) {
     resumeGame,
     restartGame,
     changeDirection,
+    configureGame,
   };
 }

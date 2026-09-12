@@ -1,4 +1,4 @@
-import type { SnakeState } from '../types/snake.types';
+import type { SnakeDifficulty, SnakeState } from '../types/snake.types';
 import {
   BASE_SPEED_MS,
   COUNTDOWN_SECONDS,
@@ -12,6 +12,8 @@ import { spawnFood } from './snake-utils';
 export function createInitialSnakeState(
   highScore: number = 0,
   gridSize: number = GRID_SIZE,
+  baseSpeedMs: number = BASE_SPEED_MS,
+  difficulty: SnakeDifficulty = 'normal',
 ): SnakeState {
   const snakeCopy = INITIAL_SNAKE.map((c) => ({ ...c }));
   return {
@@ -22,7 +24,9 @@ export function createInitialSnakeState(
     food: spawnFood(snakeCopy, gridSize),
     score: 0,
     highScore,
-    speedMs: BASE_SPEED_MS,
+    speedMs: baseSpeedMs,
+    baseSpeedMs,
+    difficulty,
     countdown: COUNTDOWN_SECONDS,
     isNewHighScore: false,
     gridSize,

@@ -22,9 +22,9 @@ export function isSelfCollision(head: Coordinate, body: Coordinate[]): boolean {
   return isCoordInList(head, body);
 }
 
-export function calculateSpeed(score: number): number {
+export function calculateSpeed(score: number, baseSpeedMs: number = BASE_SPEED_MS): number {
   const steps = Math.floor(score / POINTS_PER_SPEED_STEP);
-  return Math.max(MIN_SPEED_MS, BASE_SPEED_MS - steps * SPEED_STEP_MS);
+  return Math.max(MIN_SPEED_MS, baseSpeedMs - steps * SPEED_STEP_MS);
 }
 
 export function spawnFood(snake: Coordinate[], gridSize: number): Coordinate {
