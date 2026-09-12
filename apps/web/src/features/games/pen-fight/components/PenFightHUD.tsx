@@ -20,6 +20,7 @@ import type { PenFightPlayerId, PenFightState } from '../types/pen-fight.types';
 
 interface PenFightHUDProps {
   state: PenFightState;
+  hasOpponent?: boolean;
   onOpenSetup: () => void;
   onResetPositions: () => void;
 }
@@ -76,7 +77,10 @@ function PlayerCard({
   );
 }
 
-function phaseLabel(state: PenFightState): string {
+function phaseLabel(state: PenFightState, hasOpponent?: boolean): string {
+  if (state.mode === 'online' && !hasOpponent) {
+    return '⏳ Waiting for opponent to join room…';
+  }
   const active = state.players[state.activePlayer];
   switch (state.phase) {
     case 'aiming':
@@ -95,7 +99,12 @@ function phaseLabel(state: PenFightState): string {
   }
 }
 
-export function PenFightHUD({ state, onOpenSetup, onResetPositions }: PenFightHUDProps) {
+export function PenFightHUD({
+  state,
+  hasOpponent = true,
+  onOpenSetup,
+  onResetPositions,
+}: PenFightHUDProps) {
   const soundEnabled = usePreferencesStore((s) => s.soundEnabled);
   const toggleSound = usePreferencesStore((s) => s.toggleSound);
   const { roomCode } = useMultiplayerStore();
@@ -180,8 +189,14 @@ export function PenFightHUD({ state, onOpenSetup, onResetPositions }: PenFightHU
         <PlayerCard state={state} playerId="p1" align="left" />
 
         <div className="pointer-events-auto flex flex-col items-center gap-2">
-          <span className="rounded-full border border-surface-border/70 bg-surface-raised/80 px-4 py-1.5 text-xs font-semibold text-deck-700 dark:text-deck-200 backdrop-blur-md">
-            {phaseLabel(state)}
+          <span
+            className={`rounded-full border px-4 py-1.5 text-xs font-semibold backdrop-blur-md ${
+              state.mode === 'online' && !hasOpponent
+                ? 'border-amber-500/50 bg-amber-500/20 text-amber-300 animate-pulse'
+                : 'border-surface-border/70 bg-surface-raised/80 text-deck-700 dark:text-deck-200'
+            }`}
+          >
+            {phaseLabel(state, hasOpponent)}
           </span>
           {state.phase === 'aiming' && (
             <button

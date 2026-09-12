@@ -33,6 +33,9 @@ export function usePenFightMultiplayer(
           onRemoteFlick(playerId, direction, power);
           break;
         }
+        case 'SYNC_START':
+          engine.startMatch();
+          break;
         case 'RESET_MATCH':
           engine.startMatch();
           break;
@@ -70,6 +73,12 @@ export function usePenFightMultiplayer(
     return activePlayer === localPlayerId;
   };
 
+  const broadcastStartMatch = () => {
+    if (mode === MODE_ONLINE && player && roomCode) {
+      sendGameAction('SYNC_START', {}, player.id);
+    }
+  };
+
   const broadcastFlick = (playerId: PenFightPlayerId, direction: FlickImpulse, power: number) => {
     if (mode === MODE_ONLINE && player && roomCode) {
       sendGameAction('FLICK', { playerId, direction, power }, player.id);
@@ -95,6 +104,7 @@ export function usePenFightMultiplayer(
     hasOpponent: Boolean(opponent),
     opponentName: opponent?.displayName || null,
     isMyTurn,
+    broadcastStartMatch,
     broadcastFlick,
     broadcastNextRound,
     broadcastRematch,

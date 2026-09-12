@@ -21,6 +21,8 @@ export type { PenFightArenaHandle };
 
 interface PenFightArenaProps {
   state: PenFightState;
+  role?: 'host' | 'guest' | null;
+  hasOpponent?: boolean;
   isMyTurn?: boolean;
   onFlickTaken: () => void;
   onBeginSettling: () => void;
@@ -31,11 +33,14 @@ interface PenFightArenaProps {
 /** Full-viewport 3D canvas hosting the physics arena — kept intentionally thin. */
 export const PenFightArena = forwardRef<PenFightArenaHandle, PenFightArenaProps>(
   function PenFightArena(props, ref) {
+    const isGuest = props.state.mode === 'online' && props.role === 'guest';
+    const cameraPos: [number, number, number] = isGuest ? [0, 2.3, -3.8] : [0, 2.3, 3.8];
+
     return (
       <Canvas shadows={{ type: PCFShadowMap }} dpr={[1, 2]} className="h-full w-full touch-none">
         <PerspectiveCamera
           makeDefault
-          position={[0, 2.3, 3.8]}
+          position={cameraPos}
           fov={48}
           onUpdate={(camera: ThreePerspectiveCamera) => camera.lookAt(0, 0.1, 0)}
         />

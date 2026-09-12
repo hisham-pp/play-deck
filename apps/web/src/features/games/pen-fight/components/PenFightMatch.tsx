@@ -30,6 +30,7 @@ export interface PenFightArenaHandle {
 
 interface PenFightMatchProps {
   state: PenFightState;
+  hasOpponent?: boolean;
   isMyTurn?: boolean;
   onFlickTaken: () => void;
   onBeginSettling: () => void;
@@ -54,7 +55,15 @@ const PEN_PHYSICS_PROPS = {
 /** Physics bodies, drag-to-aim input, AI turns, and round resolution — rendered inside <Physics>. */
 export const PenFightMatch = forwardRef<PenFightArenaHandle, PenFightMatchProps>(
   function PenFightMatch(
-    { state, isMyTurn = true, onFlickTaken, onBeginSettling, onResolveRound, onLocalFlick },
+    {
+      state,
+      hasOpponent = true,
+      isMyTurn = true,
+      onFlickTaken,
+      onBeginSettling,
+      onResolveRound,
+      onLocalFlick,
+    },
     ref,
   ) {
     const p1Ref = useRef<RapierRigidBody | null>(null);
@@ -131,7 +140,7 @@ export const PenFightMatch = forwardRef<PenFightArenaHandle, PenFightMatchProps>
     const canAim =
       state.phase === 'aiming' &&
       !state.players[state.activePlayer].isAI &&
-      (state.mode !== 'online' || isMyTurn);
+      (state.mode !== 'online' || (hasOpponent && isMyTurn));
     const { handlePointerDown, handlePointerMove, handlePointerUp, aimPreview } =
       usePenFightDragAim({
         canAim,

@@ -69,12 +69,15 @@ export function PenFightGame() {
     [],
   );
 
-  const { isMyTurn, broadcastFlick, broadcastNextRound, broadcastRematch } = usePenFightMultiplayer(
-    engine,
-    state.mode,
-    state.activePlayer,
-    handleRemoteFlick,
-  );
+  const {
+    role,
+    hasOpponent,
+    isMyTurn,
+    broadcastStartMatch,
+    broadcastFlick,
+    broadcastNextRound,
+    broadcastRematch,
+  } = usePenFightMultiplayer(engine, state.mode, state.activePlayer, handleRemoteFlick);
 
   const handleLocalFlick = useCallback(
     (playerId: PenFightPlayerId, direction: FlickImpulse, power: number) => {
@@ -117,6 +120,9 @@ export function PenFightGame() {
       setSpeedMode(config.speedMode);
       setDifficulty(config.difficulty);
       startMatch();
+      if (config.mode === 'online') {
+        broadcastStartMatch();
+      }
       setPlayerName('p1', config.names.p1);
       setPlayerName('p2', config.names.p2);
       setPlayerColor('p1', config.colors.p1);
@@ -124,7 +130,16 @@ export function PenFightGame() {
       arenaRef.current?.resetPositions();
       sound.playClick();
     },
-    [setMode, setSpeedMode, setDifficulty, startMatch, setPlayerName, setPlayerColor, sound],
+    [
+      setMode,
+      setSpeedMode,
+      setDifficulty,
+      startMatch,
+      broadcastStartMatch,
+      setPlayerName,
+      setPlayerColor,
+      sound,
+    ],
   );
 
   const handleNextRound = useCallback(() => {
@@ -151,6 +166,8 @@ export function PenFightGame() {
       <PenFightArena
         ref={arenaRef}
         state={state}
+        role={role}
+        hasOpponent={hasOpponent}
         isMyTurn={isMyTurn()}
         onFlickTaken={flickTaken}
         onBeginSettling={beginSettling}
@@ -160,6 +177,7 @@ export function PenFightGame() {
 
       <PenFightHUD
         state={state}
+        hasOpponent={hasOpponent}
         onOpenSetup={() => setIsSetupOpen(true)}
         onResetPositions={handleResetPositions}
       />
