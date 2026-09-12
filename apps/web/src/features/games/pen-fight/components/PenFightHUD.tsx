@@ -7,6 +7,7 @@ import {
   Settings,
   Swords,
   Turtle,
+  UserPlus,
   Volume2,
   VolumeX,
   Zap,
@@ -144,11 +145,22 @@ export function PenFightHUD({
             )}
           </div>
 
-          {/* Online Room Badge */}
+          {/* Online Room Badge & Invite Friend trigger */}
           {state.mode === 'online' && roomCode && (
-            <div className="flex items-center gap-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-xs font-bold text-amber-300 backdrop-blur-md">
-              <Globe className="h-3.5 w-3.5 text-amber-400" />
-              <span className="font-mono">{roomCode}</span>
+            <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-xs font-bold text-amber-300 backdrop-blur-md">
+                <Globe className="h-3.5 w-3.5 text-amber-400" />
+                <span className="font-mono">{roomCode}</span>
+              </div>
+              <button
+                type="button"
+                onClick={onOpenSetup}
+                title="Invite Friend"
+                className="pointer-events-auto inline-flex items-center gap-1 rounded-lg border border-amber-500/40 bg-amber-500/20 px-2.5 py-2 text-xs font-bold text-amber-300 backdrop-blur-md transition-colors hover:bg-amber-500/30"
+              >
+                <UserPlus className="h-3.5 w-3.5 text-amber-400" />
+                <span className="hidden sm:inline">Invite</span>
+              </button>
             </div>
           )}
         </div>
