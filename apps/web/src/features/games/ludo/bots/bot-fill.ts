@@ -3,6 +3,8 @@ import { colorForSeat } from '../engine/board-layout';
 import type { LudoPlayer } from '../types/ludo.types';
 import { LUDO_BOT_DEFINITIONS, type LudoBotDefinition } from './bot-registry';
 
+const TYPE_BOT = 'bot';
+
 /**
  * Fills every empty seat (`null`) with a bot player, cycling through the
  * provided bot roster for variety. Occupied seats are returned unchanged.
@@ -21,9 +23,9 @@ export function fillEmptySeatsWithBots(
     botCursor += 1;
 
     const player: LudoPlayer = {
-      id: generateId('bot'),
+      id: generateId(TYPE_BOT),
       displayName: botDef.name,
-      type: 'bot',
+      type: TYPE_BOT,
       color: colorForSeat(seatIndex, seatCount),
       seatIndex,
       status: 'ready',
@@ -48,9 +50,9 @@ export function addBotToFirstEmptySeat(
 
   const next = [...seats];
   next[emptyIndex] = {
-    id: generateId('bot'),
+    id: generateId(TYPE_BOT),
     displayName: botDef.name,
-    type: 'bot',
+    type: TYPE_BOT,
     color: colorForSeat(emptyIndex, seats.length),
     seatIndex: emptyIndex,
     status: 'ready',

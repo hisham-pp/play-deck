@@ -33,21 +33,25 @@ function buildBotDefinition(
   };
 }
 
+const DIFF_NORMAL: LudoBotDifficulty = 'normal';
+const DIFF_HARD: LudoBotDifficulty = 'hard';
+const PERS_BALANCED: LudoBotPersonality = 'balanced';
+
 /**
  * Default bot roster. New personalities/difficulties are added here without
  * touching the engine or the bot strategy implementation.
  */
 export const LUDO_BOT_DEFINITIONS: LudoBotDefinition[] = [
-  buildBotDefinition('nova-easy-balanced', 'Nova', 'easy', 'balanced'),
-  buildBotDefinition('nova-normal-aggressive', 'Nova', 'normal', 'aggressive'),
-  buildBotDefinition('nova-hard-aggressive', 'Nova', 'hard', 'aggressive'),
-  buildBotDefinition('atlas-normal-defensive', 'Atlas', 'normal', 'defensive'),
-  buildBotDefinition('atlas-hard-defensive', 'Atlas', 'hard', 'defensive'),
-  buildBotDefinition('luna-normal-rusher', 'Luna', 'normal', 'rusher'),
-  buildBotDefinition('luna-hard-rusher', 'Luna', 'hard', 'rusher'),
-  buildBotDefinition('sage-easy-balanced', 'Sage', 'easy', 'balanced'),
-  buildBotDefinition('sage-normal-balanced', 'Sage', 'normal', 'balanced'),
-  buildBotDefinition('sage-hard-balanced', 'Sage', 'hard', 'balanced'),
+  buildBotDefinition('nova-easy-balanced', 'Nova', 'easy', PERS_BALANCED),
+  buildBotDefinition('nova-normal-aggressive', 'Nova', DIFF_NORMAL, 'aggressive'),
+  buildBotDefinition('nova-hard-aggressive', 'Nova', DIFF_HARD, 'aggressive'),
+  buildBotDefinition('atlas-normal-defensive', 'Atlas', DIFF_NORMAL, 'defensive'),
+  buildBotDefinition('atlas-hard-defensive', 'Atlas', DIFF_HARD, 'defensive'),
+  buildBotDefinition('luna-normal-rusher', 'Luna', DIFF_NORMAL, 'rusher'),
+  buildBotDefinition('luna-hard-rusher', 'Luna', DIFF_HARD, 'rusher'),
+  buildBotDefinition('sage-easy-balanced', 'Sage', 'easy', PERS_BALANCED),
+  buildBotDefinition('sage-normal-balanced', 'Sage', DIFF_NORMAL, PERS_BALANCED),
+  buildBotDefinition('sage-hard-balanced', 'Sage', DIFF_HARD, PERS_BALANCED),
 ];
 
 export function getBotDefinition(id: string): LudoBotDefinition | undefined {

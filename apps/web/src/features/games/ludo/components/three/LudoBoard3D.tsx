@@ -12,6 +12,8 @@ import {
   trackCellPosition,
 } from './board-geometry';
 
+const COLOR_WHITE = '#ffffff';
+
 interface LudoBoard3DProps {
   layout: BoardLayout;
 }
@@ -103,7 +105,7 @@ export function LudoBoard3D({ layout }: LudoBoard3DProps) {
             {/* Inner White Recessed Area */}
             <mesh position={[bx, 0.036, bz]} receiveShadow>
               <boxGeometry args={[2.16, 0.01, 2.16]} />
-              <meshStandardMaterial color="#ffffff" roughness={0.2} />
+              <meshStandardMaterial color={COLOR_WHITE} roughness={0.2} />
             </mesh>
 
             {/* 4 Circular Piece Slots */}
@@ -117,7 +119,7 @@ export function LudoBoard3D({ layout }: LudoBoard3DProps) {
                   </mesh>
                   <mesh position={[sx, 0.045, sz]}>
                     <cylinderGeometry args={[0.17, 0.17, 0.012, 24]} />
-                    <meshStandardMaterial color="#ffffff" roughness={0.1} />
+                    <meshStandardMaterial color={COLOR_WHITE} roughness={0.1} />
                   </mesh>
                 </group>
               );
@@ -126,13 +128,13 @@ export function LudoBoard3D({ layout }: LudoBoard3DProps) {
         );
       })}
 
-      {/* Shared Track Tiles (52 Cells) */}
+      {/* Shared 52 Track Cell Rendering Data */}
       {trackCells.map((cell) => (
         <group key={`track-${cell.index}`}>
           <mesh position={[cell.position[0], 0.02, cell.position[1]]} receiveShadow>
             <boxGeometry args={[CELL_SIZE * 0.94, 0.025, CELL_SIZE * 0.94]} />
             <meshStandardMaterial
-              color={cell.isEntry ? cell.cellColor : '#ffffff'}
+              color={cell.isEntry ? cell.cellColor : COLOR_WHITE}
               roughness={0.3}
               metalness={cell.isEntry ? 0.2 : 0}
             />
@@ -166,7 +168,7 @@ export function LudoBoard3D({ layout }: LudoBoard3DProps) {
       {/* Center Victory Target (3x3 Center Area) */}
       <mesh position={[0, 0.028, 0]} receiveShadow>
         <boxGeometry args={[CELL_SIZE * 2.8, 0.03, CELL_SIZE * 2.8]} />
-        <meshStandardMaterial color="#ffffff" roughness={0.2} />
+        <meshStandardMaterial color={COLOR_WHITE} roughness={0.2} />
       </mesh>
 
       {/* Center 4 Triangles */}

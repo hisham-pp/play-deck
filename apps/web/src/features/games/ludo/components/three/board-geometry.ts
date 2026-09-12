@@ -2,8 +2,10 @@ import type { BoardLayout } from '../../engine/board-layout';
 import { globalTrackIndex, homeStretchIndex } from '../../engine/board-layout';
 import type { LudoColor, LudoPieceState } from '../../types/ludo.types';
 
-export const CELL_SIZE = 0.48;
+export const BOARD_SIZE = 15;
 export const BOARD_GRID_SIZE = 15;
+export const CELL_SIZE = 0.52;
+const LAYOUT_CLASSIC4 = 'classic4';
 export const BOARD_PHYSICAL_SIZE = BOARD_GRID_SIZE * CELL_SIZE; // ~7.2 units
 
 export type Vec2 = [number, number];
@@ -91,7 +93,7 @@ export function homeStretchPosition(
   color: LudoColor,
   stretchIndex: number,
 ): Vec2 {
-  if (layout.id === 'classic4') {
+  if (layout.id === LAYOUT_CLASSIC4) {
     let col = 7;
     let row = 7;
     const step = Math.min(6, Math.max(1, stretchIndex));
@@ -125,7 +127,7 @@ export function homeStretchPosition(
 }
 
 export function homeCenterPosition(color: LudoColor, layout: BoardLayout): Vec2 {
-  if (layout.id === 'classic4') {
+  if (layout.id === LAYOUT_CLASSIC4) {
     let col = 7;
     let row = 7;
     switch (color) {
@@ -155,7 +157,7 @@ export function homeCenterPosition(color: LudoColor, layout: BoardLayout): Vec2 
 }
 
 export function baseSlotPosition(layout: BoardLayout, color: LudoColor, pieceIndex: number): Vec2 {
-  if (layout.id === 'classic4') {
+  if (layout.id === LAYOUT_CLASSIC4) {
     const isCol2 = pieceIndex % 2 === 1;
     const isRow2 = pieceIndex >= 2;
 

@@ -8,6 +8,8 @@ import { useLudoMultiplayerStore } from '@/stores/ludo-multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
 import type { LudoPlayer } from '../types/ludo.types';
 
+const VARIANT_OUTLINE = 'outline';
+
 interface LudoRoomLobbyProps {
   onStartGame: (players: LudoPlayer[]) => void;
 }
@@ -95,18 +97,23 @@ export function LudoRoomLobby({ onStartGame }: LudoRoomLobbyProps) {
               <div className="flex items-center gap-2">
                 <Button
                   size="sm"
-                  variant="outline"
+                  variant={VARIANT_OUTLINE}
                   onClick={() => setShowInviteModal(true)}
                   className="border-slate-700"
                 >
                   <UserPlus className="w-4 h-4 mr-1.5" /> Invite
                 </Button>
-                <Button size="sm" variant="outline" onClick={addBot} className="border-slate-700">
+                <Button
+                  size="sm"
+                  variant={VARIANT_OUTLINE}
+                  onClick={addBot}
+                  className="border-slate-700"
+                >
                   <Bot className="w-4 h-4 mr-1.5" /> + Bot
                 </Button>
                 <Button
                   size="sm"
-                  variant="outline"
+                  variant={VARIANT_OUTLINE}
                   onClick={() => fillRemainingWithBots(4)}
                   className="border-slate-700"
                 >

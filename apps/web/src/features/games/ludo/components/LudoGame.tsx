@@ -20,6 +20,8 @@ import { LudoRoomLobby } from './LudoRoomLobby';
 
 type GameMode = 'lobby' | 'offline-setup' | 'online-room' | 'playing';
 
+const MODE_LOBBY = 'lobby';
+
 export function LudoGame() {
   const [mode, setMode] = useState<GameMode>('lobby');
   const [configuredPlayers, setConfiguredPlayers] = useState<LudoPlayer[]>([]);
@@ -97,7 +99,7 @@ export function LudoGame() {
     }
   };
 
-  if (mode === 'lobby') {
+  if (mode === MODE_LOBBY) {
     return (
       <LudoLobby
         onSelectOffline={() => setMode('offline-setup')}
@@ -107,7 +109,7 @@ export function LudoGame() {
   }
 
   if (mode === 'offline-setup') {
-    return <LudoOfflineSetup onStart={handleStartOfflineGame} onBack={() => setMode('lobby')} />;
+    return <LudoOfflineSetup onStart={handleStartOfflineGame} onBack={() => setMode(MODE_LOBBY)} />;
   }
 
   if (mode === 'online-room') {
@@ -170,7 +172,7 @@ export function LudoGame() {
             state={state}
             onPause={() => currentSeat && pause(currentSeat.id)}
             onResume={() => currentSeat && resume(currentSeat.id)}
-            onLeave={() => setMode('lobby')}
+            onLeave={() => setMode(MODE_LOBBY)}
           />
         </div>
       </div>
@@ -202,7 +204,7 @@ export function LudoGame() {
               </div>
 
               <div className="flex gap-3">
-                <Button variant="outline" className="flex-1" onClick={() => setMode('lobby')}>
+                <Button variant="outline" className="flex-1" onClick={() => setMode(MODE_LOBBY)}>
                   <LogOut className="w-4 h-4 mr-2" /> Exit
                 </Button>
                 <Button

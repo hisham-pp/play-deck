@@ -26,6 +26,7 @@ interface PenFightHUDProps {
 }
 
 const ICON_SM = 'h-4 w-4';
+const BTN_TYPE = 'button';
 
 function PlayerCard({
   state,
@@ -153,7 +154,7 @@ export function PenFightHUD({
                 <span className="font-mono">{roomCode}</span>
               </div>
               <button
-                type="button"
+                type={BTN_TYPE}
                 onClick={onOpenSetup}
                 title="Invite Friend"
                 className="pointer-events-auto inline-flex items-center gap-1 rounded-lg border border-amber-500/40 bg-amber-500/20 px-2.5 py-2 text-xs font-bold text-amber-300 backdrop-blur-md transition-colors hover:bg-amber-500/30"
@@ -167,7 +168,7 @@ export function PenFightHUD({
 
         <div className="flex items-center gap-2">
           <button
-            type="button"
+            type={BTN_TYPE}
             onClick={() => toggleSound()}
             aria-label={soundEnabled ? 'Mute sound effects' : 'Unmute sound effects'}
             className="pointer-events-auto inline-flex h-9 w-9 items-center justify-center rounded-lg border border-surface-border/70 bg-surface-raised/80 text-deck-500 backdrop-blur-md transition-colors hover:text-deck-900 dark:hover:text-white"
@@ -175,7 +176,7 @@ export function PenFightHUD({
             {soundEnabled ? <Volume2 className={ICON_SM} /> : <VolumeX className={ICON_SM} />}
           </button>
           <button
-            type="button"
+            type={BTN_TYPE}
             onClick={onOpenSetup}
             className="pointer-events-auto inline-flex items-center gap-2 rounded-lg border border-surface-border/70 bg-surface-raised/80 px-3 py-2 text-xs font-medium text-deck-500 backdrop-blur-md transition-colors hover:text-deck-900 dark:hover:text-white"
           >
@@ -200,7 +201,7 @@ export function PenFightHUD({
           </span>
           {state.phase === 'aiming' && (
             <button
-              type="button"
+              type={BTN_TYPE}
               onClick={onResetPositions}
               className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full border border-surface-border/70 bg-surface-raised/60 px-3 py-1 text-[11px] font-medium text-deck-500 backdrop-blur-md transition-colors hover:text-deck-900 dark:hover:text-white"
             >

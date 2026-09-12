@@ -5,6 +5,8 @@ import React from 'react';
 import { TABLE_DEPTH } from '../engine/pen-fight-constants';
 import type { PenFightState } from '../types/pen-fight.types';
 
+const PHASE_AIMING = 'aiming';
+
 interface BackgroundScoreboardProps {
   state: PenFightState;
 }
@@ -57,7 +59,7 @@ export function BackgroundScoreboard({ state }: BackgroundScoreboardProps) {
             {/* Player 1 */}
             <div
               className={`flex flex-col items-center gap-1 rounded-lg p-3 transition-all ${
-                state.activePlayer === 'p1' && state.phase === 'aiming'
+                state.activePlayer === 'p1' && state.phase === PHASE_AIMING
                   ? 'ring-2 ring-blue-500 bg-blue-500/10 scale-105'
                   : 'bg-white/5'
               }`}
@@ -74,7 +76,7 @@ export function BackgroundScoreboard({ state }: BackgroundScoreboardProps) {
               <span className="font-mono text-4xl font-extrabold text-blue-400">
                 {p1.roundWins}
               </span>
-              {state.activePlayer === 'p1' && state.phase === 'aiming' && (
+              {state.activePlayer === 'p1' && state.phase === PHASE_AIMING && (
                 <span className="animate-bounce font-mono text-[9px] font-bold text-blue-300 uppercase">
                   YOUR TURN
                 </span>
@@ -90,7 +92,7 @@ export function BackgroundScoreboard({ state }: BackgroundScoreboardProps) {
             {/* Player 2 */}
             <div
               className={`flex flex-col items-center gap-1 rounded-lg p-3 transition-all ${
-                state.activePlayer === 'p2' && state.phase === 'aiming'
+                state.activePlayer === 'p2' && state.phase === PHASE_AIMING
                   ? 'ring-2 ring-red-500 bg-red-500/10 scale-105'
                   : 'bg-white/5'
               }`}
@@ -105,7 +107,7 @@ export function BackgroundScoreboard({ state }: BackgroundScoreboardProps) {
                 </span>
               </div>
               <span className="font-mono text-4xl font-extrabold text-red-400">{p2.roundWins}</span>
-              {state.activePlayer === 'p2' && state.phase === 'aiming' && (
+              {state.activePlayer === 'p2' && state.phase === PHASE_AIMING && (
                 <span className="animate-bounce font-mono text-[9px] font-bold text-red-300 uppercase">
                   ACTIVE
                 </span>
@@ -115,7 +117,8 @@ export function BackgroundScoreboard({ state }: BackgroundScoreboardProps) {
 
           {/* Status footer */}
           <div className="mt-2 text-center font-mono text-[10px] uppercase text-slate-400">
-            {state.phase === 'aiming' && `TURN: ${state.players[state.activePlayer].displayName}`}
+            {state.phase === PHASE_AIMING &&
+              `TURN: ${state.players[state.activePlayer].displayName}`}
             {state.phase === 'flicking' && '⚡ FLICK RELEASED'}
             {state.phase === 'settling' && '⏳ SETTLING PENS...'}
             {state.phase === 'round-over' && '🏆 ROUND COMPLETED'}
