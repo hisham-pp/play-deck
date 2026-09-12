@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="tttBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <rect width="256" height="256" rx="48" fill="url(#tttBg)" />
+  <rect width="254" height="254" x="1" y="1" rx="47" fill="none" stroke="#38bdf8" stroke-width="2" stroke-opacity="0.3" />
+
+  <!-- Tic-Tac-Toe Hash Grid -->
+  <line x1="94" y1="44" x2="94" y2="212" stroke="#334155" stroke-width="8" stroke-linecap="round" />
+  <line x1="162" y1="44" x2="162" y2="212" stroke="#334155" stroke-width="8" stroke-linecap="round" />
+  <line x1="44" y1="94" x2="212" y2="94" stroke="#334155" stroke-width="8" stroke-linecap="round" />
+  <line x1="44" y1="162" x2="212" y2="162" stroke="#334155" stroke-width="8" stroke-linecap="round" />
+
+  <!-- Amber 'X' in top-left -->
+  <g filter="url(#neonGlow)" stroke="#f59e0b" stroke-width="12" stroke-linecap="round">
+    <line x1="56" y1="56" x2="82" y2="82" />
+    <line x1="82" y1="56" x2="56" y2="82" />
+  </g>
+
+  <!-- Cyan 'O' in center -->
+  <circle cx="128" cy="128" r="20" fill="none" stroke="#06b6d4" stroke-width="10" filter="url(#neonGlow)" />
+
+  <!-- Amber 'X' in bottom-right -->
+  <g filter="url(#neonGlow)" stroke="#f59e0b" stroke-width="12" stroke-linecap="round">
+    <line x1="174" y1="174" x2="200" y2="200" />
+    <line x1="200" y1="174" x2="174" y2="200" />
+  </g>
+
+  <!-- Cyan 'O' in top-right -->
+  <circle cx="187" cy="69" r="14" fill="none" stroke="#38bdf8" stroke-width="6" opacity="0.6" />
+</svg>

@@ -4,11 +4,11 @@ import { ArrowLeft, Users } from 'lucide-react';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { GameDefinition } from '@playdeck/game-types';
-import { Badge } from '@/components/ui/Badge';
 import { SnakeGame } from '@/features/games/snake';
 import { useGameSessionStore } from '@/stores/game-session.store';
 import { useLibraryStore } from '@/stores/library.store';
 import { usePlayerStore } from '@/stores/player.store';
+import { GameStatusBadge, GameCategoryBadge, GameFeatureBadge } from './GameBadge';
 import { GameStage } from './GameStage';
 
 export function GameAreaShell({ game }: { game: GameDefinition }) {
@@ -58,10 +58,8 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
 
       <div className="text-center flex flex-col items-center gap-2">
         <div className="flex items-center gap-2">
-          <Badge variant={game.status === 'available' ? 'success' : 'neutral'}>
-            {game.badge || game.status}
-          </Badge>
-          <Badge variant="outline">{game.category}</Badge>
+          <GameStatusBadge status={game.status} label={game.badge} />
+          <GameCategoryBadge category={game.category} />
         </div>
         <h1 className="text-3xl md:text-4xl font-black tracking-tight text-deck-950 dark:text-white font-display">
           {game.name}
@@ -110,10 +108,7 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs text-deck-400 font-medium">Multiplayer</span>
-            <Badge variant="warning" size="sm">
-              Coming Soon
-            </Badge>
+            <GameFeatureBadge feature="multiplayer" label="Coming Soon" size="xs" />
           </div>
         </div>
       </div>

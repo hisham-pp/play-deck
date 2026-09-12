@@ -1,9 +1,9 @@
-import { Users, Play, Sparkles } from 'lucide-react';
+import { Play, Sparkles, Users } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 import { GameDefinition } from '@playdeck/game-types';
-import { Badge } from '@/components/ui/Badge';
 import { Card } from '@/components/ui/Card';
+import { GameStatusBadge, GameCategoryBadge } from './GameBadge';
 
 export function FeaturedGameCard({ game }: { game: GameDefinition }) {
   const isAvailable = game.status === 'available';
@@ -17,10 +17,8 @@ export function FeaturedGameCard({ game }: { game: GameDefinition }) {
         <div className="flex items-start justify-between gap-4">
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
-              <Badge variant={isAvailable ? 'success' : 'warning'}>
-                {game.badge || (isAvailable ? 'Ready' : 'Coming Soon')}
-              </Badge>
-              <Badge variant="outline">{game.category}</Badge>
+              <GameStatusBadge status={game.status} label={game.badge} />
+              <GameCategoryBadge category={game.category} />
             </div>
             <h3 className="text-2xl md:text-3xl font-bold text-deck-950 dark:text-white font-display mt-1">
               {game.name}
@@ -29,8 +27,21 @@ export function FeaturedGameCard({ game }: { game: GameDefinition }) {
               {game.description}
             </p>
           </div>
-          <div className="w-14 h-14 rounded-xl bg-surface-overlay border border-surface-border flex items-center justify-center text-3xl group-hover:scale-110 transition-transform flex-shrink-0">
-            {game.category === 'strategy' ? '♟️' : game.category === 'arcade' ? '🕹️' : '🧩'}
+          <div className="w-14 h-14 rounded-xl bg-surface-overlay border border-surface-border flex items-center justify-center p-2 text-3xl group-hover:scale-110 transition-transform flex-shrink-0 overflow-hidden">
+            {game.thumbnailUrl ? (
+              <img
+                src={game.thumbnailUrl}
+                alt={`${game.name} icon`}
+                className="w-full h-full object-contain"
+                loading="lazy"
+              />
+            ) : game.category === 'strategy' ? (
+              '♟️'
+            ) : game.category === 'arcade' ? (
+              '🕹️'
+            ) : (
+              '🧩'
+            )}
           </div>
         </div>
 

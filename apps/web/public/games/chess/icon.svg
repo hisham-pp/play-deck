@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="chessBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b" />
+      <stop offset="100%" stop-color="#09090b" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#b45309" />
+    </linearGradient>
+    <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <rect width="256" height="256" rx="48" fill="url(#chessBg)" />
+  <rect width="254" height="254" x="1" y="1" rx="47" fill="none" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.3" />
+
+  <!-- Diagonal chessboard diamond background pattern -->
+  <g opacity="0.12" fill="#f59e0b">
+    <rect x="36" y="36" width="44" height="44" />
+    <rect x="124" y="36" width="44" height="44" />
+    <rect x="80" y="80" width="44" height="44" />
+    <rect x="168" y="80" width="44" height="44" />
+    <rect x="36" y="124" width="44" height="44" />
+    <rect x="124" y="124" width="44" height="44" />
+    <rect x="80" y="168" width="44" height="44" />
+  </g>
+
+  <!-- Chess Knight Profile -->
+  <g filter="url(#goldGlow)">
+    <!-- Base pedestal -->
+    <rect x="68" y="200" width="120" height="16" rx="6" fill="url(#goldGrad)" />
+    <rect x="80" y="186" width="96" height="14" rx="4" fill="url(#goldGrad)" opacity="0.9" />
+
+    <!-- Knight Head & Mane -->
+    <path d="M96 186 C92 154 94 130 84 114 C76 102 72 90 74 82 C76 74 84 74 92 78 C90 64 96 50 114 42 C126 36 138 40 144 50 C154 44 168 46 172 56 C176 66 170 78 174 88 C178 98 190 106 188 122 C186 138 176 150 170 186 Z"
+          fill="url(#goldGrad)" />
+
+    <!-- Muzzle / Neck shadow indent -->
+    <path d="M92 98 C108 96 122 108 126 124 C120 134 104 140 96 132 Z" fill="#78350f" opacity="0.45" />
+
+    <!-- Eye of the Knight -->
+    <circle cx="120" cy="74" r="5" fill="#09090b" />
+    <circle cx="122" cy="72" r="1.5" fill="#ffffff" />
+  </g>
+</svg>

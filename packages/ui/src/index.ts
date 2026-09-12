@@ -1,5 +1,6 @@
 export * from './avatar';
 export * from './badge';
+export * from './game-badge';
 export * from './button';
 export * from './card';
 export * from './divider';

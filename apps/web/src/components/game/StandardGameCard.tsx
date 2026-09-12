@@ -1,9 +1,9 @@
-import { Users, ArrowRight } from 'lucide-react';
+import { ArrowRight, Users } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 import { GameDefinition } from '@playdeck/game-types';
-import { Badge } from '@/components/ui/Badge';
 import { Card } from '@/components/ui/Card';
+import { GameStatusBadge, GameCategoryBadge } from './GameBadge';
 
 export function StandardGameCard({ game }: { game: GameDefinition }) {
   const isAvailable = game.status === 'available';
@@ -15,15 +15,26 @@ export function StandardGameCard({ game }: { game: GameDefinition }) {
     >
       <div className="p-5 flex flex-col flex-1">
         <div className="flex items-center justify-between mb-4">
-          <Badge variant={isAvailable ? 'success' : 'neutral'}>
-            {game.badge || (isAvailable ? 'Available' : 'Soon')}
-          </Badge>
-          <span className="text-xs text-deck-400 capitalize">{game.category}</span>
+          <GameStatusBadge status={game.status} label={game.badge} size="xs" />
+          <GameCategoryBadge category={game.category} size="xs" />
         </div>
 
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-lg bg-surface-overlay border border-surface-border flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
-            {game.category === 'strategy' ? '♟️' : game.category === 'arcade' ? '🕹️' : '🧩'}
+          <div className="w-10 h-10 rounded-lg bg-surface-overlay border border-surface-border flex items-center justify-center p-1.5 text-xl group-hover:scale-110 transition-transform overflow-hidden">
+            {game.thumbnailUrl ? (
+              <img
+                src={game.thumbnailUrl}
+                alt={`${game.name} icon`}
+                className="w-full h-full object-contain"
+                loading="lazy"
+              />
+            ) : game.category === 'strategy' ? (
+              '♟️'
+            ) : game.category === 'arcade' ? (
+              '🕹️'
+            ) : (
+              '🧩'
+            )}
           </div>
           <div>
             <h4 className="text-base font-bold text-deck-950 dark:text-deck-100 font-display group-hover:text-amber-500 transition-colors">
