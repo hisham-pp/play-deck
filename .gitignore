@@ -17,3 +17,5 @@ build
 apps/web/AGENTS.md
 apps/web/CLAUDE.md
 
+# Local Agent & MCP Config (contains secrets)
+.mcp.json
