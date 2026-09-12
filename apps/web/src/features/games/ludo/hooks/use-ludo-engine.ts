@@ -10,6 +10,7 @@ export interface UseLudoEngineReturn {
   movePiece: (playerId: string, pieceId: string) => void;
   pause: (playerId: string) => void;
   resume: (playerId: string) => void;
+  restart: (players: LudoPlayer[]) => void;
 }
 
 export function useLudoEngine(
@@ -17,45 +18,71 @@ export function useLudoEngine(
   settings: Partial<LudoRuleSettings> = {},
 ): UseLudoEngineReturn {
   const engineRef = useRef<LudoEngine | null>(null);
+
   if (!engineRef.current) {
     engineRef.current = new LudoEngine(players, settings);
-  }
-  const engine = engineRef.current;
-
-  const [state, setState] = useState<LudoGameState>(() => engine.getState());
-
-  useEffect(() => {
-    return engine.subscribe(setState);
-  }, [engine]);
-
-  useEffect(() => {
-    if (state.status === 'waiting' && players[0]) {
-      engine.startGame(players[0].id);
+    if (players.length >= 2) {
+      engineRef.current.startGame(players[0].id);
     }
-    // Only ever auto-starts once, right after construction.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }
+
+  const [state, setState] = useState<LudoGameState>(() => engineRef.current!.getState());
+
+  const restart = useCallback(
+    (newPlayers: LudoPlayer[]) => {
+      if (engineRef.current) {
+        engineRef.current.destroy?.();
+      }
+      const newEngine = new LudoEngine(newPlayers, settings);
+      engineRef.current = newEngine;
+      if (newPlayers.length >= 2) {
+        newEngine.startGame(newPlayers[0].id);
+      }
+      setState(newEngine.getState());
+      newEngine.subscribe(setState);
+    },
+    [settings],
+  );
+
+  useEffect(() => {
+    const engine = engineRef.current;
+    if (!engine) return;
+    return engine.subscribe(setState);
   }, []);
 
   useEffect(() => {
-    return () => engine.destroy?.();
-  }, [engine]);
+    return () => engineRef.current?.destroy?.();
+  }, []);
 
-  const rollForPlayer = useCallback(
-    (playerId: string) => {
-      engine.rollDice(playerId, DiceService.roll());
+  const rollForPlayer = useCallback((playerId: string) => {
+    if (engineRef.current) {
+      engineRef.current.rollDice(playerId, DiceService.roll());
+    }
+  }, []);
+
+  const movePiece = useCallback((playerId: string, pieceId: string) => {
+    if (engineRef.current) {
+      engineRef.current.movePiece(playerId, pieceId);
+    }
+  }, []);
+
+  const pause = useCallback((playerId: string) => {
+    engineRef.current?.pauseGame(playerId);
+  }, []);
+
+  const resume = useCallback((playerId: string) => {
+    engineRef.current?.resumeGame(playerId);
+  }, []);
+
+  return {
+    get engine() {
+      return engineRef.current!;
     },
-    [engine],
-  );
-
-  const movePiece = useCallback(
-    (playerId: string, pieceId: string) => {
-      engine.movePiece(playerId, pieceId);
-    },
-    [engine],
-  );
-
-  const pause = useCallback((playerId: string) => engine.pauseGame(playerId), [engine]);
-  const resume = useCallback((playerId: string) => engine.resumeGame(playerId), [engine]);
-
-  return { engine, state, rollForPlayer, movePiece, pause, resume };
+    state,
+    rollForPlayer,
+    movePiece,
+    pause,
+    resume,
+    restart,
+  };
 }

@@ -20,7 +20,10 @@ export class RoomChatService {
     };
   }
 
-  static async broadcastMessage(message: ChatMessage): Promise<void> {
+  static async broadcastMessage(
+    message: ChatMessage,
+    gameNamespace: string = 'tictactoe',
+  ): Promise<void> {
     const supabase = getSupabaseClient();
     if (!supabase) return;
 
@@ -35,7 +38,7 @@ export class RoomChatService {
         created_at: message.createdAt,
       });
 
-      const channel = supabase.channel(`game:tictactoe:${message.roomCode}`);
+      const channel = supabase.channel(`game:${gameNamespace}:${message.roomCode}`);
       channel.send({
         type: 'broadcast',
         event: CHAT_EVENT,

@@ -65,6 +65,21 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     releaseDate: '2026-09-12',
   },
   {
+    id: 'ludo',
+    name: 'Ludo',
+    slug: 'ludo',
+    description:
+      'Classic board race for 2 to 6 players featuring 3D physics dice, AI bot personalities, and custom rule configurations.',
+    category: 'board',
+    players: { min: 2, max: 6 },
+    status: 'available',
+    thumbnailUrl: '/games/ludo/icon.svg',
+    tags: ['Board', 'Dice', '3D', 'Physics', '2-6 Players', 'Bots'],
+    featured: true,
+    badge: 'Ready to Play',
+    releaseDate: '2026-09-12',
+  },
+  {
     id: 'chess',
     name: 'Master Chess',
     slug: 'master-chess',
