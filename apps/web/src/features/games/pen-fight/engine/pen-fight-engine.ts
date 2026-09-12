@@ -7,6 +7,7 @@ import type {
   PenFightOutcome,
   PenFightPlayerId,
   PenFightState,
+  PenSpeedMode,
 } from '../types/pen-fight.types';
 import { DIFFICULTY_PRO, MODE_AI } from './pen-fight-constants';
 import { penFightReducer } from './pen-fight-reducer';
@@ -46,6 +47,10 @@ export class PenFightEngine implements BaseGameEngine<PenFightState, PenFightAct
 
   setMode(mode: PenFightMode): void {
     this.dispatch({ type: 'SET_MODE', mode });
+  }
+
+  setSpeedMode(speedMode: PenSpeedMode): void {
+    this.dispatch({ type: 'SET_SPEED_MODE', speedMode });
   }
 
   setDifficulty(difficulty: AIDifficulty): void {

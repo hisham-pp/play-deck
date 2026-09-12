@@ -11,6 +11,7 @@ import type {
   PenFightPlayerId,
   PenFightState,
   PenFightStats,
+  PenSpeedMode,
 } from '../types/pen-fight.types';
 
 export interface UsePenFightEngineReturn {
@@ -18,6 +19,7 @@ export interface UsePenFightEngineReturn {
   stats: PenFightStats | null;
   engine: PenFightEngine;
   setMode: (mode: PenFightMode) => void;
+  setSpeedMode: (speedMode: PenSpeedMode) => void;
   setDifficulty: (difficulty: AIDifficulty) => void;
   setPlayerName: (playerId: PenFightPlayerId, name: string) => void;
   setPlayerColor: (playerId: PenFightPlayerId, color: PenColor) => void;
@@ -69,6 +71,10 @@ export function usePenFightEngine(
   }, [state, onMatchOver]);
 
   const setMode = useCallback((mode: PenFightMode) => engine.setMode(mode), [engine]);
+  const setSpeedMode = useCallback(
+    (speedMode: PenSpeedMode) => engine.setSpeedMode(speedMode),
+    [engine],
+  );
   const setDifficulty = useCallback(
     (difficulty: AIDifficulty) => engine.setDifficulty(difficulty),
     [engine],
@@ -96,6 +102,7 @@ export function usePenFightEngine(
     stats,
     engine,
     setMode,
+    setSpeedMode,
     setDifficulty,
     setPlayerName,
     setPlayerColor,
