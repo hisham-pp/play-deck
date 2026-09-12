@@ -26,16 +26,7 @@ const TAB_SPECS = 'specs';
 
 type TabType = typeof TAB_RULES | typeof TAB_CONTROLS | typeof TAB_SPECS;
 
-const DEFAULT_CONTROLS: Record<string, GameControlItem[]> = {
-  snake: [
-    { key: 'W / ↑', action: 'Move Up' },
-    { key: 'S / ↓', action: 'Move Down' },
-    { key: 'A / ←', action: 'Move Left' },
-    { key: 'D / →', action: 'Move Right' },
-    { key: 'Space', action: 'Pause / Resume' },
-    { key: 'R', action: 'Restart Game' },
-  ],
-};
+import { DEFAULT_CONTROLS, DEFAULT_RULES } from './game-template-defaults';
 
 export function GameTemplateTabs({ game, rules, controls }: GameTemplateTabsProps) {
   const [activeTab, setActiveTab] = useState<TabType>(TAB_RULES);
@@ -45,6 +36,8 @@ export function GameTemplateTabs({ game, rules, controls }: GameTemplateTabsProp
       { key: 'Mouse / Touch', action: 'Interact / Select' },
       { key: 'Esc', action: 'Back / Pause' },
     ];
+
+  const activeRules = rules || DEFAULT_RULES[game.id];
 
   return (
     <div className="rounded-xl border border-surface-border bg-surface-raised overflow-hidden">
@@ -93,9 +86,9 @@ export function GameTemplateTabs({ game, rules, controls }: GameTemplateTabsProp
         {activeTab === TAB_RULES && (
           <div className="flex flex-col gap-4 text-xs leading-relaxed text-deck-600 dark:text-deck-300">
             <p className="text-sm font-medium text-deck-900 dark:text-white">{game.description}</p>
-            {rules && rules.length > 0 ? (
+            {activeRules && activeRules.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
-                {rules.map((rule, idx) => (
+                {activeRules.map((rule, idx) => (
                   <div
                     key={idx}
                     className="p-3 rounded-lg bg-surface-overlay border border-surface-border"
