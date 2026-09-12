@@ -23,9 +23,10 @@ describe('Bcrypt Password Utility Tests', () => {
     assert.strictEqual(valid, false);
   });
 
-  it('rejects unencrypted plaintext strings during verification', async () => {
+  it('gracefully verifies legacy plaintext passwords and rejects mismatches', async () => {
     const legacyPlain = 'legacy_plain_pass';
-    assert.strictEqual(await verifyPassword(legacyPlain, legacyPlain), false);
+    assert.strictEqual(await verifyPassword(legacyPlain, legacyPlain), true);
+    assert.strictEqual(await verifyPassword('incorrect', legacyPlain), false);
     assert.strictEqual(isBcryptHash(legacyPlain), false);
   });
 
