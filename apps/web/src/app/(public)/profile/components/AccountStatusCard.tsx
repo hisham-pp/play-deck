@@ -2,7 +2,7 @@
 
 import { Shield, UserCheck, LogIn, LogOut } from 'lucide-react';
 import React from 'react';
-import { Player } from '@playdeck/game-types';
+import type { Player } from '@playdeck/game-types';
 import { Button } from '@/components/ui/Button';
 
 export interface AccountStatusCardProps {
@@ -50,7 +50,7 @@ export function AccountStatusCard({
           <p className="text-xs text-deck-400 mt-1">
             {isGuest
               ? 'Your session and stats save locally in this browser.'
-              : `Signed in as ${player?.email || 'player'}. User profile saved in Supabase players table.`}
+              : `Signed in as ${player?.email || 'player'}. User profile saved in Supabase users table.`}
           </p>
         </div>
       </div>

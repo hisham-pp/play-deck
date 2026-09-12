@@ -20,7 +20,7 @@ export interface PlayerState {
     email: string,
     pass: string,
     displayName?: string,
-  ) => Promise<{ success: boolean; error?: string; requiresVerification?: boolean }>;
+  ) => Promise<{ success: boolean; error?: string }>;
   signOut: () => Promise<void>;
   continueAsGuest: () => Promise<void>;
   updateDisplayName: (name: string) => Promise<void>;
@@ -42,20 +42,20 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   initPlayer: async () => {
     if (get().isInitialized) return;
     try {
-      if (SupabaseAuthService.isConfigured()) {
-        const remote = await SupabaseAuthService.getCurrentPlayer();
-        if (remote) {
-          const stored = await StorageService.get<{ stats: PlayerStats }>(STORAGE_KEYS.PLAYER);
-          const stats = stored?.stats || DEFAULT_STATS;
-          set({ player: remote, stats, isInitialized: true });
-          await persistPlayerAndStats(remote, stats);
-          return;
-        }
-      }
       const stored = await StorageService.get<{ player: Player; stats: PlayerStats }>(
         STORAGE_KEYS.PLAYER,
       );
+
       if (stored?.player) {
+        // If stored player is logged-in, refresh profile from table if connected
+        if (!stored.player.isGuest && SupabaseAuthService.isConfigured()) {
+          const fresh = await SupabaseAuthService.fetchPlayerFromTable(stored.player.id);
+          if (fresh) {
+            set({ player: fresh, stats: stored.stats || DEFAULT_STATS, isInitialized: true });
+            await persistPlayerAndStats(fresh, stored.stats || DEFAULT_STATS);
+            return;
+          }
+        }
         set({ player: stored.player, stats: stored.stats || DEFAULT_STATS, isInitialized: true });
       } else {
         const guest = createGuestPlayer();
@@ -83,18 +83,14 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   signUpWithEmail: async (email: string, pass: string, displayName?: string) => {
     set({ isLoadingAuth: true, authError: null });
     const res = await SupabaseAuthService.signUp(email, pass, displayName);
-    if (!res.success) {
+    if (!res.success || !res.player) {
       const err = res.error || 'Failed to sign up';
       set({ isLoadingAuth: false, authError: err });
       return { success: false, error: err };
     }
-    if (res.player) {
-      set({ player: res.player, isLoadingAuth: false, authError: null, isAuthModalOpen: false });
-      await persistPlayerAndStats(res.player, get().stats);
-    } else {
-      set({ isLoadingAuth: false });
-    }
-    return { success: true, requiresVerification: res.requiresVerification };
+    set({ player: res.player, isLoadingAuth: false, authError: null, isAuthModalOpen: false });
+    await persistPlayerAndStats(res.player, get().stats);
+    return { success: true };
   },
 
   signOut: async () => {

@@ -1,0 +1,103 @@
+import type { RealtimeChannel } from '@supabase/supabase-js';
+import { getSupabaseClient } from '@/lib/supabase/client';
+
+export interface TransportMessage {
+  type: string;
+  payload: unknown;
+  senderId: string;
+  timestamp: number;
+}
+
+export interface PlayerPresence {
+  playerId: string;
+  displayName: string;
+  avatar: string;
+  role: 'host' | 'guest';
+}
+
+export class SupabaseTransportService {
+  private channel: RealtimeChannel | null = null;
+  private actionListeners: Set<(msg: TransportMessage) => void> = new Set();
+  private presenceListeners: Set<(players: PlayerPresence[]) => void> = new Set();
+  private statusListeners: Set<(status: string) => void> = new Set();
+
+  async connect(roomCode: string, player: PlayerPresence): Promise<boolean> {
+    const supabase = getSupabaseClient();
+    if (!supabase) return false;
+
+    this.disconnect();
+
+    const channelName = `game:tictactoe:${roomCode}`;
+    this.channel = supabase.channel(channelName, {
+      config: {
+        broadcast: { ack: true, self: false },
+        presence: { key: player.playerId },
+      },
+    });
+
+    this.channel
+      .on('broadcast', { event: 'game-action' }, ({ payload }) => {
+        this.actionListeners.forEach((listener) => listener(payload as TransportMessage));
+      })
+      .on('presence', { event: 'sync' }, () => {
+        if (!this.channel) return;
+        const state = this.channel.presenceState();
+        const players: PlayerPresence[] = [];
+        Object.values(state).forEach((presences) => {
+          presences.forEach((item) => players.push(item as unknown as PlayerPresence));
+        });
+        this.presenceListeners.forEach((listener) => listener(players));
+      })
+      .subscribe((status) => {
+        this.statusListeners.forEach((listener) => listener(status));
+        if (status === 'SUBSCRIBED' && this.channel) {
+          this.channel.track(player);
+        }
+      });
+
+    return true;
+  }
+
+  send(type: string, payload: unknown, senderId: string): void {
+    if (!this.channel) return;
+    const msg: TransportMessage = {
+      type,
+      payload,
+      senderId,
+      timestamp: Date.now(),
+    };
+    this.channel.send({
+      type: 'broadcast',
+      event: 'game-action',
+      payload: msg,
+    });
+  }
+
+  onAction(listener: (msg: TransportMessage) => void): () => void {
+    this.actionListeners.add(listener);
+    return () => this.actionListeners.delete(listener);
+  }
+
+  onPresence(listener: (players: PlayerPresence[]) => void): () => void {
+    this.presenceListeners.add(listener);
+    return () => this.presenceListeners.delete(listener);
+  }
+
+  onStatus(listener: (status: string) => void): () => void {
+    this.statusListeners.add(listener);
+    return () => this.statusListeners.delete(listener);
+  }
+
+  disconnect(): void {
+    if (this.channel) {
+      const supabase = getSupabaseClient();
+      if (supabase) {
+        supabase.removeChannel(this.channel);
+      }
+      this.channel = null;
+    }
+    this.actionListeners.clear();
+    this.presenceListeners.clear();
+    this.statusListeners.clear();
+  }
+}

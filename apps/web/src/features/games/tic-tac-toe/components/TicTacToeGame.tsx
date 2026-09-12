@@ -3,33 +3,41 @@
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import React, { useMemo } from 'react';
+import { useMultiplayerStore } from '@/stores/multiplayer.store';
+import { MODE_MULTIPLAYER } from '../engine/tic-tac-toe-constants';
 import { useTicTacToeEngine } from '../hooks/use-tic-tac-toe-engine';
 import { useTicTacToeKeyboard } from '../hooks/use-tic-tac-toe-keyboard';
 import { useTicTacToeSession } from '../hooks/use-tic-tac-toe-session';
-import type { TicTacToeState } from '../types/tic-tac-toe.types';
+import type { GameMode, TicTacToeState } from '../types/tic-tac-toe.types';
+import { MultiplayerLobbyModal } from './MultiplayerLobbyModal';
 import { TicTacToeBoard } from './TicTacToeBoard';
 import { TicTacToeControls } from './TicTacToeControls';
 import { TicTacToeOverlay } from './TicTacToeOverlay';
 import { TicTacToeScoreboard } from './TicTacToeScoreboard';
 
 function formatStatusAnnouncement(state: TicTacToeState): string {
-  if (state.status === 'won') {
-    return `Game Over. Player ${state.winner} won round ${state.round}.`;
-  }
-  if (state.status === 'draw') {
-    return `Game Over. Round ${state.round} ended in a draw.`;
-  }
-  if (state.isAiThinking) {
-    return 'AI is thinking...';
-  }
+  if (state.status === 'won') return `Game Over. Player ${state.winner} won round ${state.round}.`;
+  if (state.status === 'draw') return `Game Over. Round ${state.round} ended in a draw.`;
+  if (state.isAiThinking) return 'AI is thinking...';
   return `Player ${state.turn}'s turn.`;
 }
 
 export function TicTacToeGame() {
   const { handleGameOver } = useTicTacToeSession();
+  const { setLobbyOpen, leaveRoom } = useMultiplayerStore();
 
-  const { state, makeMove, setMode, setDifficulty, setHumanMark, resetRound, resetMatch } =
-    useTicTacToeEngine(handleGameOver);
+  const {
+    state,
+    roomCode,
+    myMark,
+    opponentName,
+    makeMove,
+    setMode,
+    setDifficulty,
+    setHumanMark,
+    resetRound,
+    resetMatch,
+  } = useTicTacToeEngine(handleGameOver);
 
   const { focusedIndex, setFocusedIndex } = useTicTacToeKeyboard({
     onMove: makeMove,
@@ -37,16 +45,23 @@ export function TicTacToeGame() {
     isEnabled: state.status === 'playing',
   });
 
+  const handleModeChange = (newMode: GameMode) => {
+    if (newMode === MODE_MULTIPLAYER) {
+      setLobbyOpen(true);
+    } else {
+      if (state.mode === MODE_MULTIPLAYER) leaveRoom();
+      setMode(newMode);
+    }
+  };
+
   const statusAnnouncement = useMemo(() => formatStatusAnnouncement(state), [state]);
 
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col items-center gap-5 py-2 px-4 focus:outline-none select-none">
-      {/* Screen-reader live region */}
       <div role="status" aria-live="polite" className="sr-only">
         {statusAnnouncement}
       </div>
 
-      {/* Navigation header */}
       <div className="w-full flex items-center justify-between">
         <Link
           href="/games"
@@ -57,7 +72,6 @@ export function TicTacToeGame() {
         </Link>
       </div>
 
-      {/* Scoreboard */}
       <TicTacToeScoreboard
         scores={state.scores}
         round={state.round}
@@ -69,7 +83,6 @@ export function TicTacToeGame() {
         isAiThinking={state.isAiThinking}
       />
 
-      {/* Interactive 3x3 Stage */}
       <div className="relative w-full flex items-center justify-center">
         <TicTacToeBoard
           board={state.board}
@@ -80,7 +93,6 @@ export function TicTacToeGame() {
           onCellFocus={setFocusedIndex}
         />
 
-        {/* Victory / Draw Overlay */}
         <TicTacToeOverlay
           status={state.status}
           winner={state.winner}
@@ -91,17 +103,23 @@ export function TicTacToeGame() {
         />
       </div>
 
-      {/* Tactical Control Panel */}
       <TicTacToeControls
         mode={state.mode}
         aiDifficulty={state.aiDifficulty}
         humanPlayerMark={state.humanPlayerMark}
-        onModeChange={setMode}
+        roomCode={roomCode}
+        myMark={myMark}
+        opponentName={opponentName}
+        onModeChange={handleModeChange}
         onDifficultyChange={setDifficulty}
         onHumanMarkChange={setHumanMark}
         onResetRound={resetRound}
         onResetMatch={resetMatch}
+        onOpenMultiplayerLobby={() => setLobbyOpen(true)}
+        onLeaveRoom={leaveRoom}
       />
+
+      <MultiplayerLobbyModal onMatchReady={() => setMode(MODE_MULTIPLAYER)} />
     </div>
   );
 }

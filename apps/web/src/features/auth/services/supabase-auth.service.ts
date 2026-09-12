@@ -1,13 +1,14 @@
 import type { Player } from '@playdeck/game-types';
+import { generateId } from '@playdeck/shared';
 import { getSupabaseClient, isSupabaseConfigured } from '@/lib/supabase/client';
-import { DEFAULT_AVATAR, DEFAULT_PLAYER_NAME } from '../auth.constants';
+import { DEFAULT_AVATAR, DEFAULT_PLAYER_NAME, USERS_TABLE } from '../auth.constants';
+import { hashPassword, verifyPassword } from '../utils/password.utils';
 import { PlayerTableService } from './player-table.service';
 
 export interface AuthResult {
   success: boolean;
   player?: Player;
   error?: string;
-  requiresVerification?: boolean;
 }
 
 export class SupabaseAuthService {
@@ -32,27 +33,70 @@ export class SupabaseAuthService {
     try {
       const cleanEmail = email.trim().toLowerCase();
       const cleanName = displayName?.trim() || cleanEmail.split('@')[0] || DEFAULT_PLAYER_NAME;
+      const now = new Date().toISOString();
+      const hashedPassword = await hashPassword(pass);
 
-      const { data, error } = await supabase.auth.signUp({
+      const { data: existing } = await supabase
+        .from(USERS_TABLE)
+        .select('id, password')
+        .eq('email', cleanEmail)
+        .maybeSingle();
+
+      if (existing) {
+        if (!existing.password) {
+          await supabase
+            .from(USERS_TABLE)
+            .update({
+              password: hashedPassword,
+              display_name: cleanName,
+              last_sign_in_at: now,
+              updated_at: now,
+            })
+            .eq('id', existing.id);
+
+          return {
+            success: true,
+            player: {
+              id: existing.id,
+              displayName: cleanName,
+              avatar: DEFAULT_AVATAR,
+              email: cleanEmail,
+              isGuest: false,
+              createdAt: now,
+            },
+          };
+        }
+        return { success: false, error: 'An account with this email already exists' };
+      }
+
+      const playerId = generateId('player');
+      const { error } = await supabase.from(USERS_TABLE).insert({
+        id: playerId,
         email: cleanEmail,
-        password: pass,
-        options: { data: { display_name: cleanName } },
+        password: hashedPassword,
+        display_name: cleanName,
+        avatar: DEFAULT_AVATAR,
+        is_guest: false,
+        last_sign_in_at: now,
+        created_at: now,
+        updated_at: now,
       });
 
-      if (error) return { success: false, error: error.message };
-      if (!data.user) return { success: false, error: 'Failed to create user' };
+      if (error) {
+        return { success: false, error: error.message };
+      }
 
-      const player: Player = {
-        id: data.user.id,
-        displayName: cleanName,
-        avatar: DEFAULT_AVATAR,
-        email: data.user.email || cleanEmail,
-        isGuest: false,
-        createdAt: data.user.created_at || new Date().toISOString(),
+      return {
+        success: true,
+        player: {
+          id: playerId,
+          displayName: cleanName,
+          avatar: DEFAULT_AVATAR,
+          email: cleanEmail,
+          isGuest: false,
+          createdAt: now,
+        },
       };
-
-      await this.savePlayerToTable(player);
-      return { success: true, player, requiresVerification: !data.session };
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Sign up failed';
       return { success: false, error: message };
@@ -67,74 +111,42 @@ export class SupabaseAuthService {
 
     try {
       const cleanEmail = email.trim().toLowerCase();
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: cleanEmail,
-        password: pass,
-      });
+      const { data, error } = await supabase
+        .from(USERS_TABLE)
+        .select('*')
+        .eq('email', cleanEmail)
+        .maybeSingle();
 
-      if (error) return { success: false, error: error.message };
-      if (!data.user) return { success: false, error: 'User not found' };
-
-      let player = await this.fetchPlayerFromTable(data.user.id);
-      if (!player) {
-        const metadataName = data.user.user_metadata?.display_name;
-        player = {
-          id: data.user.id,
-          displayName: metadataName || data.user.email?.split('@')[0] || DEFAULT_PLAYER_NAME,
-          avatar: DEFAULT_AVATAR,
-          email: data.user.email,
-          isGuest: false,
-          createdAt: data.user.created_at || new Date().toISOString(),
-        };
-        await this.savePlayerToTable(player);
+      if (error || !data) {
+        return { success: false, error: 'No account found with this email' };
       }
 
-      return { success: true, player };
+      const isValid = await verifyPassword(pass, data.password);
+      if (!isValid) {
+        return { success: false, error: 'Incorrect password' };
+      }
+
+      const now = new Date().toISOString();
+      await supabase.from(USERS_TABLE).update({ last_sign_in_at: now }).eq('id', data.id);
+
+      return {
+        success: true,
+        player: {
+          id: data.id,
+          displayName: data.display_name || DEFAULT_PLAYER_NAME,
+          avatar: data.avatar || DEFAULT_AVATAR,
+          email: data.email,
+          isGuest: false,
+          createdAt: data.created_at || now,
+        },
+      };
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Sign in failed';
       return { success: false, error: message };
     }
   }
 
-  static async signOut(): Promise<{ success: boolean; error?: string }> {
-    const supabase = getSupabaseClient();
-    if (!supabase) return { success: true };
-
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) return { success: false, error: error.message };
-      return { success: true };
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Sign out failed';
-      return { success: false, error: message };
-    }
-  }
-
-  static async getCurrentPlayer(): Promise<Player | null> {
-    const supabase = getSupabaseClient();
-    if (!supabase) return null;
-
-    try {
-      const { data } = await supabase.auth.getSession();
-      const sessionUser = data?.session?.user;
-      if (!sessionUser) return null;
-
-      const playerFromTable = await this.fetchPlayerFromTable(sessionUser.id);
-      if (playerFromTable) return playerFromTable;
-
-      return {
-        id: sessionUser.id,
-        displayName:
-          sessionUser.user_metadata?.display_name ||
-          sessionUser.email?.split('@')[0] ||
-          DEFAULT_PLAYER_NAME,
-        avatar: DEFAULT_AVATAR,
-        email: sessionUser.email,
-        isGuest: false,
-        createdAt: sessionUser.created_at || new Date().toISOString(),
-      };
-    } catch {
-      return null;
-    }
+  static async signOut(): Promise<{ success: boolean }> {
+    return { success: true };
   }
 }
