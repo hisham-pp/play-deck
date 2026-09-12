@@ -87,7 +87,22 @@ export function LudoOfflineSetup({ onStart, onBack }: LudoOfflineSetupProps) {
   }
 
   function handleFillWithBots() {
-    setSeats((prev) => fillEmptySeatsWithBots(prev));
+    setSeats((prev) => {
+      const next = [...prev];
+      if (!next[0] && player) {
+        next[0] = {
+          id: player.id,
+          displayName: player.displayName,
+          type: 'human',
+          color: 'red',
+          avatar: player.avatar,
+          seatIndex: 0,
+          status: 'ready',
+          ready: true,
+        };
+      }
+      return fillEmptySeatsWithBots(next);
+    });
   }
 
   function handleStart() {

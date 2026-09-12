@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Button, Card, CardContent } from '@playdeck/ui';
-import { Trophy, RefreshCw, LogOut } from 'lucide-react';
+import { Trophy, RefreshCw, LogOut, ArrowRight } from 'lucide-react';
 import { usePlayerStore } from '@/stores/player.store';
 
 import type { LudoPlayer } from '../types/ludo.types';
@@ -71,6 +71,18 @@ export function LudoGame() {
     [movePiece, currentSeat],
   );
 
+  // Auto-move single option if user doesn't pick within 1.2 seconds
+  useEffect(() => {
+    if (state?.status === 'playing' && isMyTurn && state.turnPhase === 'awaiting-move' && legalPieceIds.length > 0) {
+      const timer = setTimeout(() => {
+        if (legalPieceIds.length > 0) {
+          handleSelectPiece(legalPieceIds[0]);
+        }
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [state?.status, state?.turnPhase, isMyTurn, legalPieceIds, handleSelectPiece]);
+
   const handleRestart = () => {
     if (configuredPlayers.length > 0) {
       restart(configuredPlayers);
@@ -119,6 +131,33 @@ export function LudoGame() {
             onSelectPiece={handleSelectPiece}
             onRollDice={handleRollDice}
           />
+
+          {/* Piece Action Selector Overlay Bar */}
+          {isMyTurn && state.turnPhase === 'awaiting-move' && legalPieceIds.length > 0 && (
+            <div className="p-3 rounded-xl bg-slate-900 border border-amber-500/40 shadow-xl flex flex-wrap items-center justify-between gap-3 animate-in fade-in">
+              <div className="text-xs font-bold text-amber-400 flex items-center gap-2">
+                <span className="text-base">🎲</span>
+                <span>
+                  {state.dice.value === 6
+                    ? 'Rolled a 6! Select piece to exit base/move (Grants Extra Turn):'
+                    : `Rolled a ${state.dice.value}! Select piece to move:`}
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {legalPieceIds.map((pieceId, idx) => (
+                  <Button
+                    key={pieceId}
+                    size="sm"
+                    onClick={() => handleSelectPiece(pieceId)}
+                    className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-md"
+                  >
+                    Move Piece #{idx + 1} <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <LudoPlayerPanel state={state} botThinking={botThinking} />
         </div>
 
