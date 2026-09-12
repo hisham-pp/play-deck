@@ -76,6 +76,12 @@ export function useTicTacToeEngine(
   } = useTicTacToeMultiplayer(engine, state.mode, state.turn);
 
   useEffect(() => {
+    if (roomCode && state.mode !== MODE_MULTIPLAYER) {
+      engine.setMode(MODE_MULTIPLAYER);
+    }
+  }, [roomCode, state.mode, engine]);
+
+  useEffect(() => {
     if (state.status === STATUS_WON || state.status === STATUS_DRAW) {
       const key = `${state.round}-${state.moveHistory.length}-${state.status}-${state.winner}`;
       if (gameOverReportedRef.current !== key) {
