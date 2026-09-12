@@ -1,8 +1,9 @@
 'use client';
 
-import { Mail, Lock } from 'lucide-react';
-import React from 'react';
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import React, { useState } from 'react';
 import { Button, Input } from '@playdeck/ui';
+import { ICON_SIZE_CLASS } from '@/features/auth/auth.constants';
 
 export interface SignInTabProps {
   email: string;
@@ -23,6 +24,8 @@ export function SignInTab({
   isLoading,
   onSwitchToSignUp,
 }: SignInTabProps) {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4 mt-2">
       <Input
@@ -31,17 +34,32 @@ export function SignInTab({
         placeholder="player@example.com"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        icon={<Mail className="w-4 h-4" />}
+        icon={<Mail className={ICON_SIZE_CLASS} />}
         required
         disabled={isLoading}
       />
       <Input
         label="Password"
-        type="password"
+        type={showPassword ? 'text' : 'password'}
         placeholder="••••••••"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        icon={<Lock className="w-4 h-4" />}
+        icon={<Lock className={ICON_SIZE_CLASS} />}
+        action={
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="text-deck-400 hover:text-deck-200 transition-colors p-0.5 cursor-pointer"
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            tabIndex={-1}
+          >
+            {showPassword ? (
+              <EyeOff className={ICON_SIZE_CLASS} />
+            ) : (
+              <Eye className={ICON_SIZE_CLASS} />
+            )}
+          </button>
+        }
         required
         disabled={isLoading}
       />
