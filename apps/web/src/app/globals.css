@@ -60,3 +60,32 @@ body {
     transparent 100%
   );
 }
+
+/* Dice tumble while a roll resolves */
+@keyframes dice-tumble {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(-14deg) scale(1.08);
+  }
+  50% {
+    transform: rotate(12deg) scale(0.96);
+  }
+  75% {
+    transform: rotate(-8deg) scale(1.06);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+.dice-tumble {
+  animation: dice-tumble 0.28s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dice-tumble {
+    animation: none;
+  }
+}

@@ -1,12 +1,23 @@
 import type { BoardLayout } from '../../engine/board-layout';
-import { globalTrackIndex, homeStretchIndex } from '../../engine/board-layout';
+import {
+  globalTrackIndex,
+  homeStretchIndex,
+  isHomeStretchSteps,
+  isTrackSteps,
+} from '../../engine/board-layout';
 import type { LudoColor, LudoPieceState } from '../../types/ludo.types';
 
 export const BOARD_SIZE = 15;
 export const BOARD_GRID_SIZE = 15;
 export const CELL_SIZE = 0.52;
 const LAYOUT_CLASSIC4 = 'classic4';
-export const BOARD_PHYSICAL_SIZE = BOARD_GRID_SIZE * CELL_SIZE; // ~7.2 units
+
+/** Exact span of the 15x15 playfield in world units. */
+export const BOARD_PHYSICAL_SIZE = BOARD_GRID_SIZE * CELL_SIZE;
+/** A base yard covers a 6x6 block of grid cells. */
+export const BASE_YARD_SIZE = 6 * CELL_SIZE;
+/** The victory hub covers the middle 3x3 block. */
+export const CENTER_SIZE = 3 * CELL_SIZE;
 
 export type Vec2 = [number, number];
 
@@ -132,20 +143,20 @@ export function homeCenterPosition(color: LudoColor, layout: BoardLayout): Vec2 
     let row = 7;
     switch (color) {
       case 'red':
-        col = 6.4;
+        col = 6;
         row = 7;
         break;
       case 'green':
         col = 7;
-        row = 6.4;
+        row = 6;
         break;
       case 'yellow':
-        col = 7.6;
+        col = 8;
         row = 7;
         break;
       case 'blue':
         col = 7;
-        row = 7.6;
+        row = 8;
         break;
     }
     return gridToWorld(col, row);
@@ -153,7 +164,7 @@ export function homeCenterPosition(color: LudoColor, layout: BoardLayout): Vec2 
 
   const colorIdx = layout.colors.indexOf(color);
   const angle = (colorIdx / layout.colors.length) * Math.PI * 2 - Math.PI / 2;
-  return [Math.cos(angle) * 0.4, Math.sin(angle) * 0.4];
+  return [Math.cos(angle) * 0.85, Math.sin(angle) * 0.85];
 }
 
 export function baseSlotPosition(layout: BoardLayout, color: LudoColor, pieceIndex: number): Vec2 {
@@ -170,21 +181,21 @@ export function baseSlotPosition(layout: BoardLayout, color: LudoColor, pieceInd
         baseCenterRow = 2.5;
         break;
       case 'green': // Top-Right
-        baseCenterCol = 12.5;
+        baseCenterCol = 11.5;
         baseCenterRow = 2.5;
         break;
       case 'yellow': // Bottom-Right
-        baseCenterCol = 12.5;
-        baseCenterRow = 12.5;
+        baseCenterCol = 11.5;
+        baseCenterRow = 11.5;
         break;
       case 'blue': // Bottom-Left
         baseCenterCol = 2.5;
-        baseCenterRow = 12.5;
+        baseCenterRow = 11.5;
         break;
     }
 
-    const col = baseCenterCol + (isCol2 ? 0.7 : -0.7);
-    const row = baseCenterRow + (isRow2 ? 0.7 : -0.7);
+    const col = baseCenterCol + (isCol2 ? 1 : -1);
+    const row = baseCenterRow + (isRow2 ? 1 : -1);
     return gridToWorld(col, row);
   }
 
@@ -197,6 +208,27 @@ export function baseSlotPosition(layout: BoardLayout, color: LudoColor, pieceInd
   const dx = ((pieceIndex % 2) - 0.5) * 0.5;
   const dz = (Math.floor(pieceIndex / 2) - 0.5) * 0.5;
   return [cx + dx, cz + dz];
+}
+
+/**
+ * Where a piece sits after exactly `steps` steps, independent of the location
+ * the engine recorded. Walking a move one cell at a time needs the position of
+ * squares the piece only passes through, which never appear in piece state.
+ */
+export function positionForSteps(
+  layout: BoardLayout,
+  color: LudoColor,
+  pieceIndex: number,
+  steps: number,
+): Vec2 {
+  if (steps <= 0) return baseSlotPosition(layout, color, pieceIndex);
+  if (isTrackSteps(layout, steps)) {
+    return trackCellPosition(layout, globalTrackIndex(layout, color, steps));
+  }
+  if (isHomeStretchSteps(layout, steps)) {
+    return homeStretchPosition(layout, color, homeStretchIndex(layout, steps));
+  }
+  return homeCenterPosition(color, layout);
 }
 
 export function piecePosition(layout: BoardLayout, piece: LudoPieceState): Vec2 {

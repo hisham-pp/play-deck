@@ -1,7 +1,7 @@
 'use client';
 
 import { Trophy, RefreshCw, LogOut, ArrowRight } from 'lucide-react';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { Button, Card, CardContent } from '@playdeck/ui';
 import { usePlayerStore } from '@/stores/player.store';
 import { useLudoBotTurn } from '../hooks/use-ludo-bot-turn';
@@ -25,7 +25,17 @@ const MODE_LOBBY = 'lobby';
 export function LudoGame() {
   const [mode, setMode] = useState<GameMode>('lobby');
   const [configuredPlayers, setConfiguredPlayers] = useState<LudoPlayer[]>([]);
+  const [isDiceSettling, setIsDiceSettling] = useState(false);
   const player = usePlayerStore((s) => s.player);
+
+  useEffect(() => {
+    if (mode === 'playing') {
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = '';
+      };
+    }
+  }, [mode]);
 
   const { engine, state, rollForPlayer, movePiece, pause, resume, restart } =
     useLudoEngine(configuredPlayers);
@@ -34,6 +44,18 @@ export function LudoGame() {
 
   useLudoSound(state);
   useLudoSession(state, configuredPlayers, player?.id ?? null);
+
+  // Every roll path (HUD button, hotkey, bot, clicking the die) increments this, so
+  // the throw and the result reveal are both driven by engine state.
+  const rollsThisTurn = state.dice.rollsThisTurn;
+  const lastRollRef = useRef(rollsThisTurn);
+  useEffect(() => {
+    const previous = lastRollRef.current;
+    lastRollRef.current = rollsThisTurn;
+    if (rollsThisTurn > previous) {
+      setIsDiceSettling(true);
+    }
+  }, [rollsThisTurn]);
 
   const currentSeat = configuredPlayers[state.currentTurnSeatIndex];
   // In human turn (offline or online), allow local human to roll
@@ -76,22 +98,21 @@ export function LudoGame() {
     [movePiece, currentSeat],
   );
 
-  // Auto-move single option if user doesn't pick within 1.2 seconds
+  // Auto-move single option after brief delay
   useEffect(() => {
     if (
       state?.status === 'playing' &&
       isMyTurn &&
+      !isDiceSettling &&
       state.turnPhase === 'awaiting-move' &&
-      legalPieceIds.length > 0
+      legalPieceIds.length === 1
     ) {
       const timer = setTimeout(() => {
-        if (legalPieceIds.length > 0) {
-          handleSelectPiece(legalPieceIds[0]);
-        }
-      }, 1500);
+        handleSelectPiece(legalPieceIds[0]);
+      }, 300);
       return () => clearTimeout(timer);
     }
-  }, [state?.status, state?.turnPhase, isMyTurn, legalPieceIds, handleSelectPiece]);
+  }, [state?.status, state?.turnPhase, isMyTurn, isDiceSettling, legalPieceIds, handleSelectPiece]);
 
   const handleRestart = () => {
     if (configuredPlayers.length > 0) {
@@ -121,64 +142,91 @@ export function LudoGame() {
   const isGameOver = state.status === 'completed';
 
   return (
-    <div className="max-w-5xl mx-auto space-y-4 px-2 sm:px-4 py-2">
-      <LudoGameHeader
+    <div className="fixed inset-0 z-50 h-[100dvh] w-screen bg-slate-950">
+      <LudoBoard
         state={state}
-        configuredPlayers={configuredPlayers}
-        localSeatIndex={localSeatIndex}
+        legalPieceIds={legalPieceIds}
+        onSelectPiece={handleSelectPiece}
+        rolling={isDiceSettling}
+        onRollSettled={() => setIsDiceSettling(false)}
+        onRollDice={handleRollDice}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-start">
-        <div className="lg:col-span-3 space-y-4">
-          <LudoBoard
+      <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-3 sm:p-5">
+        {/* Top Row: Header */}
+        <div className="pointer-events-auto self-start">
+          <LudoGameHeader
             state={state}
-            legalPieceIds={legalPieceIds}
-            onSelectPiece={handleSelectPiece}
-            onRollDice={handleRollDice}
+            configuredPlayers={configuredPlayers}
+            localSeatIndex={localSeatIndex}
           />
-
-          {/* Piece Action Selector Overlay Bar */}
-          {isMyTurn && state.turnPhase === 'awaiting-move' && legalPieceIds.length > 0 && (
-            <div className="p-3 rounded-xl bg-slate-900 border border-amber-500/40 shadow-xl flex flex-wrap items-center justify-between gap-3 animate-in fade-in">
-              <div className="text-xs font-bold text-amber-400 flex items-center gap-2">
-                <span className="text-base">🎲</span>
-                <span>
-                  {state.dice.value === 6
-                    ? 'Rolled a 6! Select piece to exit base/move (Grants Extra Turn):'
-                    : `Rolled a ${state.dice.value}! Select piece to move:`}
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {legalPieceIds.map((pieceId, idx) => (
-                  <Button
-                    key={pieceId}
-                    size="sm"
-                    onClick={() => handleSelectPiece(pieceId)}
-                    className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-md"
-                  >
-                    Move Piece #{idx + 1} <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                  </Button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <LudoPlayerPanel state={state} botThinking={botThinking} />
         </div>
 
-        <div className="space-y-4">
-          <LudoDice state={state} isMyTurn={isMyTurn} onRollDice={handleRollDice} />
-          <LudoControls
-            state={state}
-            onPause={() => currentSeat && pause(currentSeat.id)}
-            onResume={() => currentSeat && resume(currentSeat.id)}
-            onLeave={() => setMode(MODE_LOBBY)}
-          />
+        {/* Bottom Row: Full Width Layout */}
+        <div className="flex flex-col gap-3 sm:gap-4">
+          {/* Player Panel - Full Width */}
+          <div className="pointer-events-auto">
+            <LudoPlayerPanel
+              state={state}
+              configuredPlayers={configuredPlayers}
+              botThinking={botThinking}
+            />
+          </div>
+
+          {/* Action Bar + Dice + Controls Row */}
+          <div className="flex gap-3 sm:gap-4 items-end justify-between">
+            {/* Piece Action Selector */}
+            <div className="flex-1">
+              {isMyTurn &&
+                !isDiceSettling &&
+                state.turnPhase === 'awaiting-move' &&
+                legalPieceIds.length > 0 && (
+                  <div className="pointer-events-auto p-3 rounded-lg bg-slate-900/80 border border-amber-500/40 backdrop-blur-md flex flex-wrap items-center justify-between gap-3 animate-in fade-in">
+                    <div className="text-xs font-bold text-amber-400 flex items-center gap-2">
+                      <span className="text-base">🎲</span>
+                      <span>
+                        {state.dice.value === 6
+                          ? 'Rolled a 6! Select piece to exit base/move (Grants Extra Turn):'
+                          : `Rolled a ${state.dice.value}! Select piece to move:`}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {legalPieceIds.map((pieceId, idx) => (
+                        <Button
+                          key={pieceId}
+                          size="sm"
+                          onClick={() => handleSelectPiece(pieceId)}
+                          className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-md"
+                        >
+                          Move Piece #{idx + 1} <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+            </div>
+
+            {/* Dice + Controls */}
+            <div className="space-y-3 pointer-events-auto">
+              <LudoDice
+                state={state}
+                isMyTurn={isMyTurn}
+                isSettling={isDiceSettling}
+                onRollDice={handleRollDice}
+              />
+              <LudoControls
+                state={state}
+                onPause={() => currentSeat && pause(currentSeat.id)}
+                onResume={() => currentSeat && resume(currentSeat.id)}
+                onLeave={() => setMode(MODE_LOBBY)}
+              />
+            </div>
+          </div>
         </div>
       </div>
 
       {isGameOver && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-sm flex items-center justify-center p-4">
           <Card className="max-w-md w-full border-amber-500/40 bg-slate-900 shadow-2xl">
             <CardContent className="p-6 text-center space-y-6">
               <div className="w-16 h-16 rounded-full bg-amber-500/20 border-2 border-amber-500 text-amber-400 mx-auto flex items-center justify-center">

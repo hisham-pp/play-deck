@@ -1,11 +1,11 @@
 'use client';
 
 import { Badge } from '@playdeck/ui';
-import type { LudoColor, LudoGameState } from '../types/ludo.types';
-import { ludoColorTheme } from '../utils/ludo-colors';
+import type { LudoColor, LudoGameState, LudoPlayer } from '../types/ludo.types';
 
 interface LudoPlayerPanelProps {
   state: LudoGameState;
+  configuredPlayers: LudoPlayer[];
   botThinking?: boolean;
 }
 
@@ -18,48 +18,39 @@ const COLOR_ICONS: Record<LudoColor, string> = {
   purple: '🟣',
 };
 
-export function LudoPlayerPanel({ state, botThinking }: LudoPlayerPanelProps) {
+export function LudoPlayerPanel({ state, configuredPlayers, botThinking }: LudoPlayerPanelProps) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+    <div className="flex w-fit flex-col gap-1.5">
       {state.players.map((p) => {
         const isCurrent = state.currentTurnSeatIndex === p.seatIndex;
         const piecesHome = p.pieces.filter((pc) => pc.location === 'home').length;
-        const theme = ludoColorTheme(p.color);
+        const configuredPlayer = configuredPlayers.find((cp) => cp.seatIndex === p.seatIndex);
+        const displayName = configuredPlayer?.displayName || 'Player';
 
         return (
           <div
             key={p.playerId}
-            className={`p-3 rounded-xl border flex flex-col justify-between transition-all ${
+            className={`flex items-center gap-2 rounded-lg border px-2.5 py-1.5 backdrop-blur-md transition-all ${
               isCurrent
-                ? 'bg-slate-900 border-amber-500/60 shadow-lg shadow-amber-500/10 ring-1 ring-amber-500/40 scale-[1.02]'
-                : 'bg-slate-900/60 border-slate-800/80'
+                ? 'bg-slate-900/90 border-amber-500/60 ring-1 ring-amber-500/40'
+                : 'bg-slate-900/80 border-slate-700/70'
             }`}
           >
-            <div className="flex items-center justify-between gap-1.5 mb-2">
-              <div className="flex items-center gap-1.5 min-w-0">
-                <span className="text-sm">{COLOR_ICONS[p.color]}</span>
-                <span className="text-xs font-black tracking-wide text-slate-200 uppercase truncate">
-                  {p.color} ({theme.symbol})
-                </span>
-              </div>
-              <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">
-                S{p.seatIndex + 1}
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between text-xs text-slate-400 pt-1 border-t border-slate-800/60">
-              <span className="font-semibold text-slate-300">
-                Home: <span className="text-amber-400 font-bold">{piecesHome}</span>/4
-              </span>
-              {isCurrent && botThinking && (
-                <Badge
-                  variant="outline"
-                  className="text-[10px] py-0.5 px-1.5 animate-pulse bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold"
-                >
-                  Thinking...
-                </Badge>
-              )}
-            </div>
+            <span className="text-xs">{COLOR_ICONS[p.color]}</span>
+            <span className="max-w-[120px] truncate text-xs font-bold text-slate-200">
+              {displayName}
+            </span>
+            <span className="text-xs font-semibold tabular-nums text-amber-400">
+              {piecesHome}/4
+            </span>
+            {isCurrent && botThinking && (
+              <Badge
+                variant="outline"
+                className="animate-pulse border-amber-500/40 bg-amber-500/20 px-1.5 py-0 text-[10px] font-bold text-amber-300"
+              >
+                Thinking
+              </Badge>
+            )}
           </div>
         );
       })}

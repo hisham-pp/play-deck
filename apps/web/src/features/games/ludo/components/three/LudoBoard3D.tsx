@@ -4,7 +4,10 @@ import { useMemo } from 'react';
 import { isSafeCell, type BoardLayout } from '../../engine/board-layout';
 import { ludoColorTheme } from '../../utils/ludo-colors';
 import {
+  BASE_YARD_SIZE,
+  BOARD_PHYSICAL_SIZE,
   CELL_SIZE,
+  CENTER_SIZE,
   baseSlotPosition,
   gridToWorld,
   homeCenterPosition,
@@ -51,20 +54,21 @@ export function LudoBoard3D({ layout }: LudoBoard3DProps) {
     <group>
       {/* Main Board Base Slab */}
       <mesh position={[0, -0.12, 0]} receiveShadow castShadow>
-        <boxGeometry args={[7.6, 0.24, 7.6]} />
+        <boxGeometry args={[BOARD_PHYSICAL_SIZE + 0.6, 0.24, BOARD_PHYSICAL_SIZE + 0.6]} />
         <meshStandardMaterial color="#0b0f19" roughness={0.7} metalness={0.3} />
       </mesh>
 
       {/* Raised Outer Border Frame */}
       <mesh position={[0, -0.01, 0]} receiveShadow>
-        <boxGeometry args={[7.4, 0.04, 7.4]} />
+        <boxGeometry args={[BOARD_PHYSICAL_SIZE + 0.3, 0.04, BOARD_PHYSICAL_SIZE + 0.3]} />
         <meshStandardMaterial color="#1e293b" roughness={0.5} metalness={0.4} />
       </mesh>
 
-      {/* Inner Playing Surface */}
+      {/* Inner Playing Surface — deliberately darker than the white cells so every
+          cell edge reads as a gridline instead of blending into the plate. */}
       <mesh position={[0, 0.005, 0]} receiveShadow>
-        <boxGeometry args={[7.2, 0.02, 7.2]} />
-        <meshStandardMaterial color="#f8fafc" roughness={0.3} />
+        <boxGeometry args={[BOARD_PHYSICAL_SIZE, 0.02, BOARD_PHYSICAL_SIZE]} />
+        <meshStandardMaterial color="#8f9bb0" roughness={0.55} />
       </mesh>
 
       {/* Corner Base Yards (6x6 Grid Areas) */}
@@ -79,16 +83,16 @@ export function LudoBoard3D({ layout }: LudoBoard3DProps) {
             baseRow = 2.5;
             break;
           case 'green':
-            baseCol = 12.5;
+            baseCol = 11.5;
             baseRow = 2.5;
             break;
           case 'yellow':
-            baseCol = 12.5;
-            baseRow = 12.5;
+            baseCol = 11.5;
+            baseRow = 11.5;
             break;
           case 'blue':
             baseCol = 2.5;
-            baseRow = 12.5;
+            baseRow = 11.5;
             break;
         }
 
@@ -98,13 +102,13 @@ export function LudoBoard3D({ layout }: LudoBoard3DProps) {
           <group key={`base-yard-${color}`}>
             {/* Outer Base Color Block */}
             <mesh position={[bx, 0.02, bz]} receiveShadow>
-              <boxGeometry args={[2.88, 0.03, 2.88]} />
+              <boxGeometry args={[BASE_YARD_SIZE, 0.03, BASE_YARD_SIZE]} />
               <meshStandardMaterial color={theme.hex} roughness={0.4} />
             </mesh>
 
             {/* Inner White Recessed Area */}
             <mesh position={[bx, 0.036, bz]} receiveShadow>
-              <boxGeometry args={[2.16, 0.01, 2.16]} />
+              <boxGeometry args={[4 * CELL_SIZE, 0.01, 4 * CELL_SIZE]} />
               <meshStandardMaterial color={COLOR_WHITE} roughness={0.2} />
             </mesh>
 
@@ -167,7 +171,7 @@ export function LudoBoard3D({ layout }: LudoBoard3DProps) {
 
       {/* Center Victory Target (3x3 Center Area) */}
       <mesh position={[0, 0.028, 0]} receiveShadow>
-        <boxGeometry args={[CELL_SIZE * 2.8, 0.03, CELL_SIZE * 2.8]} />
+        <boxGeometry args={[CENTER_SIZE, 0.03, CENTER_SIZE]} />
         <meshStandardMaterial color={COLOR_WHITE} roughness={0.2} />
       </mesh>
 
@@ -177,7 +181,7 @@ export function LudoBoard3D({ layout }: LudoBoard3DProps) {
         const theme = ludoColorTheme(color);
         return (
           <mesh key={`center-tri-${color}`} position={[cx, 0.045, cz]}>
-            <cylinderGeometry args={[0.32, 0.32, 0.01, 24]} />
+            <cylinderGeometry args={[0.2, 0.2, 0.01, 24]} />
             <meshStandardMaterial
               color={theme.hex}
               emissive={theme.hex}
