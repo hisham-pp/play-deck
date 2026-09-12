@@ -5,6 +5,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { GameDefinition } from '@playdeck/game-types';
 import { SnakeGame } from '@/features/games/snake';
+import { TicTacToeGame } from '@/features/games/tic-tac-toe';
 import { useGameSessionStore } from '@/stores/game-session.store';
 import { useLibraryStore } from '@/stores/library.store';
 import { usePlayerStore } from '@/stores/player.store';
@@ -21,6 +22,10 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
   // Dedicated real game router
   if (game.id === 'snake') {
     return <SnakeGame />;
+  }
+
+  if (game.id === 'tic-tac-toe') {
+    return <TicTacToeGame />;
   }
 
   const handleStart = () => {
