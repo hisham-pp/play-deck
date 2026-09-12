@@ -5,6 +5,24 @@ const BADGE_COMING_SOON = 'Coming Soon';
 
 export const GAME_DEFINITIONS: GameDefinition[] = [
   {
+    id: 'snake',
+    name: 'Snake',
+    slug: 'snake',
+    description:
+      'Guide the snake, eat energy pellets, and grow without crashing into walls or your own tail.',
+    category: 'arcade',
+    players: { min: 1, max: 1 },
+    status: 'available',
+    tags: ['Arcade', 'Classic', 'Retro', 'High Score'],
+    featured: true,
+    badge: 'Ready to Play',
+    releaseDate: '2026-09-11',
+    createGame: () => ({
+      board: '20x20',
+      speed: 140,
+    }),
+  },
+  {
     id: 'tic-tac-toe',
     name: 'Tic-Tac-Toe',
     slug: 'tic-tac-toe',
@@ -12,16 +30,11 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
       'The classic two-player grid battle. Align three marks horizontally, vertically, or diagonally before your opponent.',
     category: 'strategy',
     players: { min: 1, max: 2 },
-    status: 'available',
+    status: STATUS_COMING_SOON,
     tags: ['Classic', 'Turn-based', 'Quick Play', 'Local Play'],
-    featured: true,
-    badge: 'Ready to Play',
-    releaseDate: '2026-09-01',
-    createGame: () => ({
-      board: Array(9).fill(null),
-      currentTurn: 'X',
-      moves: 0,
-    }),
+    featured: false,
+    badge: BADGE_COMING_SOON,
+    releaseDate: 'Q4 2026',
   },
   {
     id: 'chess',
@@ -34,19 +47,6 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     status: STATUS_COMING_SOON,
     tags: ['Grandmaster', 'Tactics', 'Board', 'Multiplayer Ready'],
     featured: true,
-    badge: BADGE_COMING_SOON,
-    releaseDate: 'Q4 2026',
-  },
-  {
-    id: 'snake',
-    name: 'Cyber Snake',
-    slug: 'cyber-snake',
-    description:
-      'Navigate the neon serpent, harvest energy pellets, and survive ever-accelerating speeds without biting your tail.',
-    category: 'arcade',
-    players: { min: 1, max: 1 },
-    status: STATUS_COMING_SOON,
-    tags: ['Arcade', 'Reflexes', 'Retro', 'High Score'],
     badge: BADGE_COMING_SOON,
     releaseDate: 'Q4 2026',
   },

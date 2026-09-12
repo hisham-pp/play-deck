@@ -21,3 +21,12 @@ export interface PlayerPreferences {
   reducedMotion: boolean;
   autoSave: boolean;
 }
+
+export interface PlayerGameStats {
+  playerId: string;
+  gameId: string;
+  highScore: number;
+  gamesPlayed: number;
+  lastPlayedAt: string;
+  customData?: Record<string, unknown>;
+}

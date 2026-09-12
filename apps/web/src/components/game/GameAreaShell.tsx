@@ -5,6 +5,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { GameDefinition } from '@playdeck/game-types';
 import { Badge } from '@/components/ui/Badge';
+import { SnakeGame } from '@/features/games/snake';
 import { useGameSessionStore } from '@/stores/game-session.store';
 import { useLibraryStore } from '@/stores/library.store';
 import { usePlayerStore } from '@/stores/player.store';
@@ -16,6 +17,11 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
   const { addRecentSession } = useLibraryStore();
   const [status, setStatus] = useState<'idle' | 'running' | 'over'>('idle');
   const [mockScore, setMockScore] = useState(0);
+
+  // Dedicated real game router
+  if (game.id === 'snake') {
+    return <SnakeGame />;
+  }
 
   const handleStart = () => {
     if (!player) return;
