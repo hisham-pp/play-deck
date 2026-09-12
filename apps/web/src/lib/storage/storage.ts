@@ -1,4 +1,4 @@
-import { StorageAdapter } from '@playdeck/game-types';
+import type { StorageAdapter } from '@playdeck/game-types';
 import { IndexedDBAdapter } from './indexed-db';
 import { LocalStorageAdapter } from './local-storage';
 

@@ -1,14 +1,27 @@
 'use client';
 
-import { Trophy, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
 import { usePlayerStore } from '@/stores/player.store';
+import { AccountStatusCard } from './components/AccountStatusCard';
+import { ProfileHeader } from './components/ProfileHeader';
+import { ProfileStatsCard } from './components/ProfileStatsCard';
 
 const AVATARS = ['🕹️', '👾', '🚀', '♟️', '🎲', '🎯', '⚡', '🐉', '🦊'];
 
 export function ProfileClient() {
-  const { player, stats, initPlayer, updateDisplayName, updateAvatar } = usePlayerStore();
+  const {
+    player,
+    stats,
+    initPlayer,
+    updateDisplayName,
+    updateAvatar,
+    setAuthModalOpen,
+    signOut,
+    isLoadingAuth,
+  } = usePlayerStore();
+
   const [nameInput, setNameInput] = useState('');
   const [isSaved, setIsSaved] = useState(false);
 
@@ -32,14 +45,14 @@ export function ProfileClient() {
 
   return (
     <div className="max-w-3xl mx-auto flex flex-col gap-8">
-      <div className="flex flex-col gap-2 pb-4 border-b border-surface-border">
-        <h1 className="text-3xl font-extrabold text-deck-950 dark:text-white font-display tracking-tight">
-          Player Profile
-        </h1>
-        <p className="text-sm text-deck-500">
-          Manage your local player identity, avatar, and inspect client storage.
-        </p>
-      </div>
+      <ProfileHeader />
+
+      <AccountStatusCard
+        player={player}
+        isLoading={isLoadingAuth}
+        onOpenAuth={() => setAuthModalOpen(true)}
+        onSignOut={signOut}
+      />
 
       {/* Identity Card */}
       <div className="p-6 rounded-xl border border-surface-border bg-surface-raised flex flex-col sm:flex-row items-start sm:items-center gap-6">
@@ -66,9 +79,10 @@ export function ProfileClient() {
                 </Button>
               </div>
             </div>
-            <p className="text-[11px] text-deck-400 font-mono">
-              Player ID: {player?.id || 'loading...'}
-            </p>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-deck-400 font-mono">
+              <span>ID: {player?.id || 'loading...'}</span>
+              {player?.email && <span>Email: {player.email}</span>}
+            </div>
           </form>
         </div>
       </div>
@@ -95,31 +109,7 @@ export function ProfileClient() {
         </div>
       </div>
 
-      {/* Statistics */}
-      <div className="p-6 rounded-xl border border-surface-border bg-surface-raised flex flex-col gap-4">
-        <div className="flex items-center gap-2">
-          <Trophy className="w-4 h-4 text-amber-500" />
-          <h3 className="text-xs font-bold uppercase tracking-wider text-deck-500 font-display">
-            Local Stats
-          </h3>
-        </div>
-        <div className="grid grid-cols-3 gap-4 text-center">
-          <div className="p-4 rounded-lg bg-surface-overlay border border-surface-border">
-            <span className="text-2xl font-black text-deck-950 dark:text-white font-display">
-              {stats.gamesPlayed}
-            </span>
-            <p className="text-xs text-deck-400 mt-1">Games Played</p>
-          </div>
-          <div className="p-4 rounded-lg bg-surface-overlay border border-surface-border">
-            <span className="text-2xl font-black text-emerald-500 font-display">{stats.wins}</span>
-            <p className="text-xs text-deck-400 mt-1">Victories</p>
-          </div>
-          <div className="p-4 rounded-lg bg-surface-overlay border border-surface-border">
-            <span className="text-2xl font-black text-rose-500 font-display">{stats.losses}</span>
-            <p className="text-xs text-deck-400 mt-1">Defeats</p>
-          </div>
-        </div>
-      </div>
+      <ProfileStatsCard stats={stats} />
     </div>
   );
 }

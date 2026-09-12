@@ -1,5 +1,5 @@
 import Dexie, { type Table } from 'dexie';
-import { StorageAdapter } from '@playdeck/game-types';
+import type { StorageAdapter } from '@playdeck/game-types';
 
 interface KeyValueRecord {
   key: string;
