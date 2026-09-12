@@ -4,8 +4,9 @@ This file is read by AI tools at the start of every session. Keep it current.
 
 @AGENTS.md
 
-## Critical Architecture Invariants
+## Critical Architecture & Workflow Invariants
 
+- **Feature Branches (MANDATORY)**: Every task, feature, bugfix, or doc change MUST be developed and committed on a dedicated feature branch (`feat/*`, `fix/*`, `docs/*`, `refactor/*`). Direct commits or pushes to `main` are strictly prohibited.
 - **Storage**: Never call `localStorage` or `indexedDB` directly in UI or engine code. Use `StorageService` (`apps/web/src/lib/storage/storage.ts`) with `STORAGE_KEYS`.
 - **State**: Keep stores strictly separated (`player.store`, `library.store`, `game-session.store`, `preferences.store`, `multiplayer.store`). No monolithic stores.
 - **Game Engine**: Game logic is framework-agnostic and implements `GameDefinition` from `@playdeck/game-types`.

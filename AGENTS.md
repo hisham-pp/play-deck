@@ -198,3 +198,39 @@ import { Button, Card, Badge, Input, Modal, Tabs, Avatar } from '@playdeck/ui';
 ```
 
 Or inside `apps/web` via the re-export boundary `@/components/ui`.
+
+---
+
+## 7. Git Workflow & Feature Branch Policy (MANDATORY)
+
+> **MANDATORY**: Every piece of work—including new features, bug fixes, refactorings, experiments, and documentation updates—**MUST be developed on a dedicated feature branch**. Direct commits or pushes to `main` are strictly prohibited.
+
+### Branch Naming Conventions
+
+Use descriptive, lowercase branch names with hyphens, prefixed by category:
+
+- `feat/<feature-name>`: New capabilities, game engines, UI features (e.g. `feat/snake-two-player`, `feat/sound-effects`)
+- `fix/<issue-name>`: Bug fixes, layout corrections, logic patches (e.g. `fix/snake-canvas-clipping`, `fix/auth-hash-mismatch`)
+- `docs/<topic>`: Documentation, architecture updates, guides (e.g. `docs/enforce-feature-branches`)
+- `refactor/<scope>`: Code restructuring, cleanups, migrations without feature changes (e.g. `refactor/storage-adapter`)
+- `test/<scope>`: Adding or modifying test suites
+- `chore/<task>`: Tooling, package dependency updates, CI/CD
+
+### Development Workflow
+
+1. **Branch Off Up-To-Date `main`**:
+   ```bash
+   git checkout main
+   git pull origin main
+   git checkout -b <branch-type>/<short-description>
+   ```
+2. **Implement & Verify Locally**:
+   - Verify tests pass: `pnpm test`
+   - Verify linting & types: `pnpm lint`
+   - Verify build succeeds: `pnpm build`
+   - Format codebase: `pnpm format`
+3. **Commit with Conventional Messages**:
+   - `feat(...)`, `fix(...)`, `docs(...)`, `refactor(...)`, `chore(...)`
+4. **Push & Open Pull Request**:
+   - Push the branch to `origin/<branch-type>/<short-description>`.
+   - Never push or commit directly to `main`.
