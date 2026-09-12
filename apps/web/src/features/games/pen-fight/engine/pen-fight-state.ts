@@ -1,4 +1,9 @@
-import type { AIDifficulty, PenFightMode, PenFightState } from '../types/pen-fight.types';
+import type {
+  AIDifficulty,
+  PenFightMode,
+  PenFightState,
+  PenSpeedMode,
+} from '../types/pen-fight.types';
 import {
   DEFAULT_PLAYER_ONE_COLOR,
   DEFAULT_PLAYER_TWO_COLOR,
@@ -7,14 +12,17 @@ import {
   MODE_AI,
   PLAYER_ONE,
   PLAYER_TWO,
+  SPEED_NORMAL,
 } from './pen-fight-constants';
 
 export function createInitialPenFightState(
   mode: PenFightMode = MODE_AI,
   difficulty: AIDifficulty = DIFFICULTY_PRO,
+  speedMode: PenSpeedMode = SPEED_NORMAL,
 ): PenFightState {
   return {
     mode,
+    speedMode,
     difficulty,
     players: {
       p1: {

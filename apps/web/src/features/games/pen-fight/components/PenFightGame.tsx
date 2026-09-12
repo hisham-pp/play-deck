@@ -11,6 +11,7 @@ import type {
   PenFightMode,
   PenFightOutcome,
   PenFightPlayerId,
+  PenSpeedMode,
 } from '../types/pen-fight.types';
 import type { PenFightArenaHandle } from './PenFightArena';
 import { PenFightHUD } from './PenFightHUD';
@@ -46,6 +47,7 @@ export function PenFightGame() {
   const {
     state,
     setMode,
+    setSpeedMode,
     setDifficulty,
     setPlayerName,
     setPlayerColor,
@@ -82,11 +84,13 @@ export function PenFightGame() {
   const handleStartMatch = useCallback(
     (config: {
       mode: PenFightMode;
+      speedMode: PenSpeedMode;
       difficulty: AIDifficulty;
       names: Record<PenFightPlayerId, string>;
       colors: Record<PenFightPlayerId, PenColor>;
     }) => {
       setMode(config.mode);
+      setSpeedMode(config.speedMode);
       setDifficulty(config.difficulty);
       startMatch();
       setPlayerName('p1', config.names.p1);
@@ -96,7 +100,7 @@ export function PenFightGame() {
       arenaRef.current?.resetPositions();
       sound.playClick();
     },
-    [setMode, setDifficulty, startMatch, setPlayerName, setPlayerColor, sound],
+    [setMode, setSpeedMode, setDifficulty, startMatch, setPlayerName, setPlayerColor, sound],
   );
 
   const handleNextRound = useCallback(() => {
@@ -143,6 +147,7 @@ export function PenFightGame() {
         isOpen={isSetupOpen}
         onClose={() => setIsSetupOpen(false)}
         currentMode={state.mode}
+        currentSpeedMode={state.speedMode}
         currentDifficulty={state.difficulty}
         playerNames={{
           p1:

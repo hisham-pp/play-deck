@@ -1,6 +1,8 @@
 export type PenFightPlayerId = 'p1' | 'p2';
 
-export type PenFightMode = 'ai' | 'local2p';
+export type PenFightMode = 'ai' | 'local2p' | 'online';
+
+export type PenSpeedMode = 'normal' | 'slow';
 
 export type AIDifficulty = 'rookie' | 'pro' | 'legend';
 
@@ -28,6 +30,7 @@ export interface PenFightPlayerInfo {
 
 export interface PenFightState {
   mode: PenFightMode;
+  speedMode: PenSpeedMode;
   difficulty: AIDifficulty;
   players: Record<PenFightPlayerId, PenFightPlayerInfo>;
   activePlayer: PenFightPlayerId;
@@ -43,6 +46,7 @@ export interface PenFightState {
 
 export type PenFightAction =
   | { type: 'SET_MODE'; mode: PenFightMode }
+  | { type: 'SET_SPEED_MODE'; speedMode: PenSpeedMode }
   | { type: 'SET_DIFFICULTY'; difficulty: AIDifficulty }
   | { type: 'SET_PLAYER_NAME'; playerId: PenFightPlayerId; name: string }
   | { type: 'SET_PLAYER_COLOR'; playerId: PenFightPlayerId; color: PenColor }

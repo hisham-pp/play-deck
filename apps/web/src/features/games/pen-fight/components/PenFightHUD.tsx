@@ -1,8 +1,19 @@
 'use client';
 
-import { ArrowLeft, RotateCcw, Settings, Swords, Volume2, VolumeX } from 'lucide-react';
+import {
+  ArrowLeft,
+  Globe,
+  RotateCcw,
+  Settings,
+  Swords,
+  Turtle,
+  Volume2,
+  VolumeX,
+  Zap,
+} from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
+import { useMultiplayerStore } from '@/stores/multiplayer.store';
 import { usePreferencesStore } from '@/stores/preferences.store';
 import type { PenFightPlayerId, PenFightState } from '../types/pen-fight.types';
 
@@ -86,6 +97,7 @@ function phaseLabel(state: PenFightState): string {
 export function PenFightHUD({ state, onOpenSetup, onResetPositions }: PenFightHUDProps) {
   const soundEnabled = usePreferencesStore((s) => s.soundEnabled);
   const toggleSound = usePreferencesStore((s) => s.toggleSound);
+  const { roomCode } = useMultiplayerStore();
 
   return (
     <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-3 sm:p-5">
@@ -98,13 +110,38 @@ export function PenFightHUD({ state, onOpenSetup, onResetPositions }: PenFightHU
           <span className="hidden sm:inline">Back to games</span>
         </Link>
 
-        <div className="pointer-events-auto flex flex-col items-center gap-0.5 rounded-lg border border-surface-border/70 bg-surface-raised/80 px-4 py-2 text-center backdrop-blur-md">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-amber-500 font-display">
-            Pen Fight
-          </span>
-          <span className="text-[11px] font-medium text-deck-500">
-            Round {state.round} / {state.maxRounds}
-          </span>
+        <div className="pointer-events-auto flex items-center gap-2">
+          <div className="flex flex-col items-center gap-0.5 rounded-lg border border-surface-border/70 bg-surface-raised/80 px-4 py-2 text-center backdrop-blur-md">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-amber-500 font-display">
+              Pen Fight
+            </span>
+            <span className="text-[11px] font-medium text-deck-500">
+              Round {state.round} / {state.maxRounds}
+            </span>
+          </div>
+
+          {/* Speed Indicator Badge */}
+          <div className="hidden sm:flex items-center gap-1.5 rounded-lg border border-surface-border/70 bg-surface-raised/80 px-3 py-2 text-xs font-bold text-deck-300 backdrop-blur-md">
+            {state.speedMode === 'slow' ? (
+              <>
+                <Turtle className="h-3.5 w-3.5 text-cyan-400" />
+                <span className="text-cyan-300">Slow</span>
+              </>
+            ) : (
+              <>
+                <Zap className="h-3.5 w-3.5 text-amber-400" />
+                <span className="text-amber-300">Normal</span>
+              </>
+            )}
+          </div>
+
+          {/* Online Room Badge */}
+          {state.mode === 'online' && roomCode && (
+            <div className="flex items-center gap-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-xs font-bold text-amber-300 backdrop-blur-md">
+              <Globe className="h-3.5 w-3.5 text-amber-400" />
+              <span className="font-mono">{roomCode}</span>
+            </div>
+          )}
         </div>
 
         <div className="flex items-center gap-2">

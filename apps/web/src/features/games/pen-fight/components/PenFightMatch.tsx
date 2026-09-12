@@ -7,6 +7,7 @@ import {
   MIN_FLICK_IMPULSE,
   PEN_START_Y,
   PEN_START_Z,
+  SPEED_PHYSICS_CONFIG,
 } from '../engine/pen-fight-constants';
 import { speedOf } from '../engine/pen-fight-utils';
 import { usePenFightAI } from '../hooks/use-pen-fight-ai';
@@ -41,8 +42,8 @@ const PEN_PHYSICS_PROPS = {
   colliders: 'hull' as const,
   friction: 0.9,
   restitution: 0.12,
-  linearDamping: 0.65,
-  angularDamping: 0.8,
+  linearDamping: 0.45,
+  angularDamping: 0.55,
   density: 2.2,
   ccd: true,
 };
@@ -53,6 +54,13 @@ export const PenFightMatch = forwardRef<PenFightArenaHandle, PenFightMatchProps>
     const p1Ref = useRef<RapierRigidBody | null>(null);
     const p2Ref = useRef<RapierRigidBody | null>(null);
     const sound = usePenFightSound();
+
+    const speedConfig = SPEED_PHYSICS_CONFIG[state.speedMode || 'normal'];
+    const penPhysicsProps = {
+      ...PEN_PHYSICS_PROPS,
+      linearDamping: speedConfig.linearDamping,
+      angularDamping: speedConfig.angularDamping,
+    };
 
     const { beginRound, resetRound } = usePenFightRoundResolution({
       p1Ref,
@@ -66,7 +74,9 @@ export const PenFightMatch = forwardRef<PenFightArenaHandle, PenFightMatchProps>
         const body = playerId === 'p1' ? p1Ref.current : p2Ref.current;
         if (!body) return;
 
-        const impulseMag = MIN_FLICK_IMPULSE + power * (MAX_FLICK_IMPULSE - MIN_FLICK_IMPULSE);
+        const baseImpulse = MIN_FLICK_IMPULSE + power * (MAX_FLICK_IMPULSE - MIN_FLICK_IMPULSE);
+        const impulseMag = baseImpulse * speedConfig.impulseMultiplier;
+
         body.wakeUp();
         body.applyImpulse({ x: direction.x * impulseMag, y: 0, z: direction.z * impulseMag }, true);
         body.applyTorqueImpulse({ x: 0, y: (Math.random() - 0.5) * impulseMag * 0.5, z: 0 }, true);
@@ -76,7 +86,7 @@ export const PenFightMatch = forwardRef<PenFightArenaHandle, PenFightMatchProps>
         onFlickTaken();
         onBeginSettling();
       },
-      [beginRound, onFlickTaken, onBeginSettling, sound],
+      [beginRound, onFlickTaken, onBeginSettling, sound, speedConfig.impulseMultiplier],
     );
 
     const resetPositions = useCallback(() => {
@@ -122,7 +132,7 @@ export const PenFightMatch = forwardRef<PenFightArenaHandle, PenFightMatchProps>
       <>
         <RigidBody
           ref={p1Ref}
-          {...PEN_PHYSICS_PROPS}
+          {...penPhysicsProps}
           position={[0, PEN_START_Y, PEN_START_Z]}
           rotation={[0, Math.PI, 0]}
           onCollisionEnter={(payload) => {
@@ -137,7 +147,7 @@ export const PenFightMatch = forwardRef<PenFightArenaHandle, PenFightMatchProps>
 
         <RigidBody
           ref={p2Ref}
-          {...PEN_PHYSICS_PROPS}
+          {...penPhysicsProps}
           position={[0, PEN_START_Y, -PEN_START_Z]}
           rotation={[0, 0, 0]}
         >

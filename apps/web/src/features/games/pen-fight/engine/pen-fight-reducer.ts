@@ -6,7 +6,11 @@ export function penFightReducer(state: PenFightState, action: PenFightAction): P
   switch (action.type) {
     case 'SET_MODE': {
       if (state.mode === action.mode) return state;
-      return createInitialPenFightState(action.mode, state.difficulty);
+      return createInitialPenFightState(action.mode, state.difficulty, state.speedMode);
+    }
+
+    case 'SET_SPEED_MODE': {
+      return { ...state, speedMode: action.speedMode };
     }
 
     case 'SET_DIFFICULTY': {
@@ -39,7 +43,7 @@ export function penFightReducer(state: PenFightState, action: PenFightAction): P
     }
 
     case 'START_MATCH': {
-      return createInitialPenFightState(state.mode, state.difficulty);
+      return createInitialPenFightState(state.mode, state.difficulty, state.speedMode);
     }
 
     case 'FLICK_TAKEN': {
