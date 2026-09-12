@@ -2,7 +2,7 @@ import type { Player } from '@playdeck/game-types';
 import { generateId } from '@playdeck/shared';
 import { getSupabaseClient, isSupabaseConfigured } from '@/lib/supabase/client';
 import { DEFAULT_AVATAR, DEFAULT_PLAYER_NAME, USERS_TABLE } from '../auth.constants';
-import { hashPassword, verifyPassword, isBcryptHash } from '../utils/password.utils';
+import { hashPassword, verifyPassword } from '../utils/password.utils';
 import { PlayerTableService } from './player-table.service';
 
 export interface AuthResult {
@@ -127,12 +127,7 @@ export class SupabaseAuthService {
       }
 
       const now = new Date().toISOString();
-      const updatePayload: Record<string, string> = { last_sign_in_at: now };
-      if (!isBcryptHash(data.password)) {
-        updatePayload.password = await hashPassword(pass);
-      }
-
-      await supabase.from(USERS_TABLE).update(updatePayload).eq('id', data.id);
+      await supabase.from(USERS_TABLE).update({ last_sign_in_at: now }).eq('id', data.id);
 
       return {
         success: true,
