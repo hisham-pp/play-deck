@@ -8,6 +8,9 @@ interface TicTacToeOverlayProps {
   winner: PlayerMark | null;
   mode: GameMode;
   humanPlayerMark: PlayerMark;
+  myMark?: PlayerMark | null;
+  playerXName?: string;
+  playerOName?: string;
   onNextRound: () => void;
   onResetMatch: () => void;
 }
@@ -23,6 +26,9 @@ function getOverlayContent(
   winner: PlayerMark | null,
   mode: GameMode,
   humanPlayerMark: PlayerMark,
+  myMark?: PlayerMark | null,
+  playerXName?: string,
+  playerOName?: string,
 ): OverlayContent {
   if (status === 'draw') {
     return {
@@ -47,9 +53,29 @@ function getOverlayContent(
     };
   }
 
+  if (mode === 'multiplayer') {
+    const isMe = Boolean(myMark && winner === myMark);
+    const victorName = winner === 'X' ? playerXName : playerOName;
+    const opponent = winner === 'X' ? playerOName : playerXName;
+
+    if (isMe) {
+      return {
+        title: 'Victory!',
+        subtitle: `You defeated ${opponent || 'your opponent'} with 3-in-a-row!`,
+        badgeColor: 'text-emerald-400',
+      };
+    }
+    return {
+      title: `${victorName || 'Opponent'} Won!`,
+      subtitle: `${victorName || 'Opponent'} completed a 3-in-a-row line.`,
+      badgeColor: 'text-cyan-400',
+    };
+  }
+
+  const victor = winner === 'X' ? playerXName || 'Player X' : playerOName || 'Player O';
   return {
-    title: `Player ${winner} Victorious!`,
-    subtitle: `Player ${winner} achieved 3-in-a-row.`,
+    title: `${victor} Victorious!`,
+    subtitle: `${victor} achieved 3-in-a-row.`,
     badgeColor: winner === 'X' ? 'text-amber-400' : 'text-cyan-400',
   };
 }
@@ -59,6 +85,9 @@ export function TicTacToeOverlay({
   winner,
   mode,
   humanPlayerMark,
+  myMark,
+  playerXName,
+  playerOName,
   onNextRound,
   onResetMatch,
 }: TicTacToeOverlayProps) {
@@ -67,7 +96,15 @@ export function TicTacToeOverlay({
   }
 
   const isDraw = status === 'draw';
-  const { title, subtitle, badgeColor } = getOverlayContent(status, winner, mode, humanPlayerMark);
+  const { title, subtitle, badgeColor } = getOverlayContent(
+    status,
+    winner,
+    mode,
+    humanPlayerMark,
+    myMark,
+    playerXName,
+    playerOName,
+  );
 
   return (
     <div
