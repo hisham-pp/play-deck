@@ -1,4 +1,4 @@
-import { StorageAdapter } from '@playdeck/game-types';
+import type { StorageAdapter } from '@playdeck/game-types';
 
 export class LocalStorageAdapter implements StorageAdapter {
   private isBrowser: boolean;

@@ -1,4 +1,4 @@
-import { GameCategory } from './game';
+import type { GameCategory } from './game';
 
 export interface Player {
   id: string;
@@ -6,6 +6,7 @@ export interface Player {
   avatar?: string;
   isGuest: boolean;
   createdAt: string;
+  email?: string;
 }
 
 export interface PlayerStats {
