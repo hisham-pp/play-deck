@@ -73,9 +73,30 @@ PlayDeck is pre-configured for zero-friction Vercel deployments:
 
 - `pnpm dev`: Starts the Next.js development server.
 - `pnpm build`: Builds all workspace packages and production bundle.
+- `pnpm test`: Runs test suites.
 - `pnpm lint`: Runs ESLint across all files.
 - `pnpm format`: Runs Prettier to format the codebase.
 - `pnpm clean`: Cleans build artifacts and caches.
+
+---
+
+## Git Workflow & Feature Branches
+
+All development work—whether features, fixes, refactoring, or documentation—**must be performed on a dedicated feature branch**. Direct commits and pushes to `main` are strictly prohibited.
+
+1. **Branch Naming**:
+   - `feat/<name>`: New features, games, or UI capabilities
+   - `fix/<name>`: Bug fixes and issue patches
+   - `docs/<name>`: Documentation updates
+   - `refactor/<name>`: Code restructuring
+2. **Pre-merge Verification**:
+   Before merging or opening a pull request, ensure all checks pass:
+   ```bash
+   pnpm test
+   pnpm lint
+   pnpm format:check
+   pnpm build
+   ```
 
 ---
 
