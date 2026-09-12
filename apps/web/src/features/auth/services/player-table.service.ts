@@ -8,17 +8,14 @@ export class PlayerTableService {
     if (!supabase) return false;
 
     try {
-      const { error } = await supabase.from(USERS_TABLE).upsert(
-        {
-          id: player.id,
-          email: player.email || null,
+      const { error } = await supabase
+        .from(USERS_TABLE)
+        .update({
           display_name: player.displayName,
           avatar: player.avatar || DEFAULT_AVATAR,
-          is_guest: player.isGuest,
           updated_at: new Date().toISOString(),
-        },
-        { onConflict: 'id' },
-      );
+        })
+        .eq('id', player.id);
 
       return !error;
     } catch {

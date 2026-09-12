@@ -11,6 +11,7 @@ export interface SignInTabProps {
   setPassword: (val: string) => void;
   onSubmit: (e: React.FormEvent) => Promise<void>;
   isLoading: boolean;
+  onSwitchToSignUp?: () => void;
 }
 
 export function SignInTab({
@@ -20,6 +21,7 @@ export function SignInTab({
   setPassword,
   onSubmit,
   isLoading,
+  onSwitchToSignUp,
 }: SignInTabProps) {
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4 mt-2">
@@ -53,6 +55,19 @@ export function SignInTab({
       >
         Sign In
       </Button>
+
+      {onSwitchToSignUp && (
+        <div className="text-center text-xs text-deck-400 mt-1">
+          <span>Don&apos;t have an account? </span>
+          <button
+            type="button"
+            onClick={onSwitchToSignUp}
+            className="text-amber-400 hover:text-amber-300 font-medium underline underline-offset-2 cursor-pointer"
+          >
+            Create account
+          </button>
+        </div>
+      )}
     </form>
   );
 }

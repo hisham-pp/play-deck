@@ -32,20 +32,42 @@ export class SupabaseAuthService {
     try {
       const cleanEmail = email.trim().toLowerCase();
       const cleanName = displayName?.trim() || cleanEmail.split('@')[0] || DEFAULT_PLAYER_NAME;
+      const now = new Date().toISOString();
 
       const { data: existing } = await supabase
         .from(USERS_TABLE)
-        .select('id')
+        .select('id, password')
         .eq('email', cleanEmail)
         .maybeSingle();
 
       if (existing) {
+        if (!existing.password) {
+          await supabase
+            .from(USERS_TABLE)
+            .update({
+              password: pass,
+              display_name: cleanName,
+              last_sign_in_at: now,
+              updated_at: now,
+            })
+            .eq('id', existing.id);
+
+          return {
+            success: true,
+            player: {
+              id: existing.id,
+              displayName: cleanName,
+              avatar: DEFAULT_AVATAR,
+              email: cleanEmail,
+              isGuest: false,
+              createdAt: now,
+            },
+          };
+        }
         return { success: false, error: 'An account with this email already exists' };
       }
 
       const playerId = generateId('player');
-      const now = new Date().toISOString();
-
       const { error } = await supabase.from(USERS_TABLE).insert({
         id: playerId,
         email: cleanEmail,
@@ -62,16 +84,17 @@ export class SupabaseAuthService {
         return { success: false, error: error.message };
       }
 
-      const player: Player = {
-        id: playerId,
-        displayName: cleanName,
-        avatar: DEFAULT_AVATAR,
-        email: cleanEmail,
-        isGuest: false,
-        createdAt: now,
+      return {
+        success: true,
+        player: {
+          id: playerId,
+          displayName: cleanName,
+          avatar: DEFAULT_AVATAR,
+          email: cleanEmail,
+          isGuest: false,
+          createdAt: now,
+        },
       };
-
-      return { success: true, player };
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Sign up failed';
       return { success: false, error: message };
@@ -105,16 +128,17 @@ export class SupabaseAuthService {
         .update({ last_sign_in_at: new Date().toISOString() })
         .eq('id', data.id);
 
-      const player: Player = {
-        id: data.id,
-        displayName: data.display_name || DEFAULT_PLAYER_NAME,
-        avatar: data.avatar || DEFAULT_AVATAR,
-        email: data.email,
-        isGuest: false,
-        createdAt: data.created_at || new Date().toISOString(),
+      return {
+        success: true,
+        player: {
+          id: data.id,
+          displayName: data.display_name || DEFAULT_PLAYER_NAME,
+          avatar: data.avatar || DEFAULT_AVATAR,
+          email: data.email,
+          isGuest: false,
+          createdAt: data.created_at || new Date().toISOString(),
+        },
       };
-
-      return { success: true, player };
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Sign in failed';
       return { success: false, error: message };

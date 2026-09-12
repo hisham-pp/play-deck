@@ -8,6 +8,10 @@ import { AuthModalNotice } from './AuthModalNotice';
 import { SignInTab } from './SignInTab';
 import { SignUpTab } from './SignUpTab';
 
+const TAB_SIGNIN = 'signin';
+const TAB_SIGNUP = 'signup';
+type AuthTab = typeof TAB_SIGNIN | typeof TAB_SIGNUP;
+
 export function AuthModal() {
   const {
     isAuthModalOpen,
@@ -20,7 +24,7 @@ export function AuthModal() {
     continueAsGuest,
   } = usePlayerStore();
 
-  const [activeTab, setActiveTab] = useState<'signin' | 'signup'>('signin');
+  const [activeTab, setActiveTab] = useState<AuthTab>(TAB_SIGNIN);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
@@ -30,6 +34,12 @@ export function AuthModal() {
     clearAuthError();
     setSuccessMessage(null);
     setAuthModalOpen(false);
+  };
+
+  const switchTab = (tab: AuthTab) => {
+    clearAuthError();
+    setSuccessMessage(null);
+    setActiveTab(tab);
   };
 
   const handleSignIn = async (e: React.FormEvent) => {
@@ -66,26 +76,23 @@ export function AuthModal() {
       size="md"
     >
       <div className="flex flex-col gap-6">
-        <AuthModalNotice error={authError} success={successMessage} />
+        <AuthModalNotice
+          error={authError}
+          success={successMessage}
+          onSwitchToSignIn={() => switchTab(TAB_SIGNIN)}
+        />
 
-        <Tabs
-          value={activeTab}
-          onValueChange={(val) => {
-            clearAuthError();
-            setSuccessMessage(null);
-            setActiveTab(val as 'signin' | 'signup');
-          }}
-        >
+        <Tabs value={activeTab} onValueChange={(val) => switchTab(val as AuthTab)}>
           <TabList className="grid grid-cols-2 w-full">
-            <TabTrigger value="signin" className="text-center justify-center py-2">
+            <TabTrigger value={TAB_SIGNIN} className="text-center justify-center py-2">
               Sign In
             </TabTrigger>
-            <TabTrigger value="signup" className="text-center justify-center py-2">
+            <TabTrigger value={TAB_SIGNUP} className="text-center justify-center py-2">
               Create Account
             </TabTrigger>
           </TabList>
 
-          <TabContent value="signin">
+          <TabContent value={TAB_SIGNIN}>
             <SignInTab
               email={email}
               setEmail={setEmail}
@@ -93,10 +100,11 @@ export function AuthModal() {
               setPassword={setPassword}
               onSubmit={handleSignIn}
               isLoading={isLoadingAuth}
+              onSwitchToSignUp={() => switchTab(TAB_SIGNUP)}
             />
           </TabContent>
 
-          <TabContent value="signup">
+          <TabContent value={TAB_SIGNUP}>
             <SignUpTab
               displayName={displayName}
               setDisplayName={setDisplayName}
@@ -106,6 +114,7 @@ export function AuthModal() {
               setPassword={setPassword}
               onSubmit={handleSignUp}
               isLoading={isLoadingAuth}
+              onSwitchToSignIn={() => switchTab(TAB_SIGNIN)}
             />
           </TabContent>
         </Tabs>
