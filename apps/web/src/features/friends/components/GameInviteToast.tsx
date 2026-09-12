@@ -18,7 +18,7 @@ export function GameInviteToast() {
   if (!activeInvite) return null;
 
   const handleJoin = async () => {
-    dismissInvite(activeInvite.id);
+    dismissInvite(activeInvite.id, 'accepted');
     if (player) {
       await joinRoomByCode(activeInvite.roomCode, player);
     }
@@ -55,7 +55,7 @@ export function GameInviteToast() {
               variant="ghost"
               size="sm"
               className="text-xs text-deck-400 hover:text-deck-100"
-              onClick={() => dismissInvite(activeInvite.id)}
+              onClick={() => dismissInvite(activeInvite.id, 'declined')}
             >
               Decline
             </Button>
@@ -67,7 +67,7 @@ export function GameInviteToast() {
           variant="ghost"
           size="sm"
           className="text-deck-500 hover:text-deck-200 shrink-0"
-          onClick={() => dismissInvite(activeInvite.id)}
+          onClick={() => dismissInvite(activeInvite.id, 'declined')}
         >
           <X className="w-4 h-4" />
         </IconButton>

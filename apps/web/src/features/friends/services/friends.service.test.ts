@@ -45,6 +45,11 @@ describe('Friends and Invites Service Tests', () => {
       assert.equal(accepted, true);
       assert.equal(declined, true);
     });
+
+    it('expires invites when a room is closed', async () => {
+      const closed = await GameInvitesService.closeInvitesForRoom('458921');
+      assert.equal(closed, true);
+    });
   });
 
   describe('3. Friend Requests Acceptance and Removal', () => {
