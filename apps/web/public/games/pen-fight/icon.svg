@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="pfBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141b2c" />
+      <stop offset="100%" stop-color="#05070c" />
+    </linearGradient>
+    <linearGradient id="pfPenBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+    <linearGradient id="pfPenRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f87171" />
+      <stop offset="100%" stop-color="#dc2626" />
+    </linearGradient>
+    <filter id="pfGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <rect width="256" height="256" rx="48" fill="url(#pfBg)" />
+  <rect width="254" height="254" x="1" y="1" rx="47" fill="none" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.3" />
+
+  <!-- Table surface -->
+  <ellipse cx="128" cy="172" rx="92" ry="18" fill="#7a4a2b" opacity="0.5" />
+
+  <!-- Blue pen (lower-left to upper-right) -->
+  <g transform="rotate(-38 100 150)">
+    <rect x="46" y="142" width="108" height="16" rx="8" fill="url(#pfPenBlue)" />
+    <rect x="46" y="142" width="24" height="16" rx="8" fill="#0f172a" opacity="0.35" />
+    <polygon points="154,142 176,150 154,158" fill="#d7dbe2" />
+  </g>
+
+  <!-- Red pen (lower-right to upper-left), crossing the blue pen -->
+  <g transform="rotate(38 156 150)">
+    <rect x="102" y="142" width="108" height="16" rx="8" fill="url(#pfPenRed)" />
+    <rect x="186" y="142" width="24" height="16" rx="8" fill="#0f172a" opacity="0.35" />
+    <polygon points="102,142 80,150 102,158" fill="#d7dbe2" />
+  </g>
+
+  <!-- Impact spark at the crossing point -->
+  <g filter="url(#pfGlow)" fill="#f59e0b">
+    <polygon points="128,96 138,118 128,112 118,118" />
+    <polygon points="128,120 148,128 128,124 108,128" />
+  </g>
+
+  <text x="128" y="66" text-anchor="middle" font-family="Arial, sans-serif" font-weight="900" font-size="26" fill="#f8fafc" letter-spacing="2">VS</text>
+</svg>

@@ -35,6 +35,21 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     releaseDate: '2026-09-12',
   },
   {
+    id: 'pen-fight',
+    name: 'Pen Fight',
+    slug: 'pen-fight',
+    description:
+      'The classic desktop duel, remade in 3D. Flick your pen to knock your rival off the arena table before they knock you off first.',
+    category: 'arcade',
+    players: { min: 1, max: 2 },
+    status: 'available',
+    thumbnailUrl: '/games/pen-fight/icon.svg',
+    tags: ['3D', 'Physics', 'Local Play', 'AI Opponent', 'Nostalgia'],
+    featured: true,
+    badge: 'Ready to Play',
+    releaseDate: '2026-09-12',
+  },
+  {
     id: 'chess',
     name: 'Master Chess',
     slug: 'master-chess',
