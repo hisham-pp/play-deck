@@ -1,7 +1,8 @@
 import type { Player } from '@playdeck/game-types';
 import { generateId } from '@playdeck/shared';
 import { getSupabaseClient, isSupabaseConfigured } from '@/lib/supabase/client';
-import { DEFAULT_AVATAR, DEFAULT_PLAYER_NAME, PLAYERS_TABLE } from '../auth.constants';
+import { DEFAULT_AVATAR, DEFAULT_PLAYER_NAME, USERS_TABLE } from '../auth.constants';
+import { PlayerTableService } from './player-table.service';
 
 export interface AuthResult {
   success: boolean;
@@ -15,52 +16,11 @@ export class SupabaseAuthService {
   }
 
   static async savePlayerToTable(player: Player): Promise<boolean> {
-    const supabase = getSupabaseClient();
-    if (!supabase) return false;
-
-    try {
-      const { error } = await supabase.from(PLAYERS_TABLE).upsert(
-        {
-          id: player.id,
-          email: player.email || null,
-          display_name: player.displayName,
-          avatar: player.avatar || DEFAULT_AVATAR,
-          is_guest: player.isGuest,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: 'id' },
-      );
-
-      return !error;
-    } catch {
-      return false;
-    }
+    return PlayerTableService.savePlayerToTable(player);
   }
 
   static async fetchPlayerFromTable(id: string): Promise<Player | null> {
-    const supabase = getSupabaseClient();
-    if (!supabase) return null;
-
-    try {
-      const { data, error } = await supabase
-        .from(PLAYERS_TABLE)
-        .select('*')
-        .eq('id', id)
-        .maybeSingle();
-
-      if (error || !data) return null;
-
-      return {
-        id: data.id,
-        displayName: data.display_name || DEFAULT_PLAYER_NAME,
-        avatar: data.avatar || DEFAULT_AVATAR,
-        isGuest: Boolean(data.is_guest),
-        email: data.email || undefined,
-        createdAt: data.created_at || new Date().toISOString(),
-      };
-    } catch {
-      return null;
-    }
+    return PlayerTableService.fetchPlayerFromTable(id);
   }
 
   static async signUp(email: string, pass: string, displayName?: string): Promise<AuthResult> {
@@ -73,9 +33,8 @@ export class SupabaseAuthService {
       const cleanEmail = email.trim().toLowerCase();
       const cleanName = displayName?.trim() || cleanEmail.split('@')[0] || DEFAULT_PLAYER_NAME;
 
-      // Check if user already exists in the table
       const { data: existing } = await supabase
-        .from(PLAYERS_TABLE)
+        .from(USERS_TABLE)
         .select('id')
         .eq('email', cleanEmail)
         .maybeSingle();
@@ -87,7 +46,7 @@ export class SupabaseAuthService {
       const playerId = generateId('player');
       const now = new Date().toISOString();
 
-      const { error } = await supabase.from(PLAYERS_TABLE).insert({
+      const { error } = await supabase.from(USERS_TABLE).insert({
         id: playerId,
         email: cleanEmail,
         password: pass,
@@ -128,7 +87,7 @@ export class SupabaseAuthService {
     try {
       const cleanEmail = email.trim().toLowerCase();
       const { data, error } = await supabase
-        .from(PLAYERS_TABLE)
+        .from(USERS_TABLE)
         .select('*')
         .eq('email', cleanEmail)
         .maybeSingle();
@@ -141,9 +100,8 @@ export class SupabaseAuthService {
         return { success: false, error: 'Incorrect password' };
       }
 
-      // Update last sign in timestamp
       await supabase
-        .from(PLAYERS_TABLE)
+        .from(USERS_TABLE)
         .update({ last_sign_in_at: new Date().toISOString() })
         .eq('id', data.id);
 

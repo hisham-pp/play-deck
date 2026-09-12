@@ -61,7 +61,7 @@ export function SignUpTab({
 
       <div className="flex items-center gap-2 text-[11px] text-amber-400/90 bg-surface-overlay/80 px-3 py-2 rounded-md border border-surface-border">
         <Sparkles className="w-3.5 h-3.5 shrink-0 text-amber-400" />
-        <span>Instant Play: No email verification required. Data saves to players table.</span>
+        <span>Instant Play: No email verification required. Data saves to users table.</span>
       </div>
 
       <Button

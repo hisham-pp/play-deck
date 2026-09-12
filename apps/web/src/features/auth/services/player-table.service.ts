@@ -1,6 +1,6 @@
 import type { Player } from '@playdeck/game-types';
 import { getSupabaseClient } from '@/lib/supabase/client';
-import { DEFAULT_AVATAR, DEFAULT_PLAYER_NAME, PLAYERS_TABLE } from '../auth.constants';
+import { DEFAULT_AVATAR, DEFAULT_PLAYER_NAME, USERS_TABLE } from '../auth.constants';
 
 export class PlayerTableService {
   static async savePlayerToTable(player: Player): Promise<boolean> {
@@ -8,7 +8,7 @@ export class PlayerTableService {
     if (!supabase) return false;
 
     try {
-      const { error } = await supabase.from(PLAYERS_TABLE).upsert(
+      const { error } = await supabase.from(USERS_TABLE).upsert(
         {
           id: player.id,
           email: player.email || null,
@@ -32,7 +32,7 @@ export class PlayerTableService {
 
     try {
       const { data, error } = await supabase
-        .from(PLAYERS_TABLE)
+        .from(USERS_TABLE)
         .select('*')
         .eq('id', id)
         .maybeSingle();
