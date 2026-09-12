@@ -17,6 +17,7 @@ export default tseslint.config(
       '**/*.tsbuildinfo',
       '**/*.log',
       '**/tmp/**',
+      '**/.claude/**',
       '**/next-env.d.ts',
       'pnpm-lock.yaml',
     ],
