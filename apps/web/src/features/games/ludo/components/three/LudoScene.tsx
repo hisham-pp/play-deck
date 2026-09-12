@@ -4,6 +4,8 @@ import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/rapier';
 import { Suspense } from 'react';
+import { PCFShadowMap } from 'three';
+import '@/lib/three-patch';
 import { resolveLayout } from '../../engine/board-layout';
 import type { LudoGameState } from '../../types/ludo.types';
 import { LudoBoard3D } from './LudoBoard3D';
@@ -35,7 +37,7 @@ export default function LudoScene({
 
   return (
     <Canvas
-      shadows
+      shadows={{ type: PCFShadowMap }}
       camera={{ position: [0, 8.2, 7.2], fov: 42 }}
       style={{ width: '100%', height: '100%', minHeight: '440px' }}
     >
