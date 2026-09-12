@@ -14,8 +14,15 @@ interface LudoMultiplayerState {
   transport: SupabaseTransportService | null;
   error: string | null;
 
-  createRoom: (hostPlayer: { id: string; displayName: string; avatar: string }) => Promise<string | null>;
-  joinRoomByCode: (code: string, player: { id: string; displayName: string; avatar: string }) => Promise<boolean>;
+  createRoom: (hostPlayer: {
+    id: string;
+    displayName: string;
+    avatar: string;
+  }) => Promise<string | null>;
+  joinRoomByCode: (
+    code: string,
+    player: { id: string; displayName: string; avatar: string },
+  ) => Promise<boolean>;
   leaveRoom: () => void;
   addBot: () => void;
   fillRemainingWithBots: (targetSeatCount?: number) => void;
@@ -143,7 +150,10 @@ export const useLudoMultiplayerStore = create<LudoMultiplayerState>((set, get) =
   addBot: () => {
     set((state) => {
       const targetCount = Math.min(6, state.players.length + 1);
-      const seatSlots: (LudoPlayer | null)[] = Array.from({ length: targetCount }, (_, i) => state.players[i] ?? null);
+      const seatSlots: (LudoPlayer | null)[] = Array.from(
+        { length: targetCount },
+        (_, i) => state.players[i] ?? null,
+      );
       const filled = fillEmptySeatsWithBots(seatSlots);
       return { players: finalizeSeats(filled) };
     });
@@ -151,7 +161,10 @@ export const useLudoMultiplayerStore = create<LudoMultiplayerState>((set, get) =
 
   fillRemainingWithBots: (targetSeatCount = 4) => {
     set((state) => {
-      const seatSlots: (LudoPlayer | null)[] = Array.from({ length: targetSeatCount }, (_, i) => state.players[i] ?? null);
+      const seatSlots: (LudoPlayer | null)[] = Array.from(
+        { length: targetSeatCount },
+        (_, i) => state.players[i] ?? null,
+      );
       const filled = fillEmptySeatsWithBots(seatSlots);
       return { players: finalizeSeats(filled) };
     });
@@ -159,9 +172,7 @@ export const useLudoMultiplayerStore = create<LudoMultiplayerState>((set, get) =
 
   toggleReady: (playerId) => {
     set((state) => ({
-      players: state.players.map((p) =>
-        p.id === playerId ? { ...p, ready: !p.ready } : p,
-      ),
+      players: state.players.map((p) => (p.id === playerId ? { ...p, ready: !p.ready } : p)),
     }));
   },
 

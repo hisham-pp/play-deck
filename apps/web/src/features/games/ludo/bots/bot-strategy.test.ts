@@ -43,7 +43,10 @@ describe('Ludo Bot Strategy Property Tests', () => {
 
           if (state.turnPhase === 'awaiting-move') {
             const legalActions = engine.getLegalActions(seatIndex);
-            assert.ok(legalActions.length > 0, 'awaiting-move phase implies at least one legal move');
+            assert.ok(
+              legalActions.length > 0,
+              'awaiting-move phase implies at least one legal move',
+            );
 
             const botDef = LUDO_BOT_DEFINITIONS[turn % LUDO_BOT_DEFINITIONS.length];
             const chosen = botDef.strategy.chooseAction(state, player.playerId, legalActions);

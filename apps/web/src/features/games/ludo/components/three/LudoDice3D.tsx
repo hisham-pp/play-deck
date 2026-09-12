@@ -13,12 +13,7 @@ interface LudoDice3DProps {
   onRollDice?: () => void;
 }
 
-export function LudoDice3D({
-  rolling,
-  targetValue,
-  onRollComplete,
-  onRollDice,
-}: LudoDice3DProps) {
+export function LudoDice3D({ rolling, targetValue, onRollComplete, onRollDice }: LudoDice3DProps) {
   const bodyRef = useRef<RapierRigidBody>(null);
   const meshRef = useRef<Mesh>(null);
   const isRollingRef = useRef(false);

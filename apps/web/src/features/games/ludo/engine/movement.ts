@@ -1,7 +1,16 @@
 import { finishSteps, resolveLayout } from './board-layout';
-import type { LudoAction, LudoGameState, LudoPieceState, LudoPlayerState, LudoRuleSettings } from '../types/ludo.types';
+import type {
+  LudoAction,
+  LudoGameState,
+  LudoPieceState,
+  LudoPlayerState,
+  LudoRuleSettings,
+} from '../types/ludo.types';
 
-export function getPlayerBySeat(state: LudoGameState, seatIndex: number): LudoPlayerState | undefined {
+export function getPlayerBySeat(
+  state: LudoGameState,
+  seatIndex: number,
+): LudoPlayerState | undefined {
   return state.players.find((p) => p.seatIndex === seatIndex);
 }
 

@@ -22,7 +22,10 @@ function withAllPiecesHome(state: ReturnType<typeof createInitialLudoState>, sea
     ...state,
     players: state.players.map((p) =>
       p.seatIndex === seatIndex
-        ? { ...p, pieces: p.pieces.map((piece) => ({ ...piece, location: 'home' as const, steps: 59 })) }
+        ? {
+            ...p,
+            pieces: p.pieces.map((piece) => ({ ...piece, location: 'home' as const, steps: 59 })),
+          }
         : p,
     ),
   };

@@ -48,7 +48,11 @@ export function LudoRoomLobby({ onStartGame }: LudoRoomLobbyProps) {
                 {roomCode}
               </span>
               <Button size="sm" variant="ghost" onClick={handleCopyCode}>
-                {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                {copied ? (
+                  <Check className="w-4 h-4 text-emerald-400" />
+                ) : (
+                  <Copy className="w-4 h-4" />
+                )}
               </Button>
             </div>
           )}
@@ -79,7 +83,11 @@ export function LudoRoomLobby({ onStartGame }: LudoRoomLobbyProps) {
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-800">
-            <Button variant="ghost" onClick={leaveRoom} className="text-slate-400 hover:text-slate-200">
+            <Button
+              variant="ghost"
+              onClick={leaveRoom}
+              className="text-slate-400 hover:text-slate-200"
+            >
               <LogOut className="w-4 h-4 mr-2" /> Leave
             </Button>
 

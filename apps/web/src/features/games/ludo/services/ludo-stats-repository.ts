@@ -44,13 +44,16 @@ export class LocalLudoStatsRepository implements ILudoStatsRepository {
       gamesPlayed: current.gamesPlayed + 1,
       wins: won ? current.wins + 1 : current.wins,
       bestFinishRank:
-        finishRank !== null && (current.bestFinishRank === null || finishRank < current.bestFinishRank)
+        finishRank !== null &&
+        (current.bestFinishRank === null || finishRank < current.bestFinishRank)
           ? finishRank
           : current.bestFinishRank,
-      vsBotEasyWins: won && vsBotDifficulty === 'easy' ? current.vsBotEasyWins + 1 : current.vsBotEasyWins,
+      vsBotEasyWins:
+        won && vsBotDifficulty === 'easy' ? current.vsBotEasyWins + 1 : current.vsBotEasyWins,
       vsBotNormalWins:
         won && vsBotDifficulty === 'normal' ? current.vsBotNormalWins + 1 : current.vsBotNormalWins,
-      vsBotHardWins: won && vsBotDifficulty === 'hard' ? current.vsBotHardWins + 1 : current.vsBotHardWins,
+      vsBotHardWins:
+        won && vsBotDifficulty === 'hard' ? current.vsBotHardWins + 1 : current.vsBotHardWins,
       lastPlayedAt: new Date().toISOString(),
     };
 

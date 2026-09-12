@@ -18,7 +18,12 @@ export function LudoControls({ state, onPause, onResume, onLeave }: LudoControls
     <div className="flex items-center justify-between p-3 rounded-lg bg-slate-900/80 border border-slate-800">
       <div className="flex items-center gap-2">
         {isPaused ? (
-          <Button size="sm" variant="outline" onClick={onResume} className="border-emerald-500/40 text-emerald-400">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={onResume}
+            className="border-emerald-500/40 text-emerald-400"
+          >
             <Play className="w-4 h-4 mr-1.5" /> Resume
           </Button>
         ) : (
@@ -28,7 +33,12 @@ export function LudoControls({ state, onPause, onResume, onLeave }: LudoControls
         )}
       </div>
 
-      <Button size="sm" variant="ghost" onClick={onLeave} className="text-slate-400 hover:text-slate-200">
+      <Button
+        size="sm"
+        variant="ghost"
+        onClick={onLeave}
+        className="text-slate-400 hover:text-slate-200"
+      >
         <LogOut className="w-4 h-4 mr-1.5" /> Exit Game
       </Button>
     </div>

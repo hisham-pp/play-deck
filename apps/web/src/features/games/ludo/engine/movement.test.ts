@@ -27,8 +27,14 @@ describe('Ludo Movement Tests', () => {
   describe('1. Leaving base', () => {
     it('requires a 6 to leave base by default', () => {
       const piece = basePiece();
-      assert.strictEqual(computeDestinationSteps(piece, 3, DEFAULT_RULE_SETTINGS, CLASSIC_4_LAYOUT), null);
-      assert.strictEqual(computeDestinationSteps(piece, 6, DEFAULT_RULE_SETTINGS, CLASSIC_4_LAYOUT), 1);
+      assert.strictEqual(
+        computeDestinationSteps(piece, 3, DEFAULT_RULE_SETTINGS, CLASSIC_4_LAYOUT),
+        null,
+      );
+      assert.strictEqual(
+        computeDestinationSteps(piece, 6, DEFAULT_RULE_SETTINGS, CLASSIC_4_LAYOUT),
+        1,
+      );
     });
 
     it('allows any roll to leave base when requireSixToExitBase is false', () => {
@@ -94,7 +100,9 @@ describe('Ludo Movement Tests', () => {
     it('only offers moves for pieces belonging to the queried seat', () => {
       const state = createInitialLudoState(makePlayers(4));
       const actions = computeLegalMoveActions(state, 1, 6);
-      assert.ok(actions.every((a) => a.type === 'MOVE_PIECE' && a.payload.pieceId.startsWith('green-')));
+      assert.ok(
+        actions.every((a) => a.type === 'MOVE_PIECE' && a.payload.pieceId.startsWith('green-')),
+      );
     });
   });
 });

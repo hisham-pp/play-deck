@@ -18,7 +18,11 @@ function makePlayers(): LudoPlayer[] {
   }));
 }
 
-function withPieceAt(state: ReturnType<typeof createInitialLudoState>, pieceId: string, steps: number) {
+function withPieceAt(
+  state: ReturnType<typeof createInitialLudoState>,
+  pieceId: string,
+  steps: number,
+) {
   return {
     ...state,
     players: state.players.map((p) => ({

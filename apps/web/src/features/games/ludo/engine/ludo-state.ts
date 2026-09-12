@@ -1,5 +1,10 @@
 import { resolveLayout } from './board-layout';
-import { DEFAULT_RULE_SETTINGS, PHASE_AWAITING_ROLL, PIECES_PER_PLAYER, STATUS_WAITING } from './ludo-constants';
+import {
+  DEFAULT_RULE_SETTINGS,
+  PHASE_AWAITING_ROLL,
+  PIECES_PER_PLAYER,
+  STATUS_WAITING,
+} from './ludo-constants';
 import type {
   LudoGameState,
   LudoPieceState,

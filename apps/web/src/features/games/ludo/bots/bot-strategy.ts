@@ -70,7 +70,8 @@ function scoreMoveAction(
       for (const opponentPiece of opponent.pieces) {
         if (opponentPiece.location !== 'track') continue;
         const opponentIndex = globalTrackIndex(layout, opponentPiece.color, opponentPiece.steps);
-        const distanceAhead = (opponentIndex - targetIndex + layout.trackLength) % layout.trackLength;
+        const distanceAhead =
+          (opponentIndex - targetIndex + layout.trackLength) % layout.trackLength;
         if (distanceAhead >= 1 && distanceAhead <= OPPONENT_THREAT_RANGE) {
           opportunities += 1;
         }

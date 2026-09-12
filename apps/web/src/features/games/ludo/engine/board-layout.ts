@@ -97,6 +97,8 @@ export function isFinishedSteps(layout: BoardLayout, steps: number): boolean {
 export function isSafeCell(layout: BoardLayout, globalIndex: number): boolean {
   return layout.colors.some((color) => {
     const entry = layout.entryOffsets[layout.colors.indexOf(color)];
-    return layout.safeCellOffsets.some((offset) => (entry + offset) % layout.trackLength === globalIndex);
+    return layout.safeCellOffsets.some(
+      (offset) => (entry + offset) % layout.trackLength === globalIndex,
+    );
   });
 }

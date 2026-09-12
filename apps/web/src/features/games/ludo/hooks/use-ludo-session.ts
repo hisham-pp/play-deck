@@ -11,7 +11,11 @@ import type { LudoGameState, LudoPlayer } from '../types/ludo.types';
  * mirroring tic-tac-toe's session/result recording pattern. Only ever fires
  * once per completed match (guarded by a ref), regardless of re-renders.
  */
-export function useLudoSession(state: LudoGameState, players: LudoPlayer[], localPlayerId: string | null): void {
+export function useLudoSession(
+  state: LudoGameState,
+  players: LudoPlayer[],
+  localPlayerId: string | null,
+): void {
   const { currentSession, startSession, endSession } = useGameSessionStore();
   const { addRecentSession } = useLibraryStore();
   const { player, recordGamePlayed } = usePlayerStore();
@@ -23,7 +27,9 @@ export function useLudoSession(state: LudoGameState, players: LudoPlayer[], loca
     if (state.status !== 'completed' || reportedRef.current || !gameDef) return;
     reportedRef.current = true;
 
-    const localSeat = localPlayerId ? state.players.find((p) => p.playerId === localPlayerId) : undefined;
+    const localSeat = localPlayerId
+      ? state.players.find((p) => p.playerId === localPlayerId)
+      : undefined;
     const finishRank = localSeat?.finishRank ?? null;
     const won = finishRank === 1;
 
@@ -38,7 +44,11 @@ export function useLudoSession(state: LudoGameState, players: LudoPlayer[], loca
       }, undefined);
 
     void recordGamePlayed(won, 'board');
-    void ludoStatsRepository.recordGameResult({ won, finishRank, vsBotDifficulty: hardestBotDifficulty });
+    void ludoStatsRepository.recordGameResult({
+      won,
+      finishRank,
+      vsBotDifficulty: hardestBotDifficulty,
+    });
 
     if (player) {
       const session = currentSession ?? startSession(gameDef, player);

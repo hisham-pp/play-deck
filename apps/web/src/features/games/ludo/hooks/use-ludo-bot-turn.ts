@@ -53,7 +53,11 @@ export function useLudoBotTurn(
     const { botConfig } = seatPlayer;
     const botDef =
       (botConfig.botDefinitionId && getBotDefinition(botConfig.botDefinitionId)) ||
-      createCustomBotDefinition(botConfig.difficulty, botConfig.personality, seatPlayer.displayName);
+      createCustomBotDefinition(
+        botConfig.difficulty,
+        botConfig.personality,
+        seatPlayer.displayName,
+      );
 
     setBotThinking(true);
     setThinkingBotName(botDef.name);
@@ -62,7 +66,10 @@ export function useLudoBotTurn(
     timeoutRef.current = setTimeout(() => {
       inFlightRef.current = false;
       const current = engine.getState();
-      if (current.status !== 'playing' || current.currentTurnSeatIndex !== state.currentTurnSeatIndex) {
+      if (
+        current.status !== 'playing' ||
+        current.currentTurnSeatIndex !== state.currentTurnSeatIndex
+      ) {
         setBotThinking(false);
         return;
       }

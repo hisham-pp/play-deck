@@ -21,7 +21,8 @@ export function LudoGameHeader({ state, configuredPlayers, localSeatIndex }: Lud
   const currentSeat = state.players[state.currentTurnSeatIndex];
   const colorInfo = currentSeat ? COLOR_SYMBOLS[currentSeat.color] : null;
   const pConfig = configuredPlayers?.find((p) => p.seatIndex === state.currentTurnSeatIndex);
-  const displayName = pConfig?.displayName ?? (currentSeat ? `Seat ${currentSeat.seatIndex + 1}` : '');
+  const displayName =
+    pConfig?.displayName ?? (currentSeat ? `Seat ${currentSeat.seatIndex + 1}` : '');
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-xl bg-slate-900/90 border border-slate-800 backdrop-blur">

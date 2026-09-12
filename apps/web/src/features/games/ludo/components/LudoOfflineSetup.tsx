@@ -106,7 +106,10 @@ export function LudoOfflineSetup({ onStart, onBack }: LudoOfflineSetupProps) {
   }
 
   function handleStart() {
-    void ludoPreferencesRepository.savePreferences({ lastSeatCount: seatCount, autoFillWithBots: false });
+    void ludoPreferencesRepository.savePreferences({
+      lastSeatCount: seatCount,
+      autoFillWithBots: false,
+    });
     onStart(finalizeSeats(seats));
   }
 

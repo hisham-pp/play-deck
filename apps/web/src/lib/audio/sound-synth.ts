@@ -1,19 +1,15 @@
 import { usePreferencesStore } from '@/stores/preferences.store';
 
 export type SoundEffectName =
-  | 'dice-roll'
-  | 'piece-move'
-  | 'capture'
-  | 'piece-home'
-  | 'victory'
-  | 'ui-click'
-  | 'turn-pass';
+  'dice-roll' | 'piece-move' | 'capture' | 'piece-home' | 'victory' | 'ui-click' | 'turn-pass';
 
 let sharedContext: AudioContext | null = null;
 
 function getContext(): AudioContext | null {
   if (typeof window === 'undefined') return null;
-  const AudioContextCtor = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  const AudioContextCtor =
+    window.AudioContext ??
+    (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
   if (!AudioContextCtor) return null;
 
   if (!sharedContext) {
@@ -99,31 +95,62 @@ function playDiceRoll(ctx: AudioContext): void {
 }
 
 function playPieceMove(ctx: AudioContext): void {
-  tone(ctx, { frequency: 520, startTime: ctx.currentTime, duration: 0.08, type: 'triangle', gain: 0.15 });
+  tone(ctx, {
+    frequency: 520,
+    startTime: ctx.currentTime,
+    duration: 0.08,
+    type: 'triangle',
+    gain: 0.15,
+  });
 }
 
 function playCapture(ctx: AudioContext): void {
   const now = ctx.currentTime;
-  tone(ctx, { frequency: 220, frequencyEnd: 90, startTime: now, duration: 0.3, type: 'sawtooth', gain: 0.2 });
+  tone(ctx, {
+    frequency: 220,
+    frequencyEnd: 90,
+    startTime: now,
+    duration: 0.3,
+    type: 'sawtooth',
+    gain: 0.2,
+  });
   noiseBurst(ctx, { startTime: now, duration: 0.15, gain: 0.18 });
 }
 
 function playPieceHome(ctx: AudioContext): void {
   const now = ctx.currentTime;
   [660, 880].forEach((freq, i) => {
-    tone(ctx, { frequency: freq, startTime: now + i * 0.09, duration: 0.18, type: 'sine', gain: 0.18 });
+    tone(ctx, {
+      frequency: freq,
+      startTime: now + i * 0.09,
+      duration: 0.18,
+      type: 'sine',
+      gain: 0.18,
+    });
   });
 }
 
 function playVictory(ctx: AudioContext): void {
   const now = ctx.currentTime;
   [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
-    tone(ctx, { frequency: freq, startTime: now + i * 0.12, duration: 0.35, type: 'triangle', gain: 0.2 });
+    tone(ctx, {
+      frequency: freq,
+      startTime: now + i * 0.12,
+      duration: 0.35,
+      type: 'triangle',
+      gain: 0.2,
+    });
   });
 }
 
 function playUiClick(ctx: AudioContext): void {
-  tone(ctx, { frequency: 880, startTime: ctx.currentTime, duration: 0.05, type: 'square', gain: 0.08 });
+  tone(ctx, {
+    frequency: 880,
+    startTime: ctx.currentTime,
+    duration: 0.05,
+    type: 'square',
+    gain: 0.08,
+  });
 }
 
 function playTurnPass(ctx: AudioContext): void {

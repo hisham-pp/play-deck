@@ -4,12 +4,7 @@ export type LudoBoardLayoutId = 'classic4' | 'extended6';
 
 export type LudoPlayerType = 'human' | 'bot';
 
-export type LudoPlayerStatus =
-  | 'connected'
-  | 'disconnected'
-  | 'ready'
-  | 'playing'
-  | 'finished';
+export type LudoPlayerStatus = 'connected' | 'disconnected' | 'ready' | 'playing' | 'finished';
 
 export type LudoBotDifficulty = 'easy' | 'normal' | 'hard';
 

@@ -33,7 +33,9 @@ export function checkGameCompletion(state: LudoGameState): LudoGameState {
       const last = unfinished[0];
       winnerOrder = [...winnerOrder, last.playerId];
       players = players.map((p) =>
-        p.seatIndex === last.seatIndex ? { ...p, finished: true, finishRank: winnerOrder.length } : p,
+        p.seatIndex === last.seatIndex
+          ? { ...p, finished: true, finishRank: winnerOrder.length }
+          : p,
       );
     }
 

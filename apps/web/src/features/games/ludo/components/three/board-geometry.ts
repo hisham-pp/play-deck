@@ -16,21 +16,61 @@ export function gridToWorld(col: number, row: number): Vec2 {
 // 52-cell track path for classic 4-arm board (cols, rows on 15x15 grid)
 const CLASSIC_TRACK_GRID: Vec2[] = [
   // Red Arm (left -> top)
-  [1, 6], [2, 6], [3, 6], [4, 6], [5, 6],
-  [6, 5], [6, 4], [6, 3], [6, 2], [6, 1], [6, 0],
+  [1, 6],
+  [2, 6],
+  [3, 6],
+  [4, 6],
+  [5, 6],
+  [6, 5],
+  [6, 4],
+  [6, 3],
+  [6, 2],
+  [6, 1],
+  [6, 0],
   [7, 0],
   // Green Arm (top -> right)
-  [8, 0], [8, 1], [8, 2], [8, 3], [8, 4], [8, 5],
-  [9, 6], [10, 6], [11, 6], [12, 6], [13, 6], [14, 6],
+  [8, 0],
+  [8, 1],
+  [8, 2],
+  [8, 3],
+  [8, 4],
+  [8, 5],
+  [9, 6],
+  [10, 6],
+  [11, 6],
+  [12, 6],
+  [13, 6],
+  [14, 6],
   [14, 7],
   // Yellow Arm (right -> bottom)
-  [14, 8], [13, 8], [12, 8], [11, 8], [10, 8], [9, 8],
-  [8, 9], [8, 10], [8, 11], [8, 12], [8, 13], [8, 14],
+  [14, 8],
+  [13, 8],
+  [12, 8],
+  [11, 8],
+  [10, 8],
+  [9, 8],
+  [8, 9],
+  [8, 10],
+  [8, 11],
+  [8, 12],
+  [8, 13],
+  [8, 14],
   [7, 14],
   // Blue Arm (bottom -> left)
-  [6, 14], [6, 13], [6, 12], [6, 11], [6, 10], [6, 9],
-  [5, 8], [4, 8], [3, 8], [2, 8], [1, 8], [0, 8],
-  [0, 7], [0, 6],
+  [6, 14],
+  [6, 13],
+  [6, 12],
+  [6, 11],
+  [6, 10],
+  [6, 9],
+  [5, 8],
+  [4, 8],
+  [3, 8],
+  [2, 8],
+  [1, 8],
+  [0, 8],
+  [0, 7],
+  [0, 6],
 ];
 
 export function trackCellPosition(layout: BoardLayout, globalIndex: number): Vec2 {
@@ -46,7 +86,11 @@ export function trackCellPosition(layout: BoardLayout, globalIndex: number): Vec
   return [Math.cos(angle) * radius, Math.sin(angle) * radius];
 }
 
-export function homeStretchPosition(layout: BoardLayout, color: LudoColor, stretchIndex: number): Vec2 {
+export function homeStretchPosition(
+  layout: BoardLayout,
+  color: LudoColor,
+  stretchIndex: number,
+): Vec2 {
   if (layout.id === 'classic4') {
     let col = 7;
     let row = 7;
@@ -148,7 +192,7 @@ export function baseSlotPosition(layout: BoardLayout, color: LudoColor, pieceInd
   const radius = 3.8;
   const cx = Math.cos(angle) * radius;
   const cz = Math.sin(angle) * radius;
-  const dx = (pieceIndex % 2 - 0.5) * 0.5;
+  const dx = ((pieceIndex % 2) - 0.5) * 0.5;
   const dz = (Math.floor(pieceIndex / 2) - 0.5) * 0.5;
   return [cx + dx, cz + dz];
 }

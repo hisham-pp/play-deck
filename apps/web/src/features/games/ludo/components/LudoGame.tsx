@@ -42,7 +42,11 @@ export function LudoGame() {
   const legalActions = engine ? engine.getLegalActions(state.currentTurnSeatIndex) : [];
   const legalPieceIds = legalActions
     .filter((a) => a.type === 'MOVE_PIECE')
-    .map((a) => (a as { type: 'MOVE_PIECE'; playerId: string; payload: { pieceId: string } }).payload.pieceId);
+    .map(
+      (a) =>
+        (a as { type: 'MOVE_PIECE'; playerId: string; payload: { pieceId: string } }).payload
+          .pieceId,
+    );
 
   const handleStartOfflineGame = (players: LudoPlayer[]) => {
     setConfiguredPlayers(players);
@@ -73,7 +77,12 @@ export function LudoGame() {
 
   // Auto-move single option if user doesn't pick within 1.2 seconds
   useEffect(() => {
-    if (state?.status === 'playing' && isMyTurn && state.turnPhase === 'awaiting-move' && legalPieceIds.length > 0) {
+    if (
+      state?.status === 'playing' &&
+      isMyTurn &&
+      state.turnPhase === 'awaiting-move' &&
+      legalPieceIds.length > 0
+    ) {
       const timer = setTimeout(() => {
         if (legalPieceIds.length > 0) {
           handleSelectPiece(legalPieceIds[0]);
@@ -99,12 +108,7 @@ export function LudoGame() {
   }
 
   if (mode === 'offline-setup') {
-    return (
-      <LudoOfflineSetup
-        onStart={handleStartOfflineGame}
-        onBack={() => setMode('lobby')}
-      />
-    );
+    return <LudoOfflineSetup onStart={handleStartOfflineGame} onBack={() => setMode('lobby')} />;
   }
 
   if (mode === 'online-room') {
@@ -202,7 +206,10 @@ export function LudoGame() {
                 <Button variant="outline" className="flex-1" onClick={() => setMode('lobby')}>
                   <LogOut className="w-4 h-4 mr-2" /> Exit
                 </Button>
-                <Button className="flex-1 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold" onClick={handleRestart}>
+                <Button
+                  className="flex-1 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold"
+                  onClick={handleRestart}
+                >
                   <RefreshCw className="w-4 h-4 mr-2" /> Play Again
                 </Button>
               </div>

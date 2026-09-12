@@ -8,7 +8,12 @@ import {
   STATUS_PLAYING,
   STATUS_WAITING,
 } from './ludo-constants';
-import { computeDestinationSteps, computeLegalMoveActions, getPlayerById, locatePiece } from './movement';
+import {
+  computeDestinationSteps,
+  computeLegalMoveActions,
+  getPlayerById,
+  locatePiece,
+} from './movement';
 import { advanceTurn, grantExtraTurn, registerRoll } from './turns';
 import { checkGameCompletion, checkPlayerFinished } from './win-condition';
 import type { LudoAction, LudoGameState, LudoPieceLocation } from '../types/ludo.types';
@@ -148,7 +153,11 @@ export function ludoReducer(state: LudoGameState, action: LudoAction): LudoGameS
   switch (action.type) {
     case 'START_GAME': {
       if (state.status !== STATUS_WAITING) return state;
-      return { ...appendToLog(state, action), status: STATUS_PLAYING, turnPhase: PHASE_AWAITING_ROLL };
+      return {
+        ...appendToLog(state, action),
+        status: STATUS_PLAYING,
+        turnPhase: PHASE_AWAITING_ROLL,
+      };
     }
 
     case 'PAUSE_GAME': {
