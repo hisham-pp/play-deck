@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { GameDefinition } from '@playdeck/game-types';
 import { PenFightGame } from '@/features/games/pen-fight';
 import { SnakeGame } from '@/features/games/snake';
+import { TetrisGame } from '@/features/games/tetris';
 import { TicTacToeGame } from '@/features/games/tic-tac-toe';
 import { useGameSessionStore } from '@/stores/game-session.store';
 import { useLibraryStore } from '@/stores/library.store';
@@ -31,6 +32,10 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
 
   if (game.id === 'pen-fight') {
     return <PenFightGame />;
+  }
+
+  if (game.id === 'tetris') {
+    return <TetrisGame />;
   }
 
   const handleStart = () => {

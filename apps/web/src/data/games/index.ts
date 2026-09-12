@@ -20,6 +20,21 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     releaseDate: '2026-09-11',
   },
   {
+    id: 'tetris',
+    name: 'Tetris',
+    slug: 'tetris',
+    description:
+      'Rotate and stack falling tetrominoes to clear lines before the board overflows. Speed ramps up with every level.',
+    category: 'puzzle',
+    players: { min: 1, max: 1 },
+    status: 'available',
+    thumbnailUrl: '/games/tetris/icon.svg',
+    tags: ['Arcade', 'Classic', 'Puzzle', 'High Score'],
+    featured: true,
+    badge: 'Ready to Play',
+    releaseDate: '2026-09-12',
+  },
+  {
     id: 'tic-tac-toe',
     name: 'Tic-Tac-Toe',
     slug: 'tic-tac-toe',
