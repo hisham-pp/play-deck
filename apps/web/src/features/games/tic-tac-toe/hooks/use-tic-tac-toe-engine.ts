@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   DIFFICULTY_MEDIUM,
   MARK_X,
+  MODE_MULTIPLAYER,
   MODE_SINGLE,
   STATUS_DRAW,
   STATUS_WON,
@@ -16,10 +17,14 @@ import type {
   TicTacToeStats,
 } from '../types/tic-tac-toe.types';
 import { useAiTurn } from './use-ai-turn';
+import { useTicTacToeMultiplayer } from './use-tic-tac-toe-multiplayer';
 
 export interface UseTicTacToeEngineReturn {
   state: TicTacToeState;
   stats: TicTacToeStats | null;
+  roomCode: string | null;
+  myMark: PlayerMark | null;
+  opponentName: string | null;
   makeMove: (index: number) => boolean;
   setMode: (mode: GameMode) => void;
   setDifficulty: (difficulty: AIDifficulty) => void;
@@ -42,12 +47,10 @@ export function useTicTacToeEngine(
   const [stats, setStats] = useState<TicTacToeStats | null>(null);
   const gameOverReportedRef = useRef<string | null>(null);
 
-  // Subscribe to engine state mutations
   useEffect(() => {
     return engine.subscribe(setState);
   }, [engine]);
 
-  // Load lifetime stats
   const refreshStats = useCallback(async () => {
     try {
       const data = await ticTacToeStatsRepository.getStats();
@@ -61,10 +64,17 @@ export function useTicTacToeEngine(
     refreshStats();
   }, [refreshStats]);
 
-  // AI automation turn lifecycle
   useAiTurn(engine, state);
 
-  // Handle Game Over notifications
+  const {
+    roomCode,
+    myMark,
+    opponentName,
+    validateAndBroadcastMove,
+    broadcastResetRound,
+    broadcastResetMatch,
+  } = useTicTacToeMultiplayer(engine, state.mode, state.turn);
+
   useEffect(() => {
     if (state.status === STATUS_WON || state.status === STATUS_DRAW) {
       const key = `${state.round}-${state.moveHistory.length}-${state.status}-${state.winner}`;
@@ -82,26 +92,34 @@ export function useTicTacToeEngine(
       if (state.mode === MODE_SINGLE && state.turn !== state.humanPlayerMark) {
         return false;
       }
+      if (state.mode === MODE_MULTIPLAYER && !validateAndBroadcastMove(index)) {
+        return false;
+      }
       return engine.makeMove(index, state.turn);
     },
-    [engine, state.mode, state.turn, state.humanPlayerMark],
+    [engine, state.mode, state.turn, state.humanPlayerMark, validateAndBroadcastMove],
   );
 
   const setMode = useCallback((mode: GameMode) => engine.setMode(mode), [engine]);
+  const setDifficulty = useCallback((d: AIDifficulty) => engine.setDifficulty(d), [engine]);
+  const setHumanMark = useCallback((m: PlayerMark) => engine.setHumanMark(m), [engine]);
 
-  const setDifficulty = useCallback(
-    (difficulty: AIDifficulty) => engine.setDifficulty(difficulty),
-    [engine],
-  );
+  const resetRound = useCallback(() => {
+    engine.resetRound();
+    broadcastResetRound();
+  }, [engine, broadcastResetRound]);
 
-  const setHumanMark = useCallback((mark: PlayerMark) => engine.setHumanMark(mark), [engine]);
-
-  const resetRound = useCallback(() => engine.resetRound(), [engine]);
-  const resetMatch = useCallback(() => engine.resetMatch(), [engine]);
+  const resetMatch = useCallback(() => {
+    engine.resetMatch();
+    broadcastResetMatch();
+  }, [engine, broadcastResetMatch]);
 
   return {
     state,
     stats,
+    roomCode,
+    myMark,
+    opponentName,
     makeMove,
     setMode,
     setDifficulty,

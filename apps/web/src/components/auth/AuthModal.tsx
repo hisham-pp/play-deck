@@ -50,14 +50,10 @@ export function AuthModal() {
     setSuccessMessage(null);
     const result = await signUpWithEmail(email, password, displayName);
     if (result.success) {
-      if (result.requiresVerification) {
-        setSuccessMessage('Account created! User data saved to table. You can now sign in.');
-      } else {
-        setEmail('');
-        setPassword('');
-        setDisplayName('');
-        handleClose();
-      }
+      setEmail('');
+      setPassword('');
+      setDisplayName('');
+      handleClose();
     }
   };
 

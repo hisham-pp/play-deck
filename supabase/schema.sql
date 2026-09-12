@@ -1,12 +1,13 @@
 -- ==============================================================================
--- PlayDeck Supabase Database Schema (Future-Proof Reference)
+-- PlayDeck Database Schema
 -- Run this in your Supabase SQL Editor (Dashboard > SQL Editor > New Query)
 -- ==============================================================================
 
--- 1. Create table with forward-compatible columns (including jsonb metadata)
+-- 1. Table-based User/Player credentials & profiles (no Supabase Auth needed)
 create table if not exists public.players (
   id text primary key,
-  email text,
+  email text unique not null,
+  password text not null,
   display_name text not null default 'Player',
   avatar text not null default '🕹️',
   is_guest boolean not null default false,
@@ -16,12 +17,10 @@ create table if not exists public.players (
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
--- 2. Performance indexes
 create index if not exists idx_players_email on public.players(email);
 create index if not exists idx_players_is_guest on public.players(is_guest);
-create index if not exists idx_players_created_at on public.players(created_at desc);
 
--- 3. Automatic updated_at timestamp trigger
+-- 2. Automatic updated_at trigger
 create or replace function public.handle_updated_at()
 returns trigger as $$
 begin
@@ -36,57 +35,9 @@ create trigger set_players_updated_at
   for each row
   execute function public.handle_updated_at();
 
--- 4. Automatic sync trigger from auth.users (Future-Proof Auth Hook)
--- When an auth.user is created (via Email/Password, OAuth, Magic Link, etc.),
--- automatically create or update their profile row in public.players.
-create or replace function public.handle_new_auth_user()
-returns trigger as $$
-begin
-  insert into public.players (
-    id,
-    email,
-    display_name,
-    avatar,
-    is_guest,
-    last_sign_in_at
-  )
-  values (
-    new.id::text,
-    new.email,
-    coalesce(new.raw_user_meta_data->>'display_name', split_part(new.email, '@', 1), 'Player'),
-    coalesce(new.raw_user_meta_data->>'avatar', '🕹️'),
-    false,
-    new.last_sign_in_at
-  )
-  on conflict (id) do update set
-    email = coalesce(excluded.email, public.players.email),
-    display_name = case 
-      when public.players.display_name = 'Player' or public.players.display_name is null 
-      then coalesce(excluded.display_name, public.players.display_name) 
-      else public.players.display_name 
-    end,
-    last_sign_in_at = coalesce(excluded.last_sign_in_at, public.players.last_sign_in_at),
-    updated_at = timezone('utc'::text, now());
-  return new;
-end;
-$$ language plpgsql security definer;
-
--- Bind trigger to auth.users safely
-do $$
-begin
-  if exists (select 1 from pg_tables where schemaname = 'auth' and tablename = 'users') then
-    drop trigger if exists on_auth_user_created on auth.users;
-    create trigger on_auth_user_created
-      after insert on auth.users
-      for each row execute function public.handle_new_auth_user();
-  end if;
-end;
-$$;
-
--- 5. Row Level Security (RLS)
+-- 3. Row Level Security (RLS) for players
 alter table public.players enable row level security;
 
--- Idempotent RLS policy creation
 drop policy if exists "Allow public read access on players" on public.players;
 create policy "Allow public read access on players"
   on public.players for select
@@ -100,4 +51,44 @@ create policy "Allow insert access on players"
 drop policy if exists "Allow update access on players" on public.players;
 create policy "Allow update access on players"
   on public.players for update
+  using (true);
+
+-- 4. Multiplayer Rooms Table
+create table if not exists public.rooms (
+  id text primary key,
+  code text unique not null,
+  game_id text not null,
+  host_id text not null,
+  guest_id text,
+  status text not null default 'waiting',
+  metadata jsonb not null default '{}'::jsonb,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+create index if not exists idx_rooms_code on public.rooms(code);
+create index if not exists idx_rooms_status on public.rooms(status);
+create index if not exists idx_rooms_game_id on public.rooms(game_id);
+
+drop trigger if exists set_rooms_updated_at on public.rooms;
+create trigger set_rooms_updated_at
+  before update on public.rooms
+  for each row
+  execute function public.handle_updated_at();
+
+alter table public.rooms enable row level security;
+
+drop policy if exists "Allow public read access on rooms" on public.rooms;
+create policy "Allow public read access on rooms"
+  on public.rooms for select
+  using (true);
+
+drop policy if exists "Allow insert access on rooms" on public.rooms;
+create policy "Allow insert access on rooms"
+  on public.rooms for insert
+  with check (true);
+
+drop policy if exists "Allow update access on rooms" on public.rooms;
+create policy "Allow update access on rooms"
+  on public.rooms for update
   using (true);
