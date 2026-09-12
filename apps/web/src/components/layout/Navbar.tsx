@@ -1,11 +1,15 @@
 'use client';
 
-import { Gamepad2, Compass, Library, User, LogIn } from 'lucide-react';
+import { Compass, Gamepad2, Library, LogIn, User, Users } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { AuthModal } from '@/components/auth/AuthModal';
+import { FriendsModal } from '@/features/friends/components/FriendsModal';
+import { GameInviteToast } from '@/features/friends/components/GameInviteToast';
+import { useFriendsRealtime } from '@/features/friends/hooks/use-friends-realtime';
 import { cn } from '@/lib/utils';
+import { useFriendsStore } from '@/stores/friends.store';
 import { usePlayerStore } from '@/stores/player.store';
 import { ThemeToggle } from './ThemeToggle';
 
@@ -18,10 +22,15 @@ const NAV_LINKS = [
 export function Navbar() {
   const pathname = usePathname();
   const { player, initPlayer, setAuthModalOpen } = usePlayerStore();
+  const { setModalOpen, incomingRequests, pendingInvites } = useFriendsStore();
+
+  useFriendsRealtime();
 
   useEffect(() => {
     initPlayer();
   }, [initPlayer]);
+
+  const totalNotifications = incomingRequests.length + pendingInvites.length;
 
   return (
     <>
@@ -64,6 +73,22 @@ export function Navbar() {
 
           {/* Right action controls */}
           <div className="flex items-center gap-3">
+            {/* Friends Trigger */}
+            <button
+              type="button"
+              onClick={() => setModalOpen(true)}
+              className="relative p-2 rounded-lg border border-surface-border bg-surface-raised hover:bg-surface-overlay text-deck-400 hover:text-white transition-colors"
+              title="Friends & Invites"
+              aria-label="Friends Hub"
+            >
+              <Users className="w-4 h-4" />
+              {totalNotifications > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-500 text-deck-950 font-black text-[9px] flex items-center justify-center animate-pulse">
+                  {totalNotifications}
+                </span>
+              )}
+            </button>
+
             <ThemeToggle />
 
             {player?.isGuest && (
@@ -97,8 +122,10 @@ export function Navbar() {
         </div>
       </header>
 
-      {/* Global Auth Modal */}
+      {/* Global Modals & Notifications */}
       <AuthModal />
+      <FriendsModal />
+      <GameInviteToast />
     </>
   );
 }

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Player, Room } from '@playdeck/game-types';
+import type { ChatMessage, Player, Room } from '@playdeck/game-types';
 import { RoomService } from '@/features/multiplayer/services/room.service';
 import {
   PlayerPresence,
@@ -25,6 +25,12 @@ export interface MultiplayerState {
   leaveRoom: () => void;
   sendGameAction: (type: string, payload: unknown, senderId: string) => void;
   onActionReceived: (callback: (msg: TransportMessage) => void) => () => void;
+  sendChatMessage: (msg: ChatMessage) => void;
+  sendFriendNotice: (senderId: string, senderName: string) => void;
+  onChatMessage: (callback: (msg: ChatMessage) => void) => () => void;
+  onFriendNotice: (
+    callback: (data: { senderId: string; senderName: string }) => void,
+  ) => () => void;
 }
 
 export const useMultiplayerStore = create<MultiplayerState>((set, get) => ({
@@ -131,4 +137,9 @@ export const useMultiplayerStore = create<MultiplayerState>((set, get) => ({
   onActionReceived: (callback) => {
     return transport.onAction(callback);
   },
+
+  sendChatMessage: (msg) => transport.sendChat(msg),
+  sendFriendNotice: (sId, sName) => transport.sendFriendRequestNotice(sId, sName),
+  onChatMessage: (cb) => transport.onChat(cb),
+  onFriendNotice: (cb) => transport.onFriendRequest(cb),
 }));

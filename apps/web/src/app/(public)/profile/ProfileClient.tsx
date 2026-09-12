@@ -1,8 +1,9 @@
 'use client';
 
-import { Check } from 'lucide-react';
+import { Check, Users } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
+import { useFriendsStore } from '@/stores/friends.store';
 import { usePlayerStore } from '@/stores/player.store';
 import { AccountStatusCard } from './components/AccountStatusCard';
 import { ProfileHeader } from './components/ProfileHeader';
@@ -21,6 +22,8 @@ export function ProfileClient() {
     signOut,
     isLoadingAuth,
   } = usePlayerStore();
+
+  const { friends, setModalOpen } = useFriendsStore();
 
   const [nameInput, setNameInput] = useState('');
   const [isSaved, setIsSaved] = useState(false);
@@ -107,6 +110,24 @@ export function ProfileClient() {
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Friends Card */}
+      <div className="p-6 rounded-xl border border-surface-border bg-surface-raised flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+            <Users className="w-5 h-5" />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-deck-100">Friends & Rivals</h4>
+            <p className="text-xs text-deck-400">
+              {friends.length} {friends.length === 1 ? 'friend' : 'friends'} connected
+            </p>
+          </div>
+        </div>
+        <Button variant="secondary" size="sm" onClick={() => setModalOpen(true)}>
+          Manage Friends
+        </Button>
       </div>
 
       <ProfileStatsCard stats={stats} />

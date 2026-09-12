@@ -1,5 +1,8 @@
 import type { RealtimeChannel } from '@supabase/supabase-js';
+import type { ChatMessage } from '@playdeck/game-types';
 import { getSupabaseClient } from '@/lib/supabase/client';
+
+const BROADCAST_TYPE = 'broadcast';
 
 export interface TransportMessage {
   type: string;
@@ -20,6 +23,9 @@ export class SupabaseTransportService {
   private actionListeners: Set<(msg: TransportMessage) => void> = new Set();
   private presenceListeners: Set<(players: PlayerPresence[]) => void> = new Set();
   private statusListeners: Set<(status: string) => void> = new Set();
+  private chatListeners: Set<(msg: ChatMessage) => void> = new Set();
+  private friendReqListeners: Set<(data: { senderId: string; senderName: string }) => void> =
+    new Set();
 
   async connect(roomCode: string, player: PlayerPresence): Promise<boolean> {
     const supabase = getSupabaseClient();
@@ -36,8 +42,16 @@ export class SupabaseTransportService {
     });
 
     this.channel
-      .on('broadcast', { event: 'game-action' }, ({ payload }) => {
+      .on(BROADCAST_TYPE, { event: 'game-action' }, ({ payload }) => {
         this.actionListeners.forEach((listener) => listener(payload as TransportMessage));
+      })
+      .on(BROADCAST_TYPE, { event: 'chat-message' }, ({ payload }) => {
+        this.chatListeners.forEach((listener) => listener(payload as ChatMessage));
+      })
+      .on(BROADCAST_TYPE, { event: 'friend-request' }, ({ payload }) => {
+        this.friendReqListeners.forEach((listener) =>
+          listener(payload as { senderId: string; senderName: string }),
+        );
       })
       .on('presence', { event: 'sync' }, () => {
         if (!this.channel) return;
@@ -66,16 +80,36 @@ export class SupabaseTransportService {
       senderId,
       timestamp: Date.now(),
     };
+    this.channel.send({ type: BROADCAST_TYPE, event: 'game-action', payload: msg });
+  }
+
+  sendChat(msg: ChatMessage): void {
+    if (!this.channel) return;
+    this.channel.send({ type: BROADCAST_TYPE, event: 'chat-message', payload: msg });
+  }
+
+  sendFriendRequestNotice(senderId: string, senderName: string): void {
+    if (!this.channel) return;
     this.channel.send({
-      type: 'broadcast',
-      event: 'game-action',
-      payload: msg,
+      type: BROADCAST_TYPE,
+      event: 'friend-request',
+      payload: { senderId, senderName },
     });
   }
 
   onAction(listener: (msg: TransportMessage) => void): () => void {
     this.actionListeners.add(listener);
     return () => this.actionListeners.delete(listener);
+  }
+
+  onChat(listener: (msg: ChatMessage) => void): () => void {
+    this.chatListeners.add(listener);
+    return () => this.chatListeners.delete(listener);
+  }
+
+  onFriendRequest(listener: (data: { senderId: string; senderName: string }) => void): () => void {
+    this.friendReqListeners.add(listener);
+    return () => this.friendReqListeners.delete(listener);
   }
 
   onPresence(listener: (players: PlayerPresence[]) => void): () => void {
@@ -91,12 +125,12 @@ export class SupabaseTransportService {
   disconnect(): void {
     if (this.channel) {
       const supabase = getSupabaseClient();
-      if (supabase) {
-        supabase.removeChannel(this.channel);
-      }
+      if (supabase) supabase.removeChannel(this.channel);
       this.channel = null;
     }
     this.actionListeners.clear();
+    this.chatListeners.clear();
+    this.friendReqListeners.clear();
     this.presenceListeners.clear();
     this.statusListeners.clear();
   }
