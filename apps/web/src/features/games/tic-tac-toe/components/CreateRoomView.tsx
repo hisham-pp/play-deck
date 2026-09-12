@@ -1,8 +1,11 @@
 'use client';
 
-import { Copy, Check, Users, Loader2 } from 'lucide-react';
+import { Check, Copy, Loader2, UserPlus, Users } from 'lucide-react';
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/Button';
+import { InviteToRoomModal } from '@/features/friends/components/InviteToRoomModal';
+
+const BTN_TYPE = 'button';
 
 export interface CreateRoomViewProps {
   roomCode: string | null;
@@ -20,6 +23,7 @@ export function CreateRoomView({
   onStartGame,
 }: CreateRoomViewProps) {
   const [copied, setCopied] = useState(false);
+  const [isInviteOpen, setIsInviteOpen] = useState(false);
 
   const handleCopy = () => {
     if (!roomCode) return;
@@ -35,7 +39,7 @@ export function CreateRoomView({
           Generate a 6-digit numeric room code and share it with your opponent to play online.
         </p>
         <Button
-          type="button"
+          type={BTN_TYPE}
           variant="primary"
           onClick={onCreate}
           loading={isLoading}
@@ -58,7 +62,7 @@ export function CreateRoomView({
             {roomCode}
           </div>
           <Button
-            type="button"
+            type={BTN_TYPE}
             variant="outline"
             size="sm"
             onClick={handleCopy}
@@ -66,6 +70,17 @@ export function CreateRoomView({
             title="Copy Code"
           >
             {copied ? <Check className="w-5 h-5 text-emerald-400" /> : <Copy className="w-5 h-5" />}
+          </Button>
+          <Button
+            type={BTN_TYPE}
+            variant="outline"
+            size="sm"
+            onClick={() => setIsInviteOpen(true)}
+            className="p-3.5 h-auto flex items-center gap-1.5"
+            title="Invite Friend"
+          >
+            <UserPlus className="w-5 h-5 text-amber-400" />
+            <span className="text-xs font-semibold hidden sm:inline">Invite</span>
           </Button>
         </div>
       </div>
@@ -85,10 +100,17 @@ export function CreateRoomView({
       </div>
 
       {hasOpponent && (
-        <Button type="button" variant="primary" onClick={onStartGame} className="w-full max-w-xs">
+        <Button type={BTN_TYPE} variant="primary" onClick={onStartGame} className="w-full max-w-xs">
           Start Match
         </Button>
       )}
+
+      <InviteToRoomModal
+        isOpen={isInviteOpen}
+        onClose={() => setIsInviteOpen(false)}
+        gameId="tic-tac-toe"
+        roomCode={roomCode}
+      />
     </div>
   );
 }

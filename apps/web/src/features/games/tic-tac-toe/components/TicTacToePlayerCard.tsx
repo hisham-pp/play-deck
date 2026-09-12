@@ -14,6 +14,9 @@ export interface TicTacToePlayerCardProps {
   isActive: boolean;
   isMe: boolean;
   isAiThinking?: boolean;
+  opponentId?: string;
+  friendStatus?: 'none' | 'pending' | 'friends';
+  onAddFriend?: (opponentId: string) => void;
 }
 
 export function TicTacToePlayerCard({
@@ -25,6 +28,9 @@ export function TicTacToePlayerCard({
   isActive,
   isMe,
   isAiThinking = false,
+  opponentId,
+  friendStatus = 'none',
+  onAddFriend,
 }: TicTacToePlayerCardProps) {
   const isX = mark === 'X';
 
@@ -69,6 +75,27 @@ export function TicTacToePlayerCard({
         >
           {name}
         </span>
+        {!isMe && opponentId && (
+          <div className="mt-0.5">
+            {friendStatus === 'friends' ? (
+              <span className="text-[10px] text-emerald-400 font-semibold px-2 py-0.5 bg-emerald-500/10 rounded-full border border-emerald-500/20">
+                Friends ✓
+              </span>
+            ) : friendStatus === 'pending' ? (
+              <span className="text-[10px] text-amber-400 font-medium px-2 py-0.5 bg-amber-500/10 rounded-full border border-amber-500/20">
+                Requested ⏳
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => onAddFriend?.(opponentId)}
+                className="text-[10px] text-deck-300 hover:text-white font-medium px-2 py-0.5 bg-surface-base hover:bg-surface-overlay border border-surface-border rounded-full transition-colors"
+              >
+                + Add Friend
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Score */}
