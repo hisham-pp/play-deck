@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import type { BoardLayout } from '../../engine/board-layout';
+import { isSafeCell, type BoardLayout } from '../../engine/board-layout';
 import { ludoColorTheme } from '../../utils/ludo-colors';
 import {
   CELL_SIZE,
