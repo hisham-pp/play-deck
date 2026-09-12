@@ -25,13 +25,17 @@ import { PenModel } from './PenModel';
 
 export interface PenFightArenaHandle {
   resetPositions: () => void;
+  performFlick: (playerId: PenFightPlayerId, direction: FlickImpulse, power: number) => void;
 }
 
 interface PenFightMatchProps {
   state: PenFightState;
+  hasOpponent?: boolean;
+  isMyTurn?: boolean;
   onFlickTaken: () => void;
   onBeginSettling: () => void;
   onResolveRound: (winner: PenFightOutcome) => void;
+  onLocalFlick?: (playerId: PenFightPlayerId, direction: FlickImpulse, power: number) => void;
 }
 
 const QUAT_IDENTITY = { x: 0, y: 0, z: 0, w: 1 };
@@ -50,7 +54,18 @@ const PEN_PHYSICS_PROPS = {
 
 /** Physics bodies, drag-to-aim input, AI turns, and round resolution — rendered inside <Physics>. */
 export const PenFightMatch = forwardRef<PenFightArenaHandle, PenFightMatchProps>(
-  function PenFightMatch({ state, onFlickTaken, onBeginSettling, onResolveRound }, ref) {
+  function PenFightMatch(
+    {
+      state,
+      hasOpponent = true,
+      isMyTurn = true,
+      onFlickTaken,
+      onBeginSettling,
+      onResolveRound,
+      onLocalFlick,
+    },
+    ref,
+  ) {
     const p1Ref = useRef<RapierRigidBody | null>(null);
     const p2Ref = useRef<RapierRigidBody | null>(null);
     const sound = usePenFightSound();
@@ -89,6 +104,14 @@ export const PenFightMatch = forwardRef<PenFightArenaHandle, PenFightMatchProps>
       [beginRound, onFlickTaken, onBeginSettling, sound, speedConfig.impulseMultiplier],
     );
 
+    const handleUserFlick = useCallback(
+      (playerId: PenFightPlayerId, direction: FlickImpulse, power: number) => {
+        performFlick(playerId, direction, power);
+        onLocalFlick?.(playerId, direction, power);
+      },
+      [performFlick, onLocalFlick],
+    );
+
     const resetPositions = useCallback(() => {
       const p1 = p1Ref.current;
       const p2 = p2Ref.current;
@@ -107,11 +130,17 @@ export const PenFightMatch = forwardRef<PenFightArenaHandle, PenFightMatchProps>
       resetRound();
     }, [resetRound]);
 
-    useImperativeHandle(ref, () => ({ resetPositions }), [resetPositions]);
+    useImperativeHandle(ref, () => ({ resetPositions, performFlick }), [
+      resetPositions,
+      performFlick,
+    ]);
 
     usePenFightAI({ state, p1Ref, p2Ref, onFlick: performFlick });
 
-    const canAim = state.phase === 'aiming' && !state.players[state.activePlayer].isAI;
+    const canAim =
+      state.phase === 'aiming' &&
+      !state.players[state.activePlayer].isAI &&
+      (state.mode !== 'online' || (hasOpponent && isMyTurn));
     const { handlePointerDown, handlePointerMove, handlePointerUp, aimPreview } =
       usePenFightDragAim({
         canAim,
@@ -119,7 +148,7 @@ export const PenFightMatch = forwardRef<PenFightArenaHandle, PenFightMatchProps>
         playerColor: state.players[state.activePlayer].color,
         p1Ref,
         p2Ref,
-        onFlick: performFlick,
+        onFlick: handleUserFlick,
       });
 
     const handlePenCollision = useCallback(() => {

@@ -4,9 +4,11 @@ import dynamic from 'next/dynamic';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { usePlayerStore } from '@/stores/player.store';
 import { usePenFightEngine } from '../hooks/use-pen-fight-engine';
+import { usePenFightMultiplayer } from '../hooks/use-pen-fight-multiplayer';
 import { usePenFightSound } from '../hooks/use-pen-fight-sound';
 import type {
   AIDifficulty,
+  FlickImpulse,
   PenColor,
   PenFightMode,
   PenFightOutcome,
@@ -46,6 +48,7 @@ export function PenFightGame() {
 
   const {
     state,
+    engine,
     setMode,
     setSpeedMode,
     setDifficulty,
@@ -58,6 +61,30 @@ export function PenFightGame() {
     nextRound,
     requestRematch,
   } = usePenFightEngine(handleMatchOver);
+
+  const handleRemoteFlick = useCallback(
+    (playerId: PenFightPlayerId, direction: FlickImpulse, power: number) => {
+      arenaRef.current?.performFlick(playerId, direction, power);
+    },
+    [],
+  );
+
+  const {
+    role,
+    hasOpponent,
+    isMyTurn,
+    broadcastStartMatch,
+    broadcastFlick,
+    broadcastNextRound,
+    broadcastRematch,
+  } = usePenFightMultiplayer(engine, state.mode, state.activePlayer, handleRemoteFlick);
+
+  const handleLocalFlick = useCallback(
+    (playerId: PenFightPlayerId, direction: FlickImpulse, power: number) => {
+      broadcastFlick(playerId, direction, power);
+    },
+    [broadcastFlick],
+  );
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -93,6 +120,9 @@ export function PenFightGame() {
       setSpeedMode(config.speedMode);
       setDifficulty(config.difficulty);
       startMatch();
+      if (config.mode === 'online') {
+        broadcastStartMatch();
+      }
       setPlayerName('p1', config.names.p1);
       setPlayerName('p2', config.names.p2);
       setPlayerColor('p1', config.colors.p1);
@@ -100,20 +130,31 @@ export function PenFightGame() {
       arenaRef.current?.resetPositions();
       sound.playClick();
     },
-    [setMode, setSpeedMode, setDifficulty, startMatch, setPlayerName, setPlayerColor, sound],
+    [
+      setMode,
+      setSpeedMode,
+      setDifficulty,
+      startMatch,
+      broadcastStartMatch,
+      setPlayerName,
+      setPlayerColor,
+      sound,
+    ],
   );
 
   const handleNextRound = useCallback(() => {
     arenaRef.current?.resetPositions();
     nextRound();
+    broadcastNextRound();
     sound.playClick();
-  }, [nextRound, sound]);
+  }, [nextRound, broadcastNextRound, sound]);
 
   const handleRematch = useCallback(() => {
     arenaRef.current?.resetPositions();
     requestRematch();
+    broadcastRematch();
     sound.playClick();
-  }, [requestRematch, sound]);
+  }, [requestRematch, broadcastRematch, sound]);
 
   const handleResetPositions = useCallback(() => {
     arenaRef.current?.resetPositions();
@@ -125,13 +166,18 @@ export function PenFightGame() {
       <PenFightArena
         ref={arenaRef}
         state={state}
+        role={role}
+        hasOpponent={hasOpponent}
+        isMyTurn={isMyTurn()}
         onFlickTaken={flickTaken}
         onBeginSettling={beginSettling}
         onResolveRound={resolveRound}
+        onLocalFlick={handleLocalFlick}
       />
 
       <PenFightHUD
         state={state}
+        hasOpponent={hasOpponent}
         onOpenSetup={() => setIsSetupOpen(true)}
         onResetPositions={handleResetPositions}
       />

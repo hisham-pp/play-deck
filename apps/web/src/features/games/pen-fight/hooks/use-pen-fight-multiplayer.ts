@@ -33,6 +33,9 @@ export function usePenFightMultiplayer(
           onRemoteFlick(playerId, direction, power);
           break;
         }
+        case 'SYNC_START':
+          engine.startMatch();
+          break;
         case 'RESET_MATCH':
           engine.startMatch();
           break;
@@ -48,11 +51,32 @@ export function usePenFightMultiplayer(
     });
   }, [engine, mode, roomCode, player?.id, onActionReceived, onRemoteFlick]);
 
+  useEffect(() => {
+    if (mode !== MODE_ONLINE || !role || !player) return;
+
+    const myName = player.displayName || 'Player 1';
+    const oppName = opponent?.displayName || 'Opponent';
+
+    if (role === 'host') {
+      engine.setPlayerName('p1', myName);
+      engine.setPlayerName('p2', oppName);
+    } else if (role === 'guest') {
+      engine.setPlayerName('p2', myName);
+      engine.setPlayerName('p1', oppName);
+    }
+  }, [engine, mode, role, player, opponent]);
+
   const isMyTurn = (): boolean => {
     if (mode !== MODE_ONLINE) return true;
     if (!role) return false;
     const localPlayerId: PenFightPlayerId = role === 'host' ? 'p1' : 'p2';
     return activePlayer === localPlayerId;
+  };
+
+  const broadcastStartMatch = () => {
+    if (mode === MODE_ONLINE && player && roomCode) {
+      sendGameAction('SYNC_START', {}, player.id);
+    }
   };
 
   const broadcastFlick = (playerId: PenFightPlayerId, direction: FlickImpulse, power: number) => {
@@ -76,8 +100,11 @@ export function usePenFightMultiplayer(
   return {
     roomCode,
     role,
+    opponent,
+    hasOpponent: Boolean(opponent),
     opponentName: opponent?.displayName || null,
     isMyTurn,
+    broadcastStartMatch,
     broadcastFlick,
     broadcastNextRound,
     broadcastRematch,
