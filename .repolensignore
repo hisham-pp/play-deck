@@ -1,0 +1,5 @@
+# Code Lense Ignore Patterns
+# Additional rules beyond .gitignore
+*.tmp
+*.bak
+test-output/

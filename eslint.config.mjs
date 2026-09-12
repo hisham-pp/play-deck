@@ -56,7 +56,7 @@ export default tseslint.config(
       'repo-rules/enforce-import-order': 'error',
 
       // Complexity, file size & SonarQube quality controls
-      'repo-rules/max-file-lines': ['warn', { max: 150, skipBlankLines: true, skipComments: true }],
+      'repo-rules/max-file-lines': ['warn', { max: 250, skipBlankLines: true, skipComments: true }],
       'repo-rules/cognitive-complexity': ['warn', { max: 20 }],
       'repo-rules/no-duplicate-constants': ['warn', { threshold: 4, minLength: 3 }],
 

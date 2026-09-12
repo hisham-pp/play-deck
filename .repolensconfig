@@ -1,0 +1,22 @@
+{
+  "embedding": {
+    "enabled": false,
+    "provider": "mock"
+  },
+  "llm": {
+    "enabled": false,
+    "provider": "ollama",
+    "model": "llama3.2"
+  },
+  "search": {
+    "defaultMode": "hybrid",
+    "defaultLimit": 20,
+    "weights": {
+      "lexical": 0.35,
+      "semantic": 0.35,
+      "symbol": 0.15,
+      "path": 0.1,
+      "graph": 0.05
+    }
+  }
+}
