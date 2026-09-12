@@ -1,6 +1,6 @@
+import type { LudoGameState } from '../types/ludo.types';
 import { PHASE_AWAITING_ROLL } from './ludo-constants';
 import { getPlayerBySeat } from './movement';
-import type { LudoGameState } from '../types/ludo.types';
 
 /**
  * Updates the acting player's consecutive-sixes streak for this roll.

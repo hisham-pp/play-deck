@@ -1,4 +1,6 @@
+import type { LudoAction, LudoGameState, LudoPieceLocation } from '../types/ludo.types';
 import { resolveLayout } from './board-layout';
+import { isFinishedSteps, isHomeStretchSteps, isTrackSteps } from './board-layout';
 import { applyCaptureIfAny } from './capture';
 import {
   PHASE_AWAITING_MOVE,
@@ -16,8 +18,6 @@ import {
 } from './movement';
 import { advanceTurn, grantExtraTurn, registerRoll } from './turns';
 import { checkGameCompletion, checkPlayerFinished } from './win-condition';
-import type { LudoAction, LudoGameState, LudoPieceLocation } from '../types/ludo.types';
-import { isFinishedSteps, isHomeStretchSteps, isTrackSteps } from './board-layout';
 
 function appendToLog(state: LudoGameState, action: LudoAction): LudoGameState {
   return { ...state, actionLog: [...state.actionLog, action] };

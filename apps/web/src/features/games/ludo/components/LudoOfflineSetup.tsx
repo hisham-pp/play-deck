@@ -1,8 +1,8 @@
 'use client';
 
-import { generateId } from '@playdeck/shared';
 import { Bot, Dices, Trash2, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { generateId } from '@playdeck/shared';
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Input } from '@playdeck/ui';
 import { usePlayerStore } from '@/stores/player.store';
 import { addBotToFirstEmptySeat, fillEmptySeatsWithBots } from '../bots/bot-fill';

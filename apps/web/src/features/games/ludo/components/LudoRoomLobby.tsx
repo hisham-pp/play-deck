@@ -1,8 +1,8 @@
 'use client';
 
+import { UserPlus, Bot, Play, LogOut, Copy, Check } from 'lucide-react';
 import { useState } from 'react';
 import { Button, Card, CardContent, CardHeader, CardTitle, Badge } from '@playdeck/ui';
-import { UserPlus, Bot, Play, LogOut, Copy, Check } from 'lucide-react';
 import { InviteToRoomModal } from '@/features/friends/components/InviteToRoomModal';
 import { useLudoMultiplayerStore } from '@/stores/ludo-multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';

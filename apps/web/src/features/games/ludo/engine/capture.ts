@@ -1,6 +1,6 @@
+import type { LudoColor, LudoGameState, LudoPieceState } from '../types/ludo.types';
 import type { BoardLayout } from './board-layout';
 import { globalTrackIndex, isSafeCell } from './board-layout';
-import type { LudoColor, LudoGameState, LudoPieceState } from '../types/ludo.types';
 
 /**
  * Pure lookup (no mutation): which opponent piece ids would be captured if a

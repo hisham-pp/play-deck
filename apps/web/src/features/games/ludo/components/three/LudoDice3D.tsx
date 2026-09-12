@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import type { Mesh } from 'three';
 import { useFrame } from '@react-three/fiber';
 import type { RapierRigidBody } from '@react-three/rapier';
 import { RigidBody } from '@react-three/rapier';
+import { useEffect, useRef } from 'react';
+import type { Mesh } from 'three';
 
 interface LudoDice3DProps {
   rolling: boolean;

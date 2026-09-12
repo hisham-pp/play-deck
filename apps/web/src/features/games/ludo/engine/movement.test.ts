@@ -1,10 +1,10 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
+import type { LudoPieceState, LudoPlayer } from '../types/ludo.types';
 import { CLASSIC_4_LAYOUT } from './board-layout';
 import { DEFAULT_RULE_SETTINGS } from './ludo-constants';
-import { computeDestinationSteps, computeLegalMoveActions } from './movement';
 import { createInitialLudoState } from './ludo-state';
-import type { LudoPieceState, LudoPlayer } from '../types/ludo.types';
+import { computeDestinationSteps, computeLegalMoveActions } from './movement';
 
 function basePiece(overrides: Partial<LudoPieceState> = {}): LudoPieceState {
   return { id: 'red-0', color: 'red', pieceIndex: 0, location: 'base', steps: 0, ...overrides };

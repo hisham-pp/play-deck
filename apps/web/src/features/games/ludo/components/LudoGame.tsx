@@ -1,23 +1,22 @@
 'use client';
 
+import { Trophy, RefreshCw, LogOut, ArrowRight } from 'lucide-react';
 import { useState, useCallback, useEffect } from 'react';
 import { Button, Card, CardContent } from '@playdeck/ui';
-import { Trophy, RefreshCw, LogOut, ArrowRight } from 'lucide-react';
 import { usePlayerStore } from '@/stores/player.store';
-
-import type { LudoPlayer } from '../types/ludo.types';
-import { useLudoEngine } from '../hooks/use-ludo-engine';
 import { useLudoBotTurn } from '../hooks/use-ludo-bot-turn';
-import { useLudoSound } from '../hooks/use-ludo-sound';
+import { useLudoEngine } from '../hooks/use-ludo-engine';
 import { useLudoSession } from '../hooks/use-ludo-session';
+import { useLudoSound } from '../hooks/use-ludo-sound';
+import type { LudoPlayer } from '../types/ludo.types';
+import { LudoBoard } from './LudoBoard';
+import { LudoControls } from './LudoControls';
+import { LudoDice } from './LudoDice';
+import { LudoGameHeader } from './LudoGameHeader';
 import { LudoLobby } from './LudoLobby';
 import { LudoOfflineSetup } from './LudoOfflineSetup';
-import { LudoRoomLobby } from './LudoRoomLobby';
-import { LudoGameHeader } from './LudoGameHeader';
-import { LudoBoard } from './LudoBoard';
-import { LudoDice } from './LudoDice';
 import { LudoPlayerPanel } from './LudoPlayerPanel';
-import { LudoControls } from './LudoControls';
+import { LudoRoomLobby } from './LudoRoomLobby';
 
 type GameMode = 'lobby' | 'offline-setup' | 'online-room' | 'playing';
 

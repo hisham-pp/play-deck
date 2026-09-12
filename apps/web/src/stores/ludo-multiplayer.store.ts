@@ -1,10 +1,10 @@
 import { create } from 'zustand';
+import { fillEmptySeatsWithBots } from '@/features/games/ludo/bots/bot-fill';
+import type { LudoAction, LudoPlayer } from '@/features/games/ludo/types/ludo.types';
+import { finalizeSeats } from '@/features/games/ludo/utils/finalize-seats';
+import { RoomService } from '@/features/multiplayer/services/room.service';
 import type { PlayerPresence } from '@/features/multiplayer/services/supabase-transport.service';
 import { SupabaseTransportService } from '@/features/multiplayer/services/supabase-transport.service';
-import { RoomService } from '@/features/multiplayer/services/room.service';
-import type { LudoAction, LudoPlayer } from '@/features/games/ludo/types/ludo.types';
-import { fillEmptySeatsWithBots } from '@/features/games/ludo/bots/bot-fill';
-import { finalizeSeats } from '@/features/games/ludo/utils/finalize-seats';
 
 interface LudoMultiplayerState {
   roomCode: string | null;

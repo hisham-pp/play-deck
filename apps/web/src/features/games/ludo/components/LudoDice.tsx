@@ -1,7 +1,7 @@
 'use client';
 
-import { Button } from '@playdeck/ui';
 import { Dices } from 'lucide-react';
+import { Button } from '@playdeck/ui';
 import type { LudoGameState } from '../types/ludo.types';
 
 interface LudoDiceProps {

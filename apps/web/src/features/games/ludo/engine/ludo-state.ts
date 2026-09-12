@@ -1,10 +1,3 @@
-import { resolveLayout } from './board-layout';
-import {
-  DEFAULT_RULE_SETTINGS,
-  PHASE_AWAITING_ROLL,
-  PIECES_PER_PLAYER,
-  STATUS_WAITING,
-} from './ludo-constants';
 import type {
   LudoGameState,
   LudoPieceState,
@@ -12,6 +5,13 @@ import type {
   LudoPlayerState,
   LudoRuleSettings,
 } from '../types/ludo.types';
+import { resolveLayout } from './board-layout';
+import {
+  DEFAULT_RULE_SETTINGS,
+  PHASE_AWAITING_ROLL,
+  PIECES_PER_PLAYER,
+  STATUS_WAITING,
+} from './ludo-constants';
 
 function createPieces(color: LudoPlayer['color']): LudoPieceState[] {
   return Array.from({ length: PIECES_PER_PLAYER }, (_, pieceIndex) => ({

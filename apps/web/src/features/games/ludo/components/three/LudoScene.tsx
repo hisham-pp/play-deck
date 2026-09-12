@@ -1,11 +1,11 @@
 'use client';
 
-import { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/rapier';
-import type { LudoGameState } from '../../types/ludo.types';
+import { Suspense } from 'react';
 import { resolveLayout } from '../../engine/board-layout';
+import type { LudoGameState } from '../../types/ludo.types';
 import { LudoBoard3D } from './LudoBoard3D';
 import { LudoDice3D } from './LudoDice3D';
 import { LudoPiece3D } from './LudoPiece3D';

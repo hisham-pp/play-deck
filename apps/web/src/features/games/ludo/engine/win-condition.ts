@@ -1,5 +1,5 @@
-import { STATUS_COMPLETED } from './ludo-constants';
 import type { LudoGameState } from '../types/ludo.types';
+import { STATUS_COMPLETED } from './ludo-constants';
 
 export function checkPlayerFinished(state: LudoGameState, seatIndex: number): LudoGameState {
   const player = state.players.find((p) => p.seatIndex === seatIndex);

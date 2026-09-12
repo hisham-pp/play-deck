@@ -1,4 +1,3 @@
-import { finishSteps, resolveLayout } from './board-layout';
 import type {
   LudoAction,
   LudoGameState,
@@ -6,6 +5,7 @@ import type {
   LudoPlayerState,
   LudoRuleSettings,
 } from '../types/ludo.types';
+import { finishSteps, resolveLayout } from './board-layout';
 
 export function getPlayerBySeat(
   state: LudoGameState,

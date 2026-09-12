@@ -1,9 +1,9 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
+import type { LudoPieceState, LudoPlayer } from '../types/ludo.types';
 import { CLASSIC_4_LAYOUT } from './board-layout';
 import { applyCaptureIfAny } from './capture';
 import { createInitialLudoState } from './ludo-state';
-import type { LudoPieceState, LudoPlayer } from '../types/ludo.types';
 
 function makePlayers(): LudoPlayer[] {
   const colors: LudoPlayer['color'][] = ['red', 'green', 'yellow', 'blue'];

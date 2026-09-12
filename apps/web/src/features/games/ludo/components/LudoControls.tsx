@@ -1,7 +1,7 @@
 'use client';
 
-import { Button } from '@playdeck/ui';
 import { Play, Pause, LogOut } from 'lucide-react';
+import { Button } from '@playdeck/ui';
 import type { LudoGameState } from '../types/ludo.types';
 
 interface LudoControlsProps {

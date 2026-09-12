@@ -1,8 +1,8 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
+import type { LudoPlayer } from '../types/ludo.types';
 import { createInitialLudoState } from './ludo-state';
 import { checkGameCompletion, checkPlayerFinished } from './win-condition';
-import type { LudoPlayer } from '../types/ludo.types';
 
 function makePlayers(count: number): LudoPlayer[] {
   const colors: LudoPlayer['color'][] = ['red', 'green', 'yellow', 'blue', 'purple', 'cyan'];

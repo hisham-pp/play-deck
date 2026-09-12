@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
-import { createInitialLudoState } from './ludo-state';
 import type { LudoPlayer } from '../types/ludo.types';
+import { createInitialLudoState } from './ludo-state';
 
 function makePlayers(count: number): LudoPlayer[] {
   const colors: LudoPlayer['color'][] = ['red', 'green', 'yellow', 'blue', 'purple', 'cyan'];

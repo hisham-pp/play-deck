@@ -1,12 +1,12 @@
 import type { BotDefinition } from '@playdeck/game-types';
-import { createScoredMoveStrategy } from './bot-strategy';
-import { resolveEvaluationWeights } from './bot-weights';
 import type {
   LudoAction,
   LudoBotDifficulty,
   LudoBotPersonality,
   LudoGameState,
 } from '../types/ludo.types';
+import { createScoredMoveStrategy } from './bot-strategy';
+import { resolveEvaluationWeights } from './bot-weights';
 
 export type LudoBotDefinition = Omit<
   BotDefinition<LudoGameState, LudoAction>,
