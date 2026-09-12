@@ -1,9 +1,8 @@
 'use client';
 
-import { Trophy, Database, Check } from 'lucide-react';
+import { Trophy, Check } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
-import { StorageService } from '@/lib/storage/storage';
 import { usePlayerStore } from '@/stores/player.store';
 
 const AVATARS = ['🕹️', '👾', '🚀', '♟️', '🎲', '🎯', '⚡', '🐉', '🦊'];
@@ -12,7 +11,6 @@ export default function ProfilePage() {
   const { player, stats, initPlayer, updateDisplayName, updateAvatar } = usePlayerStore();
   const [nameInput, setNameInput] = useState('');
   const [isSaved, setIsSaved] = useState(false);
-  const [storageKeys, setStorageKeys] = useState<string[]>([]);
 
   useEffect(() => {
     initPlayer();
@@ -23,13 +21,6 @@ export default function ProfilePage() {
       setNameInput(player.displayName);
     }
   }, [player]);
-
-  useEffect(() => {
-    const adapter = StorageService.getAdapter();
-    if (adapter.keys) {
-      adapter.keys().then(setStorageKeys);
-    }
-  }, []);
 
   const handleSaveName = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -127,30 +118,6 @@ export default function ProfilePage() {
             <span className="text-2xl font-black text-rose-500 font-display">{stats.losses}</span>
             <p className="text-xs text-deck-400 mt-1">Defeats</p>
           </div>
-        </div>
-      </div>
-
-      {/* Storage Inspector */}
-      <div className="p-6 rounded-xl border border-surface-border bg-surface-raised flex flex-col gap-4">
-        <div className="flex items-center gap-2">
-          <Database className="w-4 h-4 text-amber-500" />
-          <h3 className="text-xs font-bold uppercase tracking-wider text-deck-500 font-display">
-            IndexedDB Storage Diagnostic
-          </h3>
-        </div>
-        <p className="text-xs text-deck-500">
-          The following keys are persisted locally in the Dexie IndexedDB store:
-        </p>
-        <div className="p-3 rounded-lg bg-surface-overlay border border-surface-border text-xs font-mono text-deck-600 dark:text-deck-300">
-          {storageKeys.length > 0 ? (
-            <ul className="list-disc pl-4 space-y-1">
-              {storageKeys.map((k) => (
-                <li key={k}>{k}</li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-deck-400 italic">No keys stored yet.</p>
-          )}
         </div>
       </div>
     </div>

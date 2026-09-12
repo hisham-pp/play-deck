@@ -1,4 +1,4 @@
-import { Gamepad2, ShieldCheck, Terminal } from 'lucide-react';
+import { Gamepad2 } from 'lucide-react';
 import React from 'react';
 
 export function Footer() {
@@ -11,17 +11,6 @@ export function Footer() {
             PlayDeck
           </span>
           <span>— Modern Game Hub Foundation</span>
-        </div>
-
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-1.5 text-deck-400">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Dexie IndexedDB Persistent</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-deck-400">
-            <Terminal className="w-3.5 h-3.5 text-amber-500" />
-            <span>Clean Architecture V1</span>
-          </div>
         </div>
       </div>
     </footer>

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "pnpm --filter @playdeck/web dev",
     "build": "pnpm --filter @playdeck/web build",
+    "test": "node --import ./scripts/test-register.mjs --test 'apps/web/src/**/*.test.ts'",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",

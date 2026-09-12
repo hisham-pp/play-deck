@@ -30,3 +30,11 @@ export interface GameFilter {
   status?: GameStatus;
   featured?: boolean;
 }
+
+export interface BaseGameEngine<TState = unknown, TAction = unknown> {
+  getState(): TState;
+  dispatch(action: TAction): void;
+  subscribe(listener: (state: TState) => void): () => void;
+  reset(): void;
+  destroy?(): void;
+}

@@ -8,4 +8,5 @@ export const STORAGE_KEYS = {
   FAVORITES: 'playdeck:favorites',
   session: (id: string) => `playdeck:session:${id}`,
   gameSave: (gameId: string, slot: string = 'default') => `playdeck:save:${gameId}:${slot}`,
+  gameStats: (gameId: string) => `playdeck:stats:${gameId}`,
 } as const;
