@@ -7,18 +7,21 @@ import type { PenFightState } from '../types/pen-fight.types';
 
 interface BackgroundScoreboardProps {
   state: PenFightState;
+  /** Flips the board to the +Z end when the local camera views the table from behind (guest). */
+  flipped?: boolean;
 }
 
-export function BackgroundScoreboard({ state }: BackgroundScoreboardProps) {
+export function BackgroundScoreboard({ state, flipped = false }: BackgroundScoreboardProps) {
   const p1 = state.players.p1;
   const p2 = state.players.p2;
 
-  // Position board behind the table surface
-  const boardZ = -TABLE_DEPTH / 2 - 0.7;
+  // Keep the board at the far end of the table relative to the viewing camera. A guest's
+  // camera sits on -Z, so an unflipped board would fill their screen and read mirrored.
+  const boardZ = (TABLE_DEPTH / 2 + 0.7) * (flipped ? 1 : -1);
   const boardY = 1.35;
 
   return (
-    <group position={[0, boardY, boardZ]}>
+    <group position={[0, boardY, boardZ]} rotation={[0, flipped ? Math.PI : 0, 0]}>
       {/* 3D Scoreboard Frame Backing */}
       <mesh receiveShadow position={[0, 0, -0.05]}>
         <boxGeometry args={[3.2, 1.4, 0.08]} />

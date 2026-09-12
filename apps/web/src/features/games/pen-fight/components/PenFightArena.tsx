@@ -45,7 +45,7 @@ export const PenFightArena = forwardRef<PenFightArenaHandle, PenFightArenaProps>
           onUpdate={(camera: ThreePerspectiveCamera) => camera.lookAt(0, 0.1, 0)}
         />
         <ArenaLighting />
-        <BackgroundScoreboard state={props.state} />
+        <BackgroundScoreboard state={props.state} flipped={isGuest} />
         <Physics gravity={[0, -9.81, 0]}>
           <TableSurface />
           <PenFightMatch ref={ref} {...props} />
