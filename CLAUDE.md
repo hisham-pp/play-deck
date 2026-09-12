@@ -11,6 +11,7 @@ This file is read by AI tools at the start of every session. Keep it current.
 - **State**: Keep stores strictly separated (`player.store`, `library.store`, `game-session.store`, `preferences.store`, `multiplayer.store`). No monolithic stores.
 - **Game Engine**: Game logic is framework-agnostic and implements `GameDefinition` from `@playdeck/game-types`.
 - **API Boundary**: Catalog calls must route through `GameRepository`.
+- **Advanced Code Search**: Use **CodeLens** for semantic code search, symbol lookup, and cross-package dependency navigation across the monorepo.
 
 ## Commands
 

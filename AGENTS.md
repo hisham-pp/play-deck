@@ -234,3 +234,13 @@ Use descriptive, lowercase branch names with hyphens, prefixed by category:
 4. **Push & Open Pull Request**:
    - Push the branch to `origin/<branch-type>/<short-description>`.
    - Never push or commit directly to `main`.
+
+---
+
+## 8. Code Search & Symbol Navigation (CodeLens)
+
+AI coding agents and developers working in this codebase MUST leverage **CodeLens / Semantic Code Search** for advanced code search and symbol navigation:
+
+- **Symbol Lookup**: Use CodeLens to inspect incoming references, implementation sites, and call hierarchies before making non-trivial modifications.
+- **Cross-Package References**: Prefer CodeLens navigation over generic string matching when tracing dependencies across monorepo packages (`@playdeck/game-types`, `@playdeck/game-core`, `@playdeck/ui`, `@playdeck/shared`).
+- **Precision Refactoring**: Rely on CodeLens semantic symbol resolution to verify all invocation signatures across React components, Zustand stores, and domain services.
