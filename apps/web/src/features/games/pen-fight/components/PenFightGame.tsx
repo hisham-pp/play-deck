@@ -4,9 +4,11 @@ import dynamic from 'next/dynamic';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { usePlayerStore } from '@/stores/player.store';
 import { usePenFightEngine } from '../hooks/use-pen-fight-engine';
+import { usePenFightMultiplayer } from '../hooks/use-pen-fight-multiplayer';
 import { usePenFightSound } from '../hooks/use-pen-fight-sound';
 import type {
   AIDifficulty,
+  FlickImpulse,
   PenColor,
   PenFightMode,
   PenFightOutcome,
@@ -46,6 +48,7 @@ export function PenFightGame() {
 
   const {
     state,
+    engine,
     setMode,
     setSpeedMode,
     setDifficulty,
@@ -58,6 +61,27 @@ export function PenFightGame() {
     nextRound,
     requestRematch,
   } = usePenFightEngine(handleMatchOver);
+
+  const handleRemoteFlick = useCallback(
+    (playerId: PenFightPlayerId, direction: FlickImpulse, power: number) => {
+      arenaRef.current?.performFlick(playerId, direction, power);
+    },
+    [],
+  );
+
+  const { isMyTurn, broadcastFlick, broadcastNextRound, broadcastRematch } = usePenFightMultiplayer(
+    engine,
+    state.mode,
+    state.activePlayer,
+    handleRemoteFlick,
+  );
+
+  const handleLocalFlick = useCallback(
+    (playerId: PenFightPlayerId, direction: FlickImpulse, power: number) => {
+      broadcastFlick(playerId, direction, power);
+    },
+    [broadcastFlick],
+  );
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -106,14 +130,16 @@ export function PenFightGame() {
   const handleNextRound = useCallback(() => {
     arenaRef.current?.resetPositions();
     nextRound();
+    broadcastNextRound();
     sound.playClick();
-  }, [nextRound, sound]);
+  }, [nextRound, broadcastNextRound, sound]);
 
   const handleRematch = useCallback(() => {
     arenaRef.current?.resetPositions();
     requestRematch();
+    broadcastRematch();
     sound.playClick();
-  }, [requestRematch, sound]);
+  }, [requestRematch, broadcastRematch, sound]);
 
   const handleResetPositions = useCallback(() => {
     arenaRef.current?.resetPositions();
@@ -125,9 +151,11 @@ export function PenFightGame() {
       <PenFightArena
         ref={arenaRef}
         state={state}
+        isMyTurn={isMyTurn()}
         onFlickTaken={flickTaken}
         onBeginSettling={beginSettling}
         onResolveRound={resolveRound}
+        onLocalFlick={handleLocalFlick}
       />
 
       <PenFightHUD

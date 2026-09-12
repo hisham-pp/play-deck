@@ -6,7 +6,12 @@ import { Physics } from '@react-three/rapier';
 import React, { forwardRef } from 'react';
 import { PCFShadowMap, type PerspectiveCamera as ThreePerspectiveCamera } from 'three';
 import '@/lib/three-patch';
-import type { PenFightOutcome, PenFightState } from '../types/pen-fight.types';
+import type {
+  FlickImpulse,
+  PenFightOutcome,
+  PenFightPlayerId,
+  PenFightState,
+} from '../types/pen-fight.types';
 import { ArenaLighting } from './ArenaLighting';
 import { BackgroundScoreboard } from './BackgroundScoreboard';
 import { PenFightMatch, type PenFightArenaHandle } from './PenFightMatch';
@@ -16,9 +21,11 @@ export type { PenFightArenaHandle };
 
 interface PenFightArenaProps {
   state: PenFightState;
+  isMyTurn?: boolean;
   onFlickTaken: () => void;
   onBeginSettling: () => void;
   onResolveRound: (winner: PenFightOutcome) => void;
+  onLocalFlick?: (playerId: PenFightPlayerId, direction: FlickImpulse, power: number) => void;
 }
 
 /** Full-viewport 3D canvas hosting the physics arena — kept intentionally thin. */
