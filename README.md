@@ -78,6 +78,10 @@ PlayDeck is pre-configured for zero-friction Vercel deployments:
 - `pnpm format`: Runs Prettier to format the codebase.
 - `pnpm clean`: Cleans build artifacts and caches.
 
+### Code Search & Navigation
+
+For advanced code search and symbol resolution across monorepo packages, developers and AI assistants should use **CodeLens / Semantic Code Search** to inspect call hierarchies, type definitions, and reference locations efficiently.
+
 ---
 
 ## Git Workflow & Feature Branches
