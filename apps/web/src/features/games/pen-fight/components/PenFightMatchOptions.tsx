@@ -16,6 +16,7 @@ interface PenFightMatchOptionsProps {
 }
 
 const ICON_SM = 'w-4 h-4';
+const BTN_TYPE = 'button';
 const TAB_BASE =
   'flex flex-col items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-bold transition-all';
 const TAB_ACTIVE = 'bg-amber-500 text-deck-950 shadow-sm';
@@ -39,7 +40,7 @@ export function PenFightMatchOptions({
     <div className="flex flex-col gap-3">
       <div className="grid grid-cols-3 gap-2 p-1 rounded-xl bg-surface-raised border border-surface-border">
         <button
-          type="button"
+          type={BTN_TYPE}
           onClick={() => onModeChange(MODE_AI)}
           className={cn(TAB_BASE, mode === MODE_AI ? TAB_ACTIVE : TAB_INACTIVE)}
         >
@@ -47,7 +48,7 @@ export function PenFightMatchOptions({
           <span>Vs CPU</span>
         </button>
         <button
-          type="button"
+          type={BTN_TYPE}
           onClick={() => onModeChange(MODE_LOCAL_2P)}
           className={cn(TAB_BASE, mode === MODE_LOCAL_2P ? TAB_ACTIVE : TAB_INACTIVE)}
         >
@@ -55,7 +56,7 @@ export function PenFightMatchOptions({
           <span>Local 2P</span>
         </button>
         <button
-          type="button"
+          type={BTN_TYPE}
           onClick={() => onModeChange(MODE_ONLINE)}
           className={cn(TAB_BASE, mode === MODE_ONLINE ? TAB_ACTIVE : TAB_INACTIVE)}
         >
@@ -69,7 +70,7 @@ export function PenFightMatchOptions({
           {DIFFICULTIES.map((d) => (
             <button
               key={d.value}
-              type="button"
+              type={BTN_TYPE}
               onClick={() => onDifficultyChange(d.value)}
               className={cn(
                 'rounded-lg border py-2 text-xs font-bold transition-all',
@@ -92,7 +93,7 @@ export function PenFightMatchOptions({
         </div>
         <div className="grid grid-cols-2 gap-2">
           <button
-            type="button"
+            type={BTN_TYPE}
             onClick={() => onSpeedModeChange('normal')}
             className={cn(
               'flex items-center justify-center gap-1.5 rounded-lg border py-1.5 text-xs font-bold transition-all',
@@ -105,7 +106,7 @@ export function PenFightMatchOptions({
             <span>Normal Speed</span>
           </button>
           <button
-            type="button"
+            type={BTN_TYPE}
             onClick={() => onSpeedModeChange('slow')}
             className={cn(
               'flex items-center justify-center gap-1.5 rounded-lg border py-1.5 text-xs font-bold transition-all',

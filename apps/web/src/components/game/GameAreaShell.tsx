@@ -4,6 +4,7 @@ import { ArrowLeft, Users } from 'lucide-react';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { GameDefinition } from '@playdeck/game-types';
+import { LudoGame } from '@/features/games/ludo';
 import { PenFightGame } from '@/features/games/pen-fight';
 import { SnakeGame } from '@/features/games/snake';
 import { TetrisGame } from '@/features/games/tetris';
@@ -28,6 +29,10 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
 
   if (game.id === 'tic-tac-toe') {
     return <TicTacToeGame />;
+  }
+
+  if (game.id === 'ludo') {
+    return <LudoGame />;
   }
 
   if (game.id === 'pen-fight') {

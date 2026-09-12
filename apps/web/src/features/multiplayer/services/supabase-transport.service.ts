@@ -27,13 +27,15 @@ export class SupabaseTransportService {
   private friendReqListeners: Set<(data: { senderId: string; senderName: string }) => void> =
     new Set();
 
+  constructor(private namespace: string = 'tictactoe') {}
+
   async connect(roomCode: string, player: PlayerPresence): Promise<boolean> {
     const supabase = getSupabaseClient();
     if (!supabase) return false;
 
     this.disconnect();
 
-    const channelName = `game:tictactoe:${roomCode}`;
+    const channelName = `game:${this.namespace}:${roomCode}`;
     this.channel = supabase.channel(channelName, {
       config: {
         broadcast: { ack: true, self: false },

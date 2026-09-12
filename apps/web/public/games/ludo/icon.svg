@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="ludoBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b" />
+      <stop offset="100%" stop-color="#09090b" />
+    </linearGradient>
+    <linearGradient id="ludoBoard" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#cbd5e1" />
+    </linearGradient>
+    <filter id="ludoGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <rect width="256" height="256" rx="48" fill="url(#ludoBg)" />
+  <rect width="254" height="254" x="1" y="1" rx="47" fill="none" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.3" />
+
+  <!-- Board plate -->
+  <rect x="44" y="44" width="168" height="168" rx="14" fill="url(#ludoBoard)" />
+  <rect x="44" y="44" width="168" height="168" rx="14" fill="none" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.55" />
+
+  <!-- Corner base yards -->
+  <g>
+    <rect x="48" y="48" width="64" height="64" rx="10" fill="#ef4444" />
+    <rect x="144" y="48" width="64" height="64" rx="10" fill="#22c55e" />
+    <rect x="48" y="144" width="64" height="64" rx="10" fill="#3b82f6" />
+    <rect x="144" y="144" width="64" height="64" rx="10" fill="#eab308" />
+  </g>
+
+  <!-- Base yard inner wells -->
+  <g fill="#f8fafc">
+    <rect x="62" y="62" width="36" height="36" rx="6" />
+    <rect x="158" y="62" width="36" height="36" rx="6" />
+    <rect x="62" y="158" width="36" height="36" rx="6" />
+    <rect x="158" y="158" width="36" height="36" rx="6" />
+  </g>
+
+  <!-- Four tokens per yard -->
+  <g>
+    <g fill="#ef4444">
+      <circle cx="72" cy="72" r="6" /><circle cx="88" cy="72" r="6" />
+      <circle cx="72" cy="88" r="6" /><circle cx="88" cy="88" r="6" />
+    </g>
+    <g fill="#22c55e">
+      <circle cx="168" cy="72" r="6" /><circle cx="184" cy="72" r="6" />
+      <circle cx="168" cy="88" r="6" /><circle cx="184" cy="88" r="6" />
+    </g>
+    <g fill="#3b82f6">
+      <circle cx="72" cy="168" r="6" /><circle cx="88" cy="168" r="6" />
+      <circle cx="72" cy="184" r="6" /><circle cx="88" cy="184" r="6" />
+    </g>
+    <g fill="#eab308">
+      <circle cx="168" cy="168" r="6" /><circle cx="184" cy="168" r="6" />
+      <circle cx="168" cy="184" r="6" /><circle cx="184" cy="184" r="6" />
+    </g>
+  </g>
+
+  <!-- Home-stretch arms running into the hub -->
+  <g>
+    <rect x="48" y="117" width="64" height="22" fill="#ef4444" />
+    <rect x="117" y="48" width="22" height="64" fill="#22c55e" />
+    <rect x="144" y="117" width="64" height="22" fill="#eab308" />
+    <rect x="117" y="144" width="22" height="64" fill="#3b82f6" />
+  </g>
+
+  <!-- Track gridlines -->
+  <g stroke="#94a3b8" stroke-width="1.5" stroke-opacity="0.55">
+    <path d="M112 48 V208 M144 48 V208 M48 112 H208 M48 144 H208" />
+  </g>
+
+  <!-- Centre victory hub -->
+  <g filter="url(#ludoGlow)">
+    <rect x="104" y="104" width="48" height="48" rx="6" fill="#f8fafc" />
+    <polygon points="106,106 106,150 128,128" fill="#ef4444" />
+    <polygon points="106,106 150,106 128,128" fill="#22c55e" />
+    <polygon points="150,106 150,150 128,128" fill="#eab308" />
+    <polygon points="106,150 150,150 128,128" fill="#3b82f6" />
+  </g>
+  <rect x="104" y="104" width="48" height="48" rx="6" fill="none" stroke="#f59e0b" stroke-width="2.5" />
+</svg>
