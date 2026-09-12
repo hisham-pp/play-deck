@@ -5,6 +5,7 @@ import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/rapier';
 import React, { forwardRef } from 'react';
 import { PCFShadowMap, type PerspectiveCamera as ThreePerspectiveCamera } from 'three';
+import '@/lib/three-patch';
 import type { PenFightOutcome, PenFightState } from '../types/pen-fight.types';
 import { ArenaLighting } from './ArenaLighting';
 import { BackgroundScoreboard } from './BackgroundScoreboard';
