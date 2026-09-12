@@ -1,4 +1,5 @@
 import type { Room } from '@playdeck/game-types';
+import { GameInvitesService } from '@/features/friends/services/game-invites.service';
 import { getSupabaseClient } from '@/lib/supabase/client';
 
 const ROOMS_TABLE = 'rooms';
@@ -109,6 +110,9 @@ export class RoomService {
   }
 
   static async closeRoom(code: string): Promise<void> {
+    const cleanCode = code.trim();
+    await GameInvitesService.closeInvitesForRoom(cleanCode);
+
     const supabase = getSupabaseClient();
     if (!supabase) return;
 
@@ -119,7 +123,7 @@ export class RoomService {
           status: 'closed',
           updated_at: new Date().toISOString(),
         })
-        .eq('code', code.trim());
+        .eq('code', cleanCode);
     } catch (err) {
       console.warn('Could not close room in database:', err);
     }

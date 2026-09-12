@@ -31,7 +31,7 @@ export interface FriendsState {
     gameId: string,
     roomCode: string,
   ) => Promise<boolean>;
-  dismissInvite: (inviteId: string) => void;
+  dismissInvite: (inviteId: string, action?: 'accepted' | 'declined') => void;
   receiveInvite: (invite: GameInvite) => void;
 }
 
@@ -106,7 +106,8 @@ export const useFriendsStore = create<FriendsState>((set, get) => ({
     return Boolean(inv);
   },
 
-  dismissInvite: (inviteId: string) => {
+  dismissInvite: (inviteId: string, action: 'accepted' | 'declined' = 'declined') => {
+    GameInvitesService.respondToInvite(inviteId, action).catch(() => {});
     set((state) => ({
       pendingInvites: state.pendingInvites.filter((i) => i.id !== inviteId),
     }));

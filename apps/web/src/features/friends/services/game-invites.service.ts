@@ -6,6 +6,7 @@ import {
   NOTIFICATION_EVENT,
   STATUS_ACCEPTED,
   STATUS_DECLINED,
+  STATUS_EXPIRED,
   STATUS_PENDING,
 } from '../friends.constants';
 
@@ -74,19 +75,49 @@ export class GameInvitesService {
         .eq('receiver_id', userId)
         .eq('status', STATUS_PENDING);
 
-      if (error || !data) return [];
+      if (error || !data || data.length === 0) return [];
 
-      return data.map((d) => ({
-        id: d.id,
-        senderId: d.sender_id,
-        senderName: 'Friend',
-        senderAvatar: '🕹️',
-        receiverId: d.receiver_id,
-        gameId: d.game_id,
-        roomCode: d.room_code,
-        status: d.status as GameInviteStatus,
-        createdAt: d.created_at,
-      }));
+      const roomCodes = Array.from(new Set(data.map((d) => d.room_code)));
+      const { data: roomRows } = await supabase
+        .from('rooms')
+        .select('code, status')
+        .in('code', roomCodes);
+
+      const activeRoomCodes = new Set(
+        (roomRows || [])
+          .filter((r) => r.status === 'waiting' || r.status === 'open')
+          .map((r) => r.code),
+      );
+
+      const validInvites: GameInvite[] = [];
+      const expiredInviteIds: string[] = [];
+
+      for (const d of data) {
+        if (activeRoomCodes.has(d.room_code)) {
+          validInvites.push({
+            id: d.id,
+            senderId: d.sender_id,
+            senderName: 'Friend',
+            senderAvatar: '🕹️',
+            receiverId: d.receiver_id,
+            gameId: d.game_id,
+            roomCode: d.room_code,
+            status: d.status as GameInviteStatus,
+            createdAt: d.created_at,
+          });
+        } else {
+          expiredInviteIds.push(d.id);
+        }
+      }
+
+      if (expiredInviteIds.length > 0) {
+        await supabase
+          .from(GAME_INVITES_TABLE)
+          .update({ status: STATUS_EXPIRED, updated_at: new Date().toISOString() })
+          .in('id', expiredInviteIds);
+      }
+
+      return validInvites;
     } catch {
       return [];
     }
@@ -105,6 +136,23 @@ export class GameInvitesService {
         .from(GAME_INVITES_TABLE)
         .update({ status, updated_at: new Date().toISOString() })
         .eq('id', inviteId);
+
+      return !error;
+    } catch {
+      return false;
+    }
+  }
+
+  static async closeInvitesForRoom(roomCode: string): Promise<boolean> {
+    const supabase = getSupabaseClient();
+    if (!supabase) return true;
+
+    try {
+      const { error } = await supabase
+        .from(GAME_INVITES_TABLE)
+        .update({ status: STATUS_EXPIRED, updated_at: new Date().toISOString() })
+        .eq('room_code', roomCode)
+        .eq('status', STATUS_PENDING);
 
       return !error;
     } catch {
