@@ -89,3 +89,10 @@ body {
     animation: none;
   }
 }
+
+/* Dragging to orbit a 3D board must never smear a text selection across the
+   HUD sitting on top of it. */
+canvas {
+  -webkit-user-select: none;
+  user-select: none;
+}

@@ -1,12 +1,14 @@
 'use client';
 
-import { Trophy, RefreshCw, LogOut, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Trophy, RefreshCw, LogOut, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { Button, Card, CardContent } from '@playdeck/ui';
 import { usePlayerStore } from '@/stores/player.store';
+import { STATUS_PLAYING } from '../engine/ludo-constants';
 import { useLudoBotTurn } from '../hooks/use-ludo-bot-turn';
 import { useLudoEngine } from '../hooks/use-ludo-engine';
+import { useLudoPieceSelection } from '../hooks/use-ludo-piece-selection';
 import { useLudoSession } from '../hooks/use-ludo-session';
 import { useLudoSound } from '../hooks/use-ludo-sound';
 import type { LudoPlayer } from '../types/ludo.types';
@@ -22,6 +24,7 @@ import { LudoRoomLobby } from './LudoRoomLobby';
 type GameMode = 'lobby' | 'offline-setup' | 'online-room' | 'playing';
 
 const MODE_LOBBY = 'lobby';
+const MODE_PLAYING = 'playing';
 
 export function LudoGame() {
   const [mode, setMode] = useState<GameMode>('lobby');
@@ -30,7 +33,7 @@ export function LudoGame() {
   const player = usePlayerStore((s) => s.player);
 
   useEffect(() => {
-    if (mode === 'playing') {
+    if (mode === MODE_PLAYING) {
       document.body.style.overflow = 'hidden';
       return () => {
         document.body.style.overflow = '';
@@ -64,24 +67,27 @@ export function LudoGame() {
   const localSeatIndex = state.currentTurnSeatIndex;
 
   const legalActions = engine ? engine.getLegalActions(state.currentTurnSeatIndex) : [];
+  // Sorted so a piece keeps the same hotkey for as long as it stays movable,
+  // whatever order the engine happens to enumerate its actions in.
   const legalPieceIds = legalActions
     .filter((a) => a.type === 'MOVE_PIECE')
     .map(
       (a) =>
         (a as { type: 'MOVE_PIECE'; playerId: string; payload: { pieceId: string } }).payload
           .pieceId,
-    );
+    )
+    .sort();
 
   const handleStartOfflineGame = (players: LudoPlayer[]) => {
     setConfiguredPlayers(players);
     restart(players);
-    setMode('playing');
+    setMode(MODE_PLAYING);
   };
 
   const handleStartOnlineGame = (players: LudoPlayer[]) => {
     setConfiguredPlayers(players);
     restart(players);
-    setMode('playing');
+    setMode(MODE_PLAYING);
   };
 
   const handleRollDice = useCallback(() => {
@@ -99,21 +105,14 @@ export function LudoGame() {
     [movePiece, currentSeat],
   );
 
-  // Auto-move single option after brief delay
-  useEffect(() => {
-    if (
-      state?.status === 'playing' &&
-      isMyTurn &&
-      !isDiceSettling &&
-      state.turnPhase === 'awaiting-move' &&
-      legalPieceIds.length === 1
-    ) {
-      const timer = setTimeout(() => {
-        handleSelectPiece(legalPieceIds[0]);
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [state?.status, state?.turnPhase, isMyTurn, isDiceSettling, legalPieceIds, handleSelectPiece]);
+  const canSelectPiece =
+    state?.status === STATUS_PLAYING &&
+    isMyTurn &&
+    !isDiceSettling &&
+    state.turnPhase === 'awaiting-move' &&
+    legalPieceIds.length > 0;
+
+  useLudoPieceSelection(legalPieceIds, canSelectPiece, handleSelectPiece);
 
   const handleRestart = () => {
     if (configuredPlayers.length > 0) {
@@ -143,10 +142,11 @@ export function LudoGame() {
   const isGameOver = state.status === 'completed';
 
   return (
-    <div className="fixed inset-0 z-50 h-[100dvh] w-screen bg-slate-950">
+    <div className="fixed inset-0 z-50 h-[100dvh] w-screen select-none bg-slate-950">
       <LudoBoard
         state={state}
         legalPieceIds={legalPieceIds}
+        numberedPieceIds={canSelectPiece ? legalPieceIds : []}
         onSelectPiece={handleSelectPiece}
         rolling={isDiceSettling}
         onRollSettled={() => setIsDiceSettling(false)}
@@ -173,9 +173,8 @@ export function LudoGame() {
           </div>
         </div>
 
-        {/* Bottom Row: Full Width Layout */}
-        <div className="flex flex-col gap-3 sm:gap-4">
-          {/* Player Panel - Full Width */}
+        {/* Bottom Row: seats on the left, dice and controls on the right */}
+        <div className="flex items-end justify-between gap-3 sm:gap-4">
           <div className="pointer-events-auto">
             <LudoPlayerPanel
               state={state}
@@ -184,54 +183,20 @@ export function LudoGame() {
             />
           </div>
 
-          {/* Action Bar + Dice + Controls Row */}
-          <div className="flex gap-3 sm:gap-4 items-end justify-between">
-            {/* Piece Action Selector */}
-            <div className="flex-1">
-              {isMyTurn &&
-                !isDiceSettling &&
-                state.turnPhase === 'awaiting-move' &&
-                legalPieceIds.length > 0 && (
-                  <div className="pointer-events-auto p-3 rounded-lg bg-slate-900/80 border border-amber-500/40 backdrop-blur-md flex flex-wrap items-center justify-between gap-3 animate-in fade-in">
-                    <div className="text-xs font-bold text-amber-400 flex items-center gap-2">
-                      <span className="text-base">🎲</span>
-                      <span>
-                        {state.dice.value === 6
-                          ? 'Rolled a 6! Select piece to exit base/move (Grants Extra Turn):'
-                          : `Rolled a ${state.dice.value}! Select piece to move:`}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {legalPieceIds.map((pieceId, idx) => (
-                        <Button
-                          key={pieceId}
-                          size="sm"
-                          onClick={() => handleSelectPiece(pieceId)}
-                          className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-md"
-                        >
-                          Move Piece #{idx + 1} <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-            </div>
-
-            {/* Dice + Controls */}
-            <div className="space-y-3 pointer-events-auto">
-              <LudoDice
-                state={state}
-                isMyTurn={isMyTurn}
-                isSettling={isDiceSettling}
-                onRollDice={handleRollDice}
-              />
-              <LudoControls
-                state={state}
-                onPause={() => currentSeat && pause(currentSeat.id)}
-                onResume={() => currentSeat && resume(currentSeat.id)}
-                onLeave={() => setMode(MODE_LOBBY)}
-              />
-            </div>
+          <div className="pointer-events-auto space-y-3">
+            <LudoDice
+              state={state}
+              isMyTurn={isMyTurn}
+              isSettling={isDiceSettling}
+              onRollDice={handleRollDice}
+              moveOptionCount={canSelectPiece ? legalPieceIds.length : 0}
+            />
+            <LudoControls
+              state={state}
+              onPause={() => currentSeat && pause(currentSeat.id)}
+              onResume={() => currentSeat && resume(currentSeat.id)}
+              onLeave={() => setMode(MODE_LOBBY)}
+            />
           </div>
         </div>
       </div>

@@ -1,22 +1,75 @@
 'use client';
 
 import { Dices } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Button } from '@playdeck/ui';
+import { STATUS_PLAYING } from '../engine/ludo-constants';
 import type { LudoGameState } from '../types/ludo.types';
+import { isPlainKeypress, isTypingTarget } from '../utils/keyboard';
 
 interface LudoDiceProps {
   state: LudoGameState;
   isMyTurn: boolean;
   isSettling: boolean;
   onRollDice: () => void;
+  /** How many pieces can legally move right now, i.e. how many hotkeys are live. */
+  moveOptionCount?: number;
 }
 
 const TUMBLE_TICK_MS = 60;
+const ROLL_KEYS = new Set([' ', 'Spacebar', 'r', 'R']);
 
-export function LudoDice({ state, isMyTurn, isSettling, onRollDice }: LudoDiceProps) {
+function isRollKey(event: KeyboardEvent): boolean {
+  return isPlainKeypress(event) && ROLL_KEYS.has(event.key) && !isTypingTarget();
+}
+
+function Key({ children }: { children: ReactNode }) {
+  return (
+    <kbd className="rounded border border-slate-700 bg-slate-800 px-1.5 py-0.5 font-sans text-[10px] font-bold text-slate-300">
+      {children}
+    </kbd>
+  );
+}
+
+interface TurnHintProps {
+  phase: LudoGameState['turnPhase'];
+  canRoll: boolean;
+  moveOptionCount: number;
+}
+
+function TurnHint({ phase, canRoll, moveOptionCount }: TurnHintProps) {
+  if (phase === 'turn-end') return <>Passing turn...</>;
+
+  if (phase === 'awaiting-move') {
+    if (moveOptionCount < 1) return <>Select a glowing piece on the board to move.</>;
+    return (
+      <>
+        Press <Key>{moveOptionCount > 1 ? `1–${moveOptionCount}` : '1'}</Key> or click the numbered
+        piece
+      </>
+    );
+  }
+
+  if (!canRoll) return null;
+  return (
+    <>
+      Press <Key>Space</Key> or <Key>R</Key> to roll
+    </>
+  );
+}
+
+export function LudoDice({
+  state,
+  isMyTurn,
+  isSettling,
+  onRollDice,
+  moveOptionCount = 0,
+}: LudoDiceProps) {
   const canRoll =
-    isMyTurn && !isSettling && state.turnPhase === 'awaiting-roll' && state.status === 'playing';
+    isMyTurn &&
+    !isSettling &&
+    state.turnPhase === 'awaiting-roll' &&
+    state.status === STATUS_PLAYING;
 
   const settledValue = state.dice.value;
   const [tumblingFace, setTumblingFace] = useState<number | null>(null);
@@ -37,10 +90,7 @@ export function LudoDice({ state, isMyTurn, isSettling, onRollDice }: LudoDicePr
   useEffect(() => {
     if (!canRoll) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
-      if (e.key !== ' ' && e.key !== 'Spacebar' && e.key.toLowerCase() !== 'r') return;
-      const el = document.activeElement;
-      if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) return;
+      if (!isRollKey(e)) return;
       e.preventDefault();
       onRollDice();
     };
@@ -75,21 +125,7 @@ export function LudoDice({ state, isMyTurn, isSettling, onRollDice }: LudoDicePr
       </div>
 
       <p className="text-xs text-slate-400 text-center">
-        {state.turnPhase === 'awaiting-roll' && canRoll && (
-          <>
-            Press{' '}
-            <kbd className="rounded border border-slate-700 bg-slate-800 px-1.5 py-0.5 font-sans text-[10px] font-bold text-slate-300">
-              Space
-            </kbd>{' '}
-            or{' '}
-            <kbd className="rounded border border-slate-700 bg-slate-800 px-1.5 py-0.5 font-sans text-[10px] font-bold text-slate-300">
-              R
-            </kbd>{' '}
-            to roll
-          </>
-        )}
-        {state.turnPhase === 'awaiting-move' && 'Select a glowing piece on the board to move.'}
-        {state.turnPhase === 'turn-end' && 'Passing turn...'}
+        <TurnHint phase={state.turnPhase} canRoll={canRoll} moveOptionCount={moveOptionCount} />
       </p>
     </div>
   );
