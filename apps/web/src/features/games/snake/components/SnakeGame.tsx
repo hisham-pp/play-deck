@@ -111,6 +111,7 @@ export function SnakeGame() {
             gridSize={state.gridSize}
             direction={state.direction}
             status={state.status}
+            speedMs={state.speedMs}
             countdown={state.countdown}
             score={state.score}
             highScore={effectiveHighScore}
