@@ -4,6 +4,7 @@ import { ArrowLeft, Users } from 'lucide-react';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { GameDefinition } from '@playdeck/game-types';
+import { ConnectFourGame } from '@/features/games/connect-four';
 import { LudoGame } from '@/features/games/ludo';
 import { PenFightGame } from '@/features/games/pen-fight';
 import { SnakeGame } from '@/features/games/snake';
@@ -41,6 +42,10 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
 
   if (game.id === 'tetris') {
     return <TetrisGame />;
+  }
+
+  if (game.id === 'connect-four') {
+    return <ConnectFourGame />;
   }
 
   const handleStart = () => {

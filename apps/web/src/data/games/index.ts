@@ -5,6 +5,7 @@ const BADGE_COMING_SOON = 'Coming Soon';
 const STATUS_AVAILABLE = 'available';
 const BADGE_READY_TO_PLAY = 'Ready to Play';
 const RELEASE_DATE_2026_09_12 = '2026-09-12';
+const TAG_CLASSIC = 'Classic';
 
 export const GAME_DEFINITIONS: GameDefinition[] = [
   {
@@ -17,7 +18,7 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     players: { min: 1, max: 1 },
     status: STATUS_AVAILABLE,
     thumbnailUrl: '/games/snake/icon.svg',
-    tags: ['Arcade', 'Classic', 'Retro', 'High Score'],
+    tags: ['Arcade', TAG_CLASSIC, 'Retro', 'High Score'],
     featured: true,
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-11',
@@ -32,7 +33,7 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     players: { min: 1, max: 1 },
     status: STATUS_AVAILABLE,
     thumbnailUrl: '/games/tetris/icon.svg',
-    tags: ['Arcade', 'Classic', 'Puzzle', 'High Score'],
+    tags: ['Arcade', TAG_CLASSIC, 'Puzzle', 'High Score'],
     featured: true,
     badge: BADGE_READY_TO_PLAY,
     releaseDate: RELEASE_DATE_2026_09_12,
@@ -47,7 +48,7 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     players: { min: 1, max: 2 },
     status: STATUS_AVAILABLE,
     thumbnailUrl: '/games/tic-tac-toe/icon.svg',
-    tags: ['Classic', 'Turn-based', 'Quick Play', 'Local Play', 'AI Opponent'],
+    tags: [TAG_CLASSIC, 'Turn-based', 'Quick Play', 'Local Play', 'AI Opponent'],
     featured: true,
     badge: BADGE_READY_TO_PLAY,
     releaseDate: RELEASE_DATE_2026_09_12,
@@ -99,17 +100,18 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
   },
   {
     id: 'connect-four',
-    name: 'Connect Grid',
-    slug: 'connect-grid',
+    name: 'Connect Four',
+    slug: 'connect-four',
     description:
-      'A vertical drop duel. Align four consecutive discs while blocking counterattacks from your adversary.',
-    category: 'puzzle',
+      'A vertical gravity duel. Drop discs to align four in a row horizontally, vertically, or diagonally before your opponent.',
+    category: 'strategy',
     players: { min: 1, max: 2 },
-    status: STATUS_COMING_SOON,
+    status: STATUS_AVAILABLE,
     thumbnailUrl: '/games/connect-four/icon.svg',
-    tags: ['Casual', 'Strategy', 'Tabletop'],
-    badge: BADGE_COMING_SOON,
-    releaseDate: 'Q1 2027',
+    tags: [TAG_CLASSIC, 'Strategy', 'Gravity Grid', 'Local Play', 'AI Opponent'],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-13',
   },
   {
     id: 'runic-memory',
