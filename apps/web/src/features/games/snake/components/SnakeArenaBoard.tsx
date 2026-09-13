@@ -11,6 +11,7 @@ export interface SnakeArenaBoardProps {
   gridSize: number;
   direction: Direction;
   status: SnakeGameStatus;
+  speedMs: number;
   countdown: number;
   score: number;
   highScore: number;
@@ -26,6 +27,7 @@ export function SnakeArenaBoard({
   gridSize,
   direction,
   status,
+  speedMs,
   countdown,
   score,
   highScore,
@@ -42,6 +44,7 @@ export function SnakeArenaBoard({
         gridSize={gridSize}
         direction={direction}
         status={status}
+        speedMs={speedMs}
       />
       <SnakeOverlay
         status={status}
