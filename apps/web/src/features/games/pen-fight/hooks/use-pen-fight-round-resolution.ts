@@ -12,6 +12,12 @@ interface UsePenFightRoundResolutionParams {
   p2Ref: RefObject<RapierRigidBody | null>;
   onResolveRound: (winner: PenFightOutcome) => void;
   sound: PenFightSoundEngine;
+  /**
+   * Only the authority client reports the outcome. Non-authority clients still evaluate each
+   * frame (so fall sounds stay in sync locally) but wait for the authoritative result instead
+   * of trusting their own copy of the simulation.
+   */
+  isAuthority: boolean;
 }
 
 /**
@@ -23,6 +29,7 @@ export function usePenFightRoundResolution({
   p2Ref,
   onResolveRound,
   sound,
+  isAuthority,
 }: UsePenFightRoundResolutionParams) {
   const awaitingRef = useRef(false);
   const settleFramesRef = useRef(0);
@@ -73,7 +80,7 @@ export function usePenFightRoundResolution({
 
     if (result.resolved) {
       awaitingRef.current = false;
-      onResolveRound(result.outcome);
+      if (isAuthority) onResolveRound(result.outcome);
     }
   });
 
