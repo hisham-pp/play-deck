@@ -3,7 +3,7 @@ import { describe, it } from 'node:test';
 import { MODE_LOCAL_2P, PLAYER_ONE, PLAYER_TWO } from './pen-fight-constants';
 import { penFightReducer } from './pen-fight-reducer';
 import { createInitialPenFightState } from './pen-fight-state';
-import { computeAIFlick, computeFlickFromDrag } from './pen-fight-utils';
+import { computeAIFlick, computeFlickFromDrag, computeFlickSpin } from './pen-fight-utils';
 
 describe('Pen Fight Engine Tests', () => {
   describe('Initial state', () => {
@@ -118,6 +118,45 @@ describe('Pen Fight Engine Tests', () => {
       );
       assert.ok(flick.direction.z < 0);
       assert.ok(flick.power > 0 && flick.power <= 1);
+    });
+  });
+
+  describe('computeFlickSpin', () => {
+    const sampleFlicks = [
+      { direction: { x: 0, y: 0, z: -1 }, power: 0 },
+      { direction: { x: 0.6, y: 0, z: -0.8 }, power: 0.37 },
+      { direction: { x: -1, y: 0, z: 0 }, power: 1 },
+      { direction: { x: 0.9999, y: 0, z: 0.0141 }, power: 0.5 },
+    ];
+
+    it('is deterministic — the same flick always yields the identical spin', () => {
+      // This is what keeps two devices in sync: both replay the same flick and must derive
+      // bit-for-bit the same impulse. A regression here silently desyncs online matches.
+      for (const { direction, power } of sampleFlicks) {
+        const first = computeFlickSpin(direction, power);
+        for (let i = 0; i < 50; i += 1) {
+          assert.strictEqual(computeFlickSpin(direction, power), first);
+        }
+      }
+    });
+
+    it('stays within the +/-0.5 spin envelope for every flick', () => {
+      for (const { direction, power } of sampleFlicks) {
+        const spin = computeFlickSpin(direction, power);
+        assert.ok(spin >= -0.5 && spin <= 0.5, `spin ${spin} out of range`);
+      }
+    });
+
+    it('mirrors the spin when the flick direction is mirrored', () => {
+      const right = computeFlickSpin({ x: 0.5, y: 0, z: -0.5 }, 0.5);
+      const left = computeFlickSpin({ x: -0.5, y: 0, z: -0.5 }, 0.5);
+      assert.strictEqual(right, -left);
+    });
+
+    it('varies with the flick, so shots are not all identical', () => {
+      const straight = computeFlickSpin({ x: 0, y: 0, z: -1 }, 0.5);
+      const angled = computeFlickSpin({ x: 0.7, y: 0, z: -0.7 }, 0.5);
+      assert.notStrictEqual(straight, angled);
     });
   });
 });

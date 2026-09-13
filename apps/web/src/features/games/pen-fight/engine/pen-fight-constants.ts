@@ -73,3 +73,11 @@ export const AI_POWER_RANGE: Record<AIDifficulty, [number, number]> = {
   pro: [0.45, 0.8],
   legend: [0.55, 0.9],
 };
+
+// --- Online sync ---
+/** Fixed physics step shared by every client so simulations advance identically. */
+export const PHYSICS_TIME_STEP = 1 / 60;
+/** How often the authority client broadcasts pen transforms while pens are in motion. */
+export const PEN_SYNC_INTERVAL_MS = 50;
+/** Extra frames of snapshots sent after motion stops, so resting poses match exactly. */
+export const PEN_SYNC_TRAILING_FRAMES = 20;

@@ -6,11 +6,13 @@ import { Physics } from '@react-three/rapier';
 import React, { forwardRef } from 'react';
 import { PCFShadowMap, type PerspectiveCamera as ThreePerspectiveCamera } from 'three';
 import '@/lib/three-patch';
+import { PHYSICS_TIME_STEP } from '../engine/pen-fight-constants';
 import type {
   FlickImpulse,
   PenFightOutcome,
   PenFightPlayerId,
   PenFightState,
+  PenSyncPayload,
 } from '../types/pen-fight.types';
 import { ArenaLighting } from './ArenaLighting';
 import { BackgroundScoreboard } from './BackgroundScoreboard';
@@ -24,10 +26,12 @@ interface PenFightArenaProps {
   role?: 'host' | 'guest' | null;
   hasOpponent?: boolean;
   isMyTurn?: boolean;
+  isAuthority?: boolean;
   onFlickTaken: () => void;
   onBeginSettling: () => void;
   onResolveRound: (winner: PenFightOutcome) => void;
   onLocalFlick?: (playerId: PenFightPlayerId, direction: FlickImpulse, power: number) => void;
+  onPenSync?: (payload: PenSyncPayload) => void;
 }
 
 /** Full-viewport 3D canvas hosting the physics arena — kept intentionally thin. */
@@ -46,7 +50,8 @@ export const PenFightArena = forwardRef<PenFightArenaHandle, PenFightArenaProps>
         />
         <ArenaLighting />
         <BackgroundScoreboard state={props.state} flipped={isGuest} />
-        <Physics gravity={[0, -9.81, 0]}>
+        {/* Fixed step so every device integrates the simulation identically. */}
+        <Physics gravity={[0, -9.81, 0]} timeStep={PHYSICS_TIME_STEP}>
           <TableSurface />
           <PenFightMatch ref={ref} {...props} />
         </Physics>

@@ -14,6 +14,7 @@ import type {
   PenFightOutcome,
   PenFightPlayerId,
   PenSpeedMode,
+  PenSyncPayload,
 } from '../types/pen-fight.types';
 import type { PenFightArenaHandle } from './PenFightArena';
 import { PenFightHUD } from './PenFightHUD';
@@ -69,15 +70,46 @@ export function PenFightGame() {
     [],
   );
 
+  const handlePenSyncReceived = useCallback((payload: PenSyncPayload) => {
+    arenaRef.current?.applyPenSync(payload);
+  }, []);
+
+  const handleRemoteReset = useCallback(() => {
+    arenaRef.current?.resetPositions();
+  }, []);
+
   const {
     role,
+    isAuthority,
     hasOpponent,
     isMyTurn,
     broadcastStartMatch,
     broadcastFlick,
     broadcastNextRound,
     broadcastRematch,
-  } = usePenFightMultiplayer(engine, state.mode, state.activePlayer, handleRemoteFlick);
+    broadcastPenSync,
+    broadcastRoundResult,
+  } = usePenFightMultiplayer(engine, state.mode, state.activePlayer, {
+    onRemoteFlick: handleRemoteFlick,
+    onPenSync: handlePenSyncReceived,
+    onResetPositions: handleRemoteReset,
+  });
+
+  /** Only the authority reaches here — it settles the round and tells the other device. */
+  const handleResolveRound = useCallback(
+    (winner: PenFightOutcome) => {
+      resolveRound(winner);
+      broadcastRoundResult(winner);
+    },
+    [resolveRound, broadcastRoundResult],
+  );
+
+  const handlePenSync = useCallback(
+    (payload: PenSyncPayload) => {
+      broadcastPenSync(payload);
+    },
+    [broadcastPenSync],
+  );
 
   const handleLocalFlick = useCallback(
     (playerId: PenFightPlayerId, direction: FlickImpulse, power: number) => {
@@ -169,10 +201,12 @@ export function PenFightGame() {
         role={role}
         hasOpponent={hasOpponent}
         isMyTurn={isMyTurn()}
+        isAuthority={isAuthority}
         onFlickTaken={flickTaken}
         onBeginSettling={beginSettling}
-        onResolveRound={resolveRound}
+        onResolveRound={handleResolveRound}
         onLocalFlick={handleLocalFlick}
+        onPenSync={handlePenSync}
       />
 
       <PenFightHUD
