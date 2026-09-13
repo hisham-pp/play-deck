@@ -14,13 +14,15 @@ import { SudokuAnnouncer } from './SudokuAnnouncer';
 import { SudokuBoard } from './SudokuBoard';
 import { SudokuNumberPad } from './SudokuNumberPad';
 import { SudokuOverlay } from './SudokuOverlay';
+import { SudokuSetupModal } from './SudokuSetupModal';
 import { SudokuStatusBar } from './SudokuStatusBar';
 
 export function SudokuGame() {
   const { currentSession, endSession } = useGameSessionStore();
   const { addRecentSession } = useLibraryStore();
   const { recordGamePlayed } = usePlayerStore();
-  const [levelMenuOpen, setLevelMenuOpen] = useState(false);
+  // The setup modal opens on arrival; a puzzle only exists once a level is picked.
+  const [isSetupOpen, setIsSetupOpen] = useState(true);
 
   const closeSession = useCallback(
     (won: boolean) => {
@@ -50,12 +52,16 @@ export function SudokuGame() {
   useSudokuKeyboard(state.status, controls);
 
   const handlePick = useCallback(
-    (difficulty?: SudokuDifficulty) => {
-      setLevelMenuOpen(false);
+    (difficulty: SudokuDifficulty) => {
+      setIsSetupOpen(false);
       controls.newPuzzle(difficulty);
     },
     [controls],
   );
+
+  const openSetup = useCallback(() => setIsSetupOpen(true), []);
+  const closeSetup = useCallback(() => setIsSetupOpen(false), []);
+  const replayDifficulty = useCallback(() => controls.newPuzzle(), [controls]);
 
   return (
     <div className="w-full max-w-6xl mx-auto flex flex-col gap-3 px-3 py-1 select-none">
@@ -86,11 +92,8 @@ export function SudokuGame() {
 
               <SudokuOverlay
                 state={state}
-                stats={stats}
-                levelMenuOpen={levelMenuOpen}
-                onNewPuzzle={handlePick}
-                onOpenLevelMenu={() => setLevelMenuOpen(true)}
-                onCloseLevelMenu={() => setLevelMenuOpen(false)}
+                onOpenSetup={openSetup}
+                onNewPuzzle={replayDifficulty}
                 onReset={controls.reset}
                 onResume={controls.resume}
               />
@@ -111,12 +114,20 @@ export function SudokuGame() {
           <SudokuActionsCard
             state={state}
             stats={stats}
-            onOpenLevelMenu={() => setLevelMenuOpen(true)}
+            onOpenSetup={openSetup}
             onReset={controls.reset}
             onAutoNotes={controls.autoFillCandidates}
           />
         </div>
       </div>
+
+      <SudokuSetupModal
+        isOpen={isSetupOpen}
+        onClose={closeSetup}
+        activeDifficulty={state.difficulty}
+        stats={stats}
+        onPick={handlePick}
+      />
     </div>
   );
 }
