@@ -6,27 +6,41 @@ import {
   isTrackSteps,
 } from '../../engine/board-layout';
 import type { LudoColor, LudoPieceState } from '../../types/ludo.types';
+import { BOARD_PHYSICAL_SIZE, CELL_SIZE, TAU, gridToWorld, type Vec2 } from './board-metrics';
+import {
+  HEX_BOARD_RADIUS,
+  hexBaseSlotPosition,
+  hexHomeCenterPosition,
+  hexHomeStretchPosition,
+  hexTrackPosition,
+  hexTrackRotation,
+  hexYardCenter,
+  hexYardRotation,
+} from './hex-board-geometry';
 
-export const BOARD_SIZE = 15;
-export const BOARD_GRID_SIZE = 15;
-export const CELL_SIZE = 0.52;
+export {
+  BASE_YARD_SIZE,
+  BOARD_GRID_SIZE,
+  BOARD_PHYSICAL_SIZE,
+  BOARD_SIZE,
+  CELL_SIZE,
+  CENTER_SIZE,
+  gridToWorld,
+} from './board-metrics';
+export type { Vec2 } from './board-metrics';
+export {
+  HEX_BOARD_RADIUS,
+  HEX_CENTER_RADIUS,
+  HEX_TRACK_APOTHEM,
+  HEX_TRACK_RADIUS,
+  HEX_YARD_SIZE,
+  hexCorridorRotation,
+} from './hex-board-geometry';
+
 const LAYOUT_CLASSIC4 = 'classic4';
 
-/** Exact span of the 15x15 playfield in world units. */
-export const BOARD_PHYSICAL_SIZE = BOARD_GRID_SIZE * CELL_SIZE;
-/** A base yard covers a 6x6 block of grid cells. */
-export const BASE_YARD_SIZE = 6 * CELL_SIZE;
-/** The victory hub covers the middle 3x3 block. */
-export const CENTER_SIZE = 3 * CELL_SIZE;
 /** Half-spacing of the 2x2 cluster finished pieces park in. */
 const HOME_SLOT_SPREAD = 0.13;
-
-export type Vec2 = [number, number];
-
-export function gridToWorld(col: number, row: number): Vec2 {
-  const half = (BOARD_GRID_SIZE - 1) / 2;
-  return [(col - half) * CELL_SIZE, (row - half) * CELL_SIZE];
-}
 
 // 52-cell track path for classic 4-arm board (cols, rows on 15x15 grid)
 const CLASSIC_TRACK_GRID: Vec2[] = [
@@ -89,16 +103,18 @@ const CLASSIC_TRACK_GRID: Vec2[] = [
 ];
 
 export function trackCellPosition(layout: BoardLayout, globalIndex: number): Vec2 {
-  if (layout.id === 'classic4') {
+  if (layout.id === LAYOUT_CLASSIC4) {
     const idx = ((globalIndex % 52) + 52) % 52;
     const [col, row] = CLASSIC_TRACK_GRID[idx];
     return gridToWorld(col, row);
   }
+  return hexTrackPosition(layout, globalIndex);
+}
 
-  // 6-arm radial layout
-  const angle = (globalIndex / layout.trackLength) * Math.PI * 2 - Math.PI / 2;
-  const radius = 3.2;
-  return [Math.cos(angle) * radius, Math.sin(angle) * radius];
+/** Rotation-y for the track cell at `globalIndex`, so cells follow the path. */
+export function trackCellRotation(layout: BoardLayout, globalIndex: number): number {
+  if (layout.id === LAYOUT_CLASSIC4) return 0;
+  return hexTrackRotation(layout, globalIndex);
 }
 
 export function homeStretchPosition(
@@ -106,67 +122,70 @@ export function homeStretchPosition(
   color: LudoColor,
   stretchIndex: number,
 ): Vec2 {
-  if (layout.id === LAYOUT_CLASSIC4) {
-    let col = 7;
-    let row = 7;
-    const step = Math.min(6, Math.max(1, stretchIndex));
+  if (layout.id !== LAYOUT_CLASSIC4) return hexHomeStretchPosition(layout, color, stretchIndex);
 
-    switch (color) {
-      case 'red':
-        col = step;
-        row = 7;
-        break;
-      case 'green':
-        col = 7;
-        row = step;
-        break;
-      case 'yellow':
-        col = 14 - step;
-        row = 7;
-        break;
-      case 'blue':
-        col = 7;
-        row = 14 - step;
-        break;
-    }
-    return gridToWorld(col, row);
+  let col = 7;
+  let row = 7;
+  const step = Math.min(6, Math.max(1, stretchIndex));
+
+  switch (color) {
+    case 'red':
+      col = step;
+      row = 7;
+      break;
+    case 'green':
+      col = 7;
+      row = step;
+      break;
+    case 'yellow':
+      col = 14 - step;
+      row = 7;
+      break;
+    case 'blue':
+      col = 7;
+      row = 14 - step;
+      break;
   }
-
-  // 6-arm radial home stretch
-  const colorIdx = layout.colors.indexOf(color);
-  const angle = (colorIdx / layout.colors.length) * Math.PI * 2 - Math.PI / 2;
-  const radius = 2.8 * (1 - stretchIndex / 7);
-  return [Math.cos(angle) * radius, Math.sin(angle) * radius];
+  return gridToWorld(col, row);
 }
 
 export function homeCenterPosition(color: LudoColor, layout: BoardLayout): Vec2 {
-  if (layout.id === LAYOUT_CLASSIC4) {
-    let col = 7;
-    let row = 7;
-    switch (color) {
-      case 'red':
-        col = 6;
-        row = 7;
-        break;
-      case 'green':
-        col = 7;
-        row = 6;
-        break;
-      case 'yellow':
-        col = 8;
-        row = 7;
-        break;
-      case 'blue':
-        col = 7;
-        row = 8;
-        break;
-    }
-    return gridToWorld(col, row);
-  }
+  if (layout.id !== LAYOUT_CLASSIC4) return hexHomeCenterPosition(layout, color);
 
-  const colorIdx = layout.colors.indexOf(color);
-  const angle = (colorIdx / layout.colors.length) * Math.PI * 2 - Math.PI / 2;
-  return [Math.cos(angle) * 0.85, Math.sin(angle) * 0.85];
+  switch (color) {
+    case 'green':
+      return gridToWorld(7, 6);
+    case 'yellow':
+      return gridToWorld(8, 7);
+    case 'blue':
+      return gridToWorld(7, 8);
+    case 'red':
+    default:
+      return gridToWorld(6, 7);
+  }
+}
+
+/** Centre of a colour's base yard, on whichever board is in play. */
+export function baseYardCenter(layout: BoardLayout, color: LudoColor): Vec2 {
+  if (layout.id !== LAYOUT_CLASSIC4) return hexYardCenter(layout, color);
+
+  switch (color) {
+    case 'green':
+      return gridToWorld(11.5, 2.5);
+    case 'yellow':
+      return gridToWorld(11.5, 11.5);
+    case 'blue':
+      return gridToWorld(2.5, 11.5);
+    case 'red':
+    default:
+      return gridToWorld(2.5, 2.5);
+  }
+}
+
+/** Rotation-y of a colour's base yard block. */
+export function baseYardRotation(layout: BoardLayout, color: LudoColor): number {
+  if (layout.id === LAYOUT_CLASSIC4) return 0;
+  return hexYardRotation(layout.colors.indexOf(color));
 }
 
 /**
@@ -182,46 +201,17 @@ export function homeSlotPosition(layout: BoardLayout, color: LudoColor, pieceInd
 }
 
 export function baseSlotPosition(layout: BoardLayout, color: LudoColor, pieceIndex: number): Vec2 {
-  if (layout.id === LAYOUT_CLASSIC4) {
-    const isCol2 = pieceIndex % 2 === 1;
-    const isRow2 = pieceIndex >= 2;
+  if (layout.id !== LAYOUT_CLASSIC4) return hexBaseSlotPosition(layout, color, pieceIndex);
 
-    let baseCenterCol = 2.5;
-    let baseCenterRow = 2.5;
-
-    switch (color) {
-      case 'red': // Top-Left
-        baseCenterCol = 2.5;
-        baseCenterRow = 2.5;
-        break;
-      case 'green': // Top-Right
-        baseCenterCol = 11.5;
-        baseCenterRow = 2.5;
-        break;
-      case 'yellow': // Bottom-Right
-        baseCenterCol = 11.5;
-        baseCenterRow = 11.5;
-        break;
-      case 'blue': // Bottom-Left
-        baseCenterCol = 2.5;
-        baseCenterRow = 11.5;
-        break;
-    }
-
-    const col = baseCenterCol + (isCol2 ? 1 : -1);
-    const row = baseCenterRow + (isRow2 ? 1 : -1);
-    return gridToWorld(col, row);
-  }
-
-  // 6-arm radial base slots
-  const colorIdx = layout.colors.indexOf(color);
-  const angle = (colorIdx / layout.colors.length) * Math.PI * 2 - Math.PI / 2;
-  const radius = 3.8;
-  const cx = Math.cos(angle) * radius;
-  const cz = Math.sin(angle) * radius;
-  const dx = ((pieceIndex % 2) - 0.5) * 0.5;
-  const dz = (Math.floor(pieceIndex / 2) - 0.5) * 0.5;
+  const [cx, cz] = baseYardCenter(layout, color);
+  const dx = (pieceIndex % 2 === 1 ? 1 : -1) * CELL_SIZE;
+  const dz = (pieceIndex >= 2 ? 1 : -1) * CELL_SIZE;
   return [cx + dx, cz + dz];
+}
+
+/** Half-extent of the board — drives the dice walls and the camera framing. */
+export function boardExtent(layout: BoardLayout): number {
+  return layout.id === LAYOUT_CLASSIC4 ? BOARD_PHYSICAL_SIZE / 2 : HEX_BOARD_RADIUS;
 }
 
 /**
@@ -257,4 +247,41 @@ export function piecePosition(layout: BoardLayout, piece: LudoPieceState): Vec2 
     default:
       return homeCenterPosition(piece.color, layout);
   }
+}
+
+/**
+ * Identifies the board square a piece stands on. Pieces sharing a key sit on
+ * one square and have to be shrunk and spread to fit inside it.
+ */
+export function pieceCellKey(layout: BoardLayout, piece: LudoPieceState): string {
+  switch (piece.location) {
+    case 'track':
+      return `track:${globalTrackIndex(layout, piece.color, piece.steps)}`;
+    case 'home-stretch':
+      return `stretch:${piece.color}:${homeStretchIndex(layout, piece.steps)}`;
+    case 'home':
+      return `home:${piece.color}`;
+    case 'base':
+    default:
+      return `base:${piece.color}:${piece.pieceIndex}`;
+  }
+}
+
+/** How much a piece shrinks so `count` pieces fit inside one square. */
+export function stackScale(count: number): number {
+  if (count <= 1) return 1;
+  if (count === 2) return 0.68;
+  if (count === 3) return 0.56;
+  return 0.48;
+}
+
+/** Where piece `index` of a `count`-piece stack sits inside its square. */
+export function stackOffset(index: number, count: number): Vec2 {
+  if (count <= 1) return [0, 0];
+  if (count === 2) {
+    return [(index === 0 ? -1 : 1) * CELL_SIZE * 0.21, 0];
+  }
+  const angle = (index / count) * TAU - Math.PI / 2;
+  const radius = CELL_SIZE * 0.24;
+  return [Math.cos(angle) * radius, Math.sin(angle) * radius];
 }

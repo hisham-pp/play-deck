@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="sudokuBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0e1726" />
+      <stop offset="100%" stop-color="#050a12" />
+    </linearGradient>
+    <linearGradient id="sudokuInk" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+    <filter id="sudokuGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background rounded card -->
+  <rect width="256" height="256" rx="48" fill="url(#sudokuBg)" />
+  <rect width="254" height="254" x="1" y="1" rx="47" fill="none" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.3" />
+
+  <!-- Highlighted box, the one the player is working -->
+  <rect x="40" y="112" width="72" height="72" fill="#f59e0b" fill-opacity="0.1" />
+
+  <!-- Thin cell rules -->
+  <path d="M64 40 V216 M88 40 V216 M136 40 V216 M160 40 V216 M40 64 H216 M40 88 H216 M40 136 H216 M40 160 H216"
+        stroke="#1e293b" stroke-width="1.5" stroke-opacity="0.9" />
+
+  <!-- Heavy box rules -->
+  <path d="M112 40 V216 M184 40 V216 M40 112 H216 M40 184 H216"
+        stroke="#334360" stroke-width="3" />
+
+  <!-- Outer frame -->
+  <rect x="40" y="40" width="176" height="176" rx="8" fill="none" stroke="#475569" stroke-width="3.5" />
+
+  <!-- Given digits -->
+  <g fill="#e2e8f0" font-family="ui-sans-serif, system-ui, sans-serif" font-size="30" font-weight="700" text-anchor="middle">
+    <text x="52" y="86">5</text>
+    <text x="148" y="86">3</text>
+    <text x="196" y="110">7</text>
+    <text x="76" y="158">9</text>
+    <text x="172" y="182">1</text>
+    <text x="124" y="206">4</text>
+  </g>
+
+  <!-- Player entry, in the tactical amber -->
+  <g filter="url(#sudokuGlow)">
+    <text x="52" y="158" fill="url(#sudokuInk)" font-family="ui-sans-serif, system-ui, sans-serif" font-size="32" font-weight="800" text-anchor="middle">8</text>
+  </g>
+
+  <!-- Pencil marks in an empty cell -->
+  <g fill="#64748b" font-family="ui-monospace, monospace" font-size="11" text-anchor="middle">
+    <text x="126" y="128">2</text>
+    <text x="140" y="128">6</text>
+    <text x="126" y="142">7</text>
+  </g>
+</svg>

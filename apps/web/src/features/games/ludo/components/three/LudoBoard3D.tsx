@@ -2,186 +2,257 @@
 
 import { useMemo } from 'react';
 import { isSafeCell, type BoardLayout } from '../../engine/board-layout';
+import type { LudoColor } from '../../types/ludo.types';
 import { ludoColorTheme } from '../../utils/ludo-colors';
 import {
   BASE_YARD_SIZE,
   BOARD_PHYSICAL_SIZE,
   CELL_SIZE,
   CENTER_SIZE,
+  HEX_BOARD_RADIUS,
+  HEX_CENTER_RADIUS,
+  HEX_YARD_SIZE,
   baseSlotPosition,
-  gridToWorld,
+  baseYardCenter,
+  baseYardRotation,
+  hexCorridorRotation,
   homeCenterPosition,
   homeStretchPosition,
   trackCellPosition,
+  trackCellRotation,
 } from './board-geometry';
 
 const COLOR_WHITE = '#ffffff';
+const COLOR_SLAB = '#0b0f19';
+const COLOR_FRAME = '#1e293b';
+/** Deliberately darker than the white cells so every cell edge reads as a
+ *  gridline instead of blending into the plate. */
+const COLOR_SURFACE = '#8f9bb0';
+const COLOR_SAFE = '#f59e0b';
+const LAYOUT_CLASSIC4 = 'classic4';
+
+/** Hexagon vertices point at the base yards, giving each yard the most room. */
+const HEX_SLAB_THETA = Math.PI / 6;
 
 interface LudoBoard3DProps {
   layout: BoardLayout;
 }
 
-export function LudoBoard3D({ layout }: LudoBoard3DProps) {
-  // Shared 52 track cell rendering data
-  const trackCells = useMemo(() => {
-    return Array.from({ length: layout.trackLength }, (_, i) => {
-      const isSafe = isSafeCell(layout, i);
-      const pos = trackCellPosition(layout, i);
-      let cellColor = '#ffffff';
+function ClassicSlab() {
+  return (
+    <group>
+      <mesh position={[0, -0.12, 0]} receiveShadow castShadow>
+        <boxGeometry args={[BOARD_PHYSICAL_SIZE + 0.6, 0.24, BOARD_PHYSICAL_SIZE + 0.6]} />
+        <meshStandardMaterial color={COLOR_SLAB} roughness={0.7} metalness={0.3} />
+      </mesh>
+      <mesh position={[0, -0.01, 0]} receiveShadow>
+        <boxGeometry args={[BOARD_PHYSICAL_SIZE + 0.3, 0.04, BOARD_PHYSICAL_SIZE + 0.3]} />
+        <meshStandardMaterial color={COLOR_FRAME} roughness={0.5} metalness={0.4} />
+      </mesh>
+      <mesh position={[0, 0.005, 0]} receiveShadow>
+        <boxGeometry args={[BOARD_PHYSICAL_SIZE, 0.02, BOARD_PHYSICAL_SIZE]} />
+        <meshStandardMaterial color={COLOR_SURFACE} roughness={0.55} />
+      </mesh>
+    </group>
+  );
+}
 
-      // Check if entry cell for a color
-      const entryColorIndex = layout.entryOffsets.indexOf(i);
-      if (entryColorIndex !== -1) {
-        const color = layout.colors[entryColorIndex];
-        cellColor = ludoColorTheme(color).hex;
-      }
+function HexSlab() {
+  return (
+    <group>
+      <mesh position={[0, -0.12, 0]} receiveShadow castShadow>
+        <cylinderGeometry
+          args={[HEX_BOARD_RADIUS + 0.3, HEX_BOARD_RADIUS + 0.3, 0.24, 6, 1, false, HEX_SLAB_THETA]}
+        />
+        <meshStandardMaterial color={COLOR_SLAB} roughness={0.7} metalness={0.3} />
+      </mesh>
+      <mesh position={[0, -0.01, 0]} receiveShadow>
+        <cylinderGeometry
+          args={[
+            HEX_BOARD_RADIUS + 0.15,
+            HEX_BOARD_RADIUS + 0.15,
+            0.04,
+            6,
+            1,
+            false,
+            HEX_SLAB_THETA,
+          ]}
+        />
+        <meshStandardMaterial color={COLOR_FRAME} roughness={0.5} metalness={0.4} />
+      </mesh>
+      <mesh position={[0, 0.005, 0]} receiveShadow>
+        <cylinderGeometry
+          args={[HEX_BOARD_RADIUS, HEX_BOARD_RADIUS, 0.02, 6, 1, false, HEX_SLAB_THETA]}
+        />
+        <meshStandardMaterial color={COLOR_SURFACE} roughness={0.55} />
+      </mesh>
+    </group>
+  );
+}
 
-      return { index: i, position: pos, isSafe, isEntry: entryColorIndex !== -1, cellColor };
-    });
-  }, [layout]);
+interface BaseYardProps {
+  layout: BoardLayout;
+  color: LudoColor;
+  yardSize: number;
+  innerSize: number;
+}
 
-  // Home stretch cells (5 cells per color)
-  const homeStretches = useMemo(() => {
-    return layout.colors.flatMap((color) =>
-      Array.from({ length: layout.homeStretchLength }, (_, i) => ({
-        color,
-        position: homeStretchPosition(layout, color, i + 1),
-      })),
-    );
-  }, [layout]);
+function BaseYard({ layout, color, yardSize, innerSize }: BaseYardProps) {
+  const theme = ludoColorTheme(color);
+  const [bx, bz] = baseYardCenter(layout, color);
+  const rotation = baseYardRotation(layout, color);
 
   return (
     <group>
-      {/* Main Board Base Slab */}
-      <mesh position={[0, -0.12, 0]} receiveShadow castShadow>
-        <boxGeometry args={[BOARD_PHYSICAL_SIZE + 0.6, 0.24, BOARD_PHYSICAL_SIZE + 0.6]} />
-        <meshStandardMaterial color="#0b0f19" roughness={0.7} metalness={0.3} />
-      </mesh>
+      <group position={[bx, 0, bz]} rotation={[0, rotation, 0]}>
+        {/* Outer colour block */}
+        <mesh position={[0, 0.02, 0]} receiveShadow>
+          <boxGeometry args={[yardSize, 0.03, yardSize]} />
+          <meshStandardMaterial color={theme.hex} roughness={0.4} />
+        </mesh>
+        {/* Inner recessed area */}
+        <mesh position={[0, 0.036, 0]} receiveShadow>
+          <boxGeometry args={[innerSize, 0.01, innerSize]} />
+          <meshStandardMaterial color={COLOR_WHITE} roughness={0.2} />
+        </mesh>
+      </group>
 
-      {/* Raised Outer Border Frame */}
-      <mesh position={[0, -0.01, 0]} receiveShadow>
-        <boxGeometry args={[BOARD_PHYSICAL_SIZE + 0.3, 0.04, BOARD_PHYSICAL_SIZE + 0.3]} />
-        <meshStandardMaterial color="#1e293b" roughness={0.5} metalness={0.4} />
-      </mesh>
-
-      {/* Inner Playing Surface — deliberately darker than the white cells so every
-          cell edge reads as a gridline instead of blending into the plate. */}
-      <mesh position={[0, 0.005, 0]} receiveShadow>
-        <boxGeometry args={[BOARD_PHYSICAL_SIZE, 0.02, BOARD_PHYSICAL_SIZE]} />
-        <meshStandardMaterial color="#8f9bb0" roughness={0.55} />
-      </mesh>
-
-      {/* Corner Base Yards (6x6 Grid Areas) */}
-      {layout.colors.map((color) => {
-        const theme = ludoColorTheme(color);
-        let baseCol = 2.5;
-        let baseRow = 2.5;
-
-        switch (color) {
-          case 'red':
-            baseCol = 2.5;
-            baseRow = 2.5;
-            break;
-          case 'green':
-            baseCol = 11.5;
-            baseRow = 2.5;
-            break;
-          case 'yellow':
-            baseCol = 11.5;
-            baseRow = 11.5;
-            break;
-          case 'blue':
-            baseCol = 2.5;
-            baseRow = 11.5;
-            break;
-        }
-
-        const [bx, bz] = gridToWorld(baseCol, baseRow);
-
+      {/* Slots are placed in world space so they always match where pieces park. */}
+      {[0, 1, 2, 3].map((slotIdx) => {
+        const [sx, sz] = baseSlotPosition(layout, color, slotIdx);
         return (
-          <group key={`base-yard-${color}`}>
-            {/* Outer Base Color Block */}
-            <mesh position={[bx, 0.02, bz]} receiveShadow>
-              <boxGeometry args={[BASE_YARD_SIZE, 0.03, BASE_YARD_SIZE]} />
-              <meshStandardMaterial color={theme.hex} roughness={0.4} />
+          <group key={slotIdx}>
+            <mesh position={[sx, 0.042, sz]}>
+              <cylinderGeometry args={[0.22, 0.22, 0.015, 24]} />
+              <meshStandardMaterial color={theme.hex} roughness={0.3} />
             </mesh>
-
-            {/* Inner White Recessed Area */}
-            <mesh position={[bx, 0.036, bz]} receiveShadow>
-              <boxGeometry args={[4 * CELL_SIZE, 0.01, 4 * CELL_SIZE]} />
-              <meshStandardMaterial color={COLOR_WHITE} roughness={0.2} />
+            <mesh position={[sx, 0.045, sz]}>
+              <cylinderGeometry args={[0.17, 0.17, 0.012, 24]} />
+              <meshStandardMaterial color={COLOR_WHITE} roughness={0.1} />
             </mesh>
-
-            {/* 4 Circular Piece Slots */}
-            {[0, 1, 2, 3].map((slotIdx) => {
-              const [sx, sz] = baseSlotPosition(layout, color, slotIdx);
-              return (
-                <group key={slotIdx}>
-                  <mesh position={[sx, 0.042, sz]}>
-                    <cylinderGeometry args={[0.22, 0.22, 0.015, 24]} />
-                    <meshStandardMaterial color={theme.hex} roughness={0.3} />
-                  </mesh>
-                  <mesh position={[sx, 0.045, sz]}>
-                    <cylinderGeometry args={[0.17, 0.17, 0.012, 24]} />
-                    <meshStandardMaterial color={COLOR_WHITE} roughness={0.1} />
-                  </mesh>
-                </group>
-              );
-            })}
           </group>
         );
       })}
+    </group>
+  );
+}
 
-      {/* Shared 52 Track Cell Rendering Data */}
-      {trackCells.map((cell) => (
-        <group key={`track-${cell.index}`}>
-          <mesh position={[cell.position[0], 0.02, cell.position[1]]} receiveShadow>
-            <boxGeometry args={[CELL_SIZE * 0.94, 0.025, CELL_SIZE * 0.94]} />
-            <meshStandardMaterial
-              color={cell.isEntry ? cell.cellColor : COLOR_WHITE}
-              roughness={0.3}
-              metalness={cell.isEntry ? 0.2 : 0}
-            />
-          </mesh>
+interface TrackCellProps {
+  position: readonly [number, number];
+  rotation: number;
+  color: string;
+  isEntry: boolean;
+  isSafe: boolean;
+}
 
-          {/* Safe Cell Golden Star Marker */}
-          {cell.isSafe && !cell.isEntry && (
-            <mesh position={[cell.position[0], 0.035, cell.position[1]]}>
-              <cylinderGeometry args={[0.14, 0.14, 0.01, 5]} />
-              <meshStandardMaterial color="#f59e0b" roughness={0.2} metalness={0.6} />
-            </mesh>
-          )}
-        </group>
-      ))}
-
-      {/* Home Stretches */}
-      {homeStretches.map((cell, i) => {
-        const theme = ludoColorTheme(cell.color);
-        return (
-          <mesh
-            key={`stretch-${cell.color}-${i}`}
-            position={[cell.position[0], 0.025, cell.position[1]]}
-            receiveShadow
-          >
-            <boxGeometry args={[CELL_SIZE * 0.94, 0.025, CELL_SIZE * 0.94]} />
-            <meshStandardMaterial color={theme.hex} roughness={0.3} />
-          </mesh>
-        );
-      })}
-
-      {/* Center Victory Target (3x3 Center Area) */}
-      <mesh position={[0, 0.028, 0]} receiveShadow>
-        <boxGeometry args={[CENTER_SIZE, 0.03, CENTER_SIZE]} />
-        <meshStandardMaterial color={COLOR_WHITE} roughness={0.2} />
+function TrackCell({ position, rotation, color, isEntry, isSafe }: TrackCellProps) {
+  return (
+    <group position={[position[0], 0, position[1]]} rotation={[0, rotation, 0]}>
+      <mesh position={[0, 0.02, 0]} receiveShadow>
+        <boxGeometry args={[CELL_SIZE * 0.94, 0.025, CELL_SIZE * 0.94]} />
+        <meshStandardMaterial color={color} roughness={0.3} metalness={isEntry ? 0.2 : 0} />
       </mesh>
 
-      {/* Center 4 Triangles */}
+      {/* Safe cell golden star marker */}
+      {isSafe && !isEntry && (
+        <mesh position={[0, 0.035, 0]}>
+          <cylinderGeometry args={[0.14, 0.14, 0.01, 5]} />
+          <meshStandardMaterial color={COLOR_SAFE} roughness={0.2} metalness={0.6} />
+        </mesh>
+      )}
+    </group>
+  );
+}
+
+function VictoryHub({ isClassic }: { isClassic: boolean }) {
+  return (
+    <mesh position={[0, 0.028, 0]} receiveShadow>
+      {isClassic ? (
+        <boxGeometry args={[CENTER_SIZE, 0.03, CENTER_SIZE]} />
+      ) : (
+        <cylinderGeometry args={[HEX_CENTER_RADIUS, HEX_CENTER_RADIUS, 0.03, 6]} />
+      )}
+      <meshStandardMaterial color={COLOR_WHITE} roughness={0.2} />
+    </mesh>
+  );
+}
+
+export function LudoBoard3D({ layout }: LudoBoard3DProps) {
+  const isClassic = layout.id === LAYOUT_CLASSIC4;
+
+  const trackCells = useMemo(() => {
+    return Array.from({ length: layout.trackLength }, (_, i) => {
+      const entryColorIndex = layout.entryOffsets.indexOf(i);
+      const entryColor = entryColorIndex === -1 ? null : layout.colors[entryColorIndex];
+
+      return {
+        index: i,
+        position: trackCellPosition(layout, i),
+        rotation: trackCellRotation(layout, i),
+        isSafe: isSafeCell(layout, i),
+        isEntry: entryColor !== null,
+        color: entryColor ? ludoColorTheme(entryColor).hex : COLOR_WHITE,
+      };
+    });
+  }, [layout]);
+
+  const homeStretches = useMemo(() => {
+    return layout.colors.flatMap((color, colorIdx) =>
+      Array.from({ length: layout.homeStretchLength }, (_, i) => ({
+        key: `stretch-${color}-${i}`,
+        hex: ludoColorTheme(color).hex,
+        position: homeStretchPosition(layout, color, i + 1),
+        // Corridors run inward along the vertex their colour's side starts at.
+        rotation: isClassic ? 0 : hexCorridorRotation(colorIdx),
+      })),
+    );
+  }, [layout, isClassic]);
+
+  return (
+    <group>
+      {isClassic ? <ClassicSlab /> : <HexSlab />}
+
+      {layout.colors.map((color) => (
+        <BaseYard
+          key={`base-yard-${color}`}
+          layout={layout}
+          color={color}
+          yardSize={isClassic ? BASE_YARD_SIZE : HEX_YARD_SIZE}
+          innerSize={isClassic ? 4 * CELL_SIZE : 2.7 * CELL_SIZE}
+        />
+      ))}
+
+      {trackCells.map((cell) => (
+        <TrackCell
+          key={`track-${cell.index}`}
+          position={cell.position}
+          rotation={cell.rotation}
+          color={cell.color}
+          isEntry={cell.isEntry}
+          isSafe={cell.isSafe}
+        />
+      ))}
+
+      {homeStretches.map((cell) => (
+        <mesh
+          key={cell.key}
+          position={[cell.position[0], 0.025, cell.position[1]]}
+          rotation={[0, cell.rotation, 0]}
+          receiveShadow
+        >
+          <boxGeometry args={[CELL_SIZE * 0.94, 0.025, CELL_SIZE * 0.94]} />
+          <meshStandardMaterial color={cell.hex} roughness={0.3} />
+        </mesh>
+      ))}
+
+      <VictoryHub isClassic={isClassic} />
+
       {layout.colors.map((color) => {
         const [cx, cz] = homeCenterPosition(color, layout);
         const theme = ludoColorTheme(color);
         return (
           <mesh key={`center-tri-${color}`} position={[cx, 0.045, cz]}>
-            <cylinderGeometry args={[0.2, 0.2, 0.01, 24]} />
+            <cylinderGeometry args={[isClassic ? 0.2 : 0.13, isClassic ? 0.2 : 0.13, 0.01, 24]} />
             <meshStandardMaterial
               color={theme.hex}
               emissive={theme.hex}

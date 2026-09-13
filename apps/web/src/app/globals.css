@@ -89,8 +89,8 @@ body {
     animation: none;
   }
 }
-
 /* Connect Four piece drop animation */
+
 @keyframes c4-drop {
   0% {
     transform: translateY(-260%);
@@ -117,4 +117,11 @@ body {
   .c4-piece-drop {
     animation: none;
   }
+}
+
+/* Dragging to orbit a 3D board must never smear a text selection across the
+   HUD sitting on top of it. */
+canvas {
+  -webkit-user-select: none;
+  user-select: none;
 }

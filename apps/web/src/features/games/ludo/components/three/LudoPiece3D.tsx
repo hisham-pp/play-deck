@@ -1,24 +1,34 @@
 'use client';
 
+import { Billboard } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import type { Group } from 'three';
 import { Vector3 } from 'three';
 import type { BoardLayout } from '../../engine/board-layout';
 import type { LudoPieceState } from '../../types/ludo.types';
 import { ludoColorTheme } from '../../utils/ludo-colors';
-import { piecePosition, positionForSteps } from './board-geometry';
+import { piecePosition, positionForSteps, stackOffset, stackScale } from './board-geometry';
+import { numberBadgeTexture } from './piece-number-texture';
 
 interface LudoPiece3DProps {
   layout: BoardLayout;
   piece: LudoPieceState;
   isLegalMove: boolean;
+  /** 1-based hotkey for this piece this turn, or null when it cannot move. */
+  moveNumber?: number | null;
+  /** Position of this piece within the pieces sharing its square. */
+  stackIndex?: number;
+  /** How many pieces share this piece's square. */
+  stackCount?: number;
   onSelectPiece?: (pieceId: string) => void;
 }
 
 const REST_Y = 0.12;
 const HOP_MS = 140;
 const HOP_HEIGHT = 0.16;
+const BADGE_ACCENT = '#fbbf24';
+const BADGE_SIZE = 0.42;
 
 /**
  * Walks a piece square by square along its own track path. A move of N advances
@@ -75,13 +85,30 @@ function usePieceWalk(
   }, []);
 }
 
-export function LudoPiece3D({ layout, piece, isLegalMove, onSelectPiece }: LudoPiece3DProps) {
+export function LudoPiece3D({
+  layout,
+  piece,
+  isLegalMove,
+  moveNumber = null,
+  stackIndex = 0,
+  stackCount = 1,
+  onSelectPiece,
+}: LudoPiece3DProps) {
   const groupRef = useRef<Group>(null);
   const [hovered, setHovered] = useState(false);
 
   const targetPos = piecePosition(layout, piece);
   const targetY = isLegalMove ? 0.22 : REST_Y;
   const advanceWalk = usePieceWalk(layout, piece, groupRef);
+
+  // Pieces sharing a square shrink and spread so the stack stays inside the cell.
+  const shrink = stackScale(stackCount);
+  const [offsetX, offsetZ] = stackOffset(stackIndex, stackCount);
+
+  const badgeTexture = useMemo(
+    () => (moveNumber === null ? null : numberBadgeTexture(moveNumber, BADGE_ACCENT)),
+    [moveNumber],
+  );
 
   useFrame((_, delta) => {
     const group = groupRef.current;
@@ -98,13 +125,12 @@ export function LudoPiece3D({ layout, piece, isLegalMove, onSelectPiece }: LudoP
   });
 
   const theme = ludoColorTheme(piece.color);
-  const scale = hovered && isLegalMove ? 1.2 : 1.0;
+  const scale = shrink * (hovered && isLegalMove ? 1.2 : 1.0);
 
   return (
     <group
       ref={groupRef}
       position={[targetPos[0], targetY, targetPos[1]]}
-      scale={[scale, scale, scale]}
       onClick={(e) => {
         if (isLegalMove && onSelectPiece) {
           e.stopPropagation();
@@ -123,50 +149,69 @@ export function LudoPiece3D({ layout, piece, isLegalMove, onSelectPiece }: LudoP
         document.body.style.cursor = 'default';
       }}
     >
-      {/* Pawn Base Ring */}
-      <mesh position={[0, 0.04, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.16, 0.21, 0.08, 20]} />
-        <meshStandardMaterial color={theme.hex} roughness={0.2} metalness={0.3} />
-      </mesh>
+      <group position={[offsetX, 0, offsetZ]} scale={[scale, scale, scale]}>
+        {/* Pawn Base Ring */}
+        <mesh position={[0, 0.04, 0]} castShadow receiveShadow>
+          <cylinderGeometry args={[0.16, 0.21, 0.08, 20]} />
+          <meshStandardMaterial color={theme.hex} roughness={0.2} metalness={0.3} />
+        </mesh>
 
-      {/* Pawn Tapered Body */}
-      <mesh position={[0, 0.22, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.09, 0.16, 0.28, 20]} />
-        <meshStandardMaterial color={theme.hex} roughness={0.2} metalness={0.25} />
-      </mesh>
+        {/* Pawn Tapered Body */}
+        <mesh position={[0, 0.22, 0]} castShadow receiveShadow>
+          <cylinderGeometry args={[0.09, 0.16, 0.28, 20]} />
+          <meshStandardMaterial color={theme.hex} roughness={0.2} metalness={0.25} />
+        </mesh>
 
-      {/* Pawn Neck Ring */}
-      <mesh position={[0, 0.38, 0]} castShadow>
-        <cylinderGeometry args={[0.12, 0.12, 0.04, 20]} />
-        <meshStandardMaterial color="#ffffff" roughness={0.1} metalness={0.5} />
-      </mesh>
+        {/* Pawn Neck Ring */}
+        <mesh position={[0, 0.38, 0]} castShadow>
+          <cylinderGeometry args={[0.12, 0.12, 0.04, 20]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.1} metalness={0.5} />
+        </mesh>
 
-      {/* Pawn Head Sphere */}
-      <mesh position={[0, 0.48, 0]} castShadow>
-        <sphereGeometry args={[0.13, 20, 20]} />
-        <meshStandardMaterial
-          color={theme.hex}
-          roughness={0.15}
-          metalness={0.3}
-          emissive={isLegalMove ? theme.hex : '#000000'}
-          emissiveIntensity={isLegalMove ? 0.35 : 0}
-        />
-      </mesh>
+        {/* Pawn Head Sphere */}
+        <mesh position={[0, 0.48, 0]} castShadow>
+          <sphereGeometry args={[0.13, 20, 20]} />
+          <meshStandardMaterial
+            color={theme.hex}
+            roughness={0.15}
+            metalness={0.3}
+            emissive={isLegalMove ? theme.hex : '#000000'}
+            emissiveIntensity={isLegalMove ? 0.35 : 0}
+          />
+        </mesh>
 
-      {/* Top Knob */}
-      <mesh position={[0, 0.62, 0]} castShadow>
-        <sphereGeometry args={[0.05, 12, 12]} />
-        <meshStandardMaterial color="#ffffff" roughness={0.1} metalness={0.4} />
-      </mesh>
+        {/* Top Knob */}
+        <mesh position={[0, 0.62, 0]} castShadow>
+          <sphereGeometry args={[0.05, 12, 12]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.1} metalness={0.4} />
+        </mesh>
 
-      {/* Legal Move Glowing Selection Ring */}
-      {isLegalMove && (
-        <group position={[0, -0.06, 0]}>
-          <mesh rotation={[-Math.PI / 2, 0, 0]}>
-            <ringGeometry args={[0.24, 0.34, 32]} />
-            <meshBasicMaterial color="#f59e0b" side={2} transparent opacity={0.85} />
+        {/* Legal Move Glowing Selection Ring */}
+        {isLegalMove && (
+          <group position={[0, -0.06, 0]}>
+            <mesh rotation={[-Math.PI / 2, 0, 0]}>
+              <ringGeometry args={[0.24, 0.34, 32]} />
+              <meshBasicMaterial color={BADGE_ACCENT} side={2} transparent opacity={0.85} />
+            </mesh>
+          </group>
+        )}
+      </group>
+
+      {/* Move number: the piece says which key moves it, so no separate list of
+          buttons is needed to tell the pieces apart. */}
+      {badgeTexture && (
+        <Billboard position={[offsetX, 0.68 * shrink + 0.34, offsetZ]}>
+          <mesh renderOrder={10}>
+            <planeGeometry args={[BADGE_SIZE, BADGE_SIZE]} />
+            <meshBasicMaterial
+              map={badgeTexture}
+              transparent
+              toneMapped={false}
+              depthTest={false}
+              depthWrite={false}
+            />
           </mesh>
-        </group>
+        </Billboard>
       )}
     </group>
   );
