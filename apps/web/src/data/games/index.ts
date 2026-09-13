@@ -5,6 +5,7 @@ const BADGE_COMING_SOON = 'Coming Soon';
 const STATUS_AVAILABLE = 'available';
 const BADGE_READY_TO_PLAY = 'Ready to Play';
 const RELEASE_DATE_2026_09_12 = '2026-09-12';
+const CATEGORY_PUZZLE = 'puzzle';
 
 export const GAME_DEFINITIONS: GameDefinition[] = [
   {
@@ -28,7 +29,7 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     slug: 'tetris',
     description:
       'Rotate and stack falling tetrominoes to clear lines before the board overflows. Speed ramps up with every level.',
-    category: 'puzzle',
+    category: CATEGORY_PUZZLE,
     players: { min: 1, max: 1 },
     status: STATUS_AVAILABLE,
     thumbnailUrl: '/games/tetris/icon.svg',
@@ -83,6 +84,21 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     releaseDate: RELEASE_DATE_2026_09_12,
   },
   {
+    id: 'sudoku',
+    name: 'Sudoku',
+    slug: 'sudoku',
+    description:
+      'Seven difficulty levels of freshly generated grids, each with exactly one solution. Pencil marks, conflict highlighting, mistake budgets and per-level best times.',
+    category: CATEGORY_PUZZLE,
+    players: { min: 1, max: 1 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/sudoku/icon.svg',
+    tags: ['Puzzle', 'Logic', 'Solo', 'Brain Training', '7 Levels'],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-13',
+  },
+  {
     id: 'chess',
     name: 'Master Chess',
     slug: 'master-chess',
@@ -103,7 +119,7 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     slug: 'connect-grid',
     description:
       'A vertical drop duel. Align four consecutive discs while blocking counterattacks from your adversary.',
-    category: 'puzzle',
+    category: CATEGORY_PUZZLE,
     players: { min: 1, max: 2 },
     status: STATUS_COMING_SOON,
     thumbnailUrl: '/games/connect-four/icon.svg',
@@ -117,7 +133,7 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     slug: 'runic-memory',
     description:
       'Test your cognitive recall across ancient glowing sigils. Flip pairs to clear the board in minimum turns.',
-    category: 'puzzle',
+    category: CATEGORY_PUZZLE,
     players: { min: 1, max: 2 },
     status: STATUS_COMING_SOON,
     thumbnailUrl: '/games/runic-memory/icon.svg',
