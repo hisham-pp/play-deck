@@ -39,6 +39,9 @@ export {
 
 const LAYOUT_CLASSIC4 = 'classic4';
 
+/** Half-spacing of the 2x2 cluster finished pieces park in. */
+const HOME_SLOT_SPREAD = 0.13;
+
 // 52-cell track path for classic 4-arm board (cols, rows on 15x15 grid)
 const CLASSIC_TRACK_GRID: Vec2[] = [
   // Red Arm (left -> top)
@@ -185,6 +188,18 @@ export function baseYardRotation(layout: BoardLayout, color: LudoColor): number 
   return hexYardRotation(layout.colors.indexOf(color));
 }
 
+/**
+ * Resting spot for a finished piece. The hub marker is a single point, so
+ * without fanning the four pieces out they all land on the same coordinate and
+ * stack into one another.
+ */
+export function homeSlotPosition(layout: BoardLayout, color: LudoColor, pieceIndex: number): Vec2 {
+  const [cx, cz] = homeCenterPosition(color, layout);
+  const dx = (pieceIndex % 2 === 0 ? -1 : 1) * HOME_SLOT_SPREAD;
+  const dz = (pieceIndex < 2 ? -1 : 1) * HOME_SLOT_SPREAD;
+  return [cx + dx, cz + dz];
+}
+
 export function baseSlotPosition(layout: BoardLayout, color: LudoColor, pieceIndex: number): Vec2 {
   if (layout.id !== LAYOUT_CLASSIC4) return hexBaseSlotPosition(layout, color, pieceIndex);
 
@@ -217,7 +232,7 @@ export function positionForSteps(
   if (isHomeStretchSteps(layout, steps)) {
     return homeStretchPosition(layout, color, homeStretchIndex(layout, steps));
   }
-  return homeCenterPosition(color, layout);
+  return homeSlotPosition(layout, color, pieceIndex);
 }
 
 export function piecePosition(layout: BoardLayout, piece: LudoPieceState): Vec2 {

@@ -89,6 +89,35 @@ body {
     animation: none;
   }
 }
+/* Connect Four piece drop animation */
+
+@keyframes c4-drop {
+  0% {
+    transform: translateY(-260%);
+    opacity: 0.3;
+  }
+  70% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  85% {
+    transform: translateY(-10%);
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.c4-piece-drop {
+  animation: c4-drop 0.32s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c4-piece-drop {
+    animation: none;
+  }
+}
 
 /* Dragging to orbit a 3D board must never smear a text selection across the
    HUD sitting on top of it. */
