@@ -18,6 +18,8 @@ export const BOARD_PHYSICAL_SIZE = BOARD_GRID_SIZE * CELL_SIZE;
 export const BASE_YARD_SIZE = 6 * CELL_SIZE;
 /** The victory hub covers the middle 3x3 block. */
 export const CENTER_SIZE = 3 * CELL_SIZE;
+/** Half-spacing of the 2x2 cluster finished pieces park in. */
+const HOME_SLOT_SPREAD = 0.13;
 
 export type Vec2 = [number, number];
 
@@ -167,6 +169,18 @@ export function homeCenterPosition(color: LudoColor, layout: BoardLayout): Vec2 
   return [Math.cos(angle) * 0.85, Math.sin(angle) * 0.85];
 }
 
+/**
+ * Resting spot for a finished piece. The hub marker is a single point, so
+ * without fanning the four pieces out they all land on the same coordinate and
+ * stack into one another.
+ */
+export function homeSlotPosition(layout: BoardLayout, color: LudoColor, pieceIndex: number): Vec2 {
+  const [cx, cz] = homeCenterPosition(color, layout);
+  const dx = (pieceIndex % 2 === 0 ? -1 : 1) * HOME_SLOT_SPREAD;
+  const dz = (pieceIndex < 2 ? -1 : 1) * HOME_SLOT_SPREAD;
+  return [cx + dx, cz + dz];
+}
+
 export function baseSlotPosition(layout: BoardLayout, color: LudoColor, pieceIndex: number): Vec2 {
   if (layout.id === LAYOUT_CLASSIC4) {
     const isCol2 = pieceIndex % 2 === 1;
@@ -228,7 +242,7 @@ export function positionForSteps(
   if (isHomeStretchSteps(layout, steps)) {
     return homeStretchPosition(layout, color, homeStretchIndex(layout, steps));
   }
-  return homeCenterPosition(color, layout);
+  return homeSlotPosition(layout, color, pieceIndex);
 }
 
 export function piecePosition(layout: BoardLayout, piece: LudoPieceState): Vec2 {

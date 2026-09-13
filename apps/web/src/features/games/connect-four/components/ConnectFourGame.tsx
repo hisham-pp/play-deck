@@ -31,7 +31,7 @@ export function ConnectFourGame() {
     resetMatch,
   } = useConnectFourEngine(handleGameOver);
 
-  const [isSetupOpen, setIsSetupOpen] = useState(false);
+  const [isSetupOpen, setIsSetupOpen] = useState(!roomCode);
 
   const isMyTurnOnline = state.mode !== MODE_MULTIPLAYER || state.turn === myDisc;
 
