@@ -18,6 +18,7 @@ const LudoScene = dynamic(() => import('./three/LudoScene'), {
 interface LudoBoardProps {
   state: LudoGameState;
   legalPieceIds: string[];
+  numberedPieceIds: string[];
   onSelectPiece: (pieceId: string) => void;
   rolling: boolean;
   onRollSettled: () => void;
@@ -27,6 +28,7 @@ interface LudoBoardProps {
 export function LudoBoard({
   state,
   legalPieceIds,
+  numberedPieceIds,
   onSelectPiece,
   rolling,
   onRollSettled,
@@ -37,6 +39,7 @@ export function LudoBoard({
       <LudoScene
         state={state}
         legalPieceIds={legalPieceIds}
+        numberedPieceIds={numberedPieceIds}
         onSelectPiece={onSelectPiece}
         rolling={rolling}
         diceTargetValue={state.dice.value}

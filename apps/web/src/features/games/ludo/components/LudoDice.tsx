@@ -10,11 +10,19 @@ interface LudoDiceProps {
   isMyTurn: boolean;
   isSettling: boolean;
   onRollDice: () => void;
+  /** How many pieces can legally move right now, i.e. how many hotkeys are live. */
+  moveOptionCount?: number;
 }
 
 const TUMBLE_TICK_MS = 60;
 
-export function LudoDice({ state, isMyTurn, isSettling, onRollDice }: LudoDiceProps) {
+export function LudoDice({
+  state,
+  isMyTurn,
+  isSettling,
+  onRollDice,
+  moveOptionCount = 0,
+}: LudoDiceProps) {
   const canRoll =
     isMyTurn && !isSettling && state.turnPhase === 'awaiting-roll' && state.status === 'playing';
 
@@ -88,7 +96,18 @@ export function LudoDice({ state, isMyTurn, isSettling, onRollDice }: LudoDicePr
             to roll
           </>
         )}
-        {state.turnPhase === 'awaiting-move' && 'Select a glowing piece on the board to move.'}
+        {state.turnPhase === 'awaiting-move' &&
+          (moveOptionCount > 0 ? (
+            <>
+              Press{' '}
+              <kbd className="rounded border border-slate-700 bg-slate-800 px-1.5 py-0.5 font-sans text-[10px] font-bold text-slate-300">
+                {moveOptionCount > 1 ? `1–${moveOptionCount}` : '1'}
+              </kbd>{' '}
+              or click the numbered piece
+            </>
+          ) : (
+            'Select a glowing piece on the board to move.'
+          ))}
         {state.turnPhase === 'turn-end' && 'Passing turn...'}
       </p>
     </div>
