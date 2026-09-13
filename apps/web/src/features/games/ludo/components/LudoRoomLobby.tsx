@@ -4,6 +4,7 @@ import { UserPlus, Bot, Play, LogOut, Copy, Check } from 'lucide-react';
 import { useState } from 'react';
 import { Button, Card, CardContent, CardHeader, CardTitle, Badge } from '@playdeck/ui';
 import { InviteToRoomModal } from '@/features/friends/components/InviteToRoomModal';
+import { LudoVoiceDock } from '@/features/voice/components/LudoVoiceDock';
 import { useLudoMultiplayerStore } from '@/stores/ludo-multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
 import type { LudoPlayer } from '../types/ludo.types';
@@ -132,6 +133,9 @@ export function LudoRoomLobby({ onStartGame }: LudoRoomLobbyProps) {
           </div>
         </CardContent>
       </Card>
+
+      {/* Warm up voice while seats fill, so the mesh is live before the first roll. */}
+      <LudoVoiceDock anchorClassName="bottom-4 right-4" />
 
       {showInviteModal && roomCode && (
         <InviteToRoomModal

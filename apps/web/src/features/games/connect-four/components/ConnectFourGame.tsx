@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import React, { useMemo, useState } from 'react';
 import { RoomChatBox } from '@/features/chat/components/RoomChatBox';
+import { RoomVoiceDock } from '@/features/voice/components/RoomVoiceDock';
 import { MODE_MULTIPLAYER, STATUS_PLAYING } from '../engine/connect-four-constants';
 import { formatStatusAnnouncement } from '../engine/connect-four-utils';
 import { useConnectFourEngine } from '../hooks/use-connect-four-engine';
@@ -110,8 +111,13 @@ export function ConnectFourGame() {
         onStartOnlineMatch={() => setMode(MODE_MULTIPLAYER)}
       />
 
-      {/* In-Game Multiplayer Chat */}
-      {state.mode === MODE_MULTIPLAYER && roomCode && <RoomChatBox roomCode={roomCode} />}
+      {/* In-Game Multiplayer Chat & Voice */}
+      {state.mode === MODE_MULTIPLAYER && roomCode && (
+        <>
+          <RoomChatBox roomCode={roomCode} />
+          <RoomVoiceDock />
+        </>
+      )}
     </div>
   );
 }

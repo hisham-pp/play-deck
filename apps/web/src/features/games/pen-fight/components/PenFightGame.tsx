@@ -2,7 +2,9 @@
 
 import dynamic from 'next/dynamic';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { RoomVoiceDock } from '@/features/voice/components/RoomVoiceDock';
 import { usePlayerStore } from '@/stores/player.store';
+import { MODE_ONLINE } from '../engine/pen-fight-constants';
 import { usePenFightEngine } from '../hooks/use-pen-fight-engine';
 import { usePenFightMultiplayer } from '../hooks/use-pen-fight-multiplayer';
 import { usePenFightSound } from '../hooks/use-pen-fight-sound';
@@ -181,6 +183,11 @@ export function PenFightGame() {
         onOpenSetup={() => setIsSetupOpen(true)}
         onResetPositions={handleResetPositions}
       />
+
+      {/* Anchored below the back link so it clears the arena HUD on both rows. */}
+      {state.mode === MODE_ONLINE && (
+        <RoomVoiceDock anchorClassName="left-3 top-16 sm:left-5 sm:top-20" />
+      )}
 
       <PenFightResultOverlay
         state={state}
