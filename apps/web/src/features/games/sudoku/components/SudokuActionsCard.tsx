@@ -10,7 +10,7 @@ import { formatBestTime } from '../utils/format-duration';
 export interface SudokuActionsCardProps {
   state: SudokuState;
   stats: SudokuStats | null;
-  onOpenLevelMenu: () => void;
+  onOpenSetup: () => void;
   onReset: () => void;
   onAutoNotes: () => void;
 }
@@ -24,7 +24,7 @@ const ICON = 'w-3.5 h-3.5';
 export function SudokuActionsCard({
   state,
   stats,
-  onOpenLevelMenu,
+  onOpenSetup,
   onReset,
   onAutoNotes,
 }: SudokuActionsCardProps) {
@@ -40,7 +40,7 @@ export function SudokuActionsCard({
             type="button"
             variant="primary"
             size="sm"
-            onClick={onOpenLevelMenu}
+            onClick={onOpenSetup}
             className={ACTION_BUTTON}
           >
             <Grid3x3 className={ICON} />

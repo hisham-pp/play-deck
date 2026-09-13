@@ -11,8 +11,6 @@ export interface SudokuDifficultyPickerProps {
   activeDifficulty: SudokuDifficulty;
   stats: SudokuStats | null;
   onPick: (difficulty: SudokuDifficulty) => void;
-  /** Compact mode drops the blurb, for the in-game "new puzzle" menu. */
-  compact?: boolean;
 }
 
 /** Difficulty index drawn as a rising bar chart of five notches. */
@@ -20,7 +18,7 @@ function DifficultyMeter({ level, total }: { level: number; total: number }) {
   const filled = Math.round(((level + 1) / total) * 5);
 
   return (
-    <span aria-hidden="true" className="flex items-end gap-[3px] h-3.5">
+    <span aria-hidden="true" className="flex items-end gap-[3px] h-4 shrink-0">
       {[0, 1, 2, 3, 4].map((notch) => (
         <span
           key={notch}
@@ -39,14 +37,9 @@ export function SudokuDifficultyPicker({
   activeDifficulty,
   stats,
   onPick,
-  compact = false,
 }: SudokuDifficultyPickerProps) {
   return (
-    <div
-      role="group"
-      aria-label="Choose a difficulty"
-      className={cn('w-full grid gap-1.5', compact ? 'grid-cols-1' : 'sm:grid-cols-2')}
-    >
+    <div role="group" aria-label="Choose a difficulty" className="w-full grid gap-2 sm:grid-cols-2">
       {DIFFICULTY_ORDER.map((difficulty, level) => {
         const config = DIFFICULTY_CONFIG[difficulty];
         const best = stats?.bestTimes[difficulty];
@@ -59,12 +52,14 @@ export function SudokuDifficultyPicker({
             onClick={() => onPick(difficulty)}
             aria-current={isActive || undefined}
             className={cn(
-              'group flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-all active:scale-[0.98]',
-              'border-surface-border bg-surface-raised hover:border-amber-500/60 hover:bg-amber-500/5',
+              'group flex items-start gap-3 rounded-xl border p-3 text-left transition-all active:scale-[0.98]',
+              'border-surface-border bg-surface-base/80 hover:border-amber-500/60 hover:bg-amber-500/5',
               isActive && 'border-amber-500/70 bg-amber-500/10',
             )}
           >
-            <DifficultyMeter level={level} total={DIFFICULTY_ORDER.length} />
+            <span className="mt-0.5">
+              <DifficultyMeter level={level} total={DIFFICULTY_ORDER.length} />
+            </span>
 
             <span className="flex-1 min-w-0">
               <span className="flex items-center justify-between gap-2">
@@ -77,13 +72,11 @@ export function SudokuDifficultyPicker({
                 </span>
               </span>
 
-              {!compact && (
-                <span className="block mt-0.5 text-[11px] leading-snug text-deck-600 dark:text-deck-400">
-                  {config.blurb}
-                </span>
-              )}
+              <span className="block mt-1 text-[11px] leading-snug text-deck-600 dark:text-deck-400">
+                {config.blurb}
+              </span>
 
-              <span className="block mt-1 text-[9px] font-mono uppercase tracking-wider text-deck-500">
+              <span className="block mt-1.5 text-[9px] font-mono uppercase tracking-wider text-deck-500">
                 {config.targetClues} clues • {config.maxMistakes}{' '}
                 {config.maxMistakes === 1 ? 'life' : 'lives'} • {config.hints}{' '}
                 {config.hints === 1 ? 'hint' : 'hints'}
