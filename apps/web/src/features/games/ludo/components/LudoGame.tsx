@@ -5,8 +5,10 @@ import Link from 'next/link';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { Button, Card, CardContent } from '@playdeck/ui';
 import { usePlayerStore } from '@/stores/player.store';
+import { STATUS_PLAYING } from '../engine/ludo-constants';
 import { useLudoBotTurn } from '../hooks/use-ludo-bot-turn';
 import { useLudoEngine } from '../hooks/use-ludo-engine';
+import { useLudoPieceSelection } from '../hooks/use-ludo-piece-selection';
 import { useLudoSession } from '../hooks/use-ludo-session';
 import { useLudoSound } from '../hooks/use-ludo-sound';
 import type { LudoPlayer } from '../types/ludo.types';
@@ -22,6 +24,7 @@ import { LudoRoomLobby } from './LudoRoomLobby';
 type GameMode = 'lobby' | 'offline-setup' | 'online-room' | 'playing';
 
 const MODE_LOBBY = 'lobby';
+const MODE_PLAYING = 'playing';
 
 export function LudoGame() {
   const [mode, setMode] = useState<GameMode>('lobby');
@@ -30,7 +33,7 @@ export function LudoGame() {
   const player = usePlayerStore((s) => s.player);
 
   useEffect(() => {
-    if (mode === 'playing') {
+    if (mode === MODE_PLAYING) {
       document.body.style.overflow = 'hidden';
       return () => {
         document.body.style.overflow = '';
@@ -74,21 +77,17 @@ export function LudoGame() {
           .pieceId,
     )
     .sort();
-  // Identity of the array changes every render; its contents rarely do.
-  const legalKey = legalPieceIds.join('|');
-  const legalPieceIdsRef = useRef(legalPieceIds);
-  legalPieceIdsRef.current = legalPieceIds;
 
   const handleStartOfflineGame = (players: LudoPlayer[]) => {
     setConfiguredPlayers(players);
     restart(players);
-    setMode('playing');
+    setMode(MODE_PLAYING);
   };
 
   const handleStartOnlineGame = (players: LudoPlayer[]) => {
     setConfiguredPlayers(players);
     restart(players);
-    setMode('playing');
+    setMode(MODE_PLAYING);
   };
 
   const handleRollDice = useCallback(() => {
@@ -107,41 +106,13 @@ export function LudoGame() {
   );
 
   const canSelectPiece =
-    state?.status === 'playing' &&
+    state?.status === STATUS_PLAYING &&
     isMyTurn &&
     !isDiceSettling &&
     state.turnPhase === 'awaiting-move' &&
-    legalKey.length > 0;
+    legalPieceIds.length > 0;
 
-  // Auto-move single option after brief delay
-  useEffect(() => {
-    if (!canSelectPiece || legalPieceIdsRef.current.length !== 1) return;
-    const timer = setTimeout(() => {
-      handleSelectPiece(legalPieceIdsRef.current[0]);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [canSelectPiece, legalKey, handleSelectPiece]);
-
-  // Each movable piece wears its own number on the board, so the number keys
-  // are the whole selection UI — nothing has to be listed under the board.
-  useEffect(() => {
-    if (!canSelectPiece) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.repeat || e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1) return;
-      const el = document.activeElement;
-      if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) return;
-
-      const choice = Number(e.key);
-      if (!Number.isInteger(choice) || choice < 1) return;
-      const pieceId = legalPieceIdsRef.current[choice - 1];
-      if (!pieceId) return;
-
-      e.preventDefault();
-      handleSelectPiece(pieceId);
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [canSelectPiece, legalKey, handleSelectPiece]);
+  useLudoPieceSelection(legalPieceIds, canSelectPiece, handleSelectPiece);
 
   const handleRestart = () => {
     if (configuredPlayers.length > 0) {

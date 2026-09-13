@@ -28,6 +28,7 @@ const COLOR_FRAME = '#1e293b';
 /** Deliberately darker than the white cells so every cell edge reads as a
  *  gridline instead of blending into the plate. */
 const COLOR_SURFACE = '#8f9bb0';
+const COLOR_SAFE = '#f59e0b';
 const LAYOUT_CLASSIC4 = 'classic4';
 
 /** Hexagon vertices point at the base yards, giving each yard the most room. */
@@ -136,6 +137,46 @@ function BaseYard({ layout, color, yardSize, innerSize }: BaseYardProps) {
   );
 }
 
+interface TrackCellProps {
+  position: readonly [number, number];
+  rotation: number;
+  color: string;
+  isEntry: boolean;
+  isSafe: boolean;
+}
+
+function TrackCell({ position, rotation, color, isEntry, isSafe }: TrackCellProps) {
+  return (
+    <group position={[position[0], 0, position[1]]} rotation={[0, rotation, 0]}>
+      <mesh position={[0, 0.02, 0]} receiveShadow>
+        <boxGeometry args={[CELL_SIZE * 0.94, 0.025, CELL_SIZE * 0.94]} />
+        <meshStandardMaterial color={color} roughness={0.3} metalness={isEntry ? 0.2 : 0} />
+      </mesh>
+
+      {/* Safe cell golden star marker */}
+      {isSafe && !isEntry && (
+        <mesh position={[0, 0.035, 0]}>
+          <cylinderGeometry args={[0.14, 0.14, 0.01, 5]} />
+          <meshStandardMaterial color={COLOR_SAFE} roughness={0.2} metalness={0.6} />
+        </mesh>
+      )}
+    </group>
+  );
+}
+
+function VictoryHub({ isClassic }: { isClassic: boolean }) {
+  return (
+    <mesh position={[0, 0.028, 0]} receiveShadow>
+      {isClassic ? (
+        <boxGeometry args={[CENTER_SIZE, 0.03, CENTER_SIZE]} />
+      ) : (
+        <cylinderGeometry args={[HEX_CENTER_RADIUS, HEX_CENTER_RADIUS, 0.03, 6]} />
+      )}
+      <meshStandardMaterial color={COLOR_WHITE} roughness={0.2} />
+    </mesh>
+  );
+}
+
 export function LudoBoard3D({ layout }: LudoBoard3DProps) {
   const isClassic = layout.id === LAYOUT_CLASSIC4;
 
@@ -150,7 +191,7 @@ export function LudoBoard3D({ layout }: LudoBoard3DProps) {
         rotation: trackCellRotation(layout, i),
         isSafe: isSafeCell(layout, i),
         isEntry: entryColor !== null,
-        cellColor: entryColor ? ludoColorTheme(entryColor).hex : COLOR_WHITE,
+        color: entryColor ? ludoColorTheme(entryColor).hex : COLOR_WHITE,
       };
     });
   }, [layout]);
@@ -158,8 +199,8 @@ export function LudoBoard3D({ layout }: LudoBoard3DProps) {
   const homeStretches = useMemo(() => {
     return layout.colors.flatMap((color, colorIdx) =>
       Array.from({ length: layout.homeStretchLength }, (_, i) => ({
-        color,
-        colorIdx,
+        key: `stretch-${color}-${i}`,
+        hex: ludoColorTheme(color).hex,
         position: homeStretchPosition(layout, color, i + 1),
         // Corridors run inward along the vertex their colour's side starts at.
         rotation: isClassic ? 0 : hexCorridorRotation(colorIdx),
@@ -182,57 +223,29 @@ export function LudoBoard3D({ layout }: LudoBoard3DProps) {
       ))}
 
       {trackCells.map((cell) => (
-        <group
+        <TrackCell
           key={`track-${cell.index}`}
-          position={[cell.position[0], 0, cell.position[1]]}
-          rotation={[0, cell.rotation, 0]}
-        >
-          <mesh position={[0, 0.02, 0]} receiveShadow>
-            <boxGeometry args={[CELL_SIZE * 0.94, 0.025, CELL_SIZE * 0.94]} />
-            <meshStandardMaterial
-              color={cell.isEntry ? cell.cellColor : COLOR_WHITE}
-              roughness={0.3}
-              metalness={cell.isEntry ? 0.2 : 0}
-            />
-          </mesh>
-
-          {/* Safe cell golden star marker */}
-          {cell.isSafe && !cell.isEntry && (
-            <mesh position={[0, 0.035, 0]}>
-              <cylinderGeometry args={[0.14, 0.14, 0.01, 5]} />
-              <meshStandardMaterial color="#f59e0b" roughness={0.2} metalness={0.6} />
-            </mesh>
-          )}
-        </group>
+          position={cell.position}
+          rotation={cell.rotation}
+          color={cell.color}
+          isEntry={cell.isEntry}
+          isSafe={cell.isSafe}
+        />
       ))}
 
-      {homeStretches.map((cell, i) => {
-        const theme = ludoColorTheme(cell.color);
-        return (
-          <mesh
-            key={`stretch-${cell.color}-${i}`}
-            position={[cell.position[0], 0.025, cell.position[1]]}
-            rotation={[0, cell.rotation, 0]}
-            receiveShadow
-          >
-            <boxGeometry args={[CELL_SIZE * 0.94, 0.025, CELL_SIZE * 0.94]} />
-            <meshStandardMaterial color={theme.hex} roughness={0.3} />
-          </mesh>
-        );
-      })}
+      {homeStretches.map((cell) => (
+        <mesh
+          key={cell.key}
+          position={[cell.position[0], 0.025, cell.position[1]]}
+          rotation={[0, cell.rotation, 0]}
+          receiveShadow
+        >
+          <boxGeometry args={[CELL_SIZE * 0.94, 0.025, CELL_SIZE * 0.94]} />
+          <meshStandardMaterial color={cell.hex} roughness={0.3} />
+        </mesh>
+      ))}
 
-      {/* Victory hub */}
-      {isClassic ? (
-        <mesh position={[0, 0.028, 0]} receiveShadow>
-          <boxGeometry args={[CENTER_SIZE, 0.03, CENTER_SIZE]} />
-          <meshStandardMaterial color={COLOR_WHITE} roughness={0.2} />
-        </mesh>
-      ) : (
-        <mesh position={[0, 0.028, 0]} receiveShadow>
-          <cylinderGeometry args={[HEX_CENTER_RADIUS, HEX_CENTER_RADIUS, 0.03, 6]} />
-          <meshStandardMaterial color={COLOR_WHITE} roughness={0.2} />
-        </mesh>
-      )}
+      <VictoryHub isClassic={isClassic} />
 
       {layout.colors.map((color) => {
         const [cx, cz] = homeCenterPosition(color, layout);
