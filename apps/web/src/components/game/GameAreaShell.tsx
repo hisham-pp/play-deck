@@ -7,6 +7,7 @@ import { GameDefinition } from '@playdeck/game-types';
 import { LudoGame } from '@/features/games/ludo';
 import { PenFightGame } from '@/features/games/pen-fight';
 import { SnakeGame } from '@/features/games/snake';
+import { SudokuGame } from '@/features/games/sudoku';
 import { TetrisGame } from '@/features/games/tetris';
 import { TicTacToeGame } from '@/features/games/tic-tac-toe';
 import { useGameSessionStore } from '@/stores/game-session.store';
@@ -41,6 +42,10 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
 
   if (game.id === 'tetris') {
     return <TetrisGame />;
+  }
+
+  if (game.id === 'sudoku') {
+    return <SudokuGame />;
   }
 
   const handleStart = () => {
