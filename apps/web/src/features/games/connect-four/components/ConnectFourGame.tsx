@@ -3,10 +3,12 @@
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import React, { useMemo, useState } from 'react';
-import { STATUS_PLAYING } from '../engine/connect-four-constants';
+import { RoomChatBox } from '@/features/chat/components/RoomChatBox';
+import { MODE_MULTIPLAYER, STATUS_PLAYING } from '../engine/connect-four-constants';
 import { formatStatusAnnouncement } from '../engine/connect-four-utils';
 import { useConnectFourEngine } from '../hooks/use-connect-four-engine';
 import { useConnectFourKeyboard } from '../hooks/use-connect-four-keyboard';
+import { useConnectFourPlayers } from '../hooks/use-connect-four-players';
 import { useConnectFourSession } from '../hooks/use-connect-four-session';
 import type { AIDifficulty, ConnectFourDisc, GameMode } from '../types/connect-four.types';
 import { ConnectFourArena } from './ConnectFourArena';
@@ -15,15 +17,36 @@ import { ConnectFourSetupModal } from './ConnectFourSetupModal';
 export function ConnectFourGame() {
   const { handleGameOver } = useConnectFourSession();
 
-  const { state, dropPiece, setMode, setDifficulty, setHumanDisc, resetRound, resetMatch } =
-    useConnectFourEngine(handleGameOver);
+  const {
+    state,
+    roomCode,
+    myDisc,
+    opponent,
+    leaveRoom,
+    dropPiece,
+    setMode,
+    setDifficulty,
+    setHumanDisc,
+    resetRound,
+    resetMatch,
+  } = useConnectFourEngine(handleGameOver);
 
   const [isSetupOpen, setIsSetupOpen] = useState(false);
+
+  const isMyTurnOnline = state.mode !== MODE_MULTIPLAYER || state.turn === myDisc;
 
   const { focusedColumn, setFocusedColumn } = useConnectFourKeyboard({
     onDrop: (col) => dropPiece(col),
     onResetRound: resetRound,
-    isEnabled: state.status === STATUS_PLAYING && !state.isAiThinking,
+    isEnabled: state.status === STATUS_PLAYING && !state.isAiThinking && isMyTurnOnline,
+  });
+
+  const { player1, player2 } = useConnectFourPlayers({
+    mode: state.mode,
+    humanPlayerDisc: state.humanPlayerDisc,
+    aiDifficulty: state.aiDifficulty,
+    myDisc,
+    opponent,
   });
 
   const handleStartMatch = (config: {
@@ -31,6 +54,9 @@ export function ConnectFourGame() {
     difficulty: AIDifficulty;
     humanDisc: ConnectFourDisc;
   }) => {
+    if (state.mode === MODE_MULTIPLAYER && config.mode !== MODE_MULTIPLAYER) {
+      leaveRoom();
+    }
     setMode(config.mode);
     setDifficulty(config.difficulty);
     setHumanDisc(config.humanDisc);
@@ -60,12 +86,17 @@ export function ConnectFourGame() {
       {/* Game Stage Arena */}
       <ConnectFourArena
         state={state}
+        player1={player1}
+        player2={player2}
         focusedColumn={focusedColumn}
+        roomCode={roomCode}
+        myDisc={myDisc}
         onDrop={dropPiece}
         onColumnFocus={setFocusedColumn}
         onResetRound={resetRound}
         onResetMatch={resetMatch}
         onOpenSetup={() => setIsSetupOpen(true)}
+        onLeaveRoom={leaveRoom}
       />
 
       {/* Match Setup Modal */}
@@ -76,7 +107,11 @@ export function ConnectFourGame() {
         currentDifficulty={state.aiDifficulty}
         currentHumanDisc={state.humanPlayerDisc}
         onStartMatch={handleStartMatch}
+        onStartOnlineMatch={() => setMode(MODE_MULTIPLAYER)}
       />
+
+      {/* In-Game Multiplayer Chat */}
+      {state.mode === MODE_MULTIPLAYER && roomCode && <RoomChatBox roomCode={roomCode} />}
     </div>
   );
 }

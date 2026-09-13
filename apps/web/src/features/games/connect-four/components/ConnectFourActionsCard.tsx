@@ -1,6 +1,6 @@
 'use client';
 
-import { RotateCcw, RotateCw, Settings } from 'lucide-react';
+import { LogOut, RotateCcw, RotateCw, Settings } from 'lucide-react';
 import React from 'react';
 import { Button } from '@playdeck/ui';
 
@@ -8,13 +8,19 @@ export interface ConnectFourActionsCardProps {
   onResetRound: () => void;
   onResetMatch: () => void;
   onOpenSetup: () => void;
+  onLeaveRoom?: () => void;
+  isMultiplayer?: boolean;
   disabled?: boolean;
 }
+
+const ICON_CLASS = 'w-3.5 h-3.5';
 
 export function ConnectFourActionsCard({
   onResetRound,
   onResetMatch,
   onOpenSetup,
+  onLeaveRoom,
+  isMultiplayer = false,
   disabled = false,
 }: ConnectFourActionsCardProps) {
   return (
@@ -31,7 +37,7 @@ export function ConnectFourActionsCard({
           disabled={disabled}
           className="w-full justify-center text-xs flex items-center gap-1.5"
         >
-          <RotateCcw className="w-3.5 h-3.5" />
+          <RotateCcw className={ICON_CLASS} />
           <span>Next Round</span>
         </Button>
 
@@ -42,7 +48,7 @@ export function ConnectFourActionsCard({
           disabled={disabled}
           className="w-full justify-center text-xs text-deck-400 hover:text-white flex items-center gap-1.5"
         >
-          <RotateCw className="w-3.5 h-3.5" />
+          <RotateCw className={ICON_CLASS} />
           <span>Reset Scores</span>
         </Button>
 
@@ -52,9 +58,21 @@ export function ConnectFourActionsCard({
           onClick={onOpenSetup}
           className="w-full justify-center text-xs border-surface-border flex items-center gap-1.5"
         >
-          <Settings className="w-3.5 h-3.5" />
+          <Settings className={ICON_CLASS} />
           <span>Match Setup</span>
         </Button>
+
+        {isMultiplayer && onLeaveRoom && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onLeaveRoom}
+            className="w-full justify-center text-xs text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 flex items-center gap-1.5 border border-rose-500/20"
+          >
+            <LogOut className={ICON_CLASS} />
+            <span>Leave Room</span>
+          </Button>
+        )}
       </div>
     </div>
   );

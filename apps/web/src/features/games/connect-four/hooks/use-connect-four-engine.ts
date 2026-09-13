@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { playSound } from '@/lib/audio/sound-synth';
 import {
+  MODE_MULTIPLAYER,
   MODE_SINGLE,
   STATUS_DRAW,
   STATUS_PLAYING,
@@ -14,6 +15,7 @@ import type {
   ConnectFourState,
   GameMode,
 } from '../types/connect-four.types';
+import { useConnectFourMultiplayer } from './use-connect-four-multiplayer';
 
 type GameOverCallback = (
   winner: ConnectFourDisc | null,
@@ -61,6 +63,22 @@ export function useConnectFourEngine(onGameOver?: GameOverCallback) {
     };
   }, [engine, onGameOver]);
 
+  const {
+    roomCode,
+    myDisc,
+    opponent,
+    validateAndBroadcastDrop,
+    broadcastResetRound,
+    broadcastResetMatch,
+    leaveRoom,
+  } = useConnectFourMultiplayer(engine, state.mode, state.turn);
+
+  useEffect(() => {
+    if (roomCode && state.mode !== MODE_MULTIPLAYER) {
+      engine.setMode(MODE_MULTIPLAYER);
+    }
+  }, [roomCode, state.mode, engine]);
+
   useEffect(() => {
     if (state.status !== STATUS_PLAYING || state.mode !== MODE_SINGLE) {
       return;
@@ -84,19 +102,35 @@ export function useConnectFourEngine(onGameOver?: GameOverCallback) {
   const dropPiece = useCallback(
     (column: number, player?: ConnectFourDisc): boolean => {
       if (state.isAiThinking) return false;
+      if (state.mode === MODE_MULTIPLAYER) {
+        if (!validateAndBroadcastDrop(column)) return false;
+        return engine.dropPiece(column, myDisc || undefined);
+      }
       return engine.dropPiece(column, player);
     },
-    [engine, state.isAiThinking],
+    [engine, state.isAiThinking, state.mode, myDisc, validateAndBroadcastDrop],
   );
 
   const setMode = useCallback((mode: GameMode) => engine.setMode(mode), [engine]);
   const setDifficulty = useCallback((diff: AIDifficulty) => engine.setDifficulty(diff), [engine]);
   const setHumanDisc = useCallback((disc: ConnectFourDisc) => engine.setHumanDisc(disc), [engine]);
-  const resetRound = useCallback(() => engine.resetRound(), [engine]);
-  const resetMatch = useCallback(() => engine.resetMatch(), [engine]);
+
+  const resetRound = useCallback(() => {
+    engine.resetRound();
+    broadcastResetRound();
+  }, [engine, broadcastResetRound]);
+
+  const resetMatch = useCallback(() => {
+    engine.resetMatch();
+    broadcastResetMatch();
+  }, [engine, broadcastResetMatch]);
 
   return {
     state,
+    roomCode,
+    myDisc,
+    opponent,
+    leaveRoom,
     dropPiece,
     setMode,
     setDifficulty,

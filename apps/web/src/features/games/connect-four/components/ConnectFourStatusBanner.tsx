@@ -4,17 +4,45 @@ import { Bot, Trophy } from 'lucide-react';
 import React from 'react';
 import {
   DISC_RED,
+  MODE_MULTIPLAYER,
   STATUS_DRAW,
   STATUS_PLAYING,
   STATUS_WON,
 } from '../engine/connect-four-constants';
-import type { ConnectFourState } from '../types/connect-four.types';
+import type { ConnectFourDisc, ConnectFourState } from '../types/connect-four.types';
 
 export interface ConnectFourStatusBannerProps {
   state: ConnectFourState;
   p1Name: string;
   p2Name: string;
   isP1Turn: boolean;
+  myDisc?: ConnectFourDisc | null;
+}
+
+function renderPlayingText(
+  state: ConnectFourState,
+  p1Name: string,
+  p2Name: string,
+  isP1Turn: boolean,
+  myDisc?: ConnectFourDisc | null,
+) {
+  if (state.mode === MODE_MULTIPLAYER && myDisc) {
+    if (state.turn === myDisc) {
+      return 'Your Turn (Drop a disc)';
+    }
+    return "Opponent's Turn (Waiting...)";
+  }
+
+  if (state.isAiThinking) {
+    return (
+      <>
+        <Bot className="w-3.5 h-3.5 text-amber-400 animate-spin" />
+        <span>Deck AI is calculating move...</span>
+      </>
+    );
+  }
+
+  return isP1Turn ? `${p1Name}'s Turn (Red)` : `${p2Name}'s Turn (Yellow)`;
 }
 
 export function ConnectFourStatusBanner({
@@ -22,6 +50,7 @@ export function ConnectFourStatusBanner({
   p1Name,
   p2Name,
   isP1Turn,
+  myDisc,
 }: ConnectFourStatusBannerProps) {
   if (state.status === STATUS_WON && state.winner) {
     const winnerName = state.winner === DISC_RED ? p1Name : p2Name;
@@ -57,16 +86,7 @@ export function ConnectFourStatusBanner({
             }`}
           />
           <span className="font-semibold text-deck-800 dark:text-deck-200 font-display tracking-wide flex items-center gap-1.5">
-            {state.isAiThinking ? (
-              <>
-                <Bot className="w-3.5 h-3.5 text-amber-400 animate-spin" />
-                <span>Deck AI is calculating move...</span>
-              </>
-            ) : isP1Turn ? (
-              `${p1Name}'s Turn (Red)`
-            ) : (
-              `${p2Name}'s Turn (Yellow)`
-            )}
+            {renderPlayingText(state, p1Name, p2Name, isP1Turn, myDisc)}
           </span>
         </div>
       </div>

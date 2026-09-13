@@ -1,6 +1,6 @@
 'use client';
 
-import { Bot, Sparkles, Swords, Users } from 'lucide-react';
+import { Bot, Globe, Sparkles, Swords, Users } from 'lucide-react';
 import React, { useState } from 'react';
 import { Button, Modal } from '@playdeck/ui';
 import { cn } from '@/lib/utils';
@@ -11,9 +11,11 @@ import {
   DISC_RED,
   DISC_YELLOW,
   MODE_LOCAL_2P,
+  MODE_MULTIPLAYER,
   MODE_SINGLE,
 } from '../engine/connect-four-constants';
 import type { AIDifficulty, ConnectFourDisc, GameMode } from '../types/connect-four.types';
+import { ConnectFourOnlineSetup } from './ConnectFourOnlineSetup';
 
 export interface ConnectFourSetupModalProps {
   isOpen: boolean;
@@ -26,9 +28,11 @@ export interface ConnectFourSetupModalProps {
     difficulty: AIDifficulty;
     humanDisc: ConnectFourDisc;
   }) => void;
+  onStartOnlineMatch?: () => void;
 }
 
 const BTN_TYPE = 'button';
+const ICON_CLASS = 'w-4 h-4';
 
 export function ConnectFourSetupModal({
   isOpen,
@@ -37,6 +41,7 @@ export function ConnectFourSetupModal({
   currentDifficulty,
   currentHumanDisc,
   onStartMatch,
+  onStartOnlineMatch,
 }: ConnectFourSetupModalProps) {
   const [mode, setMode] = useState<GameMode>(currentMode);
   const [difficulty, setDifficulty] = useState<AIDifficulty>(currentDifficulty);
@@ -44,6 +49,11 @@ export function ConnectFourSetupModal({
 
   const handleStart = () => {
     onStartMatch({ mode, difficulty, humanDisc });
+    onClose();
+  };
+
+  const handleOnlineStart = () => {
+    onStartOnlineMatch?.();
     onClose();
   };
 
@@ -55,25 +65,25 @@ export function ConnectFourSetupModal({
       description="Select game mode and preferences before dropping into the arena."
       size="md"
     >
-      <div className="flex flex-col gap-5 py-1">
+      <div className="flex flex-col gap-4 py-1">
         {/* Mode Selector */}
         <div className="flex flex-col gap-2">
           <label className="text-xs font-semibold text-deck-400 uppercase tracking-wider font-display">
             Game Mode
           </label>
-          <div className="grid grid-cols-2 gap-2 p-1 rounded-xl bg-surface-raised border border-surface-border">
+          <div className="grid grid-cols-3 gap-2 p-1 rounded-xl bg-surface-raised border border-surface-border">
             <button
               type={BTN_TYPE}
               onClick={() => setMode(MODE_LOCAL_2P)}
               className={cn(
-                'flex flex-col items-center justify-center gap-1.5 py-3 px-2 rounded-lg text-xs font-bold transition-all',
+                'flex flex-col items-center justify-center gap-1.5 py-2.5 px-2 rounded-lg text-xs font-bold transition-all',
                 mode === MODE_LOCAL_2P
                   ? 'bg-amber-500 text-deck-950 shadow-sm'
                   : 'text-deck-400 hover:text-white hover:bg-surface-overlay',
               )}
             >
-              <Users className="w-4 h-4" />
-              <span>Local 2-Player</span>
+              <Users className={ICON_CLASS} />
+              <span>Local 2P</span>
               <span className="text-[10px] font-normal opacity-80">Pass & Play</span>
             </button>
 
@@ -81,18 +91,36 @@ export function ConnectFourSetupModal({
               type={BTN_TYPE}
               onClick={() => setMode(MODE_SINGLE)}
               className={cn(
-                'flex flex-col items-center justify-center gap-1.5 py-3 px-2 rounded-lg text-xs font-bold transition-all',
+                'flex flex-col items-center justify-center gap-1.5 py-2.5 px-2 rounded-lg text-xs font-bold transition-all',
                 mode === MODE_SINGLE
                   ? 'bg-amber-500 text-deck-950 shadow-sm'
                   : 'text-deck-400 hover:text-white hover:bg-surface-overlay',
               )}
             >
-              <Bot className="w-4 h-4" />
+              <Bot className={ICON_CLASS} />
               <span>VS Deck AI</span>
               <span className="text-[10px] font-normal opacity-80">Single Player</span>
             </button>
+
+            <button
+              type={BTN_TYPE}
+              onClick={() => setMode(MODE_MULTIPLAYER)}
+              className={cn(
+                'flex flex-col items-center justify-center gap-1.5 py-2.5 px-2 rounded-lg text-xs font-bold transition-all',
+                mode === MODE_MULTIPLAYER
+                  ? 'bg-amber-500 text-deck-950 shadow-sm'
+                  : 'text-deck-400 hover:text-white hover:bg-surface-overlay',
+              )}
+            >
+              <Globe className={ICON_CLASS} />
+              <span>Online 1v1</span>
+              <span className="text-[10px] font-normal opacity-80">Live Lobby</span>
+            </button>
           </div>
         </div>
+
+        {/* Online Setup Options */}
+        {mode === MODE_MULTIPLAYER && <ConnectFourOnlineSetup onStartMatch={handleOnlineStart} />}
 
         {/* AI Options (only visible if single player) */}
         {mode === MODE_SINGLE && (
@@ -161,21 +189,23 @@ export function ConnectFourSetupModal({
           </div>
         )}
 
-        {/* Action Buttons */}
-        <div className="flex items-center justify-end gap-2 pt-2">
-          <Button variant="ghost" size="sm" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={handleStart}
-            className="flex items-center gap-1.5"
-          >
-            <Swords className="w-4 h-4" />
-            <span>Start Match</span>
-          </Button>
-        </div>
+        {/* Action Buttons for Local / AI */}
+        {mode !== MODE_MULTIPLAYER && (
+          <div className="flex items-center justify-end gap-2 pt-2">
+            <Button variant="ghost" size="sm" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={handleStart}
+              className="flex items-center gap-1.5"
+            >
+              <Swords className={ICON_CLASS} />
+              <span>Start Match</span>
+            </Button>
+          </div>
+        )}
       </div>
     </Modal>
   );
