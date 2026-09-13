@@ -40,7 +40,7 @@ export function ConnectFourGame() {
   const statusAnnouncement = useMemo(() => formatStatusAnnouncement(state), [state]);
 
   return (
-    <div className="w-full max-w-5xl mx-auto flex flex-col items-center gap-4 py-2 px-3 select-none">
+    <div className="w-full max-w-6xl mx-auto flex flex-col items-center gap-4 py-2 px-3 select-none">
       {/* Screen Reader Live Region for Accessibility */}
       <div role="status" aria-live="polite" className="sr-only">
         {statusAnnouncement}
