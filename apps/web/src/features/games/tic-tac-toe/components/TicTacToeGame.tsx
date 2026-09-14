@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import React, { useMemo, useState } from 'react';
 import { RoomChatBox } from '@/features/chat/components/RoomChatBox';
+import { RoomVoiceDock } from '@/features/voice/components/RoomVoiceDock';
 import { useMultiplayerStore } from '@/stores/multiplayer.store';
 import { MODE_MULTIPLAYER, STATUS_PLAYING } from '../engine/tic-tac-toe-constants';
 import { formatStatusAnnouncement } from '../engine/tic-tac-toe-utils';
@@ -110,7 +111,12 @@ export function TicTacToeGame() {
         onStartOnlineMatch={() => setMode(MODE_MULTIPLAYER)}
       />
 
-      {state.mode === MODE_MULTIPLAYER && roomCode && <RoomChatBox roomCode={roomCode} />}
+      {state.mode === MODE_MULTIPLAYER && roomCode && (
+        <>
+          <RoomChatBox roomCode={roomCode} />
+          <RoomVoiceDock />
+        </>
+      )}
     </div>
   );
 }

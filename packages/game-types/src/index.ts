@@ -6,3 +6,4 @@ export * from './multiplayer';
 export * from './friend';
 export * from './chat';
 export * from './bot';
+export * from './voice';

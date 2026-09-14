@@ -4,6 +4,7 @@ import { Trophy, RefreshCw, LogOut, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { Button, Card, CardContent } from '@playdeck/ui';
+import { LudoVoiceDock } from '@/features/voice/components/LudoVoiceDock';
 import { usePlayerStore } from '@/stores/player.store';
 import { STATUS_PLAYING } from '../engine/ludo-constants';
 import { useLudoBotTurn } from '../hooks/use-ludo-bot-turn';
@@ -200,6 +201,9 @@ export function LudoGame() {
           </div>
         </div>
       </div>
+
+      {/* Top-right is the only corner Ludo's HUD leaves free at every breakpoint. */}
+      <LudoVoiceDock anchorClassName="right-3 top-3 sm:right-5 sm:top-5" />
 
       {isGameOver && (
         <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-sm flex items-center justify-center p-4">
