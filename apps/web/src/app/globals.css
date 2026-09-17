@@ -126,6 +126,46 @@ canvas {
   user-select: none;
 }
 
+/* Ball Bounce: countdown / banner pop and overlay fade */
+@keyframes bb-pop {
+  0% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+  35% {
+    transform: scale(0.96);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes bb-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.bb-pop {
+  animation: bb-pop 0.45s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+.bb-fade {
+  animation: bb-fade 0.2s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bb-pop,
+  .bb-fade {
+    animation: none;
+  }
+}
+
 /* Summit Rush race countdown pop */
 @keyframes summit-count-pop {
   0% {
