@@ -32,6 +32,8 @@ export interface ChessBoardProps {
   onSelectSquare: (square: number) => void;
   onFocusSquare: (square: number) => void;
   onKeyDown: (event: KeyboardEvent<HTMLElement>) => void;
+  /** Positions the stage; defaults to filling its container. */
+  className?: string;
 }
 
 export function ChessBoard({
@@ -42,9 +44,10 @@ export function ChessBoard({
   onSelectSquare,
   onFocusSquare,
   onKeyDown,
+  className = 'absolute inset-0',
 }: ChessBoardProps) {
   return (
-    <div className="relative w-full aspect-square max-h-[70vh] rounded-2xl overflow-hidden border border-surface-border bg-[#070b14] shadow-arcade group">
+    <div className={`${className} overflow-hidden bg-[#070b14] group`}>
       <ChessScene
         state={state}
         orientation={orientation}
@@ -63,7 +66,7 @@ export function ChessBoard({
         onKeyDown={onKeyDown}
       />
 
-      <div className="absolute bottom-3 left-3 pointer-events-none px-3 py-1 rounded-full bg-surface-raised/85 border border-surface-border text-[11px] font-medium text-deck-400 backdrop-blur opacity-70 group-hover:opacity-100 transition-opacity">
+      <div className="absolute bottom-3 left-1/2 hidden -translate-x-1/2 pointer-events-none px-3 py-1 rounded-full bg-surface-raised/85 border border-surface-border text-[11px] font-medium text-deck-400 backdrop-blur opacity-70 group-hover:opacity-100 transition-opacity xl:block">
         Drag to orbit · scroll to zoom · tap a piece, then its square
       </div>
     </div>

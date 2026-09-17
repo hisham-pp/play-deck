@@ -48,6 +48,7 @@ export function useChessEngine(onGameOver?: ChessGameOverCallback) {
 
   const [state, setState] = useState<ChessGameState>(() => engine.getState());
   const reportedRef = useRef<string | null>(null);
+  const soundedPlyRef = useRef(0);
 
   useEffect(() => {
     const unsubscribe = engine.subscribe(setState);
@@ -56,9 +57,22 @@ export function useChessEngine(onGameOver?: ChessGameOverCallback) {
 
   useEffect(() => () => engine.destroy(), [engine]);
 
-  // Report a finished game once, keyed by match so a new game can report again.
+  // Sound follows the history rather than the local move call, so a move that
+  // arrives from an online opponent is heard exactly like one played here.
   useEffect(() => {
-    if (state.status === STATUS_PLAYING) return;
+    const plies = state.history.length;
+    const last = state.history[plies - 1];
+    if (last && plies > soundedPlyRef.current) soundForMove(last);
+    soundedPlyRef.current = plies;
+  }, [state.history]);
+
+  // Report a finished game once, keyed by match so a new game can report again.
+  // A takeback -- local or agreed online -- reopens the game and re-arms this.
+  useEffect(() => {
+    if (state.status === STATUS_PLAYING) {
+      reportedRef.current = null;
+      return;
+    }
     if (reportedRef.current === state.matchId) return;
 
     reportedRef.current = state.matchId;
@@ -66,20 +80,12 @@ export function useChessEngine(onGameOver?: ChessGameOverCallback) {
   }, [state, onGameOver]);
 
   const move = useCallback(
-    (from: number, to: number, promotion?: PromotionPiece) => {
-      const record = engine.moveTo(from, to, promotion);
-      if (record) soundForMove(record);
-      return record;
-    },
+    (from: number, to: number, promotion?: PromotionPiece) => engine.moveTo(from, to, promotion),
     [engine],
   );
 
   const undo = useCallback(() => {
-    if (engine.undo()) {
-      // A takeback reopens the game, so it may report a result again.
-      reportedRef.current = null;
-      playSound('turn-pass');
-    }
+    if (engine.undo()) playSound('turn-pass');
   }, [engine]);
 
   const newGame = useCallback(() => {

@@ -8,7 +8,7 @@ import '@/lib/three-patch';
 import { findKing } from '../../engine/chess-board';
 import { TOTAL_SQUARES } from '../../engine/chess-constants';
 import type { ChessGameState, PieceColor } from '../../types/chess.types';
-import { cameraPositionFor, CAMERA_FOV, MAX_ZOOM, MIN_ZOOM } from './board-metrics';
+import { cameraPositionFor, CAMERA_FOV, framingScale, MAX_ZOOM, MIN_ZOOM } from './board-metrics';
 import { ChessBoard3D, type BoardHighlights } from './ChessBoard3D';
 import { ChessPiece3D } from './ChessPiece3D';
 import { nextIdentityState, type IdentityState } from './piece-identities';
@@ -94,6 +94,44 @@ function CameraRig({ orientation }: { orientation: PieceColor }) {
 }
 
 /**
+ * Pulls the camera back whenever the viewport gets too narrow for the board,
+ * keeping the current viewing angle. It runs on resize only, so a player's own
+ * zoom is left alone the rest of the time.
+ */
+function useFramingDistance(): number {
+  const aspect = useThree((scene) => scene.size.width / Math.max(1, scene.size.height));
+  return Math.hypot(...cameraPositionFor('w')) * framingScale(aspect);
+}
+
+function CameraFit() {
+  const camera = useThree((scene) => scene.camera);
+  const controls = useThree((scene) => scene.controls) as unknown as OrbitLike | null;
+  const distance = useFramingDistance();
+
+  useEffect(() => {
+    camera.position.setLength(distance);
+    camera.lookAt(0, 0, 0);
+    controls?.update();
+  }, [distance, camera, controls]);
+
+  return null;
+}
+
+/** Orbit controls whose zoom-out limit always allows the fitted framing. */
+function FittedOrbitControls() {
+  const distance = useFramingDistance();
+  return (
+    <OrbitControls
+      enablePan={false}
+      maxPolarAngle={Math.PI / 2.35}
+      minDistance={MIN_ZOOM}
+      maxDistance={Math.max(MAX_ZOOM, distance * 1.3)}
+      makeDefault
+    />
+  );
+}
+
+/**
  * Pieces are rendered from the board, but keyed by a tracked identity rather
  * than by square, so a moved piece is the same React element on a new square
  * and can travel there.
@@ -166,14 +204,9 @@ export default function ChessScene({
       <directionalLight position={[-7, 8, -6]} intensity={0.42} />
       <pointLight position={[0, 7, 0]} intensity={0.35} />
 
-      <OrbitControls
-        enablePan={false}
-        maxPolarAngle={Math.PI / 2.35}
-        minDistance={MIN_ZOOM}
-        maxDistance={MAX_ZOOM}
-        makeDefault
-      />
+      <FittedOrbitControls />
       <CameraRig orientation={orientation} />
+      <CameraFit />
 
       <Suspense fallback={null}>
         <ChessBoard3D highlights={highlights} onSelectSquare={onSelectSquare} />

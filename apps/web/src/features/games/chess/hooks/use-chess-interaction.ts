@@ -38,6 +38,11 @@ export interface UseChessInteractionOptions {
   controls: ChessControls;
   /** Turn the board to face whoever is to move, for pass-and-play. */
   autoFlip: boolean;
+  /**
+   * The only colour this screen may move, online. Null at a shared board,
+   * where whoever is on move plays.
+   */
+  playerColor?: PieceColor | null;
 }
 
 type TapOutcome =
@@ -111,6 +116,7 @@ export function useChessInteraction({
   state,
   controls,
   autoFlip,
+  playerColor = null,
 }: UseChessInteractionOptions): ChessInteraction {
   const [selected, setSelected] = useState<number | null>(null);
   const [cursor, setCursor] = useState<number | null>(null);
@@ -118,11 +124,13 @@ export function useChessInteraction({
   const [pendingPromotion, setPendingPromotion] = useState<PendingPromotion | null>(null);
 
   const { board, turn } = state.position;
-  const isPlaying = state.status === STATUS_PLAYING;
+  const isPlaying =
+    state.status === STATUS_PLAYING && (playerColor === null || playerColor === turn);
 
   useEffect(() => {
-    if (autoFlip) setOrientation(turn);
-  }, [autoFlip, turn]);
+    if (playerColor) setOrientation(playerColor);
+    else if (autoFlip) setOrientation(turn);
+  }, [autoFlip, playerColor, turn]);
 
   // A move, a takeback or a new game all invalidate a selection in progress.
   useEffect(() => {

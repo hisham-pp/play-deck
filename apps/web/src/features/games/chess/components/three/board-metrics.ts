@@ -38,6 +38,19 @@ export const CAMERA_FOV = 40;
 export const MIN_ZOOM = 6;
 export const MAX_ZOOM = 18;
 
+/** Width-to-height ratio below which the default framing clips the board's sides. */
+const FULL_FRAME_ASPECT = 1.25;
+
+/**
+ * How much farther than the default the camera must sit so the whole board
+ * stays in view. The field of view is vertical, so a tall, narrow viewport
+ * (a phone, or a canvas squeezed beside the side panel) sees less width.
+ */
+export function framingScale(aspect: number): number {
+  if (!Number.isFinite(aspect) || aspect <= 0) return 1;
+  return Math.max(1, FULL_FRAME_ASPECT / aspect);
+}
+
 /**
  * Where the camera sits for a given point of view. Flipping the board is a
  * camera move, not a re-mapping of squares, so nothing downstream of here has

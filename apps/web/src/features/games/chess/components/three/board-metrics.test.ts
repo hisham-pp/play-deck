@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
 import { fromAlgebraic } from '../../engine/chess-board';
-import { BOARD_HALF, cameraPositionFor, squareToWorld } from './board-metrics';
+import { BOARD_HALF, cameraPositionFor, framingScale, squareToWorld } from './board-metrics';
 
 function at(name: string): [number, number] {
   const index = fromAlgebraic(name);
@@ -54,6 +54,22 @@ describe('3D board metrics', () => {
 
       assert.strictEqual(black[2], -white[2]);
       assert.strictEqual(black[1], white[1], 'both views look down from the same height');
+    });
+  });
+
+  describe('framingScale', () => {
+    it('keeps the default distance on a wide viewport', () => {
+      assert.strictEqual(framingScale(16 / 9), 1);
+    });
+
+    it('pulls the camera back on a narrow viewport', () => {
+      assert.ok(framingScale(0.5) > 2);
+      assert.ok(framingScale(0.5) > framingScale(1));
+    });
+
+    it('ignores a degenerate size', () => {
+      assert.strictEqual(framingScale(0), 1);
+      assert.strictEqual(framingScale(Number.NaN), 1);
     });
   });
 });

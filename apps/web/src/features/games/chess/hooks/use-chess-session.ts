@@ -6,7 +6,7 @@ import { useGameSessionStore } from '@/stores/game-session.store';
 import { useLibraryStore } from '@/stores/library.store';
 import { usePlayerStore } from '@/stores/player.store';
 import { chessStatsRepository } from '../services/chess-stats-repository';
-import type { ChessGameState } from '../types/chess.types';
+import type { ChessGameState, PieceColor } from '../types/chess.types';
 
 const CHESS_GAME_ID = 'chess';
 
@@ -14,11 +14,14 @@ const CHESS_GAME_ID = 'chess';
  * Ties a finished game into the platform: player stats, chess-specific records
  * and the session history on the shelf.
  *
- * Both players sit at one board, so there is no "did the user win" to record --
- * the local player is whoever is playing. A decisive game counts as a win for
- * the account, a draw as neither.
+ * At a shared board both players are at this screen, so a decisive game counts
+ * as a win for the account. Online, it counts only when this player's colour
+ * won. A draw is never a win.
  */
-export function useChessSession() {
+export function useChessSession(
+  /** Read when a game ends, since the online seat is only known after mount. */
+  localColorRef: { readonly current: PieceColor | null },
+) {
   const { currentSession, startSession, endSession } = useGameSessionStore();
   const { addRecentSession } = useLibraryStore();
   const { player, recordGamePlayed } = usePlayerStore();
@@ -34,8 +37,11 @@ export function useChessSession() {
       if (!result) return;
 
       const isDraw = result.winner === null;
+      const localColor = localColorRef.current;
+      // At a shared board someone at this screen always won; online, only if it was us.
+      const won = !isDraw && (localColor === null || result.winner === localColor);
 
-      await recordGamePlayed(!isDraw, 'board');
+      await recordGamePlayed(won, 'board');
       await chessStatsRepository.recordGameResult({
         winner: result.winner,
         reason: result.reason,
@@ -45,7 +51,7 @@ export function useChessSession() {
       if (!player) return;
 
       const session = currentSession ?? startSession(gameDef, player);
-      const ended = endSession(isDraw ? undefined : player.id, isDraw);
+      const ended = endSession(won ? player.id : undefined, isDraw);
 
       if (ended) {
         addRecentSession({
@@ -55,7 +61,16 @@ export function useChessSession() {
         });
       }
     },
-    [addRecentSession, currentSession, endSession, gameDef, player, recordGamePlayed, startSession],
+    [
+      addRecentSession,
+      currentSession,
+      endSession,
+      gameDef,
+      localColorRef,
+      player,
+      recordGamePlayed,
+      startSession,
+    ],
   );
 
   return { handleGameOver };
