@@ -78,3 +78,29 @@ export interface FlickInput {
   direction: FlickImpulse;
   power: number;
 }
+
+export interface Quat {
+  x: number;
+  y: number;
+  z: number;
+  w: number;
+}
+
+/** A single pen's full physics snapshot, as broadcast by the authority client. */
+export interface PenTransform {
+  t: FlickImpulse;
+  r: Quat;
+  lv: FlickImpulse;
+  av: FlickImpulse;
+}
+
+/** Authoritative arena snapshot: both pens plus a monotonic sequence for ordering. */
+export interface PenSyncPayload {
+  seq: number;
+  p1: PenTransform;
+  p2: PenTransform;
+}
+
+export interface RoundResultPayload {
+  winner: PenFightOutcome;
+}

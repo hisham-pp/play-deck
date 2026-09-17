@@ -31,6 +31,8 @@ export interface MultiplayerState {
   onFriendNotice: (
     callback: (data: { senderId: string; senderName: string }) => void,
   ) => () => void;
+  /** Realtime channel for this room, used by voice chat for WebRTC signalling. */
+  getTransport: () => SupabaseTransportService;
 }
 
 export const useMultiplayerStore = create<MultiplayerState>((set, get) => ({
@@ -142,4 +144,5 @@ export const useMultiplayerStore = create<MultiplayerState>((set, get) => ({
   sendFriendNotice: (sId, sName) => transport.sendFriendRequestNotice(sId, sName),
   onChatMessage: (cb) => transport.onChat(cb),
   onFriendNotice: (cb) => transport.onFriendRequest(cb),
+  getTransport: () => transport,
 }));

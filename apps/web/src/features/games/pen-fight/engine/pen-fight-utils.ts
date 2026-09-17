@@ -63,6 +63,18 @@ export function computeAIFlick(
   };
 }
 
+/**
+ * The Y-axis spin added to a flick, as a factor in [-0.5, 0.5].
+ *
+ * This MUST stay a pure function of the flick itself — online play replays the same flick on
+ * both devices and any divergence here (a `Math.random()`, a timestamp, a device-specific
+ * value) makes the two simulations drift apart within a single round. Plain arithmetic only:
+ * no transcendental functions, whose last bits are not guaranteed identical across engines.
+ */
+export function computeFlickSpin(direction: Vec3Like, power: number): number {
+  return clamp(direction.x * 0.6 + (power - 0.5) * 0.2, -0.5, 0.5);
+}
+
 export function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }

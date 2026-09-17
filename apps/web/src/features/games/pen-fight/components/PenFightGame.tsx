@@ -2,7 +2,9 @@
 
 import dynamic from 'next/dynamic';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { RoomVoiceDock } from '@/features/voice/components/RoomVoiceDock';
 import { usePlayerStore } from '@/stores/player.store';
+import { MODE_ONLINE } from '../engine/pen-fight-constants';
 import { usePenFightEngine } from '../hooks/use-pen-fight-engine';
 import { usePenFightMultiplayer } from '../hooks/use-pen-fight-multiplayer';
 import { usePenFightSound } from '../hooks/use-pen-fight-sound';
@@ -14,6 +16,7 @@ import type {
   PenFightOutcome,
   PenFightPlayerId,
   PenSpeedMode,
+  PenSyncPayload,
 } from '../types/pen-fight.types';
 import type { PenFightArenaHandle } from './PenFightArena';
 import { PenFightHUD } from './PenFightHUD';
@@ -69,15 +72,46 @@ export function PenFightGame() {
     [],
   );
 
+  const handlePenSyncReceived = useCallback((payload: PenSyncPayload) => {
+    arenaRef.current?.applyPenSync(payload);
+  }, []);
+
+  const handleRemoteReset = useCallback(() => {
+    arenaRef.current?.resetPositions();
+  }, []);
+
   const {
     role,
+    isAuthority,
     hasOpponent,
     isMyTurn,
     broadcastStartMatch,
     broadcastFlick,
     broadcastNextRound,
     broadcastRematch,
-  } = usePenFightMultiplayer(engine, state.mode, state.activePlayer, handleRemoteFlick);
+    broadcastPenSync,
+    broadcastRoundResult,
+  } = usePenFightMultiplayer(engine, state.mode, state.activePlayer, {
+    onRemoteFlick: handleRemoteFlick,
+    onPenSync: handlePenSyncReceived,
+    onResetPositions: handleRemoteReset,
+  });
+
+  /** Only the authority reaches here — it settles the round and tells the other device. */
+  const handleResolveRound = useCallback(
+    (winner: PenFightOutcome) => {
+      resolveRound(winner);
+      broadcastRoundResult(winner);
+    },
+    [resolveRound, broadcastRoundResult],
+  );
+
+  const handlePenSync = useCallback(
+    (payload: PenSyncPayload) => {
+      broadcastPenSync(payload);
+    },
+    [broadcastPenSync],
+  );
 
   const handleLocalFlick = useCallback(
     (playerId: PenFightPlayerId, direction: FlickImpulse, power: number) => {
@@ -169,10 +203,12 @@ export function PenFightGame() {
         role={role}
         hasOpponent={hasOpponent}
         isMyTurn={isMyTurn()}
+        isAuthority={isAuthority}
         onFlickTaken={flickTaken}
         onBeginSettling={beginSettling}
-        onResolveRound={resolveRound}
+        onResolveRound={handleResolveRound}
         onLocalFlick={handleLocalFlick}
+        onPenSync={handlePenSync}
       />
 
       <PenFightHUD
@@ -181,6 +217,11 @@ export function PenFightGame() {
         onOpenSetup={() => setIsSetupOpen(true)}
         onResetPositions={handleResetPositions}
       />
+
+      {/* Anchored below the back link so it clears the arena HUD on both rows. */}
+      {state.mode === MODE_ONLINE && (
+        <RoomVoiceDock anchorClassName="left-3 top-16 sm:left-5 sm:top-20" />
+      )}
 
       <PenFightResultOverlay
         state={state}

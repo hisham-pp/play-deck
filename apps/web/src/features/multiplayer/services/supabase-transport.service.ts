@@ -1,5 +1,6 @@
 import type { RealtimeChannel } from '@supabase/supabase-js';
-import type { ChatMessage } from '@playdeck/game-types';
+import type { ChatMessage, VoiceSignal, VoiceSignalChannel } from '@playdeck/game-types';
+import { VOICE_SIGNAL_EVENT } from '@/features/voice/voice.constants';
 import { getSupabaseClient } from '@/lib/supabase/client';
 
 const BROADCAST_TYPE = 'broadcast';
@@ -18,14 +19,17 @@ export interface PlayerPresence {
   role: 'host' | 'guest';
 }
 
-export class SupabaseTransportService {
+export class SupabaseTransportService implements VoiceSignalChannel {
   private channel: RealtimeChannel | null = null;
   private actionListeners: Set<(msg: TransportMessage) => void> = new Set();
   private presenceListeners: Set<(players: PlayerPresence[]) => void> = new Set();
   private statusListeners: Set<(status: string) => void> = new Set();
   private chatListeners: Set<(msg: ChatMessage) => void> = new Set();
+  private voiceListeners: Set<(signal: VoiceSignal) => void> = new Set();
   private friendReqListeners: Set<(data: { senderId: string; senderName: string }) => void> =
     new Set();
+  /** Latest presence roster, so late subscribers (voice) do not wait for a sync. */
+  private lastPresence: PlayerPresence[] = [];
 
   constructor(private namespace: string = 'tictactoe') {}
 
@@ -50,6 +54,9 @@ export class SupabaseTransportService {
       .on(BROADCAST_TYPE, { event: 'chat-message' }, ({ payload }) => {
         this.chatListeners.forEach((listener) => listener(payload as ChatMessage));
       })
+      .on(BROADCAST_TYPE, { event: VOICE_SIGNAL_EVENT }, ({ payload }) => {
+        this.voiceListeners.forEach((listener) => listener(payload as VoiceSignal));
+      })
       .on(BROADCAST_TYPE, { event: 'friend-request' }, ({ payload }) => {
         this.friendReqListeners.forEach((listener) =>
           listener(payload as { senderId: string; senderName: string }),
@@ -62,6 +69,7 @@ export class SupabaseTransportService {
         Object.values(state).forEach((presences) => {
           presences.forEach((item) => players.push(item as unknown as PlayerPresence));
         });
+        this.lastPresence = players;
         this.presenceListeners.forEach((listener) => listener(players));
       })
       .subscribe((status) => {
@@ -90,6 +98,12 @@ export class SupabaseTransportService {
     this.channel.send({ type: BROADCAST_TYPE, event: 'chat-message', payload: msg });
   }
 
+  /** WebRTC offer/answer/candidate traffic for room voice chat. */
+  sendVoiceSignal(signal: VoiceSignal): void {
+    if (!this.channel) return;
+    this.channel.send({ type: BROADCAST_TYPE, event: VOICE_SIGNAL_EVENT, payload: signal });
+  }
+
   sendFriendRequestNotice(senderId: string, senderName: string): void {
     if (!this.channel) return;
     this.channel.send({
@@ -107,6 +121,17 @@ export class SupabaseTransportService {
   onChat(listener: (msg: ChatMessage) => void): () => void {
     this.chatListeners.add(listener);
     return () => this.chatListeners.delete(listener);
+  }
+
+  onVoiceSignal(listener: (signal: VoiceSignal) => void): () => void {
+    this.voiceListeners.add(listener);
+    return () => {
+      this.voiceListeners.delete(listener);
+    };
+  }
+
+  getPresence(): PlayerPresence[] {
+    return this.lastPresence;
   }
 
   onFriendRequest(listener: (data: { senderId: string; senderName: string }) => void): () => void {
@@ -132,8 +157,10 @@ export class SupabaseTransportService {
     }
     this.actionListeners.clear();
     this.chatListeners.clear();
+    this.voiceListeners.clear();
     this.friendReqListeners.clear();
     this.presenceListeners.clear();
     this.statusListeners.clear();
+    this.lastPresence = [];
   }
 }

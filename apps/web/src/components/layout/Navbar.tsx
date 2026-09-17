@@ -1,16 +1,18 @@
 'use client';
 
-import { Compass, Gamepad2, Library, LogIn, User, Users } from 'lucide-react';
+import { Compass, Gamepad2, Library, LogIn, Search, User, Users } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AuthModal } from '@/components/auth/AuthModal';
+import { GlobalSearchModal } from '@/components/search/GlobalSearchModal';
 import { FriendsModal } from '@/features/friends/components/FriendsModal';
 import { GameInviteToast } from '@/features/friends/components/GameInviteToast';
 import { useFriendsRealtime } from '@/features/friends/hooks/use-friends-realtime';
 import { cn } from '@/lib/utils';
 import { useFriendsStore } from '@/stores/friends.store';
 import { usePlayerStore } from '@/stores/player.store';
+import { useSearchStore } from '@/stores/search.store';
 import { ThemeToggle } from './ThemeToggle';
 
 const NAV_LINKS = [
@@ -23,11 +25,16 @@ export function Navbar() {
   const pathname = usePathname();
   const { player, initPlayer, setAuthModalOpen } = usePlayerStore();
   const { setModalOpen, incomingRequests, pendingInvites } = useFriendsStore();
+  const { openSearch } = useSearchStore();
+  const [isMac, setIsMac] = useState(false);
 
   useFriendsRealtime();
 
   useEffect(() => {
     initPlayer();
+    if (typeof window !== 'undefined') {
+      setIsMac(/Mac|iPod|iPhone|iPad/.test(navigator.userAgent));
+    }
   }, [initPlayer]);
 
   const totalNotifications = incomingRequests.length + pendingInvites.length;
@@ -73,6 +80,23 @@ export function Navbar() {
 
           {/* Right action controls */}
           <div className="flex items-center gap-3">
+            {/* Global Search Trigger */}
+            <button
+              type="button"
+              onClick={() => openSearch()}
+              className="flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg border border-surface-border bg-surface-raised hover:bg-surface-overlay text-deck-400 hover:text-white transition-colors group text-xs font-medium"
+              title={`Search games (${isMac ? '⌘K' : 'Ctrl+K'} or /)`}
+              aria-label="Search games"
+            >
+              <Search className="w-4 h-4 text-deck-400 group-hover:text-amber-500 transition-colors" />
+              <span className="hidden sm:inline text-deck-400 group-hover:text-deck-200">
+                Search...
+              </span>
+              <kbd className="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-surface-overlay border border-surface-border font-mono text-[10px] text-deck-400 group-hover:text-deck-300">
+                {isMac ? '⌘K' : 'Ctrl K'}
+              </kbd>
+            </button>
+
             {/* Friends Trigger */}
             <button
               type="button"
@@ -123,6 +147,7 @@ export function Navbar() {
       </header>
 
       {/* Global Modals & Notifications */}
+      <GlobalSearchModal />
       <AuthModal />
       <FriendsModal />
       <GameInviteToast />

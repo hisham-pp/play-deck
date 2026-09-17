@@ -36,7 +36,8 @@ playdeck/
 │       │   ├── features/
 │       │   │   ├── games/                 # Services, catalog repository, registry
 │       │   │   ├── player/                # Player identity & stats
-│       │   │   └── multiplayer/           # Reserved contracts for lobby, room & transport
+│       │   │   ├── multiplayer/           # Reserved contracts for lobby, room & transport
+│       │   │   └── voice/                 # WebRTC mesh voice chat for online rooms
 │       │   │
 │       │   ├── lib/
 │       │   │   ├── storage/               # Storage abstraction (IndexedDB + LocalStorage)
@@ -125,6 +126,15 @@ export interface GameDefinition<TState = unknown> {
 - All game catalog queries run through `GameRepository` (`features/games/services/game-repository.ts`).
 - Today: `LocalGameRepository` queries static catalog definitions in `data/games/`.
 - Future: `ApiGameRepository` queries the backend API without breaking any UI component.
+
+### Rule 5: Voice Chat Rides the Existing Transport
+
+- Voice chat is a **full mesh of audio-only WebRTC peer connections**, one per pair of players in a room.
+- Signalling (offer / answer / ICE candidate) is broadcast over the **same Supabase realtime channel the game already uses** via `VoiceSignalChannel` — never stand up a separate signalling server or socket.
+- Never call `navigator.mediaDevices.getUserMedia` from a component. Acquire and release the mic through `features/voice/services/microphone.service.ts`, which owns the single shared `MediaStream`.
+- Voice state lives in its own `voice-chat.store`. Do not fold it into `multiplayer.store`.
+- Presence is the roster of record: `syncRoster()` reconciles the mesh so a dropped broadcast or refreshed tab self-heals.
+- To add voice to a new online game, render `<VoiceChatDock />` (or an existing binder such as `RoomVoiceDock`) with that game's room code and transport — no engine changes are required.
 
 ---
 
