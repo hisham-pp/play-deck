@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="mineBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="50%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#090d16" />
+    </linearGradient>
+    <radialGradient id="hazardGlow" cx="65%" cy="50%" r="45%">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
+    </radialGradient>
+    <filter id="mineFilter" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#mineBg)" />
+  <rect width="800" height="450" fill="url(#hazardGlow)" />
+
+  <!-- Grid Cells Pattern -->
+  <g stroke="#334155" stroke-width="1.5" stroke-opacity="0.4">
+    <!-- Unrevealed 3D beveled cells -->
+    <rect x="60" y="80" width="70" height="70" rx="8" fill="#1e293b" stroke="#475569" />
+    <rect x="140" y="80" width="70" height="70" rx="8" fill="#0f172a" />
+    <text x="175" y="128" font-family="system-ui, -apple-system, sans-serif" font-size="34" font-weight="900" fill="#3b82f6" text-anchor="middle">1</text>
+
+    <rect x="220" y="80" width="70" height="70" rx="8" fill="#0f172a" />
+    <text x="255" y="128" font-family="system-ui, -apple-system, sans-serif" font-size="34" font-weight="900" fill="#22c55e" text-anchor="middle">2</text>
+
+    <rect x="60" y="160" width="70" height="70" rx="8" fill="#0f172a" />
+    <text x="95" y="208" font-family="system-ui, -apple-system, sans-serif" font-size="34" font-weight="900" fill="#ef4444" text-anchor="middle">3</text>
+
+    <!-- Flagged Cell -->
+    <rect x="140" y="160" width="70" height="70" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="2" />
+    <polygon points="168,180 188,190 168,200" fill="#ef4444" />
+    <line x1="168" y1="180" x2="168" y2="212" stroke="#e2e8f0" stroke-width="3" stroke-linecap="round" />
+
+    <rect x="220" y="160" width="70" height="70" rx="8" fill="#0f172a" />
+    <text x="255" y="208" font-family="system-ui, -apple-system, sans-serif" font-size="34" font-weight="900" fill="#a855f7" text-anchor="middle">4</text>
+
+    <rect x="60" y="240" width="70" height="70" rx="8" fill="#1e293b" stroke="#475569" />
+    <rect x="140" y="240" width="70" height="70" rx="8" fill="#1e293b" stroke="#475569" />
+    <rect x="220" y="240" width="70" height="70" rx="8" fill="#1e293b" stroke="#475569" />
+  </g>
+
+  <!-- Large Tactical Naval Mine with Glowing Spikes -->
+  <g transform="translate(540, 220)" filter="url(#mineFilter)">
+    <!-- Spikes -->
+    <line x1="0" y1="-100" x2="0" y2="100" stroke="#0f172a" stroke-width="18" stroke-linecap="round" />
+    <line x1="-100" y1="0" x2="100" y2="0" stroke="#0f172a" stroke-width="18" stroke-linecap="round" />
+    <line x1="-70" y1="-70" x2="70" y2="70" stroke="#0f172a" stroke-width="18" stroke-linecap="round" />
+    <line x1="-70" y1="70" x2="70" y2="-70" stroke="#0f172a" stroke-width="18" stroke-linecap="round" />
+
+    <circle cx="0" cy="-100" r="10" fill="#ef4444" />
+    <circle cx="0" cy="100" r="10" fill="#ef4444" />
+    <circle cx="-100" cy="0" r="10" fill="#ef4444" />
+    <circle cx="100" cy="0" r="10" fill="#ef4444" />
+    <circle cx="-70" cy="-70" r="10" fill="#ef4444" />
+    <circle cx="70" cy="70" r="10" fill="#ef4444" />
+    <circle cx="-70" cy="70" r="10" fill="#ef4444" />
+    <circle cx="70" cy="-70" r="10" fill="#ef4444" />
+
+    <!-- Mine sphere -->
+    <circle cx="0" cy="0" r="75" fill="#1e293b" stroke="#ef4444" stroke-width="5" />
+    <circle cx="0" cy="0" r="28" fill="#ef4444" />
+    <circle cx="-25" cy="-25" r="12" fill="#ffffff" opacity="0.3" />
+  </g>
+
+  <!-- Digital HUD Timer style display -->
+  <g transform="translate(60, 340)">
+    <rect width="120" height="42" rx="6" fill="#000000" stroke="#334155" />
+    <text x="60" y="30" font-family="monospace" font-size="24" font-weight="bold" fill="#ef4444" text-anchor="middle" letter-spacing="3">099</text>
+  </g>
+
+  <text x="50" y="415" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="900" fill="#ef4444" fill-opacity="0.12" letter-spacing="4">TACTICAL MINES</text>
+</svg>

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="runicBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0e0a1a" />
+      <stop offset="50%" stop-color="#191133" />
+      <stop offset="100%" stop-color="#080512" />
+    </linearGradient>
+    <radialGradient id="arcaneGlow" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.3" />
+      <stop offset="60%" stop-color="#c084fc" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0" />
+    </radialGradient>
+    <filter id="runeGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#runicBg)" />
+  <rect width="800" height="450" fill="url(#arcaneGlow)" />
+
+  <!-- Magic circle background elements -->
+  <g stroke="#a855f7" stroke-opacity="0.15" stroke-width="1.5" fill="none">
+    <circle cx="400" cy="225" r="190" />
+    <circle cx="400" cy="225" r="160" stroke-dasharray="8 8" />
+    <circle cx="400" cy="225" r="130" />
+    <!-- Rotating decorative octagram points -->
+    <polygon points="400,35 435,160 560,160 460,230 495,355 400,285 305,355 340,230 240,160 365,160" />
+  </g>
+
+  <!-- 4 Runic Stone Cards in a Diamond Array -->
+  <!-- Card 1: Algiz Rune (Protection) -->
+  <g transform="translate(140, 140)" filter="url(#runeGlow)">
+    <rect width="110" height="150" rx="14" fill="#1f1838" stroke="#a855f7" stroke-width="2" />
+    <!-- Rune symbol -->
+    <line x1="55" y1="35" x2="55" y2="115" stroke="#c084fc" stroke-width="6" stroke-linecap="round" />
+    <line x1="55" y1="65" x2="25" y2="40" stroke="#c084fc" stroke-width="6" stroke-linecap="round" />
+    <line x1="55" y1="65" x2="85" y2="40" stroke="#c084fc" stroke-width="6" stroke-linecap="round" />
+  </g>
+
+  <!-- Card 2: Kenaz Rune (Torch / Flame) -->
+  <g transform="translate(290, 80)" filter="url(#runeGlow)">
+    <rect width="110" height="150" rx="14" fill="#251a44" stroke="#c084fc" stroke-width="2.5" />
+    <line x1="40" y1="35" x2="40" y2="115" stroke="#e879f9" stroke-width="6" stroke-linecap="round" />
+    <line x1="40" y1="75" x2="75" y2="45" stroke="#e879f9" stroke-width="6" stroke-linecap="round" />
+    <line x1="40" y1="75" x2="75" y2="105" stroke="#e879f9" stroke-width="6" stroke-linecap="round" />
+  </g>
+
+  <!-- Card 3: Matching Kenaz Pair (Glow Resonance) -->
+  <g transform="translate(430, 160)" filter="url(#runeGlow)">
+    <rect width="110" height="150" rx="14" fill="#251a44" stroke="#e879f9" stroke-width="2.5" />
+    <line x1="40" y1="35" x2="40" y2="115" stroke="#f0abfc" stroke-width="6" stroke-linecap="round" />
+    <line x1="40" y1="75" x2="75" y2="45" stroke="#f0abfc" stroke-width="6" stroke-linecap="round" />
+    <line x1="40" y1="75" x2="75" y2="105" stroke="#f0abfc" stroke-width="6" stroke-linecap="round" />
+  </g>
+
+  <!-- Card 4: Face down Card Back (Mystic sigil) -->
+  <g transform="translate(570, 110)">
+    <rect width="110" height="150" rx="14" fill="#130e24" stroke="#6b21a8" stroke-width="2" />
+    <circle cx="55" cy="75" r="28" fill="none" stroke="#9333ea" stroke-width="2" stroke-dasharray="4 4" />
+    <polygon points="55,55 70,85 40,85" fill="#a855f7" opacity="0.6" />
+    <polygon points="55,95 70,65 40,65" fill="#a855f7" opacity="0.6" />
+  </g>
+
+  <!-- Magic Sparkles -->
+  <circle cx="280" cy="60" r="3" fill="#e879f9" />
+  <circle cx="560" cy="180" r="4" fill="#c084fc" />
+  <circle cx="390" cy="360" r="3" fill="#a855f7" />
+
+  <text x="50" y="415" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="900" fill="#a855f7" fill-opacity="0.12" letter-spacing="4">RUNIC RECALL</text>
+</svg>

@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="tttBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c0a1a" />
+      <stop offset="50%" stop-color="#140f28" />
+      <stop offset="100%" stop-color="#070510" />
+    </linearGradient>
+    <filter id="neonXGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter id="neonOGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#tttBg)" />
+
+  <!-- 3x3 Arena Grid Lines -->
+  <g stroke="#3b82f6" stroke-width="6" stroke-linecap="round" opacity="0.4">
+    <line x1="300" y1="50" x2="300" y2="400" />
+    <line x1="500" y1="50" x2="500" y2="400" />
+    <line x1="120" y1="170" x2="680" y2="170" />
+    <line x1="120" y1="290" x2="680" y2="290" />
+  </g>
+
+  <!-- Big Neon X in Center Cell -->
+  <g transform="translate(400, 230)" filter="url(#neonXGlow)">
+    <line x1="-50" y1="-50" x2="50" y2="50" stroke="#06b6d4" stroke-width="18" stroke-linecap="round" />
+    <line x1="50" y1="-50" x2="-50" y2="50" stroke="#06b6d4" stroke-width="18" stroke-linecap="round" />
+    <line x1="-50" y1="-50" x2="50" y2="50" stroke="#cffafe" stroke-width="6" stroke-linecap="round" />
+    <line x1="50" y1="-50" x2="-50" y2="50" stroke="#cffafe" stroke-width="6" stroke-linecap="round" />
+  </g>
+
+  <!-- Big Neon O in Top Left Cell -->
+  <g transform="translate(210, 110)" filter="url(#neonOGlow)">
+    <circle cx="0" cy="0" r="44" fill="none" stroke="#ec4899" stroke-width="16" />
+    <circle cx="0" cy="0" r="44" fill="none" stroke="#fbcfe8" stroke-width="5" />
+  </g>
+
+  <!-- Another Neon X in Bottom Right Cell -->
+  <g transform="translate(590, 345)" filter="url(#neonXGlow)">
+    <line x1="-40" y1="-40" x2="40" y2="40" stroke="#06b6d4" stroke-width="14" stroke-linecap="round" />
+    <line x1="40" y1="-40" x2="-40" y2="40" stroke="#06b6d4" stroke-width="14" stroke-linecap="round" />
+  </g>
+
+  <!-- Another Neon O in Bottom Left Cell -->
+  <g transform="translate(210, 345)" filter="url(#neonOGlow)">
+    <circle cx="0" cy="0" r="38" fill="none" stroke="#ec4899" stroke-width="12" />
+  </g>
+
+  <!-- Another Neon O in Top Right Cell -->
+  <g transform="translate(590, 110)" filter="url(#neonOGlow)">
+    <circle cx="0" cy="0" r="38" fill="none" stroke="#ec4899" stroke-width="12" />
+  </g>
+
+  <!-- Diagonal Win Laser Strike connecting O's -->
+  <line x1="160" y1="380" x2="640" y2="70" stroke="#f472b6" stroke-width="4" stroke-dasharray="8 8" opacity="0.8" />
+
+  <text x="50" y="425" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="900" fill="#ec4899" fill-opacity="0.12" letter-spacing="4">TIC-TAC-TOE</text>
+</svg>
