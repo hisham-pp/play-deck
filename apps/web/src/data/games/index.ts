@@ -6,6 +6,7 @@ const STATUS_AVAILABLE = 'available';
 const BADGE_READY_TO_PLAY = 'Ready to Play';
 const RELEASE_DATE_2026_09_12 = '2026-09-12';
 const TAG_CLASSIC = 'Classic';
+const TAG_LOCAL_PLAY = 'Local Play';
 const CATEGORY_PUZZLE = 'puzzle';
 
 export const GAME_DEFINITIONS: GameDefinition[] = [
@@ -49,7 +50,7 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     players: { min: 1, max: 2 },
     status: STATUS_AVAILABLE,
     thumbnailUrl: '/games/tic-tac-toe/icon.svg',
-    tags: [TAG_CLASSIC, 'Turn-based', 'Quick Play', 'Local Play', 'AI Opponent'],
+    tags: [TAG_CLASSIC, 'Turn-based', 'Quick Play', TAG_LOCAL_PLAY, 'AI Opponent'],
     featured: true,
     badge: BADGE_READY_TO_PLAY,
     releaseDate: RELEASE_DATE_2026_09_12,
@@ -64,7 +65,7 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     players: { min: 1, max: 2 },
     status: STATUS_AVAILABLE,
     thumbnailUrl: '/games/pen-fight/icon.svg',
-    tags: ['3D', 'Physics', 'Local Play', 'AI Opponent', 'Nostalgia'],
+    tags: ['3D', 'Physics', TAG_LOCAL_PLAY, 'AI Opponent', 'Nostalgia'],
     featured: true,
     badge: BADGE_READY_TO_PLAY,
     releaseDate: RELEASE_DATE_2026_09_12,
@@ -104,15 +105,15 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     name: 'Master Chess',
     slug: 'master-chess',
     description:
-      'The timeless game of kings, pawns, and strategic mastery. Outthink your opponent and deliver checkmate.',
+      'Full tournament rules on a 3D board: castling, en passant, promotion, check, stalemate and every draw. Pass and play with a move list, takebacks and full keyboard control.',
     category: 'board',
     players: { min: 2, max: 2 },
-    status: STATUS_COMING_SOON,
+    status: STATUS_AVAILABLE,
     thumbnailUrl: '/games/chess/icon.svg',
-    tags: ['Grandmaster', 'Tactics', 'Board', 'Multiplayer Ready'],
+    tags: ['Grandmaster', 'Tactics', 'Board', '3D', TAG_LOCAL_PLAY],
     featured: true,
-    badge: BADGE_COMING_SOON,
-    releaseDate: 'Q4 2026',
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-13',
   },
   {
     id: 'connect-four',
@@ -125,7 +126,7 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     players: { min: 1, max: 2 },
     status: STATUS_AVAILABLE,
     thumbnailUrl: '/games/connect-four/icon.svg',
-    tags: [TAG_CLASSIC, 'Strategy', 'Gravity Grid', 'Local Play', 'AI Opponent'],
+    tags: [TAG_CLASSIC, 'Strategy', 'Gravity Grid', TAG_LOCAL_PLAY, 'AI Opponent'],
     featured: true,
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-13',

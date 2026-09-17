@@ -4,6 +4,7 @@ import { ArrowLeft, Users } from 'lucide-react';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { GameDefinition } from '@playdeck/game-types';
+import { ChessGame } from '@/features/games/chess';
 import { ConnectFourGame } from '@/features/games/connect-four';
 import { LudoGame } from '@/features/games/ludo';
 import { PenFightGame } from '@/features/games/pen-fight';
@@ -51,6 +52,10 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
 
   if (game.id === 'sudoku') {
     return <SudokuGame />;
+  }
+
+  if (game.id === 'chess') {
+    return <ChessGame />;
   }
 
   const handleStart = () => {
