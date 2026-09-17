@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="sudokuBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c0e1e" />
+      <stop offset="50%" stop-color="#141838" />
+      <stop offset="100%" stop-color="#070814" />
+    </linearGradient>
+    <radialGradient id="matrixGlow" cx="45%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#sudokuBg)" />
+  <rect width="800" height="450" fill="url(#matrixGlow)" />
+
+  <!-- Sudoku 9x9 Big Grid Display (Center Left) -->
+  <g transform="translate(140, 55)">
+    <!-- Active Highlight Box -->
+    <rect x="110" y="110" width="110" height="110" fill="#6366f1" fill-opacity="0.15" />
+    <rect x="146" y="146" width="38" height="38" rx="6" fill="#f59e0b" fill-opacity="0.3" stroke="#f59e0b" stroke-width="2" />
+
+    <!-- Thin Grid Lines -->
+    <g stroke="#3730a3" stroke-width="1.5" stroke-opacity="0.5">
+      <line x1="36" y1="0" x2="36" y2="330" />
+      <line x1="73" y1="0" x2="73" y2="330" />
+      <line x1="146" y1="0" x2="146" y2="330" />
+      <line x1="183" y1="0" x2="183" y2="330" />
+      <line x1="256" y1="0" x2="256" y2="330" />
+      <line x1="293" y1="0" x2="293" y2="330" />
+      <line x1="0" y1="36" x2="330" y2="36" />
+      <line x1="0" y1="73" x2="330" y2="73" />
+      <line x1="0" y1="146" x2="330" y2="146" />
+      <line x1="0" y1="183" x2="330" y2="183" />
+      <line x1="0" y1="256" x2="330" y2="256" />
+      <line x1="0" y1="293" x2="330" y2="293" />
+    </g>
+
+    <!-- Thick 3x3 Box Dividers -->
+    <g stroke="#818cf8" stroke-width="3.5">
+      <line x1="110" y1="0" x2="110" y2="330" />
+      <line x1="220" y1="0" x2="220" y2="330" />
+      <line x1="0" y1="110" x2="330" y2="110" />
+      <line x1="0" y1="220" x2="330" y2="220" />
+      <rect x="0" y="0" width="330" height="330" fill="none" stroke="#818cf8" stroke-width="4" rx="8" />
+    </g>
+
+    <!-- Matrix Digits -->
+    <g font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="bold" fill="#e0e7ff" text-anchor="middle">
+      <text x="18" y="27">5</text>
+      <text x="55" y="27">3</text>
+      <text x="165" y="27">7</text>
+      <text x="18" y="64">6</text>
+      <text x="128" y="64">1</text>
+      <text x="165" y="64">9</text>
+      <text x="202" y="64">5</text>
+      <text x="55" y="101">9</text>
+      <text x="92" y="101">8</text>
+      <text x="275" y="101">6</text>
+      <!-- Center highlighted gold 7 -->
+      <text x="165" y="174" font-size="26" font-weight="900" fill="#fde047">7</text>
+      <text x="202" y="174">2</text>
+      <text x="18" y="211">7</text>
+      <text x="92" y="284">2</text>
+      <text x="128" y="284">8</text>
+      <text x="275" y="321">9</text>
+    </g>
+  </g>
+
+  <!-- Large Floating Golden '9' Glyph (Right) -->
+  <g transform="translate(580, 210)">
+    <circle cx="0" cy="0" r="100" fill="#6366f1" fill-opacity="0.1" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="6 6" />
+    <text x="0" y="45" font-family="system-ui, -apple-system, sans-serif" font-size="130" font-weight="900" fill="#818cf8" fill-opacity="0.4" text-anchor="middle">9</text>
+  </g>
+
+  <text x="50" y="425" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="900" fill="#818cf8" fill-opacity="0.12" letter-spacing="4">PURE SUDOKU</text>
+</svg>

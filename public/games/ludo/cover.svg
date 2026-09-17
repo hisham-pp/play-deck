@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="ludoBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18131d" />
+      <stop offset="50%" stop-color="#241b2e" />
+      <stop offset="100%" stop-color="#0c0910" />
+    </linearGradient>
+    <filter id="diceShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.6" />
+    </filter>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#ludoBg)" />
+
+  <!-- Ludo Board Quadrant Display (Isometric Left-Center) -->
+  <g transform="translate(100, 45)">
+    <!-- Red Home Base (Top Left) -->
+    <rect x="20" y="20" width="160" height="160" rx="16" fill="#dc2626" stroke="#f87171" stroke-width="2" />
+    <circle cx="65" cy="65" r="20" fill="#ffffff" />
+    <circle cx="135" cy="65" r="20" fill="#ffffff" />
+    <circle cx="65" cy="135" r="20" fill="#ffffff" />
+    <circle cx="135" cy="135" r="20" fill="#ffffff" />
+    <circle cx="65" cy="65" r="12" fill="#dc2626" />
+    <circle cx="135" cy="65" r="12" fill="#dc2626" />
+    <circle cx="65" cy="135" r="12" fill="#dc2626" />
+    <circle cx="135" cy="135" r="12" fill="#dc2626" />
+
+    <!-- Green Home Base (Top Right) -->
+    <rect x="240" y="20" width="160" height="160" rx="16" fill="#16a34a" stroke="#4ade80" stroke-width="2" />
+    <circle cx="285" cy="65" r="20" fill="#ffffff" />
+    <circle cx="355" cy="65" r="20" fill="#ffffff" />
+    <circle cx="285" cy="135" r="20" fill="#ffffff" />
+    <circle cx="355" cy="135" r="20" fill="#ffffff" />
+    <circle cx="285" cy="65" r="12" fill="#16a34a" />
+    <circle cx="355" cy="65" r="12" fill="#16a34a" />
+    <circle cx="285" cy="135" r="12" fill="#16a34a" />
+    <circle cx="355" cy="135" r="12" fill="#16a34a" />
+
+    <!-- Blue Home Base (Bottom Left) -->
+    <rect x="20" y="200" width="160" height="160" rx="16" fill="#2563eb" stroke="#60a5fa" stroke-width="2" />
+    <circle cx="65" cy="245" r="20" fill="#ffffff" />
+    <circle cx="135" cy="245" r="20" fill="#ffffff" />
+    <circle cx="65" cy="315" r="20" fill="#ffffff" />
+    <circle cx="135" cy="315" r="20" fill="#ffffff" />
+    <circle cx="65" cy="245" r="12" fill="#2563eb" />
+    <circle cx="135" cy="245" r="12" fill="#2563eb" />
+    <circle cx="65" cy="315" r="12" fill="#2563eb" />
+    <circle cx="135" cy="315" r="12" fill="#2563eb" />
+
+    <!-- Yellow Home Base (Bottom Right) -->
+    <rect x="240" y="200" width="160" height="160" rx="16" fill="#ca8a04" stroke="#facc15" stroke-width="2" />
+    <circle cx="285" cy="245" r="20" fill="#ffffff" />
+    <circle cx="355" cy="245" r="20" fill="#ffffff" />
+    <circle cx="285" cy="315" r="20" fill="#ffffff" />
+    <circle cx="355" cy="315" r="20" fill="#ffffff" />
+    <circle cx="285" cy="245" r="12" fill="#ca8a04" />
+    <circle cx="355" cy="245" r="12" fill="#ca8a04" />
+    <circle cx="285" cy="315" r="12" fill="#ca8a04" />
+    <circle cx="355" cy="315" r="12" fill="#ca8a04" />
+  </g>
+
+  <!-- 3D Tumbling High Roll Dice (Right Side) -->
+  <g transform="translate(590, 210) rotate(-18)" filter="url(#diceShadow)">
+    <rect x="-70" y="-70" width="140" height="140" rx="28" fill="#ffffff" stroke="#e2e8f0" stroke-width="3" />
+    <!-- Golden Six Pips -->
+    <circle cx="-35" cy="-35" r="12" fill="#dc2626" />
+    <circle cx="-35" cy="0" r="12" fill="#dc2626" />
+    <circle cx="-35" cy="35" r="12" fill="#dc2626" />
+    <circle cx="35" cy="-35" r="12" fill="#dc2626" />
+    <circle cx="35" cy="0" r="12" fill="#dc2626" />
+    <circle cx="35" cy="35" r="12" fill="#dc2626" />
+  </g>
+
+  <text x="50" y="425" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="900" fill="#f59e0b" fill-opacity="0.12" letter-spacing="4">LUDO CLASSIC</text>
+</svg>

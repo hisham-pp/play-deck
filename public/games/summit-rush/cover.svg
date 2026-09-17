@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0f0c1b" />
+      <stop offset="40%" stop-color="#2d123b" />
+      <stop offset="80%" stop-color="#831843" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+    <linearGradient id="mountainFar" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#31153f" />
+      <stop offset="100%" stop-color="#180b22" />
+    </linearGradient>
+    <linearGradient id="hillFore" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#15803d" />
+      <stop offset="50%" stop-color="#166534" />
+      <stop offset="100%" stop-color="#14532d" />
+    </linearGradient>
+    <linearGradient id="buggyBody" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="50%" stop-color="#ea580c" />
+      <stop offset="100%" stop-color="#dc2626" />
+    </linearGradient>
+    <filter id="sunGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="12" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="800" height="450" fill="url(#skyGrad)" />
+
+  <!-- Giant Synthwave Retro Sun -->
+  <g transform="translate(480, 180)" filter="url(#sunGlow)">
+    <circle cx="0" cy="0" r="90" fill="#fde047" opacity="0.9" />
+  </g>
+
+  <!-- Distant mountain peaks -->
+  <polygon points="120,320 280,180 440,320" fill="url(#mountainFar)" opacity="0.6" />
+  <polygon points="340,330 520,160 680,330" fill="url(#mountainFar)" opacity="0.7" />
+
+  <!-- Rolling Hills Terrain -->
+  <path d="M 0 320 Q 200 240, 360 300 T 800 260 L 800 450 L 0 450 Z" fill="url(#hillFore)" />
+  <path d="M 0 320 Q 200 240, 360 300 T 800 260" fill="none" stroke="#4ade80" stroke-width="4" stroke-opacity="0.8" />
+
+  <!-- Airborne Dune Buggy (Mid-Air Leap!) -->
+  <g transform="translate(340, 190) rotate(-18)">
+    <!-- Exhaust trail & flames -->
+    <path d="M -80 10 Q -120 15, -160 8" fill="none" stroke="#f59e0b" stroke-width="6" stroke-linecap="round" opacity="0.8" />
+    <path d="M -80 14 Q -110 18, -140 12" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" />
+
+    <!-- Roll Cage -->
+    <path d="M -40 -5 L -20 -38 L 20 -38 L 35 -5" fill="none" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+    <line x1="-5" y1="-38" x2="5" y2="-5" stroke="#cbd5e1" stroke-width="3" />
+
+    <!-- Buggy Chassis Body -->
+    <path d="M -60 5 L -50 -10 L 40 -10 L 65 5 L 60 15 L -55 15 Z" fill="url(#buggyBody)" stroke="#fef08a" stroke-width="2" rx="4" />
+
+    <!-- Front & Rear Huge Wheels -->
+    <!-- Rear Wheel -->
+    <g transform="translate(-40, 20)">
+      <circle cx="0" cy="0" r="22" fill="#0f172a" stroke="#334155" stroke-width="4" />
+      <circle cx="0" cy="0" r="10" fill="#f59e0b" />
+      <circle cx="0" cy="0" r="4" fill="#ffffff" />
+    </g>
+    <!-- Front Wheel -->
+    <g transform="translate(45, 20)">
+      <circle cx="0" cy="0" r="20" fill="#0f172a" stroke="#334155" stroke-width="4" />
+      <circle cx="0" cy="0" r="9" fill="#f59e0b" />
+      <circle cx="0" cy="0" r="3.5" fill="#ffffff" />
+    </g>
+
+    <!-- Driver Silhouette with Helmet -->
+    <circle cx="0" cy="-18" r="9" fill="#f8fafc" />
+    <path d="M 2 -21 L 9 -17 L 3 -15 Z" fill="#0284c7" />
+  </g>
+
+  <!-- Golden Coin Pickups in the Air -->
+  <g transform="translate(480, 130)">
+    <circle cx="0" cy="0" r="14" fill="#fde047" stroke="#ca8a04" stroke-width="2" />
+    <text x="0" y="5" font-family="sans-serif" font-size="14" font-weight="900" fill="#a16207" text-anchor="middle">$</text>
+  </g>
+  <g transform="translate(540, 110)">
+    <circle cx="0" cy="0" r="14" fill="#fde047" stroke="#ca8a04" stroke-width="2" />
+    <text x="0" y="5" font-family="sans-serif" font-size="14" font-weight="900" fill="#a16207" text-anchor="middle">$</text>
+  </g>
+  <!-- Red Fuel Canister Pickup -->
+  <g transform="translate(600, 100)">
+    <rect x="-10" y="-12" width="20" height="24" rx="3" fill="#dc2626" stroke="#fca5a5" stroke-width="1.5" />
+    <rect x="-4" y="-16" width="8" height="4" fill="#e2e8f0" />
+    <text x="0" y="4" font-family="sans-serif" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">GAS</text>
+  </g>
+
+  <text x="50" y="420" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="900" fill="#f59e0b" fill-opacity="0.15" letter-spacing="4">SUMMIT RUSH</text>
+</svg>

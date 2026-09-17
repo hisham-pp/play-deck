@@ -1,53 +1,86 @@
-import { ArrowRight } from 'lucide-react';
+'use client';
+
+import { ArrowRight, Play } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { GameDefinition } from '@playdeck/game-types';
 import { GameStatusBadge } from './GameBadge';
 
 export function CompactGameCard({ game }: { game: GameDefinition }) {
+  const router = useRouter();
   const isAvailable = game.status === 'available';
 
-  return (
-    <Link href={`/games/${game.id}`} className="block">
-      <div className="flex items-center justify-between p-3.5 rounded-lg border border-surface-border bg-surface-raised hover:border-surface-borderHover hover:bg-surface-overlay transition-all group">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-md bg-surface-overlay border border-surface-border flex items-center justify-center p-1 text-lg group-hover:scale-105 transition-transform overflow-hidden">
-            {game.thumbnailUrl ? (
-              <img
-                src={game.thumbnailUrl}
-                alt={`${game.name} icon`}
-                className="w-full h-full object-contain"
-                loading="lazy"
-              />
-            ) : game.category === 'strategy' ? (
-              '♟️'
-            ) : game.category === 'arcade' ? (
-              '🕹️'
-            ) : (
-              '🧩'
-            )}
-          </div>
-          <div>
-            <h4 className="text-sm font-semibold text-deck-950 dark:text-deck-100 group-hover:text-amber-500 transition-colors">
-              {game.name}
-            </h4>
-            <div className="flex items-center gap-2 text-[11px] text-deck-500">
-              <span className="capitalize">{game.category}</span>
-              <span>•</span>
-              <span>{game.players.max}p</span>
-            </div>
-          </div>
-        </div>
+  const handleClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('a') || target.closest('button')) {
+      return;
+    }
+    if (isAvailable) {
+      router.push(`/play/${game.id}`);
+    } else {
+      router.push(`/games/${game.id}`);
+    }
+  };
 
-        <div className="flex items-center gap-2">
-          <GameStatusBadge
-            status={game.status}
-            label={isAvailable ? 'Playable' : 'Soon'}
-            size="xs"
-          />
-          <ArrowRight className="w-4 h-4 text-deck-400 group-hover:translate-x-0.5 transition-transform" />
+  return (
+    <div
+      onClick={handleClick}
+      className="flex items-center justify-between p-3.5 rounded-xl border border-surface-border bg-surface-raised hover:border-amber-500/40 hover:bg-surface-overlay transition-all duration-200 group cursor-pointer select-none"
+    >
+      <div className="flex items-center gap-3.5">
+        <div className="w-10 h-10 rounded-lg bg-surface-base border border-surface-border flex items-center justify-center p-1.5 text-lg group-hover:scale-105 transition-transform overflow-hidden flex-shrink-0">
+          {game.thumbnailUrl ? (
+            <img
+              src={game.thumbnailUrl}
+              alt={`${game.name} icon`}
+              className="w-full h-full object-contain"
+              loading="lazy"
+            />
+          ) : game.category === 'strategy' ? (
+            '♟️'
+          ) : game.category === 'arcade' ? (
+            '🕹️'
+          ) : (
+            '🧩'
+          )}
+        </div>
+        <div>
+          <h4 className="text-sm font-bold text-deck-950 dark:text-deck-100 group-hover:text-amber-500 transition-colors">
+            {game.name}
+          </h4>
+          <div className="flex items-center gap-2 text-[11px] text-deck-500 mt-0.5">
+            <span className="capitalize">{game.category}</span>
+            <span>•</span>
+            <span>{game.players.max === 1 ? 'Solo' : `${game.players.max} Players`}</span>
+          </div>
         </div>
       </div>
-    </Link>
+
+      <div className="flex items-center gap-3">
+        <GameStatusBadge status={game.status} label={isAvailable ? 'Playable' : 'Soon'} size="xs" />
+
+        <Link
+          href={`/games/${game.id}`}
+          onClick={(e) => e.stopPropagation()}
+          className="text-xs text-deck-500 hover:text-white transition-colors hidden sm:inline"
+        >
+          Details
+        </Link>
+
+        {isAvailable ? (
+          <Link
+            href={`/play/${game.id}`}
+            onClick={(e) => e.stopPropagation()}
+            className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-500 group-hover:bg-amber-500 group-hover:text-slate-950 flex items-center justify-center transition-all shadow-sm"
+            title="Play Game"
+          >
+            <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
+          </Link>
+        ) : (
+          <ArrowRight className="w-4 h-4 text-deck-500" />
+        )}
+      </div>
+    </div>
   );
 }

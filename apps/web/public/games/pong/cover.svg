@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="pongBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0a1a" />
+      <stop offset="50%" stop-color="#140f2d" />
+      <stop offset="100%" stop-color="#080612" />
+    </linearGradient>
+    <radialGradient id="pongGlow" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0" />
+    </radialGradient>
+    <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#pongBg)" />
+  <rect width="800" height="450" fill="url(#pongGlow)" />
+
+  <!-- Center Court Dashed Divider -->
+  <line x1="400" y1="20" x2="400" y2="430" stroke="#f59e0b" stroke-width="4" stroke-dasharray="14 14" stroke-opacity="0.4" />
+
+  <!-- Left Paddle (Player 1 Cyan) -->
+  <g filter="url(#neonGlow)">
+    <rect x="70" y="140" width="18" height="150" rx="9" fill="#06b6d4" stroke="#67e8f9" stroke-width="2" />
+  </g>
+
+  <!-- Right Paddle (Player 2 / AI Amber) -->
+  <g filter="url(#neonGlow)">
+    <rect x="712" y="180" width="18" height="150" rx="9" fill="#f59e0b" stroke="#fde68a" stroke-width="2" />
+  </g>
+
+  <!-- Motion Trails for the Pong Ball -->
+  <path d="M 88 230 Q 240 120, 360 210 T 560 170" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="6 6" stroke-opacity="0.4" />
+  <circle cx="510" cy="180" r="7" fill="#f59e0b" opacity="0.3" />
+  <circle cx="535" cy="175" r="10" fill="#f59e0b" opacity="0.6" />
+
+  <!-- Ball with Radiant Burst -->
+  <g filter="url(#neonGlow)">
+    <circle cx="565" cy="170" r="15" fill="#ffffff" stroke="#f59e0b" stroke-width="3" />
+    <circle cx="565" cy="170" r="7" fill="#fef08a" />
+  </g>
+
+  <!-- Score Board HUD -->
+  <g font-family="monospace, Courier" font-size="52" font-weight="bold" text-anchor="middle" fill="#f59e0b" fill-opacity="0.3">
+    <text x="320" y="90">07</text>
+    <text x="480" y="90">05</text>
+  </g>
+
+  <text x="50" y="405" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="900" fill="#f59e0b" fill-opacity="0.12" letter-spacing="4">PONG DUEL</text>
+</svg>
