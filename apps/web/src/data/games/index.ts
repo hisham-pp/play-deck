@@ -5,6 +5,7 @@ const BADGE_READY_TO_PLAY = 'Ready to Play';
 const RELEASE_DATE_2026_09_12 = '2026-09-12';
 const TAG_CLASSIC = 'Classic';
 const TAG_LOCAL_PLAY = 'Local Play';
+const TAG_PUZZLE = 'Puzzle';
 const CATEGORY_PUZZLE = 'puzzle';
 
 export const GAME_DEFINITIONS: GameDefinition[] = [
@@ -33,7 +34,7 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     players: { min: 1, max: 1 },
     status: STATUS_AVAILABLE,
     thumbnailUrl: '/games/tetris/icon.svg',
-    tags: ['Arcade', TAG_CLASSIC, 'Puzzle', 'High Score'],
+    tags: ['Arcade', TAG_CLASSIC, TAG_PUZZLE, 'High Score'],
     featured: true,
     badge: BADGE_READY_TO_PLAY,
     releaseDate: RELEASE_DATE_2026_09_12,
@@ -93,7 +94,7 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     players: { min: 1, max: 1 },
     status: STATUS_AVAILABLE,
     thumbnailUrl: '/games/sudoku/icon.svg',
-    tags: ['Puzzle', 'Logic', 'Solo', 'Brain Training', '7 Levels'],
+    tags: [TAG_PUZZLE, 'Logic', 'Solo', 'Brain Training', '7 Levels'],
     featured: true,
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-13',
@@ -154,7 +155,22 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     players: { min: 1, max: 1 },
     status: STATUS_AVAILABLE,
     thumbnailUrl: '/games/minesweeper/icon.svg',
-    tags: ['Puzzle', 'Logic', 'Solo', TAG_CLASSIC, 'Speedrun', 'Keyboard Ready'],
+    tags: [TAG_PUZZLE, 'Logic', 'Solo', TAG_CLASSIC, 'Speedrun', 'Keyboard Ready'],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-17',
+  },
+  {
+    id: '2048',
+    name: '2048',
+    slug: '2048',
+    description:
+      'Slide, merge, and forge tiles on a 4x4 grid to reach the coveted 2048 milestone. Featuring undo, smooth transitions, and persistent records.',
+    category: CATEGORY_PUZZLE,
+    players: { min: 1, max: 1 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/2048/icon.svg',
+    tags: [TAG_PUZZLE, 'Logic', 'Solo', TAG_CLASSIC, 'High Score', 'Tactile'],
     featured: true,
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-17',
