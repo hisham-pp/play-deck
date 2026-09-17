@@ -7,6 +7,7 @@ import { GameDefinition } from '@playdeck/game-types';
 import { ChessGame } from '@/features/games/chess';
 import { ConnectFourGame } from '@/features/games/connect-four';
 import { LudoGame } from '@/features/games/ludo';
+import { MinesweeperGame } from '@/features/games/minesweeper';
 import { PenFightGame } from '@/features/games/pen-fight';
 import { RunicMemoryGame } from '@/features/games/runic-memory';
 import { SnakeGame } from '@/features/games/snake';
@@ -61,6 +62,10 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
 
   if (game.id === 'runic-memory') {
     return <RunicMemoryGame />;
+  }
+
+  if (game.id === 'minesweeper') {
+    return <MinesweeperGame />;
   }
 
   const handleStart = () => {
