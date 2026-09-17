@@ -4,6 +4,7 @@ import { ArrowLeft, Users } from 'lucide-react';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { GameDefinition } from '@playdeck/game-types';
+import { Game2048 } from '@/features/games/2048';
 import { ChessGame } from '@/features/games/chess';
 import { ConnectFourGame } from '@/features/games/connect-four';
 import { LudoGame } from '@/features/games/ludo';
@@ -66,6 +67,10 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
 
   if (game.id === 'minesweeper') {
     return <MinesweeperGame />;
+  }
+
+  if (game.id === '2048') {
+    return <Game2048 />;
   }
 
   const handleStart = () => {
