@@ -175,4 +175,19 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-17',
   },
+  {
+    id: 'pong',
+    name: 'Pong',
+    slug: 'pong',
+    description:
+      'The timeless paddle duel. Deflect the accelerating ball, master angular shots, and outrally the AI or your friend in local 2-player mode.',
+    category: 'arcade',
+    players: { min: 1, max: 2 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/pong/icon.svg',
+    tags: ['Arcade', TAG_CLASSIC, TAG_LOCAL_PLAY, 'AI Opponent', 'Ball Physics', 'Speedrun'],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-17',
+  },
 ];
