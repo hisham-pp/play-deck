@@ -221,4 +221,20 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-17',
   },
+  {
+    id: 'summit-rush',
+    name: 'Summit Rush',
+    slug: 'summit-rush',
+    description:
+      'Hill-climb through endless ridges in a springy dune buggy. Balance on the throttle, grab fuel, land flips, upgrade your ride, and race a friend online with voice chat.',
+    category: 'arcade',
+    players: { min: 1, max: 2 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/summit-rush/icon.svg',
+    bannerUrl: '/games/summit-rush/cover.svg',
+    tags: ['Arcade', 'Physics', 'Driving', 'Upgrades', 'Online Race', 'Voice Chat'],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: RELEASE_DATE_2026_09_17,
+  },
 ];
