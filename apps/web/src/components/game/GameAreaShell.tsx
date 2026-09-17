@@ -8,6 +8,7 @@ import { ChessGame } from '@/features/games/chess';
 import { ConnectFourGame } from '@/features/games/connect-four';
 import { LudoGame } from '@/features/games/ludo';
 import { PenFightGame } from '@/features/games/pen-fight';
+import { RunicMemoryGame } from '@/features/games/runic-memory';
 import { SnakeGame } from '@/features/games/snake';
 import { SudokuGame } from '@/features/games/sudoku';
 import { TetrisGame } from '@/features/games/tetris';
@@ -56,6 +57,10 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
 
   if (game.id === 'chess') {
     return <ChessGame />;
+  }
+
+  if (game.id === 'runic-memory') {
+    return <RunicMemoryGame />;
   }
 
   const handleStart = () => {

@@ -3,8 +3,11 @@
 import { RigidBody, type RapierRigidBody } from '@react-three/rapier';
 import React, { forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import {
-  MAX_FLICK_IMPULSE,
-  MIN_FLICK_IMPULSE,
+  MAX_FLICK_SPEED,
+  MAX_FLICK_SPIN,
+  MIN_FLICK_SPEED,
+  PEN_FRICTION,
+  PEN_RESTITUTION,
   PEN_START_Y,
   PEN_START_Z,
   SPEED_PHYSICS_CONFIG,
@@ -51,10 +54,8 @@ const ZERO_VEC = { x: 0, y: 0, z: 0 };
 
 const PEN_PHYSICS_PROPS = {
   colliders: 'hull' as const,
-  friction: 0.9,
-  restitution: 0.12,
-  linearDamping: 0.45,
-  angularDamping: 0.55,
+  friction: PEN_FRICTION,
+  restitution: PEN_RESTITUTION,
   density: 2.2,
   ccd: true,
 };
@@ -114,8 +115,13 @@ export const PenFightMatch = forwardRef<PenFightArenaHandle, PenFightMatchProps>
         const body = playerId === 'p1' ? p1Ref.current : p2Ref.current;
         if (!body) return;
 
-        const baseImpulse = MIN_FLICK_IMPULSE + power * (MAX_FLICK_IMPULSE - MIN_FLICK_IMPULSE);
-        const impulseMag = baseImpulse * speedConfig.impulseMultiplier;
+        // Flicks are specified as a launch speed rather than a raw impulse, so the feel stays
+        // the same whatever the pen's mass works out to. Mass comes from the collider, which is
+        // identical on every device, so the impulse is too.
+        const launchSpeed =
+          (MIN_FLICK_SPEED + power * (MAX_FLICK_SPEED - MIN_FLICK_SPEED)) *
+          speedConfig.speedMultiplier;
+        const impulseMag = launchSpeed * body.mass();
 
         // Spin is derived from the flick itself rather than Math.random(): every device must
         // compute the identical impulse for the same flick, or the simulations drift apart.
@@ -123,7 +129,11 @@ export const PenFightMatch = forwardRef<PenFightArenaHandle, PenFightMatchProps>
 
         body.wakeUp();
         body.applyImpulse({ x: direction.x * impulseMag, y: 0, z: direction.z * impulseMag }, true);
-        body.applyTorqueImpulse({ x: 0, y: spin * impulseMag * 0.5, z: 0 }, true);
+        const angvel = body.angvel();
+        body.setAngvel(
+          { x: angvel.x, y: angvel.y + spin * MAX_FLICK_SPIN * (0.4 + power * 0.6), z: angvel.z },
+          true,
+        );
 
         beginRound();
         flushSync();
@@ -131,7 +141,7 @@ export const PenFightMatch = forwardRef<PenFightArenaHandle, PenFightMatchProps>
         onFlickTaken();
         onBeginSettling();
       },
-      [beginRound, flushSync, onFlickTaken, onBeginSettling, sound, speedConfig.impulseMultiplier],
+      [beginRound, flushSync, onFlickTaken, onBeginSettling, sound, speedConfig.speedMultiplier],
     );
 
     const handleUserFlick = useCallback(
@@ -186,7 +196,7 @@ export const PenFightMatch = forwardRef<PenFightArenaHandle, PenFightMatchProps>
     const handlePenCollision = useCallback(() => {
       const impact =
         speedOf(p1Ref.current?.linvel() ?? ZERO_VEC) + speedOf(p2Ref.current?.linvel() ?? ZERO_VEC);
-      sound.playCollision(impact / 6);
+      sound.playCollision(impact / 10);
     }, [sound]);
 
     return (

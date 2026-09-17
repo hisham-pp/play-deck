@@ -1,7 +1,17 @@
 import { usePreferencesStore } from '@/stores/preferences.store';
 
 export type SoundEffectName =
-  'dice-roll' | 'piece-move' | 'capture' | 'piece-home' | 'victory' | 'ui-click' | 'turn-pass';
+  | 'dice-roll'
+  | 'piece-move'
+  | 'capture'
+  | 'piece-home'
+  | 'victory'
+  | 'ui-click'
+  | 'turn-pass'
+  | 'rune-flip'
+  | 'rune-match'
+  | 'rune-mismatch'
+  | 'rune-reveal';
 
 let sharedContext: AudioContext | null = null;
 
@@ -117,6 +127,9 @@ function playCapture(ctx: AudioContext): void {
   noiseBurst(ctx, { startTime: now, duration: 0.15, gain: 0.18 });
 }
 
+const OSC_SINE: OscillatorType = 'sine';
+const OSC_TRIANGLE: OscillatorType = 'triangle';
+
 function playPieceHome(ctx: AudioContext): void {
   const now = ctx.currentTime;
   [660, 880].forEach((freq, i) => {
@@ -124,7 +137,7 @@ function playPieceHome(ctx: AudioContext): void {
       frequency: freq,
       startTime: now + i * 0.09,
       duration: 0.18,
-      type: 'sine',
+      type: OSC_SINE,
       gain: 0.18,
     });
   });
@@ -137,7 +150,7 @@ function playVictory(ctx: AudioContext): void {
       frequency: freq,
       startTime: now + i * 0.12,
       duration: 0.35,
-      type: 'triangle',
+      type: OSC_TRIANGLE,
       gain: 0.2,
     });
   });
@@ -159,8 +172,56 @@ function playTurnPass(ctx: AudioContext): void {
     frequencyEnd: 160,
     startTime: ctx.currentTime,
     duration: 0.2,
-    type: 'sine',
+    type: OSC_SINE,
     gain: 0.12,
+  });
+}
+
+function playRuneFlip(ctx: AudioContext): void {
+  const now = ctx.currentTime;
+  tone(ctx, {
+    frequency: 320,
+    frequencyEnd: 90,
+    startTime: now,
+    duration: 0.08,
+    type: OSC_TRIANGLE,
+    gain: 0.22,
+  });
+  noiseBurst(ctx, { startTime: now, duration: 0.05, gain: 0.12 });
+}
+
+function playRuneReveal(ctx: AudioContext): void {
+  tone(ctx, {
+    frequency: 440,
+    frequencyEnd: 660,
+    startTime: ctx.currentTime,
+    duration: 0.15,
+    type: OSC_SINE,
+    gain: 0.16,
+  });
+}
+
+function playRuneMatch(ctx: AudioContext): void {
+  const now = ctx.currentTime;
+  [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+    tone(ctx, {
+      frequency: freq,
+      startTime: now + i * 0.04,
+      duration: 0.45,
+      type: OSC_TRIANGLE,
+      gain: 0.16,
+    });
+  });
+}
+
+function playRuneMismatch(ctx: AudioContext): void {
+  tone(ctx, {
+    frequency: 200,
+    frequencyEnd: 110,
+    startTime: ctx.currentTime,
+    duration: 0.22,
+    type: OSC_SINE,
+    gain: 0.18,
   });
 }
 
@@ -172,6 +233,10 @@ const EFFECT_PLAYERS: Record<SoundEffectName, (ctx: AudioContext) => void> = {
   victory: playVictory,
   'ui-click': playUiClick,
   'turn-pass': playTurnPass,
+  'rune-flip': playRuneFlip,
+  'rune-match': playRuneMatch,
+  'rune-mismatch': playRuneMismatch,
+  'rune-reveal': playRuneReveal,
 };
 
 /**

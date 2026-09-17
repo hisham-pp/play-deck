@@ -1,7 +1,5 @@
 import { GameDefinition } from '@playdeck/game-types';
 
-const STATUS_COMING_SOON = 'coming-soon';
-const BADGE_COMING_SOON = 'Coming Soon';
 const STATUS_AVAILABLE = 'available';
 const BADGE_READY_TO_PLAY = 'Ready to Play';
 const RELEASE_DATE_2026_09_12 = '2026-09-12';
@@ -105,12 +103,12 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     name: 'Master Chess',
     slug: 'master-chess',
     description:
-      'Full tournament rules on a 3D board: castling, en passant, promotion, check, stalemate and every draw. Pass and play with a move list, takebacks and full keyboard control.',
+      'Full tournament rules on a 3D board: castling, en passant, promotion, check, stalemate and every draw. Pass and play, or challenge a friend online with voice and chat.',
     category: 'board',
     players: { min: 2, max: 2 },
     status: STATUS_AVAILABLE,
     thumbnailUrl: '/games/chess/icon.svg',
-    tags: ['Grandmaster', 'Tactics', 'Board', '3D', TAG_LOCAL_PLAY],
+    tags: ['Grandmaster', 'Board', '3D', TAG_LOCAL_PLAY, 'Online 1v1', 'Voice Chat'],
     featured: true,
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-13',
@@ -139,10 +137,11 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
       'Test your cognitive recall across ancient glowing sigils. Flip pairs to clear the board in minimum turns.',
     category: CATEGORY_PUZZLE,
     players: { min: 1, max: 2 },
-    status: STATUS_COMING_SOON,
+    status: STATUS_AVAILABLE,
     thumbnailUrl: '/games/runic-memory/icon.svg',
-    tags: ['Brain Training', 'Memory', 'Solitaire', 'Relaxing'],
-    badge: BADGE_COMING_SOON,
-    releaseDate: 'Q1 2027',
+    tags: ['Brain Training', 'Memory', 'Solitaire', 'Multiplayer Ready', 'Voice Chat', 'Arcane'],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-17',
   },
 ];
