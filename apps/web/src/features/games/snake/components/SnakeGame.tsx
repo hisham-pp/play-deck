@@ -21,6 +21,7 @@ export function SnakeGame() {
   const { addRecentSession } = useLibraryStore();
   const { player, recordGamePlayed } = usePlayerStore();
   const [isSetupOpen, setIsSetupOpen] = useState(true);
+  const [theme, setTheme] = useState<'grass' | 'arcade'>('grass');
 
   const handleGameOver = useCallback(
     (_finalScore: number) => {
@@ -84,6 +85,30 @@ export function SnakeGame() {
           <ArrowLeft className="w-4 h-4" />
           <span>Back to games</span>
         </Link>
+        <div className="flex items-center gap-1 bg-surface-raised p-1 rounded-xl border border-surface-border text-xs">
+          <button
+            type="button"
+            onClick={() => setTheme('grass')}
+            className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
+              theme === 'grass'
+                ? 'bg-[#a2d149] text-slate-900 shadow-sm font-semibold'
+                : 'text-deck-400 hover:text-deck-200'
+            }`}
+          >
+            🌿 Classic Grass
+          </button>
+          <button
+            type="button"
+            onClick={() => setTheme('arcade')}
+            className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
+              theme === 'arcade'
+                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40 shadow-sm font-semibold'
+                : 'text-deck-400 hover:text-deck-200'
+            }`}
+          >
+            ⚡ Cyber Dark
+          </button>
+        </div>
       </div>
 
       <div className="w-full grid grid-cols-2 md:grid-cols-[200px_minmax(0,1fr)_200px] lg:grid-cols-[220px_minmax(0,1fr)_220px] items-start justify-center gap-3 lg:gap-5">
@@ -116,6 +141,7 @@ export function SnakeGame() {
             score={state.score}
             highScore={effectiveHighScore}
             isNewHighScore={state.isNewHighScore}
+            theme={theme}
             onStart={startGame}
             onResume={resumeGame}
             onRestart={restartGame}
