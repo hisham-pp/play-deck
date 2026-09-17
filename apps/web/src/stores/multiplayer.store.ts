@@ -8,6 +8,7 @@ import {
 } from '@/features/multiplayer/services/supabase-transport.service';
 
 const transport = new SupabaseTransportService();
+const STATUS_ERROR = 'error';
 
 export interface MultiplayerState {
   connectionStatus: 'disconnected' | 'connecting' | 'connected' | 'error';
@@ -21,7 +22,8 @@ export interface MultiplayerState {
 
   setLobbyOpen: (open: boolean) => void;
   createRoom: (gameId: string, player: Player) => Promise<string | null>;
-  joinRoomByCode: (code: string, player: Player) => Promise<boolean>;
+  /** Pass `expectedGameId` to refuse a room that belongs to a different game. */
+  joinRoomByCode: (code: string, player: Player, expectedGameId?: string) => Promise<boolean>;
   leaveRoom: () => void;
   sendGameAction: (type: string, payload: unknown, senderId: string) => void;
   onActionReceived: (callback: (msg: TransportMessage) => void) => () => void;
@@ -73,18 +75,22 @@ export const useMultiplayerStore = create<MultiplayerState>((set, get) => ({
       });
       return room.code;
     } catch {
-      set({ connectionStatus: 'error', errorMessage: 'Failed to create room' });
+      set({ connectionStatus: STATUS_ERROR, errorMessage: 'Failed to create room' });
       return null;
     }
   },
 
-  joinRoomByCode: async (code, player) => {
+  joinRoomByCode: async (code, player, expectedGameId) => {
     const cleanCode = code.trim();
     set({ connectionStatus: 'connecting', errorMessage: null });
     try {
-      const room = await RoomService.fetchRoomByCode(cleanCode);
+      const room = await RoomService.fetchRoomByCode(cleanCode, expectedGameId);
       if (!room) {
-        set({ connectionStatus: 'error', errorMessage: 'Invalid room code' });
+        set({ connectionStatus: STATUS_ERROR, errorMessage: 'Invalid room code' });
+        return false;
+      }
+      if (expectedGameId && room.gameId !== expectedGameId) {
+        set({ connectionStatus: STATUS_ERROR, errorMessage: 'This room is for a different game' });
         return false;
       }
 
@@ -112,7 +118,7 @@ export const useMultiplayerStore = create<MultiplayerState>((set, get) => ({
       });
       return true;
     } catch {
-      set({ connectionStatus: 'error', errorMessage: 'Failed to join room' });
+      set({ connectionStatus: STATUS_ERROR, errorMessage: 'Failed to join room' });
       return false;
     }
   },

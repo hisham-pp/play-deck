@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { RoomVoiceDock } from '@/features/voice/components/RoomVoiceDock';
+import { useMultiplayerStore } from '@/stores/multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
 import { MODE_ONLINE } from '../engine/pen-fight-constants';
 import { usePenFightEngine } from '../hooks/use-pen-fight-engine';
@@ -38,7 +39,9 @@ const PenFightArena = dynamic(() => import('./PenFightArena').then((mod) => mod.
 export function PenFightGame() {
   const { player, recordGamePlayed } = usePlayerStore();
   const arenaRef = useRef<PenFightArenaHandle | null>(null);
-  const [isSetupOpen, setIsSetupOpen] = useState(true);
+  // Arriving already seated (invite or join link) skips setup and joins the online match.
+  const [seatedOnMount] = useState(() => Boolean(useMultiplayerStore.getState().roomCode));
+  const [isSetupOpen, setIsSetupOpen] = useState(!seatedOnMount);
   const sound = usePenFightSound();
   const resultSoundKeyRef = useRef<string | null>(null);
 
@@ -175,6 +178,20 @@ export function PenFightGame() {
       sound,
     ],
   );
+
+  // Same as joining with a code from the setup modal: enter the online match once.
+  const startedSeatedRef = useRef(false);
+  useEffect(() => {
+    if (!seatedOnMount || startedSeatedRef.current) return;
+    startedSeatedRef.current = true;
+    handleStartMatch({
+      mode: MODE_ONLINE,
+      speedMode: state.speedMode,
+      difficulty: state.difficulty,
+      names: { p1: player?.displayName ?? 'Player 1', p2: 'Opponent' },
+      colors: { p1: state.players.p1.color, p2: state.players.p2.color },
+    });
+  }, [seatedOnMount, handleStartMatch, player, state]);
 
   const handleNextRound = useCallback(() => {
     arenaRef.current?.resetPositions();

@@ -4,6 +4,7 @@ import { Check, Copy, Loader2, LogIn, UserPlus, Users } from 'lucide-react';
 import React, { useState } from 'react';
 import { Button, TabContent, TabList, Tabs, TabTrigger } from '@playdeck/ui';
 import { InviteToRoomModal } from '@/features/friends/components/InviteToRoomModal';
+import { ShareRoomLink } from '@/features/multiplayer/components/ShareRoomLink';
 import { useMultiplayerStore } from '@/stores/multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
 
@@ -90,6 +91,13 @@ function CreateRoomSection({
           </Button>
         </div>
       </div>
+
+      <ShareRoomLink
+        gameId="connect-four"
+        gameName="Connect Four"
+        roomCode={roomCode}
+        className="max-w-xs text-left"
+      />
 
       <div className="p-3 rounded-lg border border-surface-border bg-surface-overlay/80 w-full max-w-xs flex items-center justify-center gap-2 text-xs">
         {hasOpponent ? (

@@ -4,6 +4,7 @@ import { Check, Copy, Loader2, LogIn, UserPlus, Users } from 'lucide-react';
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { Button, TabContent, TabList, Tabs, TabTrigger } from '@playdeck/ui';
 import { InviteToRoomModal } from '@/features/friends/components/InviteToRoomModal';
+import { ShareRoomLink } from '@/features/multiplayer/components/ShareRoomLink';
 import { useMultiplayerStore } from '@/stores/multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
 
@@ -81,6 +82,12 @@ function HostPanel({ onReady }: ChessOnlineSetupProps) {
         Room code
       </span>
       <RoomCode code={roomCode} />
+      <ShareRoomLink
+        gameId={CHESS_GAME_ID}
+        gameName="Chess"
+        roomCode={roomCode}
+        className={`${WIDE} text-left`}
+      />
 
       <div
         className={`${WIDE} flex items-center justify-center gap-2 rounded-lg border border-surface-border bg-surface-overlay/80 p-3 text-xs`}

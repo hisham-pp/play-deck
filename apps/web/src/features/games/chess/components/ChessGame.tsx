@@ -95,7 +95,10 @@ export function ChessGame() {
   const online = useChessOnline(engine);
   localColorRef.current = online.isOnline ? online.localColor : null;
 
-  const [setup, setSetup] = useState<ChessMatchSetup>(DEFAULT_SETUP);
+  // A player who arrives already seated (invite or join link) starts in online mode.
+  const [setup, setSetup] = useState<ChessMatchSetup>(() =>
+    online.roomCode ? { ...DEFAULT_SETUP, mode: 'online' } : DEFAULT_SETUP,
+  );
   const [isSetupOpen, setIsSetupOpen] = useState(!online.roomCode);
   const { reviewPly, reviewedMove, boardState, setReviewPly } = useReview(state);
   const { boardControls, commands } = useChessCommands(state, controls, online);

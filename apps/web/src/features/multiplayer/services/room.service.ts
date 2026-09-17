@@ -46,7 +46,8 @@ export class RoomService {
     return room;
   }
 
-  static async fetchRoomByCode(code: string): Promise<Room | null> {
+  /** `offlineGameId` names the game of the stand-in room returned when Supabase is not configured. */
+  static async fetchRoomByCode(code: string, offlineGameId = 'tic-tac-toe'): Promise<Room | null> {
     const cleanCode = code.trim();
     if (!/^\d{6}$/.test(cleanCode)) return null;
 
@@ -55,7 +56,7 @@ export class RoomService {
       return {
         id: `room_${cleanCode}`,
         code: cleanCode,
-        gameId: 'tic-tac-toe',
+        gameId: offlineGameId,
         hostId: 'host',
         maxPlayers: 2,
         status: 'open',

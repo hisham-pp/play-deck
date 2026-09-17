@@ -4,6 +4,7 @@ import { Check, Copy, Loader2, UserPlus, Users } from 'lucide-react';
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { InviteToRoomModal } from '@/features/friends/components/InviteToRoomModal';
+import { ShareRoomLink } from '@/features/multiplayer/components/ShareRoomLink';
 
 const BTN_TYPE = 'button';
 
@@ -84,6 +85,13 @@ export function CreateRoomView({
           </Button>
         </div>
       </div>
+
+      <ShareRoomLink
+        gameId="tic-tac-toe"
+        gameName="Tic-Tac-Toe"
+        roomCode={roomCode}
+        className="max-w-xs text-left"
+      />
 
       <div className="p-3 rounded-lg border border-surface-border bg-surface-overlay/80 w-full max-w-xs flex items-center justify-center gap-2 text-xs">
         {hasOpponent ? (

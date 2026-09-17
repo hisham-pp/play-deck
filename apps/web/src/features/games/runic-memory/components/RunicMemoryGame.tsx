@@ -2,7 +2,7 @@
 
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { Player } from '@playdeck/game-types';
 import { RoomChatBox } from '@/features/chat/components/RoomChatBox';
 import type { PlayerPresence } from '@/features/multiplayer/services/supabase-transport.service';
@@ -84,6 +84,12 @@ export function RunicMemoryGame() {
 
   const [isSetupOpen, setIsSetupOpen] = useState(!roomCode);
   const isMultiplayer = state.mode === MODE_MULTIPLAYER;
+
+  // Arriving already seated (invite or join link): switch to multiplayer so the
+  // host's board seed is received.
+  useEffect(() => {
+    if (roomCode && !isMultiplayer) resetMatch(state.difficulty, MODE_MULTIPLAYER);
+  }, [roomCode, isMultiplayer, resetMatch, state.difficulty]);
 
   const handleFlipCard = (index: number) => {
     if (isMultiplayer && !validateAndBroadcastFlip(index)) {

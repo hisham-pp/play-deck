@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { Button, Card, CardContent } from '@playdeck/ui';
 import { LudoVoiceDock } from '@/features/voice/components/LudoVoiceDock';
+import { useLudoMultiplayerStore } from '@/stores/ludo-multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
 import { STATUS_PLAYING } from '../engine/ludo-constants';
 import { useLudoBotTurn } from '../hooks/use-ludo-bot-turn';
@@ -26,9 +27,28 @@ type GameMode = 'lobby' | 'offline-setup' | 'online-room' | 'playing';
 
 const MODE_LOBBY = 'lobby';
 const MODE_PLAYING = 'playing';
+const MODE_ONLINE_ROOM = 'online-room';
+
+/** Hosts a fresh online room for the local player, unless they are already in one. */
+function useOpenOnlineRoom() {
+  const player = usePlayerStore((s) => s.player);
+  const createRoom = useLudoMultiplayerStore((s) => s.createRoom);
+
+  return useCallback(() => {
+    if (!player || useLudoMultiplayerStore.getState().roomCode) return;
+    void createRoom({
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🕹️',
+    });
+  }, [createRoom, player]);
+}
 
 export function LudoGame() {
-  const [mode, setMode] = useState<GameMode>('lobby');
+  // A player who arrives already seated (invite or join link) goes straight to the room.
+  const [mode, setMode] = useState<GameMode>(() =>
+    useLudoMultiplayerStore.getState().roomCode ? MODE_ONLINE_ROOM : MODE_LOBBY,
+  );
   const [configuredPlayers, setConfiguredPlayers] = useState<LudoPlayer[]>([]);
   const [isDiceSettling, setIsDiceSettling] = useState(false);
   const player = usePlayerStore((s) => s.player);
@@ -121,11 +141,17 @@ export function LudoGame() {
     }
   };
 
+  const openOnlineRoom = useOpenOnlineRoom();
+  const handleSelectOnline = () => {
+    setMode(MODE_ONLINE_ROOM);
+    openOnlineRoom();
+  };
+
   if (mode === MODE_LOBBY) {
     return (
       <LudoLobby
         onSelectOffline={() => setMode('offline-setup')}
-        onSelectOnline={() => setMode('online-room')}
+        onSelectOnline={handleSelectOnline}
       />
     );
   }
@@ -135,7 +161,9 @@ export function LudoGame() {
   }
 
   if (mode === 'online-room') {
-    return <LudoRoomLobby onStartGame={handleStartOnlineGame} />;
+    return (
+      <LudoRoomLobby onStartGame={handleStartOnlineGame} onLeave={() => setMode(MODE_LOBBY)} />
+    );
   }
 
   if (!state) return null;
