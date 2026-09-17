@@ -1,10 +1,11 @@
 'use client';
 
 import { notFound } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { GameDefinition } from '@playdeck/game-types';
 import { GameAreaShell } from '@/components/game/GameAreaShell';
 import { gameService } from '@/features/games/services/game-service';
+import { JoinLinkGate } from '@/features/multiplayer/components/JoinLinkGate';
 
 interface PlayGameClientProps {
   gameId: string;
@@ -36,5 +37,12 @@ export function PlayGameClient({ gameId }: PlayGameClientProps) {
     notFound();
   }
 
-  return <GameAreaShell game={game} />;
+  // Search params are client-only; the gate reads `?room=` from a shared join link.
+  return (
+    <Suspense fallback={null}>
+      <JoinLinkGate game={game}>
+        <GameAreaShell game={game} />
+      </JoinLinkGate>
+    </Suspense>
+  );
 }

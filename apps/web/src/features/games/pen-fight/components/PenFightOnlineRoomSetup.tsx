@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import type { Player } from '@playdeck/game-types';
 import { Button } from '@playdeck/ui';
 import { InviteToRoomModal } from '@/features/friends/components/InviteToRoomModal';
+import { ShareRoomLink } from '@/features/multiplayer/components/ShareRoomLink';
 
 const ICON_SM = 'w-4 h-4';
 const BTN_TYPE = 'button';
@@ -50,7 +51,7 @@ export function PenFightOnlineRoomSetup({
       {roomCode ? (
         <div className="flex flex-col items-center gap-3 py-2">
           <span className="text-[11px] font-medium text-deck-400">
-            Room Created! Share code or invite your friend:
+            Room Created! Share the code, link, or invite your friend:
           </span>
           <div className="flex items-center gap-2">
             <span className="font-mono text-xl font-black tracking-widest text-amber-400 px-3 py-1 bg-amber-500/10 rounded-lg border border-amber-500/30">
@@ -73,6 +74,8 @@ export function PenFightOnlineRoomSetup({
               <span>Invite Friend</span>
             </button>
           </div>
+
+          <ShareRoomLink gameId="pen-fight" gameName="Pen Fight" roomCode={roomCode} />
 
           <div className="p-2.5 rounded-lg border border-surface-border bg-surface-raised/80 w-full flex items-center justify-center gap-2 text-xs">
             {opponent ? (

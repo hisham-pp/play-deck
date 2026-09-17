@@ -4,6 +4,7 @@ import { UserPlus, Bot, Play, LogOut, Copy, Check } from 'lucide-react';
 import { useState } from 'react';
 import { Button, Card, CardContent, CardHeader, CardTitle, Badge } from '@playdeck/ui';
 import { InviteToRoomModal } from '@/features/friends/components/InviteToRoomModal';
+import { ShareRoomLink } from '@/features/multiplayer/components/ShareRoomLink';
 import { LudoVoiceDock } from '@/features/voice/components/LudoVoiceDock';
 import { useLudoMultiplayerStore } from '@/stores/ludo-multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
@@ -13,9 +14,10 @@ const VARIANT_OUTLINE = 'outline';
 
 interface LudoRoomLobbyProps {
   onStartGame: (players: LudoPlayer[]) => void;
+  onLeave: () => void;
 }
 
-export function LudoRoomLobby({ onStartGame }: LudoRoomLobbyProps) {
+export function LudoRoomLobby({ onStartGame, onLeave }: LudoRoomLobbyProps) {
   const { roomCode, hostId, players, addBot, fillRemainingWithBots, leaveRoom } =
     useLudoMultiplayerStore();
   const player = usePlayerStore((s) => s.player);
@@ -42,7 +44,7 @@ export function LudoRoomLobby({ onStartGame }: LudoRoomLobbyProps) {
               🎲 Ludo Online Room
             </CardTitle>
             <p className="text-xs text-slate-400 mt-1">
-              Share room code or invite friends (2–6 players)
+              Share the room code or link, or invite friends (2–6 players)
             </p>
           </div>
           {roomCode && (
@@ -61,6 +63,9 @@ export function LudoRoomLobby({ onStartGame }: LudoRoomLobbyProps) {
           )}
         </CardHeader>
         <CardContent className="space-y-6">
+          {roomCode && isHost && (
+            <ShareRoomLink gameId="ludo" gameName="Ludo" roomCode={roomCode} />
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {players.map((p, idx) => (
               <div
@@ -88,7 +93,10 @@ export function LudoRoomLobby({ onStartGame }: LudoRoomLobbyProps) {
           <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-800">
             <Button
               variant="ghost"
-              onClick={leaveRoom}
+              onClick={() => {
+                leaveRoom();
+                onLeave();
+              }}
               className="text-slate-400 hover:text-slate-200"
             >
               <LogOut className="w-4 h-4 mr-2" /> Leave

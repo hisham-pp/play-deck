@@ -40,7 +40,7 @@ export const useLudoMultiplayerStore = create<LudoMultiplayerState>((set, get) =
 
   createRoom: async (hostPlayer) => {
     try {
-      const room = await RoomService.createRoom(hostPlayer.id, 'ludo');
+      const room = await RoomService.createRoom('ludo', hostPlayer.id);
       const transport = new SupabaseTransportService('ludo');
 
       const initialHostSeat: LudoPlayer = {
