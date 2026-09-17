@@ -6,7 +6,11 @@ import { Physics } from '@react-three/rapier';
 import React, { forwardRef } from 'react';
 import { PCFShadowMap, type PerspectiveCamera as ThreePerspectiveCamera } from 'three';
 import '@/lib/three-patch';
-import { PHYSICS_TIME_STEP } from '../engine/pen-fight-constants';
+import {
+  PHYSICS_SOLVER_ITERATIONS,
+  PHYSICS_TIME_STEP,
+  WORLD_GRAVITY,
+} from '../engine/pen-fight-constants';
 import type {
   FlickImpulse,
   PenFightOutcome,
@@ -51,7 +55,11 @@ export const PenFightArena = forwardRef<PenFightArenaHandle, PenFightArenaProps>
         <ArenaLighting />
         <BackgroundScoreboard state={props.state} flipped={isGuest} />
         {/* Fixed step so every device integrates the simulation identically. */}
-        <Physics gravity={[0, -9.81, 0]} timeStep={PHYSICS_TIME_STEP}>
+        <Physics
+          gravity={[0, WORLD_GRAVITY, 0]}
+          timeStep={PHYSICS_TIME_STEP}
+          numSolverIterations={PHYSICS_SOLVER_ITERATIONS}
+        >
           <TableSurface />
           <PenFightMatch ref={ref} {...props} />
         </Physics>

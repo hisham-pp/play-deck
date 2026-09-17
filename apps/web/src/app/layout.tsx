@@ -1,5 +1,5 @@
-import type { Metadata, Viewport } from 'next';
 import { Analytics } from '@vercel/analytics/next';
+import type { Metadata, Viewport } from 'next';
 import { Footer } from '@/components/layout/Footer';
 import { Navbar } from '@/components/layout/Navbar';
 import './globals.css';
