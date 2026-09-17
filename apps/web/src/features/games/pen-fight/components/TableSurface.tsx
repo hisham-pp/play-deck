@@ -1,8 +1,14 @@
 'use client';
 
-import { RigidBody } from '@react-three/rapier';
+import { CoefficientCombineRule, RigidBody } from '@react-three/rapier';
 import React, { useMemo } from 'react';
-import { TABLE_DEPTH, TABLE_HEIGHT, TABLE_WIDTH } from '../engine/pen-fight-constants';
+import {
+  TABLE_DEPTH,
+  TABLE_FRICTION,
+  TABLE_HEIGHT,
+  TABLE_RESTITUTION,
+  TABLE_WIDTH,
+} from '../engine/pen-fight-constants';
 import { createTableTexture } from '../utils/create-table-texture';
 
 export function TableSurface() {
@@ -27,7 +33,14 @@ export function TableSurface() {
   return (
     <group>
       {/* Tabletop Physics Rigid Body */}
-      <RigidBody type="fixed" colliders="cuboid" friction={0.85} restitution={0.15}>
+      <RigidBody
+        type="fixed"
+        colliders="cuboid"
+        friction={TABLE_FRICTION}
+        restitution={TABLE_RESTITUTION}
+        // A dead wooden top: pens land without bouncing, while pen-on-pen hits keep their clack.
+        restitutionCombineRule={CoefficientCombineRule.Min}
+      >
         <mesh receiveShadow position={[0, 0, 0]}>
           <boxGeometry args={[TABLE_WIDTH, TABLE_HEIGHT, TABLE_DEPTH]} />
           {texture ? (

@@ -7,16 +7,21 @@ export const MODE_ONLINE: PenFightMode = 'online';
 export const SPEED_NORMAL = 'normal' as const;
 export const SPEED_SLOW = 'slow' as const;
 
+/**
+ * Per-speed tuning. Damping is kept light: pens should stop because of table friction (a
+ * constant, snappy deceleration), not because of air drag (a slow exponential fade that feels
+ * floaty). `speedMultiplier` scales the launch velocity of a flick.
+ */
 export const SPEED_PHYSICS_CONFIG = {
   normal: {
-    linearDamping: 0.45,
-    angularDamping: 0.55,
-    impulseMultiplier: 1.35,
+    linearDamping: 0.08,
+    angularDamping: 0.7,
+    speedMultiplier: 1,
   },
   slow: {
-    linearDamping: 0.9,
-    angularDamping: 1.0,
-    impulseMultiplier: 0.95,
+    linearDamping: 0.6,
+    angularDamping: 1.2,
+    speedMultiplier: 0.8,
   },
 };
 
@@ -44,8 +49,26 @@ export const PEN_RADIUS = 0.045;
 export const PEN_START_Z = TABLE_DEPTH / 2 - 0.5;
 export const PEN_START_Y = TABLE_SURFACE_Y + PEN_RADIUS + 0.01;
 
-export const MAX_FLICK_IMPULSE = 0.024;
-export const MIN_FLICK_IMPULSE = 0.005;
+/** A real ballpoint pen is ~14 cm long; the arena models it at PEN_LENGTH world units. */
+const REAL_PEN_LENGTH_M = 0.14;
+/**
+ * Gravity scaled to the arena. The scene is several times larger than a real desk, so real-world
+ * 9.81 makes everything drift and fall in slow motion. Scaling it by the same factor restores
+ * the quick, snappy feel of flicking an actual pen across a table.
+ */
+export const WORLD_GRAVITY = -9.81 * (PEN_LENGTH / REAL_PEN_LENGTH_M);
+
+/** Launch speed (world units/s) of a flick at 0% and 100% power, before the speed multiplier. */
+export const MIN_FLICK_SPEED = 1.2;
+export const MAX_FLICK_SPEED = 7.8;
+/** Peak yaw spin (rad/s) a flick can add; scaled by `computeFlickSpin` and power. */
+export const MAX_FLICK_SPIN = 9;
+
+// Contact materials: plastic pens slide on a varnished tabletop and clack off each other.
+export const PEN_FRICTION = 0.28;
+export const PEN_RESTITUTION = 0.38;
+export const TABLE_FRICTION = 0.34;
+export const TABLE_RESTITUTION = 0.05;
 export const MAX_DRAG_DISTANCE = 1.6;
 export const GRAB_RADIUS = 0.75;
 export const MIN_POWER_THRESHOLD = 0.06;
@@ -75,8 +98,12 @@ export const AI_POWER_RANGE: Record<AIDifficulty, [number, number]> = {
 };
 
 // --- Online sync ---
-/** Fixed physics step shared by every client so simulations advance identically. */
-export const PHYSICS_TIME_STEP = 1 / 60;
+/**
+ * Fixed physics step shared by every client so simulations advance identically. 120 Hz keeps
+ * the small, fast pens stable under the arena-scaled gravity (at 60 Hz a resting pen jitters).
+ */
+export const PHYSICS_TIME_STEP = 1 / 120;
+export const PHYSICS_SOLVER_ITERATIONS = 8;
 /** How often the authority client broadcasts pen transforms while pens are in motion. */
 export const PEN_SYNC_INTERVAL_MS = 50;
 /** Extra frames of snapshots sent after motion stops, so resting poses match exactly. */
