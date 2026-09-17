@@ -14,6 +14,7 @@ import { PongGame } from '@/features/games/pong';
 import { RunicMemoryGame } from '@/features/games/runic-memory';
 import { SnakeGame } from '@/features/games/snake';
 import { SudokuGame } from '@/features/games/sudoku';
+import { SummitRushGame } from '@/features/games/summit-rush';
 import { TetrisGame } from '@/features/games/tetris';
 import { TicTacToeGame } from '@/features/games/tic-tac-toe';
 import { useGameSessionStore } from '@/stores/game-session.store';
@@ -76,6 +77,10 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
 
   if (game.id === 'pong') {
     return <PongGame />;
+  }
+
+  if (game.id === 'summit-rush') {
+    return <SummitRushGame />;
   }
 
   const handleStart = () => {
