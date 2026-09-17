@@ -11,6 +11,7 @@ import { ConnectFourGame } from '@/features/games/connect-four';
 import { LudoGame } from '@/features/games/ludo';
 import { MinesweeperGame } from '@/features/games/minesweeper';
 import { PenFightGame } from '@/features/games/pen-fight';
+import { PongGame } from '@/features/games/pong';
 import { RunicMemoryGame } from '@/features/games/runic-memory';
 import { SnakeGame } from '@/features/games/snake';
 import { SudokuGame } from '@/features/games/sudoku';
@@ -76,6 +77,10 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
 
   if (game.id === 'ball-bounce') {
     return <BallBounceGame />;
+  }
+
+  if (game.id === 'pong') {
+    return <PongGame />;
   }
 
   const handleStart = () => {
