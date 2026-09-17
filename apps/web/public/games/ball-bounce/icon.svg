@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <rect width="256" height="256" rx="48" fill="#0a0f1c" />
+  <rect width="254" height="254" x="1" y="1" rx="47" fill="none" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.3" />
+  <g>
+    <rect x="36" y="52" width="52" height="20" rx="4" fill="#f59e0b" />
+    <rect x="102" y="52" width="52" height="20" rx="4" fill="#a78bfa" />
+    <rect x="168" y="52" width="52" height="20" rx="4" fill="#f59e0b" />
+    <rect x="36" y="80" width="52" height="20" rx="4" fill="#60a5fa" />
+    <rect x="168" y="80" width="52" height="20" rx="4" fill="#60a5fa" />
+    <rect x="36" y="108" width="52" height="20" rx="4" fill="#2dd4bf" />
+    <rect x="102" y="108" width="52" height="20" rx="4" fill="#2dd4bf" />
+    <rect x="168" y="108" width="52" height="20" rx="4" fill="#2dd4bf" />
+  </g>
+  <g fill="#2dd4bf">
+    <rect x="112" y="84" width="4" height="4" />
+    <rect x="124" y="92" width="3" height="3" />
+    <rect x="138" y="82" width="4" height="4" />
+  </g>
+  <circle cx="110" cy="172" r="4" fill="#f8fafc" fill-opacity="0.12" />
+  <circle cx="117" cy="160" r="5" fill="#f8fafc" fill-opacity="0.2" />
+  <circle cx="124" cy="148" r="6" fill="#f8fafc" fill-opacity="0.3" />
+  <circle cx="132" cy="135" r="10" fill="#f8fafc" />
+  <rect x="80" y="196" width="96" height="14" rx="7" fill="#e5e7eb" />
+  <rect x="116" y="201.5" width="24" height="3" fill="#f59e0b" />
+</svg>

@@ -3,9 +3,12 @@ import { GameDefinition } from '@playdeck/game-types';
 const STATUS_AVAILABLE = 'available';
 const BADGE_READY_TO_PLAY = 'Ready to Play';
 const RELEASE_DATE_2026_09_12 = '2026-09-12';
+const RELEASE_DATE_2026_09_17 = '2026-09-17';
 const TAG_CLASSIC = 'Classic';
 const TAG_LOCAL_PLAY = 'Local Play';
 const TAG_PUZZLE = 'Puzzle';
+const TAG_SOLO = 'Solo';
+const TAG_HIGH_SCORE = 'High Score';
 const CATEGORY_PUZZLE = 'puzzle';
 
 export const GAME_DEFINITIONS: GameDefinition[] = [
@@ -19,7 +22,7 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     players: { min: 1, max: 1 },
     status: STATUS_AVAILABLE,
     thumbnailUrl: '/games/snake/icon.svg',
-    tags: ['Arcade', TAG_CLASSIC, 'Retro', 'High Score'],
+    tags: ['Arcade', TAG_CLASSIC, 'Retro', TAG_HIGH_SCORE],
     featured: true,
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-11',
@@ -34,7 +37,7 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     players: { min: 1, max: 1 },
     status: STATUS_AVAILABLE,
     thumbnailUrl: '/games/tetris/icon.svg',
-    tags: ['Arcade', TAG_CLASSIC, TAG_PUZZLE, 'High Score'],
+    tags: ['Arcade', TAG_CLASSIC, TAG_PUZZLE, TAG_HIGH_SCORE],
     featured: true,
     badge: BADGE_READY_TO_PLAY,
     releaseDate: RELEASE_DATE_2026_09_12,
@@ -94,7 +97,7 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     players: { min: 1, max: 1 },
     status: STATUS_AVAILABLE,
     thumbnailUrl: '/games/sudoku/icon.svg',
-    tags: [TAG_PUZZLE, 'Logic', 'Solo', 'Brain Training', '7 Levels'],
+    tags: [TAG_PUZZLE, 'Logic', TAG_SOLO, 'Brain Training', '7 Levels'],
     featured: true,
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-13',
@@ -143,7 +146,7 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     tags: ['Brain Training', 'Memory', 'Solitaire', 'Multiplayer Ready', 'Voice Chat', 'Arcane'],
     featured: true,
     badge: BADGE_READY_TO_PLAY,
-    releaseDate: '2026-09-17',
+    releaseDate: RELEASE_DATE_2026_09_17,
   },
   {
     id: 'minesweeper',
@@ -155,10 +158,10 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     players: { min: 1, max: 1 },
     status: STATUS_AVAILABLE,
     thumbnailUrl: '/games/minesweeper/icon.svg',
-    tags: [TAG_PUZZLE, 'Logic', 'Solo', TAG_CLASSIC, 'Speedrun', 'Keyboard Ready'],
+    tags: [TAG_PUZZLE, 'Logic', TAG_SOLO, TAG_CLASSIC, 'Speedrun', 'Keyboard Ready'],
     featured: true,
     badge: BADGE_READY_TO_PLAY,
-    releaseDate: '2026-09-17',
+    releaseDate: RELEASE_DATE_2026_09_17,
   },
   {
     id: '2048',
@@ -170,10 +173,25 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     players: { min: 1, max: 1 },
     status: STATUS_AVAILABLE,
     thumbnailUrl: '/games/2048/icon.svg',
-    tags: [TAG_PUZZLE, 'Logic', 'Solo', TAG_CLASSIC, 'High Score', 'Tactile'],
+    tags: [TAG_PUZZLE, 'Logic', TAG_SOLO, TAG_CLASSIC, TAG_HIGH_SCORE, 'Tactile'],
     featured: true,
     badge: BADGE_READY_TO_PLAY,
-    releaseDate: '2026-09-17',
+    releaseDate: RELEASE_DATE_2026_09_17,
+  },
+  {
+    id: 'ball-bounce',
+    name: 'Ball Bounce',
+    slug: 'ball-bounce',
+    description:
+      'Steer the paddle, keep the ball alive, and smash through ever-tougher block layouts. Chain combos, grab power-ups, and chase your high score.',
+    category: 'arcade',
+    players: { min: 1, max: 1 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/ball-bounce/icon.svg',
+    tags: ['Arcade', TAG_SOLO, TAG_HIGH_SCORE, 'Power-ups', 'Touch Ready', 'Keyboard Ready'],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: RELEASE_DATE_2026_09_17,
   },
   {
     id: 'pong',
