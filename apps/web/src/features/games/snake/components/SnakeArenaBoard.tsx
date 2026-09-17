@@ -2,6 +2,7 @@
 
 import React from 'react';
 import type { Coordinate, Direction, SnakeGameStatus } from '../types/snake.types';
+import type { SnakeTheme } from './canvas/SnakeRenderer2D';
 import { SnakeBoard } from './SnakeBoard';
 import { SnakeOverlay } from './SnakeOverlay';
 
@@ -16,6 +17,7 @@ export interface SnakeArenaBoardProps {
   score: number;
   highScore: number;
   isNewHighScore: boolean;
+  theme?: SnakeTheme;
   onStart: () => void;
   onResume: () => void;
   onRestart: () => void;
@@ -32,6 +34,7 @@ export function SnakeArenaBoard({
   score,
   highScore,
   isNewHighScore,
+  theme = 'grass',
   onStart,
   onResume,
   onRestart,
@@ -45,6 +48,8 @@ export function SnakeArenaBoard({
         direction={direction}
         status={status}
         speedMs={speedMs}
+        score={score}
+        theme={theme}
       />
       <SnakeOverlay
         status={status}
