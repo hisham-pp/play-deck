@@ -144,4 +144,19 @@ export const GAME_DEFINITIONS: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-17',
   },
+  {
+    id: 'minesweeper',
+    name: 'Minesweeper',
+    slug: 'minesweeper',
+    description:
+      'The definitive deduction classic. Clear hidden minefields with first-click safety, tactical chording, customizable boards, and record-tracking speedruns.',
+    category: CATEGORY_PUZZLE,
+    players: { min: 1, max: 1 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/minesweeper/icon.svg',
+    tags: ['Puzzle', 'Logic', 'Solo', TAG_CLASSIC, 'Speedrun', 'Keyboard Ready'],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-17',
+  },
 ];
