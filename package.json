@@ -4,7 +4,9 @@
   "private": true,
   "description": "PlayDeck - A modern game hub foundation",
   "scripts": {
+    "predev": "node scripts/generate-word-chain-dictionary.mjs",
     "dev": "pnpm --filter @playdeck/web dev",
+    "prebuild": "node scripts/generate-word-chain-dictionary.mjs",
     "build": "pnpm --filter @playdeck/web build",
     "test": "node --import ./scripts/test-register.mjs --test 'apps/web/src/**/*.test.ts'",
     "lint": "eslint .",
@@ -28,6 +30,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/bcryptjs": "^3.0.0",
+    "an-array-of-english-words": "^2.0.0",
     "eslint": "^10.10.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.12.0",

@@ -2,9 +2,11 @@ import type { GameContent } from '@playdeck/game-types';
 import { game2048Content } from './2048';
 import { ballBounceContent } from './ball-bounce';
 import { connectFourContent } from './connect-four';
+import { flappyArcadeContent } from './flappy-arcade';
 import { ludoContent } from './ludo';
 import { chessContent } from './master-chess';
 import { minesweeperContent } from './minesweeper';
+import { miniGolfContent } from './mini-golf';
 import { penFightContent } from './pen-fight';
 import { pongContent } from './pong';
 import { pushYourLuckContent } from './push-your-luck';
@@ -14,6 +16,7 @@ import { sudokuContent } from './sudoku';
 import { summitRushContent } from './summit-rush';
 import { tetrisContent } from './tetris';
 import { ticTacToeContent } from './tic-tac-toe';
+import { wordChainContent } from './word-chain';
 
 const ALL_CONTENT: GameContent[] = [
   snakeContent,
@@ -30,7 +33,10 @@ const ALL_CONTENT: GameContent[] = [
   ballBounceContent,
   pongContent,
   summitRushContent,
+  flappyArcadeContent,
+  miniGolfContent,
   pushYourLuckContent,
+  wordChainContent,
 ];
 
 /**

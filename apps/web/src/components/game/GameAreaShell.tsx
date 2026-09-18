@@ -8,8 +8,10 @@ import { Game2048 } from '@/features/games/2048';
 import { BallBounceGame } from '@/features/games/ball-bounce';
 import { ChessGame } from '@/features/games/chess';
 import { ConnectFourGame } from '@/features/games/connect-four';
+import { FlappyArcadeGame } from '@/features/games/flappy-arcade';
 import { LudoGame } from '@/features/games/ludo';
 import { MinesweeperGame } from '@/features/games/minesweeper';
+import { MiniGolfGame } from '@/features/games/mini-golf';
 import { PenFightGame } from '@/features/games/pen-fight';
 import { PongGame } from '@/features/games/pong';
 import { PushYourLuckGame } from '@/features/games/push-your-luck';
@@ -19,6 +21,7 @@ import { SudokuGame } from '@/features/games/sudoku';
 import { SummitRushGame } from '@/features/games/summit-rush';
 import { TetrisGame } from '@/features/games/tetris';
 import { TicTacToeGame } from '@/features/games/tic-tac-toe';
+import { WordChainGame } from '@/features/games/word-chain';
 import { useGameSessionStore } from '@/stores/game-session.store';
 import { useLibraryStore } from '@/stores/library.store';
 import { usePlayerStore } from '@/stores/player.store';
@@ -26,16 +29,18 @@ import { GameStatusBadge, GameCategoryBadge, GameFeatureBadge } from './GameBadg
 import { GameStage } from './GameStage';
 
 /**
- * Slug-to-component registry for shipped games. A new game adds one entry here
- * rather than another branch in the shell.
+ * Every shipped game renders its own component. The catalog is a lookup rather
+ * than a chain of branches so adding a game is one line, not one more `if`.
  */
 const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   '2048': Game2048,
   'ball-bounce': BallBounceGame,
   chess: ChessGame,
   'connect-four': ConnectFourGame,
+  'flappy-arcade': FlappyArcadeGame,
   ludo: LudoGame,
   minesweeper: MinesweeperGame,
+  'mini-golf': MiniGolfGame,
   'pen-fight': PenFightGame,
   pong: PongGame,
   'push-your-luck': PushYourLuckGame,
@@ -45,17 +50,17 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'summit-rush': SummitRushGame,
   tetris: TetrisGame,
   'tic-tac-toe': TicTacToeGame,
+  'word-chain': WordChainGame,
 };
 
 export function GameAreaShell({ game }: { game: GameDefinition }) {
-  const GameComponent = GAME_COMPONENTS[game.id];
-
   const { player } = usePlayerStore();
   const { currentSession, startSession, endSession } = useGameSessionStore();
   const { addRecentSession } = useLibraryStore();
   const [status, setStatus] = useState<'idle' | 'running' | 'over'>('idle');
   const [mockScore, setMockScore] = useState(0);
 
+  const GameComponent = GAME_COMPONENTS[game.id];
   if (GameComponent) {
     return <GameComponent />;
   }
