@@ -11,6 +11,7 @@ import { ConnectFourGame } from '@/features/games/connect-four';
 import { FlappyArcadeGame } from '@/features/games/flappy-arcade';
 import { LudoGame } from '@/features/games/ludo';
 import { MinesweeperGame } from '@/features/games/minesweeper';
+import { MiniGolfGame } from '@/features/games/mini-golf';
 import { PenFightGame } from '@/features/games/pen-fight';
 import { PongGame } from '@/features/games/pong';
 import { RunicMemoryGame } from '@/features/games/runic-memory';
@@ -38,6 +39,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'flappy-arcade': FlappyArcadeGame,
   ludo: LudoGame,
   minesweeper: MinesweeperGame,
+  'mini-golf': MiniGolfGame,
   'pen-fight': PenFightGame,
   pong: PongGame,
   'runic-memory': RunicMemoryGame,
