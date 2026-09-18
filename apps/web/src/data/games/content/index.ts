@@ -15,6 +15,7 @@ import { sudokuContent } from './sudoku';
 import { summitRushContent } from './summit-rush';
 import { tetrisContent } from './tetris';
 import { ticTacToeContent } from './tic-tac-toe';
+import { wordChainContent } from './word-chain';
 
 const ALL_CONTENT: GameContent[] = [
   snakeContent,
@@ -33,6 +34,7 @@ const ALL_CONTENT: GameContent[] = [
   summitRushContent,
   flappyArcadeContent,
   miniGolfContent,
+  wordChainContent,
 ];
 
 /**
