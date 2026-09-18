@@ -6,7 +6,6 @@ import {
   TAG_MULTIPLAYER,
   TAG_VOICE_CHAT,
   TAG_PHYSICS,
-  TAG_SOLO,
   CATEGORY_ARCADE,
 } from './constants';
 
@@ -87,22 +86,6 @@ export const COMING_SOON_ARCADE_GAMES_2: GameDefinition[] = [
     thumbnailUrl: '/games/bomber-arena/icon.svg',
     bannerUrl: '/games/bomber-arena/cover.svg',
     tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PHYSICS],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
-    id: 'mini-golf',
-    name: 'Mini Golf',
-    slug: 'mini-golf',
-    description:
-      'Polished multiplayer 2D Mini Golf game with drag-based shot indicator, satisfying ball physics, and 9/18-hole courses featuring walls, ramps, moving obstacles, hazards, portals, and leaderboard tracking.',
-    category: CATEGORY_ARCADE,
-    players: { min: 2, max: 6 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/mini-golf/icon.svg',
-    bannerUrl: '/games/mini-golf/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PHYSICS, TAG_SOLO],
     featured: false,
     badge: BADGE_COMING_SOON,
     releaseDate: RELEASE_DATE_COMING_SOON,
