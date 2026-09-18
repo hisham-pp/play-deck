@@ -30,8 +30,11 @@ export class SupabaseTransportService implements VoiceSignalChannel {
     new Set();
   /** Latest presence roster, so late subscribers (voice) do not wait for a sync. */
   private lastPresence: PlayerPresence[] = [];
+  private namespace: string;
 
-  constructor(private namespace: string = 'tictactoe') {}
+  constructor(namespace: string = 'tictactoe') {
+    this.namespace = namespace;
+  }
 
   async connect(roomCode: string, player: PlayerPresence): Promise<boolean> {
     const supabase = getSupabaseClient();
