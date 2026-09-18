@@ -1,11 +1,10 @@
 'use client';
 
-import { BookOpen, Gamepad2, ShieldCheck, Tag } from 'lucide-react';
+import { BookOpen, Gamepad2, Tag } from 'lucide-react';
 import React, { useState } from 'react';
 import { GameDefinition } from '@playdeck/game-types';
 import { cn } from '@/lib/utils';
 import { GameControlsTab, GameControlItem } from './GameControlsTab';
-import { GameSpecsTab } from './GameSpecsTab';
 
 export type { GameControlItem };
 
@@ -22,9 +21,8 @@ interface GameTemplateTabsProps {
 
 const TAB_RULES = 'rules';
 const TAB_CONTROLS = 'controls';
-const TAB_SPECS = 'specs';
 
-type TabType = typeof TAB_RULES | typeof TAB_CONTROLS | typeof TAB_SPECS;
+type TabType = typeof TAB_RULES | typeof TAB_CONTROLS;
 
 import { DEFAULT_CONTROLS, DEFAULT_RULES } from './game-template-defaults';
 
@@ -66,19 +64,6 @@ export function GameTemplateTabs({ game, rules, controls }: GameTemplateTabsProp
         >
           <Gamepad2 className="w-3.5 h-3.5" />
           <span>Controls & Keybindings</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab(TAB_SPECS)}
-          className={cn(
-            'flex items-center gap-2 py-3 px-4 text-xs font-semibold border-b-2 transition-colors',
-            activeTab === TAB_SPECS
-              ? 'border-amber-500 text-amber-500'
-              : 'border-transparent text-deck-500 hover:text-deck-900 dark:hover:text-white',
-          )}
-        >
-          <ShieldCheck className="w-3.5 h-3.5" />
-          <span>Game Architecture</span>
         </button>
       </div>
 
@@ -124,7 +109,6 @@ export function GameTemplateTabs({ game, rules, controls }: GameTemplateTabsProp
         )}
 
         {activeTab === TAB_CONTROLS && <GameControlsTab controls={activeControls} />}
-        {activeTab === TAB_SPECS && <GameSpecsTab />}
       </div>
     </div>
   );
