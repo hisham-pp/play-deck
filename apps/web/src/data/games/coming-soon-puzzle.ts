@@ -29,22 +29,6 @@ export const COMING_SOON_PUZZLE_GAMES: GameDefinition[] = [
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
   {
-    id: 'word-chain',
-    name: 'Word Chain',
-    slug: 'word-chain',
-    description:
-      'Multiplayer word chain game where players take turns entering words that start with the last letter of the previous word. Fail to answer in time and lose a life. Last player standing wins. Features escalating timers and rule variants.',
-    category: CATEGORY_PUZZLE,
-    players: { min: 2, max: 8 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/word-chain/icon.svg',
-    bannerUrl: '/games/word-chain/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_SOLO, TAG_WORD_PUZZLE],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
     id: 'anagram-sprint',
     name: 'Anagram Sprint',
     slug: 'anagram-sprint',

@@ -18,11 +18,34 @@ import { SudokuGame } from '@/features/games/sudoku';
 import { SummitRushGame } from '@/features/games/summit-rush';
 import { TetrisGame } from '@/features/games/tetris';
 import { TicTacToeGame } from '@/features/games/tic-tac-toe';
+import { WordChainGame } from '@/features/games/word-chain';
 import { useGameSessionStore } from '@/stores/game-session.store';
 import { useLibraryStore } from '@/stores/library.store';
 import { usePlayerStore } from '@/stores/player.store';
 import { GameStatusBadge, GameCategoryBadge, GameFeatureBadge } from './GameBadge';
 import { GameStage } from './GameStage';
+
+/**
+ * Every shipped game renders its own component. The catalog is a lookup rather
+ * than a chain of branches so adding a game is one line, not one more `if`.
+ */
+const GAME_COMPONENTS: Record<string, React.ComponentType> = {
+  '2048': Game2048,
+  'ball-bounce': BallBounceGame,
+  chess: ChessGame,
+  'connect-four': ConnectFourGame,
+  ludo: LudoGame,
+  minesweeper: MinesweeperGame,
+  'pen-fight': PenFightGame,
+  pong: PongGame,
+  'runic-memory': RunicMemoryGame,
+  snake: SnakeGame,
+  sudoku: SudokuGame,
+  'summit-rush': SummitRushGame,
+  tetris: TetrisGame,
+  'tic-tac-toe': TicTacToeGame,
+  'word-chain': WordChainGame,
+};
 
 export function GameAreaShell({ game }: { game: GameDefinition }) {
   const { player } = usePlayerStore();
@@ -31,61 +54,9 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
   const [status, setStatus] = useState<'idle' | 'running' | 'over'>('idle');
   const [mockScore, setMockScore] = useState(0);
 
-  // Dedicated real game router
-  if (game.id === 'snake') {
-    return <SnakeGame />;
-  }
-
-  if (game.id === 'tic-tac-toe') {
-    return <TicTacToeGame />;
-  }
-
-  if (game.id === 'ludo') {
-    return <LudoGame />;
-  }
-
-  if (game.id === 'pen-fight') {
-    return <PenFightGame />;
-  }
-
-  if (game.id === 'tetris') {
-    return <TetrisGame />;
-  }
-
-  if (game.id === 'connect-four') {
-    return <ConnectFourGame />;
-  }
-
-  if (game.id === 'sudoku') {
-    return <SudokuGame />;
-  }
-
-  if (game.id === 'chess') {
-    return <ChessGame />;
-  }
-
-  if (game.id === 'runic-memory') {
-    return <RunicMemoryGame />;
-  }
-
-  if (game.id === 'minesweeper') {
-    return <MinesweeperGame />;
-  }
-
-  if (game.id === '2048') {
-    return <Game2048 />;
-  }
-
-  if (game.id === 'ball-bounce') {
-    return <BallBounceGame />;
-  }
-
-  if (game.id === 'pong') {
-    return <PongGame />;
-  }
-
-  if (game.id === 'summit-rush') {
-    return <SummitRushGame />;
+  const GameComponent = GAME_COMPONENTS[game.id];
+  if (GameComponent) {
+    return <GameComponent />;
   }
 
   const handleStart = () => {
