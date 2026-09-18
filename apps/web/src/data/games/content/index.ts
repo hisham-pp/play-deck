@@ -20,6 +20,7 @@ import { summitRushContent } from './summit-rush';
 import { tetrisContent } from './tetris';
 import { ticTacToeContent } from './tic-tac-toe';
 import { tinyIslandContent } from './tiny-island';
+import { unstableElevatorContent } from './unstable-elevator';
 import { wordChainContent } from './word-chain';
 
 const ALL_CONTENT: GameContent[] = [
@@ -45,6 +46,7 @@ const ALL_CONTENT: GameContent[] = [
   tinyIslandContent,
   wordChainContent,
   colorThiefContent,
+  unstableElevatorContent,
 ];
 
 /**
