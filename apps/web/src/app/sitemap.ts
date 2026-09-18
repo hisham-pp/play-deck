@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { GAME_DEFINITIONS } from '@/data/games';
+import { getGameContent } from '@/data/games/content';
 import { absoluteUrl, gameOverviewPath } from '@/lib/seo/site';
 
 /** Routes that exist independently of the catalog. */
@@ -22,16 +23,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: route.priority,
   }));
 
-  // One entry per game, always under the canonical slug. Player-specific
-  // routes (/library, /profile) and session shells (/play/*) stay out.
-  const gameEntries = GAME_DEFINITIONS.filter((game) => game.status !== 'coming-soon').map(
-    (game) => ({
+  // One entry per game, always under the canonical slug. This mirrors the
+  // `isIndexable` rule on the game page: playable and with written content.
+  // Coming-soon entries, player routes (/library, /profile) and session
+  // shells (/play/*) stay out.
+  const gameEntries = GAME_DEFINITIONS.filter(
+    (game) => game.status === 'available' && getGameContent(game.id) !== undefined,
+  ).map((game) => {
+    const released = game.releaseDate ? new Date(game.releaseDate) : now;
+    return {
       url: absoluteUrl(gameOverviewPath(game.slug)),
-      lastModified: game.releaseDate ? new Date(game.releaseDate) : now,
+      lastModified: Number.isNaN(released.getTime()) ? now : released,
       changeFrequency: 'monthly' as const,
       priority: game.featured ? 0.8 : 0.7,
-    }),
-  );
+    };
+  });
 
   return [...staticEntries, ...gameEntries];
 }

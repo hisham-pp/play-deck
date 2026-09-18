@@ -7,12 +7,16 @@ const MAX_SEO_TITLE_LENGTH = 65;
 const MIN_SEO_DESCRIPTION_LENGTH = 110;
 const MAX_SEO_DESCRIPTION_LENGTH = 165;
 
+const AVAILABLE_GAMES = GAME_DEFINITIONS.filter((game) => game.status === 'available');
+
 describe('Game content registry — coverage', () => {
-  it('has a content module for every game in the catalog', () => {
-    const missing = GAME_DEFINITIONS.filter((game) => !getGameContent(game.id)).map(
+  it('has a content module for every playable game', () => {
+    // Coming-soon entries are exempt until they ship; a playable game without
+    // content would publish a thin page, so that is a failure.
+    const missing = AVAILABLE_GAMES.filter((game) => !getGameContent(game.id)).map(
       (game) => game.id,
     );
-    assert.deepEqual(missing, [], `games missing a content module: ${missing.join(', ')}`);
+    assert.deepEqual(missing, [], `playable games missing a content module: ${missing.join(', ')}`);
   });
 
   it('has no orphaned content without a matching game', () => {

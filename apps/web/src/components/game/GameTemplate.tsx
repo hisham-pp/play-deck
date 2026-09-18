@@ -44,7 +44,27 @@ export function GameTemplate({
         </section>
       )}
 
-      {content && <GameOverviewSections game={game} content={content} />}
+      {content ? (
+        <GameOverviewSections game={game} content={content} />
+      ) : (
+        /* Games still in development have no content module yet. Show what the
+           catalog knows so the page is never an empty shell. */
+        <section
+          id="about"
+          className="rounded-2xl border border-surface-border bg-surface-raised p-6 md:p-8"
+        >
+          <h2 className="text-lg md:text-xl font-black font-display text-deck-950 dark:text-white mb-4">
+            About {game.name}
+          </h2>
+          <p className="text-sm leading-relaxed text-deck-600 dark:text-deck-300">
+            {game.description}
+          </p>
+          <p className="mt-4 text-xs text-deck-500">
+            {game.name} is still in development. Full rules, controls and strategy notes land here
+            when it ships.
+          </p>
+        </section>
+      )}
 
       {footer}
     </div>

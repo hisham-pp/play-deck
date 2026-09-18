@@ -149,7 +149,8 @@ Each game has a dedicated, indexable page at `/games/<slug>` — one canonical U
 - **Never hide content behind client-only state.** Page content renders in server components as real `<section>` / `<h2>` markup. A tab panel mounted only when active never reaches the HTML crawlers see.
 - **Structured data** is built by `lib/seo/structured-data.ts` (`VideoGame`, `BreadcrumbList`, `HowTo`, `FAQPage`, `ItemList`) and emitted through `<JsonLd />`. Absolute URLs come from `lib/seo/site.ts` — never hardcode a domain.
 - **`/play/<slug>` is `noindex, follow`** and canonicals back to the overview page. It is a session shell with no crawlable content.
-- `data/games/content/game-content.test.ts` enforces coverage and SEO field limits. A game without a content module, or a description outside the snippet range, fails the suite.
+- **Coming-soon games are `noindex, follow`.** A page earns indexing only by being `available` _and_ having a content module; until then it renders a fallback About block and stays out of the sitemap. Ship a content module with the game to make its page indexable.
+- `data/games/content/game-content.test.ts` enforces coverage and SEO field limits. A **playable** game without a content module, or a description outside the snippet range, fails the suite.
 
 ---
 

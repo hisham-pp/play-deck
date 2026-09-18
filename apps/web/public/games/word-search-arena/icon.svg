@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#061729" />
+      <stop offset="100%" stop-color="#050811" />
+    </linearGradient>
+    <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0" />
+    </radialGradient>
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Container -->
+  <rect width="256" height="256" rx="48" fill="url(#bgGrad)" />
+  <rect width="254" height="254" x="1" y="1" rx="47" fill="none" stroke="#06b6d4" stroke-width="2" stroke-opacity="0.3" />
+
+  <!-- Inner Court Arena -->
+  <rect x="24" y="24" width="208" height="208" rx="24" fill="#070b14" stroke="#1e293b" stroke-width="2" />
+  <circle cx="128" cy="128" r="80" fill="url(#glowGrad)" />
+
+  <!-- Thematic Iconography -->
+  <g filter="url(#neonGlow)">
+    <g font-size="28" font-weight="900" fill="#38bdf8" text-anchor="middle">
+      <text x="78" y="90">S</text><text x="128" y="90">E</text><text x="178" y="90">E</text><text x="228" y="90">K</text>
+      <text x="78" y="140">W</text><text x="128" y="140">O</text><text x="178" y="140">R</text><text x="228" y="140">D</text>
+    </g>
+    <rect x="52" y="112" width="190" height="36" rx="18" fill="none" stroke="#f59e0b" stroke-width="4"/>
+  </g>
+</svg>

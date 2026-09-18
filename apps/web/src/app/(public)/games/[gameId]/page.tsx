@@ -41,6 +41,15 @@ function findGame(slug: string): GameDefinition | undefined {
   return GAME_DEFINITIONS.find((game) => game.slug === slug);
 }
 
+/**
+ * A page earns indexing by being playable and having a written content module.
+ * Coming-soon entries still get a real page for catalog click-through, but they
+ * are thin by definition, so they stay out of the index until they ship.
+ */
+function isIndexable(game: GameDefinition): boolean {
+  return game.status === 'available' && getGameContent(game.id) !== undefined;
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { gameId } = await params;
   const game = findGame(gameId);
@@ -60,6 +69,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     keywords: [game.name, game.category, ...game.tags, ...(content?.seo.keywords ?? []), SITE_NAME],
     alternates: { canonical },
+    ...(isIndexable(game) ? {} : { robots: { index: false, follow: true } }),
     openGraph: {
       type: 'article',
       url: canonical,

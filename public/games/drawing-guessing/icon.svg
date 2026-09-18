@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#23081e" />
+      <stop offset="100%" stop-color="#050811" />
+    </linearGradient>
+    <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ec4899" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#ec4899" stop-opacity="0" />
+    </radialGradient>
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Container -->
+  <rect width="256" height="256" rx="48" fill="url(#bgGrad)" />
+  <rect width="254" height="254" x="1" y="1" rx="47" fill="none" stroke="#ec4899" stroke-width="2" stroke-opacity="0.3" />
+
+  <!-- Inner Court Arena -->
+  <rect x="24" y="24" width="208" height="208" rx="24" fill="#070b14" stroke="#1e293b" stroke-width="2" />
+  <circle cx="128" cy="128" r="80" fill="url(#glowGrad)" />
+
+  <!-- Thematic Iconography -->
+  <g filter="url(#neonGlow)">
+    <path d="M50 190 Q90 120, 150 160 T220 90" fill="none" stroke="#ec4899" stroke-width="10" stroke-linecap="round"/>
+      <g transform="translate(130, 40) rotate(45)">
+        <rect x="0" y="0" width="24" height="90" rx="4" fill="#8b5cf6" stroke="#ffffff" stroke-width="3"/>
+        <polygon points="0,90 12,118 24,90" fill="#fde047"/>
+        <polygon points="8,110 12,118 16,110" fill="#0f172a"/>
+      </g>
+  </g>
+</svg>

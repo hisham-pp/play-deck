@@ -16,6 +16,13 @@ const CATEGORY_GENRES: Record<string, string> = {
   all: 'Casual',
 };
 
+/** Coming-soon entries carry a placeholder like "Coming Soon" rather than a date. */
+function isoDate(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? undefined : value;
+}
+
 function playModes(game: GameDefinition): string[] {
   const modes: string[] = [];
   if (game.players.min <= 1) modes.push('SinglePlayer');
@@ -50,7 +57,7 @@ export function buildGameSchema(game: GameDefinition, content?: GameContent): Js
     gamePlatform: ['Web Browser', 'PC', 'Mobile'],
     applicationCategory: 'GameApplication',
     operatingSystem: 'Any',
-    ...(game.releaseDate ? { datePublished: game.releaseDate } : {}),
+    ...(isoDate(game.releaseDate) ? { datePublished: game.releaseDate } : {}),
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,
@@ -60,8 +67,11 @@ export function buildGameSchema(game: GameDefinition, content?: GameContent): Js
       '@type': 'Offer',
       price: '0',
       priceCurrency: 'USD',
-      availability: 'https://schema.org/InStock',
-      url: absoluteUrl(gamePlayPath(game.slug)),
+      availability:
+        game.status === 'available' ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
+      url: absoluteUrl(
+        game.status === 'available' ? gamePlayPath(game.slug) : gameOverviewPath(game.slug),
+      ),
     },
   };
 }
