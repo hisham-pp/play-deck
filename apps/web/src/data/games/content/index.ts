@@ -9,6 +9,7 @@ import { penFightContent } from './pen-fight';
 import { pongContent } from './pong';
 import { runicMemoryContent } from './runic-memory';
 import { snakeContent } from './snake';
+import { snakeAndLadderContent } from './snake-and-ladder';
 import { sudokuContent } from './sudoku';
 import { summitRushContent } from './summit-rush';
 import { tetrisContent } from './tetris';
@@ -29,6 +30,7 @@ const ALL_CONTENT: GameContent[] = [
   ballBounceContent,
   pongContent,
   summitRushContent,
+  snakeAndLadderContent,
 ];
 
 /**

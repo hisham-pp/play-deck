@@ -208,20 +208,4 @@ export const COMING_SOON_STRATEGY_GAMES: GameDefinition[] = [
     badge: BADGE_COMING_SOON,
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
-  {
-    id: 'snake-and-ladder',
-    name: 'Snake & Ladder',
-    slug: 'snake-and-ladder',
-    description:
-      'Build a polished online multiplayer Snake & Ladder game with optional voice chat. Classic 10×10 board, animated token movement, interactive dice rolling, and server-authoritative online gameplay via Supabase Realtime.',
-    category: CATEGORY_BOARD,
-    players: { min: 2, max: 4 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/snake-and-ladder/icon.svg',
-    bannerUrl: '/games/snake-and-ladder/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_SOLO],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
 ];

@@ -14,6 +14,7 @@ import { PenFightGame } from '@/features/games/pen-fight';
 import { PongGame } from '@/features/games/pong';
 import { RunicMemoryGame } from '@/features/games/runic-memory';
 import { SnakeGame } from '@/features/games/snake';
+import { SnakeLadderGame } from '@/features/games/snake-and-ladder';
 import { SudokuGame } from '@/features/games/sudoku';
 import { SummitRushGame } from '@/features/games/summit-rush';
 import { TetrisGame } from '@/features/games/tetris';
@@ -86,6 +87,10 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
 
   if (game.id === 'summit-rush') {
     return <SummitRushGame />;
+  }
+
+  if (game.id === 'snake-and-ladder') {
+    return <SnakeLadderGame />;
   }
 
   const handleStart = () => {

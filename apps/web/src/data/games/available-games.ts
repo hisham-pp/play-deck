@@ -244,4 +244,20 @@ export const AVAILABLE_GAMES: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: RELEASE_DATE_2026_09_17,
   },
+  {
+    id: 'snake-and-ladder',
+    name: 'Snake & Ladder',
+    slug: 'snake-and-ladder',
+    description:
+      'The classic 100-square race, with animated climbs and slides. Play pass-and-play, against bots, or online with friends over voice chat.',
+    category: CATEGORY_BOARD,
+    players: { min: 2, max: 4 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/snake-and-ladder/icon.svg',
+    bannerUrl: '/games/snake-and-ladder/cover.svg',
+    tags: [TAG_CLASSIC, 'Board', 'Dice', TAG_LOCAL_PLAY, '2-4 Players', 'Voice Chat'],
+    featured: false,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-18',
+  },
 ];

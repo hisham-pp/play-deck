@@ -4,8 +4,6 @@ export type SnakeLadderPlayerType = 'human' | 'bot';
 
 export type SnakeLadderPlayerStatus = 'connected' | 'disconnected' | 'playing' | 'finished';
 
-export type SnakeLadderBotDifficulty = 'easy' | 'normal' | 'hard';
-
 /** Seat-level identity, independent of React or any transport concern. */
 export interface SnakeLadderPlayer {
   id: string;
@@ -16,7 +14,6 @@ export interface SnakeLadderPlayer {
   seatIndex: number;
   status: SnakeLadderPlayerStatus;
   ready: boolean;
-  botDifficulty?: SnakeLadderBotDifficulty;
 }
 
 export interface SnakeLadderPlayerState {
@@ -111,5 +108,5 @@ export interface SnakeLadderStats {
 
 export interface SnakeLadderPreferences {
   lastSeatCount: number;
-  lastBotDifficulty: SnakeLadderBotDifficulty;
+  lastBotCount: number;
 }

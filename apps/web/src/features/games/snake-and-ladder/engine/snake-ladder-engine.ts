@@ -45,6 +45,16 @@ export class SnakeLadderEngine implements BaseGameEngine<SnakeLadderGameState, S
     this.notify();
   }
 
+  /**
+   * Adopts a state decided elsewhere — the room host's snapshot when a guest
+   * joins or reconnects mid-match. Everything after that flows back through
+   * `dispatch`, so this is the only door around the reducer.
+   */
+  loadState(state: SnakeLadderGameState): void {
+    this.state = state;
+    this.notify();
+  }
+
   destroy(): void {
     this.listeners.clear();
   }
