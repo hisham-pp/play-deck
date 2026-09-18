@@ -9,6 +9,7 @@ import { BallBounceGame } from '@/features/games/ball-bounce';
 import { ChessGame } from '@/features/games/chess';
 import { ConnectFourGame } from '@/features/games/connect-four';
 import { FlappyArcadeGame } from '@/features/games/flappy-arcade';
+import { HumanConveyorGame } from '@/features/games/human-conveyor-belt';
 import { LudoGame } from '@/features/games/ludo';
 import { MinesweeperGame } from '@/features/games/minesweeper';
 import { MiniGolfGame } from '@/features/games/mini-golf';
@@ -39,6 +40,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   chess: ChessGame,
   'connect-four': ConnectFourGame,
   'flappy-arcade': FlappyArcadeGame,
+  'human-conveyor-belt': HumanConveyorGame,
   ludo: LudoGame,
   minesweeper: MinesweeperGame,
   'mini-golf': MiniGolfGame,
