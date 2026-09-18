@@ -8,6 +8,7 @@ import { Game2048 } from '@/features/games/2048';
 import { BallBounceGame } from '@/features/games/ball-bounce';
 import { ChessGame } from '@/features/games/chess';
 import { ConnectFourGame } from '@/features/games/connect-four';
+import { FlappyArcadeGame } from '@/features/games/flappy-arcade';
 import { LudoGame } from '@/features/games/ludo';
 import { MinesweeperGame } from '@/features/games/minesweeper';
 import { PenFightGame } from '@/features/games/pen-fight';
@@ -86,6 +87,10 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
 
   if (game.id === 'summit-rush') {
     return <SummitRushGame />;
+  }
+
+  if (game.id === 'flappy-arcade') {
+    return <FlappyArcadeGame />;
   }
 
   const handleStart = () => {
