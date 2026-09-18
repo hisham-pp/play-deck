@@ -359,7 +359,72 @@ export const MiniGolfCanvas: React.FC<MiniGolfCanvasProps> = ({
       ctx.restore();
     }
 
-    // 12. Golf Ball
+    // 12. Golf Balls (Resting other players + active player ball)
+    // First render resting balls of other players
+    for (const player of state.players) {
+      if (player.id === activePlayer?.id) continue;
+      const otherBall = state.playerBalls?.[player.id];
+      if (!otherBall || otherBall.inHole) continue;
+
+      ctx.save();
+      // Drop shadow
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+      ctx.beginPath();
+      ctx.ellipse(
+        otherBall.x,
+        otherBall.y + 3,
+        otherBall.radius * 1.1,
+        otherBall.radius * 0.7,
+        0,
+        0,
+        Math.PI * 2,
+      );
+      ctx.fill();
+
+      // Ball sphere gradient
+      const ballGrad = ctx.createRadialGradient(
+        otherBall.x - otherBall.radius * 0.35,
+        otherBall.y - otherBall.radius * 0.35,
+        1,
+        otherBall.x,
+        otherBall.y,
+        otherBall.radius,
+      );
+      ballGrad.addColorStop(0, '#ffffff');
+      ballGrad.addColorStop(0.5, player.color || '#94a3b8');
+      ballGrad.addColorStop(1, '#0f172a');
+
+      ctx.fillStyle = ballGrad;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(otherBall.x, otherBall.y, otherBall.radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Non-color glyph symbol in center
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '8px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const symbol =
+        player.glyph === 'diamond'
+          ? '◆'
+          : player.glyph === 'star'
+            ? '★'
+            : player.glyph === 'triangle'
+              ? '▲'
+              : '●';
+      ctx.fillText(symbol, otherBall.x, otherBall.y);
+
+      // Name label above ball
+      ctx.fillStyle = 'rgba(226, 232, 240, 0.85)';
+      ctx.font = '9px sans-serif';
+      ctx.fillText(player.name.split(' ')[0], otherBall.x, otherBall.y - 12);
+      ctx.restore();
+    }
+
+    // Now render the active player ball
     if (!state.ball.inHole || state.phase === 'hole-clear') {
       ctx.save();
       // Drop shadow
@@ -376,6 +441,16 @@ export const MiniGolfCanvas: React.FC<MiniGolfCanvasProps> = ({
       );
       ctx.fill();
 
+      // Aiming halo pulse
+      if (state.phase === 'aiming') {
+        const pulse = 2 + Math.sin(Date.now() * 0.006) * 1.5;
+        ctx.strokeStyle = activePlayer ? `${activePlayer.color}88` : 'rgba(251, 191, 36, 0.6)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(state.ball.x, state.ball.y, state.ball.radius + pulse, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
       // Ball sphere gradient with 3D specular highlight
       const ballGrad = ctx.createRadialGradient(
         state.ball.x - state.ball.radius * 0.35,
@@ -390,12 +465,30 @@ export const MiniGolfCanvas: React.FC<MiniGolfCanvasProps> = ({
       ballGrad.addColorStop(1, '#0f172a');
 
       ctx.fillStyle = ballGrad;
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.arc(state.ball.x, state.ball.y, state.ball.radius, 0, Math.PI * 2);
       ctx.fill();
       ctx.stroke();
+
+      // Active player glyph symbol
+      if (activePlayer?.glyph) {
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '8px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const symbol =
+          activePlayer.glyph === 'diamond'
+            ? '◆'
+            : activePlayer.glyph === 'star'
+              ? '★'
+              : activePlayer.glyph === 'triangle'
+                ? '▲'
+                : '●';
+        ctx.fillText(symbol, state.ball.x, state.ball.y);
+      }
+
       ctx.restore();
     }
 
