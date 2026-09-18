@@ -251,4 +251,27 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-18',
   },
+  {
+    id: 'bomb-factory',
+    name: 'Bomb Factory',
+    slug: 'bomb-factory',
+    description:
+      'Players collaboratively assemble machines under time pressure, but each player sees different information.',
+    category: CATEGORY_PUZZLE,
+    players: { min: 2, max: 6 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/bomb-factory/icon.svg',
+    bannerUrl: '/games/bomb-factory/cover.svg',
+    tags: [
+      TAG_MULTIPLAYER,
+      TAG_VOICE_CHAT,
+      'Cooperative',
+      TAG_LOCAL_PLAY,
+      'Puzzle',
+      'Voice-Essential',
+    ],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-18',
+  },
 ];

@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { GameDefinition } from '@playdeck/game-types';
 import { Game2048 } from '@/features/games/2048';
 import { BallBounceGame } from '@/features/games/ball-bounce';
+import { BombFactoryGame } from '@/features/games/bomb-factory';
 import { ChessGame } from '@/features/games/chess';
 import { ColorThiefGame } from '@/features/games/color-thief';
 import { ConnectFourGame } from '@/features/games/connect-four';
@@ -41,6 +42,7 @@ import { GameStage } from './GameStage';
 const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   '2048': Game2048,
   'ball-bounce': BallBounceGame,
+  'bomb-factory': BombFactoryGame,
   chess: ChessGame,
   'color-thief': ColorThiefGame,
   'connect-four': ConnectFourGame,

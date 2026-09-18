@@ -5,29 +5,12 @@ import {
   RELEASE_DATE_COMING_SOON,
   TAG_MULTIPLAYER,
   TAG_VOICE_CHAT,
-  TAG_COOPERATIVE,
   TAG_SOLO,
   TAG_WORD_PUZZLE,
   CATEGORY_PUZZLE,
 } from './constants';
 
 export const COMING_SOON_PUZZLE_GAMES: GameDefinition[] = [
-  {
-    id: 'bomb-factory',
-    name: 'Bomb Factory',
-    slug: 'bomb-factory',
-    description:
-      'Players collaboratively assemble machines under time pressure, but each player sees different information.',
-    category: CATEGORY_PUZZLE,
-    players: { min: 2, max: 6 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/bomb-factory/icon.svg',
-    bannerUrl: '/games/bomb-factory/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_COOPERATIVE],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
   {
     id: 'anagram-sprint',
     name: 'Anagram Sprint',
