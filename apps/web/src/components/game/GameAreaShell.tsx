@@ -12,6 +12,7 @@ import { LudoGame } from '@/features/games/ludo';
 import { MinesweeperGame } from '@/features/games/minesweeper';
 import { PenFightGame } from '@/features/games/pen-fight';
 import { PongGame } from '@/features/games/pong';
+import { PushYourLuckGame } from '@/features/games/push-your-luck';
 import { RunicMemoryGame } from '@/features/games/runic-memory';
 import { SnakeGame } from '@/features/games/snake';
 import { SudokuGame } from '@/features/games/sudoku';
@@ -24,68 +25,39 @@ import { usePlayerStore } from '@/stores/player.store';
 import { GameStatusBadge, GameCategoryBadge, GameFeatureBadge } from './GameBadge';
 import { GameStage } from './GameStage';
 
+/**
+ * Slug-to-component registry for shipped games. A new game adds one entry here
+ * rather than another branch in the shell.
+ */
+const GAME_COMPONENTS: Record<string, React.ComponentType> = {
+  '2048': Game2048,
+  'ball-bounce': BallBounceGame,
+  chess: ChessGame,
+  'connect-four': ConnectFourGame,
+  ludo: LudoGame,
+  minesweeper: MinesweeperGame,
+  'pen-fight': PenFightGame,
+  pong: PongGame,
+  'push-your-luck': PushYourLuckGame,
+  'runic-memory': RunicMemoryGame,
+  snake: SnakeGame,
+  sudoku: SudokuGame,
+  'summit-rush': SummitRushGame,
+  tetris: TetrisGame,
+  'tic-tac-toe': TicTacToeGame,
+};
+
 export function GameAreaShell({ game }: { game: GameDefinition }) {
+  const GameComponent = GAME_COMPONENTS[game.id];
+
   const { player } = usePlayerStore();
   const { currentSession, startSession, endSession } = useGameSessionStore();
   const { addRecentSession } = useLibraryStore();
   const [status, setStatus] = useState<'idle' | 'running' | 'over'>('idle');
   const [mockScore, setMockScore] = useState(0);
 
-  // Dedicated real game router
-  if (game.id === 'snake') {
-    return <SnakeGame />;
-  }
-
-  if (game.id === 'tic-tac-toe') {
-    return <TicTacToeGame />;
-  }
-
-  if (game.id === 'ludo') {
-    return <LudoGame />;
-  }
-
-  if (game.id === 'pen-fight') {
-    return <PenFightGame />;
-  }
-
-  if (game.id === 'tetris') {
-    return <TetrisGame />;
-  }
-
-  if (game.id === 'connect-four') {
-    return <ConnectFourGame />;
-  }
-
-  if (game.id === 'sudoku') {
-    return <SudokuGame />;
-  }
-
-  if (game.id === 'chess') {
-    return <ChessGame />;
-  }
-
-  if (game.id === 'runic-memory') {
-    return <RunicMemoryGame />;
-  }
-
-  if (game.id === 'minesweeper') {
-    return <MinesweeperGame />;
-  }
-
-  if (game.id === '2048') {
-    return <Game2048 />;
-  }
-
-  if (game.id === 'ball-bounce') {
-    return <BallBounceGame />;
-  }
-
-  if (game.id === 'pong') {
-    return <PongGame />;
-  }
-
-  if (game.id === 'summit-rush') {
-    return <SummitRushGame />;
+  if (GameComponent) {
+    return <GameComponent />;
   }
 
   const handleStart = () => {

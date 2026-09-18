@@ -77,22 +77,6 @@ export const COMING_SOON_CASUAL_GAMES_2: GameDefinition[] = [
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
   {
-    id: 'push-your-luck',
-    name: 'Push Your Luck',
-    slug: 'push-your-luck',
-    description:
-      "Keep collecting points, but every additional move increases the chance of losing everything you've accumulated this round.",
-    category: CATEGORY_CASUAL,
-    players: { min: 2, max: 8 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/push-your-luck/icon.svg',
-    bannerUrl: '/games/push-your-luck/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PARTY],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
     id: 'hide-and-seek',
     name: 'Hide & Seek',
     slug: 'hide-and-seek',
