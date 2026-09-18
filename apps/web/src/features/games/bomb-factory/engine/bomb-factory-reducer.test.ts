@@ -4,6 +4,7 @@ import type {
   AssemblySubmission,
   BombFactorySeat,
   Dossier,
+  DossierFact,
   MachineSpec,
 } from '../types/bomb-factory.types';
 import { verdictsFromAll } from './assembly-validator';
@@ -42,11 +43,29 @@ function buildLine(seatCount = 4) {
 /** Reads the one correct move for a step back out of the shared dossiers. */
 function correctMove(dossiers: Dossier[], spec: MachineSpec, stepIndex: number) {
   const facts = dossiers.flatMap((dossier) => dossier.facts);
-  const partId = facts.find((f) => f.kind === 'order' && f.stepIndex === stepIndex)!.partId;
-  const stationId = facts.find((f) => f.kind === 'routing' && f.partId === partId)!.stationId;
-  const dial = facts.find((f) => f.kind === 'calibration' && f.partId === partId)!.dial;
+  const orderFact = facts.find(
+    (f): f is Extract<DossierFact, { kind: 'order' }> =>
+      f.kind === 'order' && f.stepIndex === stepIndex,
+  )!;
+  const partId = orderFact.partId;
+
+  const routingFact = facts.find(
+    (f): f is Extract<DossierFact, { kind: 'routing' }> =>
+      f.kind === 'routing' && f.partId === partId,
+  )!;
+  const stationId = routingFact.stationId;
+
+  const calFact = facts.find(
+    (f): f is Extract<DossierFact, { kind: 'calibration' }> =>
+      f.kind === 'calibration' && f.partId === partId,
+  )!;
+  const dial = calFact.dial;
+
   const material = partById(partId)!.material;
-  const notice = facts.find((f) => f.kind === 'safety' && f.material === material);
+  const notice = facts.find(
+    (f): f is Extract<DossierFact, { kind: 'safety' }> =>
+      f.kind === 'safety' && f.material === material,
+  );
   const toolId = spec.toolIds.find((id) => !notice?.forbiddenToolIds.includes(id))!;
 
   return { partId, stationId, dial, toolId };

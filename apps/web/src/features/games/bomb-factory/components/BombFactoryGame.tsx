@@ -60,8 +60,8 @@ function BombFactoryGameInner() {
   });
 
   const operator = useMemo(
-    () => operatorSeatFor(state.seats, state.machineIndex),
-    [state.seats, state.machineIndex],
+    () => operatorSeatFor(state.seats, state.machineIndex, state.currentStep),
+    [state.seats, state.machineIndex, state.currentStep],
   );
 
   const isOperator = Boolean(operator && (state.mode === 'local' || operator.id === localSeatId));
@@ -129,7 +129,14 @@ function BombFactoryGameInner() {
       return (
         <div className="mx-auto flex w-full max-w-4xl flex-col gap-4">
           {state.mode === 'online' && roomCode && <BombFactoryVoiceDock />}
-          <BombFactoryBriefing spec={state.spec} onReady={startLine} onLeave={handleLeaveGame} />
+          <BombFactoryBriefing
+            state={state}
+            mode={state.mode}
+            dossiers={dossiers}
+            localSeatId={localSeatId}
+            canStart={state.mode === 'local' ? true : isHost}
+            onStart={startLine}
+          />
         </div>
       );
     }
