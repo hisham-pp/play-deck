@@ -5,20 +5,39 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import type { GameDefinition, Player } from '@playdeck/game-types';
 import { Button } from '@playdeck/ui';
+import { useBombFactoryMultiplayerStore } from '@/stores/bomb-factory-multiplayer.store';
+import { useColorThiefMultiplayerStore } from '@/stores/color-thief-multiplayer.store';
+import { useHumanConveyorMultiplayerStore } from '@/stores/human-conveyor-multiplayer.store';
 import { useLudoMultiplayerStore } from '@/stores/ludo-multiplayer.store';
+import { useMiniGolfMultiplayerStore } from '@/stores/mini-golf-multiplayer.store';
 import { useMultiplayerStore } from '@/stores/multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
+import { useSnakeLadderMultiplayerStore } from '@/stores/snake-ladder-multiplayer.store';
+import { useTinyIslandMultiplayerStore } from '@/stores/tiny-island-multiplayer.store';
 import { JOIN_ROOM_PARAM, parseJoinCode } from '../services/join-link';
 
 const LUDO_GAME_ID = 'ludo';
+const MINI_GOLF_GAME_ID = 'mini-golf';
+const SNAKE_LADDER_GAME_ID = 'snake-and-ladder';
+const HUMAN_CONVEYOR_GAME_ID = 'human-conveyor-belt';
+const TINY_ISLAND_GAME_ID = 'tiny-island';
+const COLOR_THIEF_GAME_ID = 'color-thief';
+const BOMB_FACTORY_GAME_ID = 'bomb-factory';
+const DEFAULT_JOIN_ERROR = 'Could not join room';
 
 type GateStatus = 'idle' | 'joining' | 'failed';
 
-/** Ludo keeps its own multi-seat room store; every other game uses the shared one. */
+/** Games with dedicated multi-seat room stores route to their own stores. */
 function currentRoomCodeFor(gameId: string): string | null {
-  return gameId === LUDO_GAME_ID
-    ? useLudoMultiplayerStore.getState().roomCode
-    : useMultiplayerStore.getState().roomCode;
+  if (gameId === LUDO_GAME_ID) return useLudoMultiplayerStore.getState().roomCode;
+  if (gameId === MINI_GOLF_GAME_ID) return useMiniGolfMultiplayerStore.getState().roomCode;
+  if (gameId === SNAKE_LADDER_GAME_ID) return useSnakeLadderMultiplayerStore.getState().roomCode;
+  if (gameId === HUMAN_CONVEYOR_GAME_ID)
+    return useHumanConveyorMultiplayerStore.getState().roomCode;
+  if (gameId === TINY_ISLAND_GAME_ID) return useTinyIslandMultiplayerStore.getState().roomCode;
+  if (gameId === COLOR_THIEF_GAME_ID) return useColorThiefMultiplayerStore.getState().roomCode;
+  if (gameId === BOMB_FACTORY_GAME_ID) return useBombFactoryMultiplayerStore.getState().roomCode;
+  return useMultiplayerStore.getState().roomCode;
 }
 
 async function joinRoomFor(gameId: string, code: string, player: Player): Promise<string | null> {
@@ -29,14 +48,74 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       displayName: player.displayName,
       avatar: player.avatar || '🕹️',
     });
-    return ok ? null : (useLudoMultiplayerStore.getState().error ?? 'Could not join room');
+    return ok ? null : (useLudoMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === MINI_GOLF_GAME_ID) {
+    const store = useMiniGolfMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '⛳',
+    });
+    return ok ? null : (useMiniGolfMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === SNAKE_LADDER_GAME_ID) {
+    const store = useSnakeLadderMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🕹️',
+    });
+    return ok ? null : (useSnakeLadderMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === HUMAN_CONVEYOR_GAME_ID) {
+    const store = useHumanConveyorMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '⚙️',
+    });
+    return ok ? null : (useHumanConveyorMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === TINY_ISLAND_GAME_ID) {
+    const store = useTinyIslandMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🌴',
+    });
+    return ok ? null : (useTinyIslandMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === COLOR_THIEF_GAME_ID) {
+    const store = useColorThiefMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🎨',
+    });
+    return ok ? null : (useColorThiefMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === BOMB_FACTORY_GAME_ID) {
+    const store = useBombFactoryMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🛠️',
+    });
+    return ok ? null : (useBombFactoryMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
   }
 
   const store = useMultiplayerStore.getState();
   // A player switching rooms leaves the old one first so the channel is free.
   if (store.roomCode && store.roomCode !== code) store.leaveRoom();
   const ok = await store.joinRoomByCode(code, player, gameId);
-  return ok ? null : (useMultiplayerStore.getState().errorMessage ?? 'Could not join room');
+  return ok ? null : (useMultiplayerStore.getState().errorMessage ?? DEFAULT_JOIN_ERROR);
 }
 
 export interface JoinLinkGateProps {

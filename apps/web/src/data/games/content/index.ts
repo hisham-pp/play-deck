@@ -1,8 +1,11 @@
 import type { GameContent } from '@playdeck/game-types';
 import { game2048Content } from './2048';
 import { ballBounceContent } from './ball-bounce';
+import { bombFactoryContent } from './bomb-factory';
+import { colorThiefContent } from './color-thief';
 import { connectFourContent } from './connect-four';
 import { flappyArcadeContent } from './flappy-arcade';
+import { humanConveyorBeltContent } from './human-conveyor-belt';
 import { ludoContent } from './ludo';
 import { chessContent } from './master-chess';
 import { minesweeperContent } from './minesweeper';
@@ -17,6 +20,7 @@ import { sudokuContent } from './sudoku';
 import { summitRushContent } from './summit-rush';
 import { tetrisContent } from './tetris';
 import { ticTacToeContent } from './tic-tac-toe';
+import { tinyIslandContent } from './tiny-island';
 import { wordChainContent } from './word-chain';
 
 const ALL_CONTENT: GameContent[] = [
@@ -35,10 +39,14 @@ const ALL_CONTENT: GameContent[] = [
   pongContent,
   summitRushContent,
   flappyArcadeContent,
+  humanConveyorBeltContent,
   miniGolfContent,
   pushYourLuckContent,
   snakeAndLadderContent,
+  tinyIslandContent,
   wordChainContent,
+  colorThiefContent,
+  bombFactoryContent,
 ];
 
 /**

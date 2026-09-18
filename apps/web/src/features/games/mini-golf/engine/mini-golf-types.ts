@@ -85,10 +85,14 @@ export interface Ball {
   trail: Vector2D[];
 }
 
+export type PlayerGlyph = 'circle' | 'diamond' | 'star' | 'triangle' | 'square';
+
 export interface Player {
   id: string;
   name: string;
   color: string;
+  glyph?: PlayerGlyph;
+  avatar?: string;
   isAi?: boolean;
 }
 
@@ -118,7 +122,8 @@ export interface PlayerScoreCard {
   holesInOne: number;
 }
 
-export type GameMode = 'solo' | 'vs-ai' | 'pass-and-play';
+export type GameMode = 'solo' | 'vs-ai' | 'pass-and-play' | 'online';
+export type CoursePreset = 'front-9' | 'back-9' | 'full-18';
 
 export type GamePhase = 'aiming' | 'rolling' | 'hazard-reset' | 'hole-clear' | 'course-complete';
 
@@ -136,7 +141,11 @@ export interface MiniGolfState {
   activePlayerIndex: number;
   phase: GamePhase;
   mode: GameMode;
+  coursePreset: CoursePreset;
   ball: Ball;
+  playerBalls: Record<string, Ball>;
+  completedHolePlayerIds: string[];
+  playerHoleStrokes: Record<string, number>;
   scorecards: Record<string, PlayerScoreCard>;
   currentStrokes: number;
   lastScoreClassification?: ScoreClassification;
@@ -147,7 +156,7 @@ export interface MiniGolfState {
 export interface MiniGolfStats {
   gamesPlayed: number;
   roundsCompleted: number;
-  bestRoundScore: number; // lowest total strokes for 9 holes
+  bestRoundScore: number; // lowest total strokes
   totalStrokes: number;
   holesInOne: number;
   eagles: number;
