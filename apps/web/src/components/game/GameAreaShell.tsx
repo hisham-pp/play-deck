@@ -17,6 +17,7 @@ import { PongGame } from '@/features/games/pong';
 import { PushYourLuckGame } from '@/features/games/push-your-luck';
 import { RunicMemoryGame } from '@/features/games/runic-memory';
 import { SnakeGame } from '@/features/games/snake';
+import { SnakeLadderGame } from '@/features/games/snake-and-ladder';
 import { SudokuGame } from '@/features/games/sudoku';
 import { SummitRushGame } from '@/features/games/summit-rush';
 import { TetrisGame } from '@/features/games/tetris';
@@ -46,6 +47,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'push-your-luck': PushYourLuckGame,
   'runic-memory': RunicMemoryGame,
   snake: SnakeGame,
+  'snake-and-ladder': SnakeLadderGame,
   sudoku: SudokuGame,
   'summit-rush': SummitRushGame,
   tetris: TetrisGame,

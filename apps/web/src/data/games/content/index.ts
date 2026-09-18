@@ -12,6 +12,7 @@ import { pongContent } from './pong';
 import { pushYourLuckContent } from './push-your-luck';
 import { runicMemoryContent } from './runic-memory';
 import { snakeContent } from './snake';
+import { snakeAndLadderContent } from './snake-and-ladder';
 import { sudokuContent } from './sudoku';
 import { summitRushContent } from './summit-rush';
 import { tetrisContent } from './tetris';
@@ -36,6 +37,7 @@ const ALL_CONTENT: GameContent[] = [
   flappyArcadeContent,
   miniGolfContent,
   pushYourLuckContent,
+  snakeAndLadderContent,
   wordChainContent,
 ];
 
