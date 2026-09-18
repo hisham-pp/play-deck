@@ -11,7 +11,10 @@ export type SoundEffectName =
   | 'rune-flip'
   | 'rune-match'
   | 'rune-mismatch'
-  | 'rune-reveal';
+  | 'rune-reveal'
+  | 'rivet-lock'
+  | 'fault-buzz'
+  | 'klaxon';
 
 let sharedContext: AudioContext | null = null;
 
@@ -225,6 +228,49 @@ function playRuneMismatch(ctx: AudioContext): void {
   });
 }
 
+/** A part seating home: a short metallic knock with a rising confirm chime. */
+function playRivetLock(ctx: AudioContext): void {
+  const now = ctx.currentTime;
+  noiseBurst(ctx, { startTime: now, duration: 0.05, gain: 0.16 });
+  tone(ctx, {
+    frequency: 392,
+    frequencyEnd: 784,
+    startTime: now + 0.02,
+    duration: 0.14,
+    type: OSC_TRIANGLE,
+    gain: 0.18,
+  });
+}
+
+/** A rejected assembly: a flat, unhappy factory buzzer. */
+function playFaultBuzz(ctx: AudioContext): void {
+  const now = ctx.currentTime;
+  [0, 0.16].forEach((offset) => {
+    tone(ctx, {
+      frequency: 150,
+      startTime: now + offset,
+      duration: 0.13,
+      type: 'square',
+      gain: 0.12,
+    });
+  });
+}
+
+/** The line failing: a two-tone klaxon sweeping down. */
+function playKlaxon(ctx: AudioContext): void {
+  const now = ctx.currentTime;
+  [0, 0.34, 0.68].forEach((offset) => {
+    tone(ctx, {
+      frequency: 440,
+      frequencyEnd: 220,
+      startTime: now + offset,
+      duration: 0.3,
+      type: 'sawtooth',
+      gain: 0.16,
+    });
+  });
+}
+
 const EFFECT_PLAYERS: Record<SoundEffectName, (ctx: AudioContext) => void> = {
   'dice-roll': playDiceRoll,
   'piece-move': playPieceMove,
@@ -237,6 +283,9 @@ const EFFECT_PLAYERS: Record<SoundEffectName, (ctx: AudioContext) => void> = {
   'rune-match': playRuneMatch,
   'rune-mismatch': playRuneMismatch,
   'rune-reveal': playRuneReveal,
+  'rivet-lock': playRivetLock,
+  'fault-buzz': playFaultBuzz,
+  klaxon: playKlaxon,
 };
 
 /**

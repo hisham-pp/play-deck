@@ -203,3 +203,67 @@ canvas {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Bomb Factory — a part seating home on the line */
+@keyframes bf-seat {
+  0% {
+    transform: translateY(-14%) scale(0.94);
+    opacity: 0.35;
+  }
+  60% {
+    transform: translateY(0) scale(1.04);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.bf-seat {
+  animation: bf-seat 0.34s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+/* Bomb Factory — a rejected assembly kicking back */
+@keyframes bf-fault {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  45% {
+    transform: translateX(5px);
+  }
+  70% {
+    transform: translateX(-3px);
+  }
+}
+
+.bf-fault {
+  animation: bf-fault 0.3s ease-in-out both;
+}
+
+/* Bomb Factory — the clock running out of patience */
+@keyframes bf-urgent {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.bf-urgent {
+  animation: bf-urgent 0.9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bf-seat,
+  .bf-fault,
+  .bf-urgent {
+    animation: none;
+  }
+}
