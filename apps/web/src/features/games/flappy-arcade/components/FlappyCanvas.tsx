@@ -268,7 +268,7 @@ export function FlappyCanvas({ state, onFlap }: FlappyCanvasProps) {
 
   return (
     <div
-      className="relative flex items-center justify-center w-full select-none cursor-pointer overflow-hidden rounded-xl border border-deck-border/60 bg-[#090d16] shadow-2xl"
+      className="relative flex items-center justify-center w-full h-full select-none cursor-pointer overflow-hidden rounded-xl border border-deck-border/60 bg-[#090d16] shadow-2xl"
       onClick={onFlap}
       role="button"
       tabIndex={0}
@@ -282,7 +282,7 @@ export function FlappyCanvas({ state, onFlap }: FlappyCanvasProps) {
     >
       <canvas
         ref={canvasRef}
-        className="w-full max-w-[480px] aspect-[3/4] object-contain touch-none"
+        className="h-full aspect-[3/4] max-w-full object-contain touch-none"
         style={{ imageRendering: 'crisp-edges' }}
       />
     </div>

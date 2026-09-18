@@ -1,26 +1,30 @@
 'use client';
 
-import { BarChart3, Pause, Play, Volume2, VolumeX } from 'lucide-react';
+import { BarChart3, Maximize2, Minimize2, Pause, Play, Volume2, VolumeX } from 'lucide-react';
 import React from 'react';
 import type { FlappyGameState } from '../engine/flappy-types';
 
 interface FlappyHUDProps {
   state: FlappyGameState;
   soundEnabled: boolean;
+  isFullscreen?: boolean;
   onToggleSound: () => void;
   onTogglePause: () => void;
   onOpenStats: () => void;
+  onToggleFullscreen?: () => void;
 }
 
 export function FlappyHUD({
   state,
   soundEnabled,
+  isFullscreen = false,
   onToggleSound,
   onTogglePause,
   onOpenStats,
+  onToggleFullscreen,
 }: FlappyHUDProps) {
   return (
-    <div className="flex items-center justify-between w-full max-w-[480px] px-2 py-2 mb-2 bg-[#111827]/80 backdrop-blur border border-deck-border/70 rounded-xl">
+    <div className="flex items-center justify-between w-full max-w-xl md:max-w-2xl px-3 py-2 mb-2 bg-[#111827]/85 backdrop-blur border border-deck-border/70 rounded-xl">
       {/* Left: Score & High Score */}
       <div className="flex items-center gap-4">
         <div className="flex flex-col">
@@ -97,6 +101,22 @@ export function FlappyHUD({
             aria-label="Resume Game"
           >
             <Play className="w-4 h-4" />
+          </button>
+        )}
+
+        {onToggleFullscreen && (
+          <button
+            type="button"
+            onClick={onToggleFullscreen}
+            className="p-2 text-deck-400 hover:text-deck-100 hover:bg-deck-700/60 rounded-lg transition-colors"
+            title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen (F)'}
+            aria-label={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen (F)'}
+          >
+            {isFullscreen ? (
+              <Minimize2 className="w-4 h-4 text-amber-400" />
+            ) : (
+              <Maximize2 className="w-4 h-4" />
+            )}
           </button>
         )}
       </div>
