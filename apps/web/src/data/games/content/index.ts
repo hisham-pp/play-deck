@@ -1,6 +1,7 @@
 import type { GameContent } from '@playdeck/game-types';
 import { game2048Content } from './2048';
 import { ballBounceContent } from './ball-bounce';
+import { colorThiefContent } from './color-thief';
 import { connectFourContent } from './connect-four';
 import { flappyArcadeContent } from './flappy-arcade';
 import { humanConveyorBeltContent } from './human-conveyor-belt';
@@ -43,6 +44,7 @@ const ALL_CONTENT: GameContent[] = [
   snakeAndLadderContent,
   tinyIslandContent,
   wordChainContent,
+  colorThiefContent,
 ];
 
 /**

@@ -7,6 +7,7 @@ import { GameDefinition } from '@playdeck/game-types';
 import { Game2048 } from '@/features/games/2048';
 import { BallBounceGame } from '@/features/games/ball-bounce';
 import { ChessGame } from '@/features/games/chess';
+import { ColorThiefGame } from '@/features/games/color-thief';
 import { ConnectFourGame } from '@/features/games/connect-four';
 import { FlappyArcadeGame } from '@/features/games/flappy-arcade';
 import { HumanConveyorGame } from '@/features/games/human-conveyor-belt';
@@ -39,6 +40,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   '2048': Game2048,
   'ball-bounce': BallBounceGame,
   chess: ChessGame,
+  'color-thief': ColorThiefGame,
   'connect-four': ConnectFourGame,
   'flappy-arcade': FlappyArcadeGame,
   'human-conveyor-belt': HumanConveyorGame,
