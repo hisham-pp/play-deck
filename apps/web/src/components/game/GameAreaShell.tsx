@@ -8,6 +8,7 @@ import { Game2048 } from '@/features/games/2048';
 import { BallBounceGame } from '@/features/games/ball-bounce';
 import { ChessGame } from '@/features/games/chess';
 import { ConnectFourGame } from '@/features/games/connect-four';
+import { FlappyArcadeGame } from '@/features/games/flappy-arcade';
 import { LudoGame } from '@/features/games/ludo';
 import { MinesweeperGame } from '@/features/games/minesweeper';
 import { PenFightGame } from '@/features/games/pen-fight';
@@ -34,6 +35,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'ball-bounce': BallBounceGame,
   chess: ChessGame,
   'connect-four': ConnectFourGame,
+  'flappy-arcade': FlappyArcadeGame,
   ludo: LudoGame,
   minesweeper: MinesweeperGame,
   'pen-fight': PenFightGame,

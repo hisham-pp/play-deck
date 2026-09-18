@@ -114,6 +114,22 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     releaseDate: RELEASE_DATE_2026_09_17,
   },
   {
+    id: 'flappy-arcade',
+    name: 'Flappy Arcade',
+    slug: 'flappy-arcade',
+    description:
+      'Pilot the cyber-glider through hazardous energy conduits. Tap or press space to thrust against gravity, dodge pulsing pylons, and climb the flight leaderboards.',
+    category: CATEGORY_ARCADE,
+    players: { min: 1, max: 1 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/flappy-arcade/icon.svg',
+    bannerUrl: '/games/flappy-arcade/cover.svg',
+    tags: [TAG_ARCADE, TAG_SOLO, TAG_HIGH_SCORE, 'Retro'],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-18',
+  },
+  {
     id: 'word-chain',
     name: 'Word Chain',
     slug: 'word-chain',

@@ -107,20 +107,4 @@ export const COMING_SOON_ARCADE_GAMES_2: GameDefinition[] = [
     badge: BADGE_COMING_SOON,
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
-  {
-    id: 'flappy-arcade',
-    name: 'Flappy Arcade',
-    slug: 'flappy-arcade',
-    description:
-      'Implement an original side-scrolling tap-to-fly arcade game using the PlayDeck architecture. Gravity-based vertical movement, procedurally generated obstacles, increasing difficulty, and persistent best-score tracking via IndexedDB. > **IMPORTANT:** Do not copy Flappy Bird assets, branding, artwork, or proprietary implementation. Create an entirely original PlayDeck visual identity.',
-    category: CATEGORY_ARCADE,
-    players: { min: 1, max: 1 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/flappy-arcade/icon.svg',
-    bannerUrl: '/games/flappy-arcade/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_SOLO],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
 ];
