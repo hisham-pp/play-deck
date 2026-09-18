@@ -25,6 +25,7 @@ import { SummitRushGame } from '@/features/games/summit-rush';
 import { TetrisGame } from '@/features/games/tetris';
 import { TicTacToeGame } from '@/features/games/tic-tac-toe';
 import { TinyIslandGame } from '@/features/games/tiny-island';
+import { ElevatorGame } from '@/features/games/unstable-elevator';
 import { WordChainGame } from '@/features/games/word-chain';
 import { useGameSessionStore } from '@/stores/game-session.store';
 import { useLibraryStore } from '@/stores/library.store';
@@ -58,6 +59,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   tetris: TetrisGame,
   'tic-tac-toe': TicTacToeGame,
   'tiny-island': TinyIslandGame,
+  'unstable-elevator': ElevatorGame,
   'word-chain': WordChainGame,
 };
 

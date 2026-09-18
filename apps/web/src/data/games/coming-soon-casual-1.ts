@@ -5,7 +5,6 @@ import {
   RELEASE_DATE_COMING_SOON,
   TAG_MULTIPLAYER,
   TAG_VOICE_CHAT,
-  TAG_PHYSICS,
   TAG_COOPERATIVE,
   TAG_PARTY,
   TAG_SOCIAL_DECEPTION,
@@ -13,22 +12,6 @@ import {
 } from './constants';
 
 export const COMING_SOON_CASUAL_GAMES_1: GameDefinition[] = [
-  {
-    id: 'unstable-elevator',
-    name: 'Unstable Elevator',
-    slug: 'unstable-elevator',
-    description:
-      'Players stand on a physics-based elevator platform and must balance objects on it while it moves between floors. Drop an object = penalty.',
-    category: CATEGORY_CASUAL,
-    players: { min: 2, max: 4 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/unstable-elevator/icon.svg',
-    bannerUrl: '/games/unstable-elevator/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PHYSICS, TAG_COOPERATIVE],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
   {
     id: 'dont-wake-the-giant',
     name: "Don't Wake the Giant",

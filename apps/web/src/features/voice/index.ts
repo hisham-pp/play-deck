@@ -4,5 +4,6 @@ export { LudoVoiceDock } from './components/LudoVoiceDock';
 export { MiniGolfVoiceDock } from './components/MiniGolfVoiceDock';
 export { HumanConveyorVoiceDock } from './components/HumanConveyorVoiceDock';
 export { TinyIslandVoiceDock } from './components/TinyIslandVoiceDock';
+export { ElevatorVoiceDock } from './components/ElevatorVoiceDock';
 export { isVoiceChatSupported } from './services/microphone.service';
 export type { VoiceIdentity, VoiceRemotePeer } from './types/voice.types';
