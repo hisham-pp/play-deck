@@ -13,6 +13,7 @@ import { penFightContent } from './pen-fight';
 import { pongContent } from './pong';
 import { pushYourLuckContent } from './push-your-luck';
 import { runicMemoryContent } from './runic-memory';
+import { shadowTagContent } from './shadow-tag';
 import { snakeContent } from './snake';
 import { snakeAndLadderContent } from './snake-and-ladder';
 import { sudokuContent } from './sudoku';
@@ -45,6 +46,7 @@ const ALL_CONTENT: GameContent[] = [
   tinyIslandContent,
   wordChainContent,
   colorThiefContent,
+  shadowTagContent,
 ];
 
 /**
