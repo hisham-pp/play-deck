@@ -5,31 +5,59 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import type { GameDefinition, Player } from '@playdeck/game-types';
 import { Button } from '@playdeck/ui';
+import { useColorThiefMultiplayerStore } from '@/stores/color-thief-multiplayer.store';
 import { useLudoMultiplayerStore } from '@/stores/ludo-multiplayer.store';
 import { useMultiplayerStore } from '@/stores/multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
 import { JOIN_ROOM_PARAM, parseJoinCode } from '../services/join-link';
 
-const LUDO_GAME_ID = 'ludo';
-
 type GateStatus = 'idle' | 'joining' | 'failed';
 
-/** Ludo keeps its own multi-seat room store; every other game uses the shared one. */
+/**
+ * A multi-seat room store, for the games that keep their own. Each exposes the
+ * same three things the gate needs, so adding a game here is one entry rather
+ * than one more branch.
+ */
+interface SeatedRoomStore {
+  getRoomCode: () => string | null;
+  join: (code: string, player: Player) => Promise<boolean>;
+  getError: () => string | null;
+}
+
+const SEATED_ROOM_STORES: Record<string, SeatedRoomStore> = {
+  ludo: {
+    getRoomCode: () => useLudoMultiplayerStore.getState().roomCode,
+    join: (code, player) =>
+      useLudoMultiplayerStore.getState().joinRoomByCode(code, {
+        id: player.id,
+        displayName: player.displayName,
+        avatar: player.avatar || '🕹️',
+      }),
+    getError: () => useLudoMultiplayerStore.getState().error,
+  },
+  'color-thief': {
+    getRoomCode: () => useColorThiefMultiplayerStore.getState().roomCode,
+    join: (code, player) =>
+      useColorThiefMultiplayerStore.getState().joinRoomByCode(code, {
+        id: player.id,
+        displayName: player.displayName,
+        avatar: player.avatar || '🎨',
+      }),
+    getError: () => useColorThiefMultiplayerStore.getState().error,
+  },
+};
+
+/** Games with their own seated room store; everything else uses the shared one. */
 function currentRoomCodeFor(gameId: string): string | null {
-  return gameId === LUDO_GAME_ID
-    ? useLudoMultiplayerStore.getState().roomCode
-    : useMultiplayerStore.getState().roomCode;
+  const seated = SEATED_ROOM_STORES[gameId];
+  return seated ? seated.getRoomCode() : useMultiplayerStore.getState().roomCode;
 }
 
 async function joinRoomFor(gameId: string, code: string, player: Player): Promise<string | null> {
-  if (gameId === LUDO_GAME_ID) {
-    const store = useLudoMultiplayerStore.getState();
-    const ok = await store.joinRoomByCode(code, {
-      id: player.id,
-      displayName: player.displayName,
-      avatar: player.avatar || '🕹️',
-    });
-    return ok ? null : (useLudoMultiplayerStore.getState().error ?? 'Could not join room');
+  const seated = SEATED_ROOM_STORES[gameId];
+  if (seated) {
+    const ok = await seated.join(code, player);
+    return ok ? null : (seated.getError() ?? 'Could not join room');
   }
 
   const store = useMultiplayerStore.getState();

@@ -17,22 +17,6 @@ import {
 
 export const COMING_SOON_STRATEGY_GAMES: GameDefinition[] = [
   {
-    id: 'color-thief',
-    name: 'Color Thief',
-    slug: 'color-thief',
-    description:
-      'Players steal territory from each other by painting tiles, but certain colors have hidden abilities.',
-    category: CATEGORY_STRATEGY,
-    players: { min: 2, max: 6 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/color-thief/icon.svg',
-    bannerUrl: '/games/color-thief/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
     id: 'tiny-island',
     name: 'Tiny Island',
     slug: 'tiny-island',
