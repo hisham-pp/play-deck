@@ -18,9 +18,9 @@ export function FeaturedGameCard({ game }: { game: GameDefinition }) {
       return;
     }
     if (isAvailable) {
-      router.push(`/play/${game.id}`);
+      router.push(`/play/${game.slug}`);
     } else {
-      router.push(`/games/${game.id}`);
+      router.push(`/games/${game.slug}`);
     }
   };
 
@@ -94,7 +94,7 @@ export function FeaturedGameCard({ game }: { game: GameDefinition }) {
 
           <div className="flex items-center gap-3">
             <Link
-              href={`/games/${game.id}`}
+              href={`/games/${game.slug}`}
               onClick={(e) => e.stopPropagation()}
               className="text-xs font-semibold text-deck-600 dark:text-deck-300 hover:text-deck-950 dark:hover:text-white transition-colors inline-flex items-center gap-1 py-1"
             >
@@ -104,7 +104,7 @@ export function FeaturedGameCard({ game }: { game: GameDefinition }) {
 
             {isAvailable ? (
               <Link
-                href={`/play/${game.id}`}
+                href={`/play/${game.slug}`}
                 onClick={(e) => e.stopPropagation()}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-all shadow-md group-hover:scale-105 shadow-amber-500/20"
               >

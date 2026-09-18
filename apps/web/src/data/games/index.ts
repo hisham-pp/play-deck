@@ -1,4 +1,4 @@
-import { GameDefinition } from '@playdeck/game-types';
+import type { GameDefinition } from '@playdeck/game-types';
 
 const STATUS_AVAILABLE = 'available';
 const BADGE_READY_TO_PLAY = 'Ready to Play';

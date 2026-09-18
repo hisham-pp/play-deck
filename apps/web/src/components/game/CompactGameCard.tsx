@@ -17,9 +17,9 @@ export function CompactGameCard({ game }: { game: GameDefinition }) {
       return;
     }
     if (isAvailable) {
-      router.push(`/play/${game.id}`);
+      router.push(`/play/${game.slug}`);
     } else {
-      router.push(`/games/${game.id}`);
+      router.push(`/games/${game.slug}`);
     }
   };
 
@@ -61,7 +61,7 @@ export function CompactGameCard({ game }: { game: GameDefinition }) {
         <GameStatusBadge status={game.status} label={isAvailable ? 'Playable' : 'Soon'} size="xs" />
 
         <Link
-          href={`/games/${game.id}`}
+          href={`/games/${game.slug}`}
           onClick={(e) => e.stopPropagation()}
           className="text-xs text-deck-500 hover:text-white transition-colors hidden sm:inline"
         >
@@ -70,7 +70,7 @@ export function CompactGameCard({ game }: { game: GameDefinition }) {
 
         {isAvailable ? (
           <Link
-            href={`/play/${game.id}`}
+            href={`/play/${game.slug}`}
             onClick={(e) => e.stopPropagation()}
             className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-500 group-hover:bg-amber-500 group-hover:text-slate-950 flex items-center justify-center transition-all shadow-sm"
             title="Play Game"

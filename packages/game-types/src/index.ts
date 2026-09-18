@@ -7,3 +7,4 @@ export * from './friend';
 export * from './chat';
 export * from './bot';
 export * from './voice';
+export * from './game-content';
