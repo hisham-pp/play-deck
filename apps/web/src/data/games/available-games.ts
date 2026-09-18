@@ -1,4 +1,4 @@
-import { GameDefinition } from '@playdeck/game-types';
+import type { GameDefinition } from '@playdeck/game-types';
 import {
   STATUS_AVAILABLE,
   BADGE_READY_TO_PLAY,

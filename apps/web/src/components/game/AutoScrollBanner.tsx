@@ -80,7 +80,7 @@ export function AutoScrollBanner({ games, intervalMs = 4500 }: AutoScrollBannerP
     if (target.closest('button') || target.closest('a')) {
       return;
     }
-    router.push(`/play/${currentGame.id}`);
+    router.push(`/play/${currentGame.slug}`);
   };
 
   return (
@@ -176,7 +176,7 @@ export function AutoScrollBanner({ games, intervalMs = 4500 }: AutoScrollBannerP
 
           {/* Actions Bar */}
           <div className="flex items-center gap-3 mt-4 pt-2">
-            <Link href={`/play/${currentGame.id}`}>
+            <Link href={`/play/${currentGame.slug}`}>
               <Button
                 variant="primary"
                 size="lg"
@@ -187,7 +187,7 @@ export function AutoScrollBanner({ games, intervalMs = 4500 }: AutoScrollBannerP
               </Button>
             </Link>
 
-            <Link href={`/games/${currentGame.id}`}>
+            <Link href={`/games/${currentGame.slug}`}>
               <Button
                 variant="outline"
                 size="lg"

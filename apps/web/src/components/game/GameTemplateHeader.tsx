@@ -1,10 +1,7 @@
-'use client';
-
 import { Play, Sparkles, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
-import { GameDefinition } from '@playdeck/game-types';
-import { Button } from '@/components/ui/Button';
+import type { GameDefinition } from '@playdeck/game-types';
 import {
   GameStatusBadge,
   GameCategoryBadge,
@@ -14,24 +11,45 @@ import {
 
 interface GameTemplateHeaderProps {
   game: GameDefinition;
-  onPlay?: () => void;
+  /** Session launcher URL. Rendered as a real anchor so crawlers follow it. */
+  playHref: string;
   backHref?: string;
+  tagline?: string;
 }
 
-export function GameTemplateHeader({ game, onPlay, backHref = '/games' }: GameTemplateHeaderProps) {
+export function GameTemplateHeader({
+  game,
+  playHref,
+  backHref = '/games',
+  tagline,
+}: GameTemplateHeaderProps) {
   const isAvailable = game.status === 'available';
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <Link
-          href={backHref}
-          className="inline-flex items-center gap-2 text-xs font-medium text-deck-500 hover:text-deck-900 dark:hover:text-white transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to Catalog</span>
-        </Link>
-      </div>
+      <nav aria-label="Breadcrumb">
+        <ol className="flex items-center gap-1.5 text-xs font-medium text-deck-500">
+          <li>
+            <Link href="/" className="hover:text-deck-900 dark:hover:text-white transition-colors">
+              Home
+            </Link>
+          </li>
+          <li aria-hidden>/</li>
+          <li>
+            <Link
+              href={backHref}
+              className="inline-flex items-center gap-1.5 hover:text-deck-900 dark:hover:text-white transition-colors"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              Games
+            </Link>
+          </li>
+          <li aria-hidden>/</li>
+          <li aria-current="page" className="text-deck-900 dark:text-white">
+            {game.name}
+          </li>
+        </ol>
+      </nav>
 
       <div className="rounded-2xl border border-surface-border bg-surface-raised p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm">
         <div className="flex items-start gap-4">
@@ -58,20 +76,25 @@ export function GameTemplateHeader({ game, onPlay, backHref = '/games' }: GameTe
             <h1 className="text-2xl md:text-3xl font-black text-deck-950 dark:text-white font-display">
               {game.name}
             </h1>
-            <p className="text-xs text-deck-500 max-w-xl leading-relaxed">{game.description}</p>
+            <p className="text-xs text-deck-500 max-w-xl leading-relaxed">
+              {tagline ?? game.description}
+            </p>
           </div>
         </div>
 
         <div className="flex items-center gap-3 w-full md:w-auto">
           {isAvailable ? (
-            <Button onClick={onPlay} variant="primary" size="lg" className="w-full md:w-auto gap-2">
+            <Link
+              href={playHref}
+              className="inline-flex items-center justify-center gap-2 w-full md:w-auto px-6 h-12 rounded-xl bg-amber-500 hover:bg-amber-400 text-deck-950 font-bold text-sm transition-colors shadow-sm"
+            >
               <Play className="w-4 h-4 fill-current" />
-              <span>Launch Session</span>
-            </Button>
+              <span>Play {game.name}</span>
+            </Link>
           ) : (
-            <Button variant="outline" size="lg" disabled className="w-full md:w-auto opacity-60">
+            <span className="inline-flex items-center justify-center w-full md:w-auto px-6 h-12 rounded-xl border border-surface-border text-deck-500 font-bold text-sm opacity-60">
               Coming Soon
-            </Button>
+            </span>
           )}
         </div>
       </div>

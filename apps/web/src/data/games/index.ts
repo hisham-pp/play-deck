@@ -1,4 +1,4 @@
-import { GameDefinition } from '@playdeck/game-types';
+import type { GameDefinition } from '@playdeck/game-types';
 import { AVAILABLE_GAMES } from './available-games';
 import { COMING_SOON_ARCADE_GAMES_1 } from './coming-soon-arcade-1';
 import { COMING_SOON_ARCADE_GAMES_2 } from './coming-soon-arcade-2';

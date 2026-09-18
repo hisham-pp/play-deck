@@ -66,9 +66,9 @@ export function GlobalSearchModal() {
   const handleLaunchGame = (game: GameDefinition, preferDetails = false) => {
     closeSearch();
     if (preferDetails || game.status !== 'available') {
-      router.push(`/games/${game.id}`);
+      router.push(`/games/${game.slug}`);
     } else {
-      router.push(`/play/${game.id}`);
+      router.push(`/play/${game.slug}`);
     }
   };
 

@@ -41,10 +41,12 @@ playdeck/
 │       │   │
 │       │   ├── lib/
 │       │   │   ├── storage/               # Storage abstraction (IndexedDB + LocalStorage)
+│       │   │   ├── seo/                   # Canonical URLs, absolute URLs & JSON-LD builders
 │       │   │   ├── api/                   # Future API boundary
 │       │   │   └── utils/                 # cn, formatting helpers
 │       │   │
 │       │   ├── data/games/                # Static game definitions & mock registry
+│       │   │   └── content/             # Per-game SEO & editorial content (one file per game)
 │       │   └── stores/                    # Separated Zustand stores
 │       │
 │       ├── next.config.ts
@@ -135,6 +137,20 @@ export interface GameDefinition<TState = unknown> {
 - Voice state lives in its own `voice-chat.store`. Do not fold it into `multiplayer.store`.
 - Presence is the roster of record: `syncRoster()` reconciles the mesh so a dropped broadcast or refreshed tab self-heals.
 - To add voice to a new online game, render `<VoiceChatDock />` (or an existing binder such as `RoomVoiceDock`) with that game's room code and transport — no engine changes are required.
+
+### Rule 6: Every Game Owns Its Own Page & Content
+
+Each game has a dedicated, indexable page at `/games/<slug>` — one canonical URL per game, prerendered at build time.
+
+- **Content is data, not page code.** A game's editorial content (SEO title/description/keywords, overview prose, how-to-play steps, rules, controls, tips, FAQ) lives in one file: `data/games/content/<slug>.ts`, typed as `GameContent` from `@playdeck/game-types`.
+- **Adding a game = two edits.** Add the `GameDefinition` to `data/games/index.ts` and a `GameContent` module registered in `data/games/content/index.ts`. The page, metadata, JSON-LD, sitemap entry and internal links all follow automatically — never add a bespoke page file per game.
+- **`slug` is the canonical URL, always.** Link to games with `game.slug`, never `game.id`. When an `id` differs from its `slug`, `redirects()` in `next.config.ts` issues a real 308; a `redirect()` inside a prerendered page only yields a meta-refresh soft redirect.
+- **`dynamicParams = false`** on `/games/[gameId]`. Without it, Next renders unknown slugs on demand and caches the not-found page as a **200** — a soft 404 that gets indexed.
+- **Never hide content behind client-only state.** Page content renders in server components as real `<section>` / `<h2>` markup. A tab panel mounted only when active never reaches the HTML crawlers see.
+- **Structured data** is built by `lib/seo/structured-data.ts` (`VideoGame`, `BreadcrumbList`, `HowTo`, `FAQPage`, `ItemList`) and emitted through `<JsonLd />`. Absolute URLs come from `lib/seo/site.ts` — never hardcode a domain.
+- **`/play/<slug>` is `noindex, follow`** and canonicals back to the overview page. It is a session shell with no crawlable content.
+- **Coming-soon games are `noindex, follow`.** A page earns indexing only by being `available` _and_ having a content module; until then it renders a fallback About block and stays out of the sitemap. Ship a content module with the game to make its page indexable.
+- `data/games/content/game-content.test.ts` enforces coverage and SEO field limits. A **playable** game without a content module, or a description outside the snippet range, fails the suite.
 
 ---
 

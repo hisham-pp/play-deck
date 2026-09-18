@@ -20,9 +20,9 @@ export function StandardGameCard({ game }: { game: GameDefinition }) {
     }
 
     if (isAvailable) {
-      router.push(`/play/${game.id}`);
+      router.push(`/play/${game.slug}`);
     } else {
-      router.push(`/games/${game.id}`);
+      router.push(`/games/${game.slug}`);
     }
   };
 
@@ -122,7 +122,7 @@ export function StandardGameCard({ game }: { game: GameDefinition }) {
       {/* 3. Footer Actions */}
       <div className="p-2.5 px-4 border-t border-surface-border bg-surface-overlay/40 flex items-center justify-between">
         <Link
-          href={`/games/${game.id}`}
+          href={`/games/${game.slug}`}
           onClick={(e) => e.stopPropagation()}
           className="text-xs text-deck-400 hover:text-white font-medium inline-flex items-center gap-1 transition-colors py-1"
         >
@@ -132,7 +132,7 @@ export function StandardGameCard({ game }: { game: GameDefinition }) {
 
         {isAvailable ? (
           <Link
-            href={`/play/${game.id}`}
+            href={`/play/${game.slug}`}
             onClick={(e) => e.stopPropagation()}
             className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-500 hover:text-amber-400 transition-colors py-1"
           >
