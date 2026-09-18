@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { getCourseHoles } from '../engine/mini-golf-courses';
 import {
   advanceToNextHole,
   computeAiShot,
@@ -8,13 +9,28 @@ import {
   tickGame,
 } from '../engine/mini-golf-engine';
 import { calculateTrajectory } from '../engine/mini-golf-physics';
-import type { GameMode, MiniGolfState, Player, ShotPreview } from '../engine/mini-golf-types';
+import type {
+  CoursePreset,
+  GameMode,
+  MiniGolfState,
+  Player,
+  ShotPreview,
+} from '../engine/mini-golf-types';
 import { miniGolfSound } from '../services/mini-golf-sound.service';
 import { miniGolfStatsRepository } from '../services/mini-golf-stats-repository';
 
-export function useMiniGolfEngine(initialMode: GameMode = 'solo', customPlayers?: Player[]) {
+export function useMiniGolfEngine(
+  initialMode: GameMode = 'solo',
+  customPlayers?: Player[],
+  initialPreset: CoursePreset = 'front-9',
+) {
   const [state, setState] = useState<MiniGolfState>(() =>
-    createInitialMiniGolfState(initialMode, customPlayers),
+    createInitialMiniGolfState(
+      initialMode,
+      customPlayers,
+      getCourseHoles(initialPreset),
+      initialPreset,
+    ),
   );
   const [shotPreview, setShotPreview] = useState<ShotPreview | null>(null);
 
@@ -58,14 +74,21 @@ export function useMiniGolfEngine(initialMode: GameMode = 'solo', customPlayers?
       if (events.inHole) {
         miniGolfSound.playCupDrop();
         const currentHole = currentState.holes[currentState.currentHoleIndex];
-        const underPar = currentState.currentStrokes + 1 < currentHole.par;
+        const underPar =
+          (currentState.playerHoleStrokes[
+            currentState.players[currentState.activePlayerIndex]?.id
+          ] ?? currentState.currentStrokes) < currentHole.par;
         setTimeout(() => miniGolfSound.playHoleClear(underPar), 180);
 
-        // Record hole statistics
+        // Record hole statistics for local player
         const activePlayer = currentState.players[currentState.activePlayerIndex];
-        const scorecard = nextState.scorecards[activePlayer.id];
-        const isLastHole = nextState.currentHoleIndex === nextState.holes.length - 1;
-        miniGolfStatsRepository.recordRoundResult(scorecard, isLastHole).catch(() => {});
+        if (!activePlayer.isAi) {
+          const scorecard = nextState.scorecards[activePlayer.id];
+          const isLastHole = nextState.currentHoleIndex === nextState.holes.length - 1;
+          if (scorecard) {
+            miniGolfStatsRepository.recordRoundResult(scorecard, isLastHole).catch(() => {});
+          }
+        }
       }
 
       if (nextState !== currentState) {
@@ -116,6 +139,12 @@ export function useMiniGolfEngine(initialMode: GameMode = 'solo', customPlayers?
     setState((prev) => executeShot(prev, angle, power));
   }, []);
 
+  const executeRemoteShot = useCallback((_playerId: string, angle: number, power: number) => {
+    miniGolfSound.playPutt(power);
+    setShotPreview(null);
+    setState((prev) => executeShot(prev, angle, power));
+  }, []);
+
   const updateAimPreview = useCallback((angle: number, power: number) => {
     const currentState = stateRef.current;
     if (currentState.phase !== 'aiming') {
@@ -153,20 +182,30 @@ export function useMiniGolfEngine(initialMode: GameMode = 'solo', customPlayers?
     setState((prev) => ({ ...prev, isMuted: !prev.isMuted }));
   }, []);
 
-  const changeMode = useCallback((newMode: GameMode) => {
-    setState(createInitialMiniGolfState(newMode));
+  const changeMode = useCallback((newMode: GameMode, preset: CoursePreset = 'front-9') => {
+    setState(createInitialMiniGolfState(newMode, undefined, getCourseHoles(preset), preset));
     setShotPreview(null);
   }, []);
+
+  const startCustomMatch = useCallback(
+    (mode: GameMode, players: Player[], preset: CoursePreset = 'front-9') => {
+      setState(createInitialMiniGolfState(mode, players, getCourseHoles(preset), preset));
+      setShotPreview(null);
+    },
+    [],
+  );
 
   return {
     state,
     shotPreview,
     shoot,
+    executeRemoteShot,
     updateAimPreview,
     clearAimPreview,
     nextHole,
     restart,
     toggleMute,
     changeMode,
+    startCustomMatch,
   };
 }

@@ -6,19 +6,24 @@ import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import type { GameDefinition, Player } from '@playdeck/game-types';
 import { Button } from '@playdeck/ui';
 import { useLudoMultiplayerStore } from '@/stores/ludo-multiplayer.store';
+import { useMiniGolfMultiplayerStore } from '@/stores/mini-golf-multiplayer.store';
 import { useMultiplayerStore } from '@/stores/multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
+import { useSnakeLadderMultiplayerStore } from '@/stores/snake-ladder-multiplayer.store';
 import { JOIN_ROOM_PARAM, parseJoinCode } from '../services/join-link';
 
 const LUDO_GAME_ID = 'ludo';
+const MINI_GOLF_GAME_ID = 'mini-golf';
+const SNAKE_LADDER_GAME_ID = 'snake-and-ladder';
 
 type GateStatus = 'idle' | 'joining' | 'failed';
 
-/** Ludo keeps its own multi-seat room store; every other game uses the shared one. */
+/** Games with dedicated multi-seat room stores route to their own stores. */
 function currentRoomCodeFor(gameId: string): string | null {
-  return gameId === LUDO_GAME_ID
-    ? useLudoMultiplayerStore.getState().roomCode
-    : useMultiplayerStore.getState().roomCode;
+  if (gameId === LUDO_GAME_ID) return useLudoMultiplayerStore.getState().roomCode;
+  if (gameId === MINI_GOLF_GAME_ID) return useMiniGolfMultiplayerStore.getState().roomCode;
+  if (gameId === SNAKE_LADDER_GAME_ID) return useSnakeLadderMultiplayerStore.getState().roomCode;
+  return useMultiplayerStore.getState().roomCode;
 }
 
 async function joinRoomFor(gameId: string, code: string, player: Player): Promise<string | null> {
@@ -30,6 +35,26 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       avatar: player.avatar || '🕹️',
     });
     return ok ? null : (useLudoMultiplayerStore.getState().error ?? 'Could not join room');
+  }
+
+  if (gameId === MINI_GOLF_GAME_ID) {
+    const store = useMiniGolfMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '⛳',
+    });
+    return ok ? null : (useMiniGolfMultiplayerStore.getState().error ?? 'Could not join room');
+  }
+
+  if (gameId === SNAKE_LADDER_GAME_ID) {
+    const store = useSnakeLadderMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🕹️',
+    });
+    return ok ? null : (useSnakeLadderMultiplayerStore.getState().error ?? 'Could not join room');
   }
 
   const store = useMultiplayerStore.getState();

@@ -5,21 +5,21 @@ export const miniGolfContent: GameContent = {
   seo: {
     title: 'Play Mini Golf Online Free — 2D Physics Arcade Game',
     description:
-      'Putt through 9 handcrafted mini golf courses with realistic 2D ball physics, bank shots, bumpers, sand traps, water hazards, and pass-and-play multiplayer.',
+      'Putt through 18 handcrafted championship mini golf holes with 2D ball physics, bank shots, portals, online multiplayer, and real-time voice chat.',
     keywords: [
       'mini golf online',
       'play mini golf free',
       '2d mini golf',
       'arcade golf game',
       'physics golf game',
-      'pass and play golf',
+      'multiplayer mini golf',
       'browser mini golf',
     ],
   },
   tagline: 'Line up your angle, master the bank shots, and sink the birdie.',
   overview: [
-    'Mini Golf brings classic arcade putting greens into PlayDeck with realistic 2D physics. Navigate 9 handcrafted championship holes loaded with elevation changes, sand traps, water hazards, pinball bumpers, and kinetic obstacles.',
-    'Drag to aim your putter and dial in the perfect shot power. Play solo against smart AI rivals or pass the controls around with friends in 2 to 4 player local multiplayer. Every hole tests angle calculations, banking mastery, and delicate speed control.',
+    'Mini Golf brings classic arcade putting greens into PlayDeck with realistic 2D physics. Navigate 18 handcrafted championship holes loaded with elevation changes, sand traps, water hazards, pinball bumpers, portals, speed boosters, and kinetic obstacles.',
+    'Drag to aim your putter and dial in the perfect shot power. Play solo against smart AI rivals, pass and play locally, or create private online rooms to compete with friends across the Front 9, Back 9, or Full 18 with built-in voice chat.',
   ],
   howToPlay: [
     {
