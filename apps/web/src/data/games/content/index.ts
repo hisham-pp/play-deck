@@ -6,6 +6,7 @@ import { flappyArcadeContent } from './flappy-arcade';
 import { ludoContent } from './ludo';
 import { chessContent } from './master-chess';
 import { minesweeperContent } from './minesweeper';
+import { miniGolfContent } from './mini-golf';
 import { penFightContent } from './pen-fight';
 import { pongContent } from './pong';
 import { runicMemoryContent } from './runic-memory';
@@ -31,6 +32,7 @@ const ALL_CONTENT: GameContent[] = [
   pongContent,
   summitRushContent,
   flappyArcadeContent,
+  miniGolfContent,
 ];
 
 /**

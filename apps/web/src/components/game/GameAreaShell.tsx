@@ -11,6 +11,7 @@ import { ConnectFourGame } from '@/features/games/connect-four';
 import { FlappyArcadeGame } from '@/features/games/flappy-arcade';
 import { LudoGame } from '@/features/games/ludo';
 import { MinesweeperGame } from '@/features/games/minesweeper';
+import { MiniGolfGame } from '@/features/games/mini-golf';
 import { PenFightGame } from '@/features/games/pen-fight';
 import { PongGame } from '@/features/games/pong';
 import { RunicMemoryGame } from '@/features/games/runic-memory';
@@ -91,6 +92,10 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
 
   if (game.id === 'flappy-arcade') {
     return <FlappyArcadeGame />;
+  }
+
+  if (game.id === 'mini-golf') {
+    return <MiniGolfGame />;
   }
 
   const handleStart = () => {
