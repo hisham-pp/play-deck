@@ -3,6 +3,7 @@ import { game2048Content } from './2048';
 import { ballBounceContent } from './ball-bounce';
 import { connectFourContent } from './connect-four';
 import { flappyArcadeContent } from './flappy-arcade';
+import { humanConveyorBeltContent } from './human-conveyor-belt';
 import { ludoContent } from './ludo';
 import { chessContent } from './master-chess';
 import { minesweeperContent } from './minesweeper';
@@ -35,6 +36,7 @@ const ALL_CONTENT: GameContent[] = [
   pongContent,
   summitRushContent,
   flappyArcadeContent,
+  humanConveyorBeltContent,
   miniGolfContent,
   pushYourLuckContent,
   snakeAndLadderContent,
