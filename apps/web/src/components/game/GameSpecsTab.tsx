@@ -17,13 +17,6 @@ export function GameSpecsTab() {
           Decoupled state machine plug-and-play architecture.
         </p>
       </div>
-      <div className="p-4 rounded-lg bg-surface-overlay border border-surface-border flex flex-col gap-1">
-        <span className="text-deck-500 font-medium">Multiplayer Readiness</span>
-        <span className="text-sm font-bold text-amber-500">Contract Ready (Phase 2)</span>
-        <p className="text-[11px] text-deck-400 mt-1">
-          Reserved lobby, room code, and WebRTC transport.
-        </p>
-      </div>
     </div>
   );
 }
