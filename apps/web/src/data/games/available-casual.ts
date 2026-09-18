@@ -1,11 +1,15 @@
 import type { GameDefinition } from '@playdeck/game-types';
 import {
-  STATUS_AVAILABLE,
   BADGE_READY_TO_PLAY,
-  TAG_AI_OPPONENT,
-  TAG_LOCAL_PLAY,
-  TAG_PARTY,
   CATEGORY_CASUAL,
+  STATUS_AVAILABLE,
+  TAG_AI_OPPONENT,
+  TAG_COOPERATIVE,
+  TAG_LOCAL_PLAY,
+  TAG_MULTIPLAYER,
+  TAG_PARTY,
+  TAG_PHYSICS,
+  TAG_VOICE_CHAT,
 } from './constants';
 
 /** Playable party and casual games, kept apart from the arcade/puzzle roster. */
@@ -22,6 +26,22 @@ export const AVAILABLE_CASUAL_GAMES: GameDefinition[] = [
     thumbnailUrl: '/games/push-your-luck/icon.svg',
     bannerUrl: '/games/push-your-luck/cover.svg',
     tags: [TAG_PARTY, TAG_LOCAL_PLAY, TAG_AI_OPPONENT, 'Turn-based', 'Risk'],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-18',
+  },
+  {
+    id: 'human-conveyor-belt',
+    name: 'Human Conveyor Belt',
+    slug: 'human-conveyor-belt',
+    description:
+      'Players must position themselves to move objects through a constantly changing machine. Players ARE the machine parts.',
+    category: CATEGORY_CASUAL,
+    players: { min: 2, max: 6 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/human-conveyor-belt/icon.svg',
+    bannerUrl: '/games/human-conveyor-belt/cover.svg',
+    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PHYSICS, TAG_COOPERATIVE],
     featured: true,
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-18',

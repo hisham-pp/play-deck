@@ -107,4 +107,64 @@ describe('Mini Golf Engine — Core State & Rules', () => {
     assert.ok(typeof aiShot.angle === 'number');
     assert.ok(aiShot.power >= 0.1 && aiShot.power <= 1.0);
   });
+
+  it('rotates turns between players in multi-player mode when ball comes to rest', () => {
+    let state = createInitialMiniGolfState('pass-and-play');
+    assert.equal(state.players.length, 2);
+    assert.equal(state.activePlayerIndex, 0);
+
+    // Player 1 shoots
+    state = executeShot(state, 0, 0.4);
+    assert.equal(state.phase, 'rolling');
+
+    // Simulate ball coming to rest away from hole
+    state.ball.vx = 0;
+    state.ball.vy = 0;
+    state.ball.isResting = true;
+
+    const { state: afterRest } = tickGame(state, 1 / 60);
+    // Turn rotates to Player 2
+    assert.equal(afterRest.activePlayerIndex, 1);
+    assert.equal(afterRest.phase, 'aiming');
+
+    // Player 2 shoots
+    const stateP2 = executeShot(afterRest, 0, 0.4);
+    stateP2.ball.vx = 0;
+    stateP2.ball.vy = 0;
+    stateP2.ball.isResting = true;
+
+    const { state: afterP2Rest } = tickGame(stateP2, 1 / 60);
+    // Turn rotates back to Player 1
+    assert.equal(afterP2Rest.activePlayerIndex, 0);
+  });
+
+  it('advances to next unfinished player when one player finishes hole first', () => {
+    let state = createInitialMiniGolfState('pass-and-play');
+    state = executeShot(state, 0, 0.5);
+
+    // Player 1 sinks ball in cup
+    const hole = state.holes[0];
+    state.ball.x = hole.cup.x;
+    state.ball.y = hole.cup.y;
+    state.ball.vx = 20;
+    state.ball.vy = 0;
+
+    const { state: afterSink } = tickGame(state, 1 / 60);
+    // Player 1 sunk, but Player 2 hasn't!
+    assert.equal(afterSink.phase, 'aiming');
+    assert.equal(afterSink.activePlayerIndex, 1);
+    assert.deepEqual(afterSink.completedHolePlayerIds, ['p1']);
+
+    // Now Player 2 sinks ball in cup
+    const stateP2 = executeShot(afterSink, 0, 0.5);
+    stateP2.ball.x = hole.cup.x;
+    stateP2.ball.y = hole.cup.y;
+    stateP2.ball.vx = 20;
+    stateP2.ball.vy = 0;
+
+    const { state: afterAllSink } = tickGame(stateP2, 1 / 60);
+    // All players done! Phase becomes hole-clear
+    assert.equal(afterAllSink.phase, 'hole-clear');
+    assert.equal(afterAllSink.completedHolePlayerIds.length, 2);
+  });
 });

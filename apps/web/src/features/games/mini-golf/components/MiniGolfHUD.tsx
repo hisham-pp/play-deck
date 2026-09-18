@@ -14,6 +14,7 @@ interface MiniGolfHUDProps {
   state: MiniGolfState;
   shotPreview: ShotPreview | null;
   isFullscreen: boolean;
+  localPlayerId?: string | null;
   onToggleFullscreen: () => void;
   onToggleMute: () => void;
   onOpenScorecard: () => void;
@@ -25,6 +26,7 @@ export const MiniGolfHUD: React.FC<MiniGolfHUDProps> = ({
   state,
   shotPreview,
   isFullscreen,
+  localPlayerId,
   onToggleFullscreen,
   onToggleMute,
   onOpenScorecard,
@@ -35,6 +37,8 @@ export const MiniGolfHUD: React.FC<MiniGolfHUDProps> = ({
   const activePlayer = state.players[state.activePlayerIndex];
   const strokes = state.currentStrokes;
   const par = currentHole?.par ?? 3;
+
+  const isMyTurn = localPlayerId ? activePlayer?.id === localPlayerId : true;
 
   const strokeColor =
     strokes === 0
@@ -47,16 +51,28 @@ export const MiniGolfHUD: React.FC<MiniGolfHUDProps> = ({
 
   const powerPercent = shotPreview ? Math.round(shotPreview.power * 100) : 0;
 
+  const presetLabel =
+    state.coursePreset === 'front-9'
+      ? 'Front 9'
+      : state.coursePreset === 'back-9'
+        ? 'Back 9'
+        : '18 Holes';
+
   return (
     <div className="w-full flex flex-col gap-2 pointer-events-none select-none">
       {/* Top HUD Bar */}
-      <div className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-[#111827]/90 border border-[#232f45] backdrop-blur-md shadow-lg pointer-events-auto">
+      <div className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-[#111827]/90 border border-[#232f45] backdrop-blur-md shadow-lg pointer-events-auto flex-wrap gap-2">
         {/* Left: Hole & Par info */}
         <div className="flex items-center gap-3">
           <div className="flex flex-col">
-            <span className="text-xs uppercase tracking-wider text-slate-400 font-semibold">
-              Hole {currentHole ? currentHole.id : 1} of {state.holes.length}
-            </span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs uppercase tracking-wider text-slate-400 font-semibold">
+                Hole {currentHole ? currentHole.id : 1} of {state.holes.length}
+              </span>
+              <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-slate-800 text-amber-400 border border-slate-700">
+                {presetLabel}
+              </span>
+            </div>
             <span className="text-base font-bold text-white tracking-tight">
               {currentHole?.name}
             </span>
@@ -76,13 +92,23 @@ export const MiniGolfHUD: React.FC<MiniGolfHUDProps> = ({
 
         {/* Center: Turn Banner for multiplayer */}
         {activePlayer && state.players.length > 1 && (
-          <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-[#1c2438] border border-[#2b3852]">
+          <div
+            className={`flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold ${
+              isMyTurn
+                ? 'bg-amber-500/10 border-amber-500/40 text-amber-300 shadow-sm'
+                : 'bg-[#1c2438] border-[#2b3852] text-slate-300'
+            }`}
+          >
             <span
               className="w-2.5 h-2.5 rounded-full animate-pulse"
               style={{ backgroundColor: activePlayer.color }}
             />
-            <span className="text-xs font-medium text-slate-200">
-              {activePlayer.name}&apos;s Turn
+            <span>
+              {state.mode === 'online'
+                ? isMyTurn
+                  ? 'Your Turn to Putt!'
+                  : `${activePlayer.name}'s Turn`
+                : `${activePlayer.name}'s Turn`}
             </span>
           </div>
         )}

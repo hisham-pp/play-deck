@@ -1,7 +1,8 @@
-import { MINI_GOLF_COURSES } from './mini-golf-courses';
+import { FRONT_NINE_COURSES, MINI_GOLF_COURSES } from './mini-golf-courses';
 import { MAX_SHOT_SPEED, updateBallPhysics, type PhysicsStepEvents } from './mini-golf-physics';
 import type {
   Ball,
+  CoursePreset,
   GameMode,
   HoleDefinition,
   HoleScore,
@@ -13,15 +14,16 @@ import type {
 } from './mini-golf-types';
 
 export const DEFAULT_PLAYERS: Record<GameMode, Player[]> = {
-  solo: [{ id: 'p1', name: 'Player 1', color: '#10b981' }],
+  solo: [{ id: 'p1', name: 'Player 1', color: '#10b981', glyph: 'circle' }],
   'vs-ai': [
-    { id: 'p1', name: 'Player 1', color: '#10b981' },
-    { id: 'ai-bot', name: 'Ace Bot', color: '#f59e0b', isAi: true },
+    { id: 'p1', name: 'Player 1', color: '#10b981', glyph: 'circle' },
+    { id: 'ai-bot', name: 'Ace Bot', color: '#f59e0b', glyph: 'star', isAi: true },
   ],
   'pass-and-play': [
-    { id: 'p1', name: 'Player 1', color: '#10b981' },
-    { id: 'p2', name: 'Player 2', color: '#38bdf8' },
+    { id: 'p1', name: 'Player 1', color: '#10b981', glyph: 'circle' },
+    { id: 'p2', name: 'Player 2', color: '#38bdf8', glyph: 'diamond' },
   ],
+  online: [{ id: 'p1', name: 'Player 1', color: '#10b981', glyph: 'circle' }],
 };
 
 export function classifyScore(strokes: number, par: number): ScoreClassification {
@@ -52,15 +54,35 @@ export function createInitialBall(tee: { x: number; y: number }): Ball {
   };
 }
 
+export function getNextActivePlayerIndex(
+  players: Player[],
+  currentIndex: number,
+  completedIds: string[],
+): number {
+  if (completedIds.length >= players.length) return currentIndex;
+  let next = (currentIndex + 1) % players.length;
+  for (let i = 0; i < players.length; i++) {
+    if (!completedIds.includes(players[next].id)) {
+      return next;
+    }
+    next = (next + 1) % players.length;
+  }
+  return currentIndex;
+}
+
 export function createInitialMiniGolfState(
   mode: GameMode = 'solo',
   customPlayers?: Player[],
-  holes: HoleDefinition[] = MINI_GOLF_COURSES,
+  holes: HoleDefinition[] = FRONT_NINE_COURSES,
+  coursePreset: CoursePreset = 'front-9',
 ): MiniGolfState {
   const players = customPlayers ?? DEFAULT_PLAYERS[mode];
-  const initialHole = holes[0];
+  const initialHole = holes[0] ?? MINI_GOLF_COURSES[0];
 
   const scorecards: Record<string, PlayerScoreCard> = {};
+  const playerBalls: Record<string, Ball> = {};
+  const playerHoleStrokes: Record<string, number> = {};
+
   for (const player of players) {
     scorecards[player.id] = {
       player,
@@ -69,7 +91,11 @@ export function createInitialMiniGolfState(
       totalParDiff: 0,
       holesInOne: 0,
     };
+    playerBalls[player.id] = createInitialBall(initialHole.tee);
+    playerHoleStrokes[player.id] = 0;
   }
+
+  const activePlayer = players[0];
 
   return {
     currentHoleIndex: 0,
@@ -78,7 +104,11 @@ export function createInitialMiniGolfState(
     activePlayerIndex: 0,
     phase: 'aiming',
     mode,
-    ball: createInitialBall(initialHole.tee),
+    coursePreset,
+    ball: playerBalls[activePlayer.id] ?? createInitialBall(initialHole.tee),
+    playerBalls,
+    completedHolePlayerIds: [],
+    playerHoleStrokes,
     scorecards,
     currentStrokes: 0,
     rotatorsState: initialHole.rotators.map((r) => ({ ...r })),
@@ -91,6 +121,9 @@ export function executeShot(state: MiniGolfState, angle: number, power: number):
 
   const clampedPower = Math.max(0.05, Math.min(1.0, power));
   const shotSpeed = clampedPower * MAX_SHOT_SPEED;
+
+  const activePlayer = state.players[state.activePlayerIndex];
+  const currentStrokes = (state.playerHoleStrokes[activePlayer.id] ?? 0) + 1;
 
   const updatedBall: Ball = {
     ...state.ball,
@@ -106,8 +139,16 @@ export function executeShot(state: MiniGolfState, angle: number, power: number):
   return {
     ...state,
     ball: updatedBall,
+    playerBalls: {
+      ...state.playerBalls,
+      [activePlayer.id]: updatedBall,
+    },
+    playerHoleStrokes: {
+      ...state.playerHoleStrokes,
+      [activePlayer.id]: currentStrokes,
+    },
+    currentStrokes,
     phase: 'rolling',
-    currentStrokes: state.currentStrokes + 1,
   };
 }
 
@@ -137,9 +178,10 @@ export function tickGame(
     angle: rot.angle + rot.speed * dt,
   }));
 
-  // Update ball physics
+  // Update active ball physics
   const ballCopy: Ball = { ...state.ball, trail: [...state.ball.trail] };
   const events = updateBallPhysics(ballCopy, currentHole, nextRotators, dt);
+  const activePlayer = state.players[state.activePlayerIndex];
 
   // 1. Water Hazard penalty drop
   if (events.hitWater) {
@@ -154,12 +196,41 @@ export function tickGame(
       trail: [],
     };
 
+    const nextStrokes = (state.playerHoleStrokes[activePlayer.id] ?? state.currentStrokes) + 1; // +1 penalty
+    const updatedBalls = { ...state.playerBalls, [activePlayer.id]: penaltyBall };
+    const updatedHoleStrokes = { ...state.playerHoleStrokes, [activePlayer.id]: nextStrokes };
+
+    // In multi-player, rotate to next player after penalty drop
+    if (state.players.length > 1) {
+      const nextActiveIndex = getNextActivePlayerIndex(
+        state.players,
+        state.activePlayerIndex,
+        state.completedHolePlayerIds,
+      );
+      const nextPlayer = state.players[nextActiveIndex];
+      return {
+        state: {
+          ...state,
+          ball: updatedBalls[nextPlayer.id],
+          playerBalls: updatedBalls,
+          playerHoleStrokes: updatedHoleStrokes,
+          rotatorsState: nextRotators,
+          activePlayerIndex: nextActiveIndex,
+          currentStrokes: updatedHoleStrokes[nextPlayer.id] ?? 0,
+          phase: 'aiming',
+        },
+        events,
+      };
+    }
+
     return {
       state: {
         ...state,
         ball: penaltyBall,
+        playerBalls: updatedBalls,
+        playerHoleStrokes: updatedHoleStrokes,
         rotatorsState: nextRotators,
-        currentStrokes: state.currentStrokes + 1, // +1 penalty stroke
+        currentStrokes: nextStrokes,
         phase: 'aiming',
       },
       events,
@@ -168,9 +239,8 @@ export function tickGame(
 
   // 2. Ball Sunk in Cup!
   if (events.inHole) {
-    const activePlayer = state.players[state.activePlayerIndex];
     const par = currentHole.par;
-    const strokes = state.currentStrokes;
+    const strokes = state.playerHoleStrokes[activePlayer.id] ?? state.currentStrokes;
     const classification = classifyScore(strokes, par);
 
     const prevScorecard = state.scorecards[activePlayer.id];
@@ -192,13 +262,51 @@ export function tickGame(
       },
     };
 
+    const nextCompleted = state.completedHolePlayerIds.includes(activePlayer.id)
+      ? state.completedHolePlayerIds
+      : [...state.completedHolePlayerIds, activePlayer.id];
+
+    const updatedBalls = {
+      ...state.playerBalls,
+      [activePlayer.id]: ballCopy,
+    };
+
+    // Check if ALL players have sunk or finished the hole
+    if (nextCompleted.length >= state.players.length) {
+      return {
+        state: {
+          ...state,
+          ball: ballCopy,
+          playerBalls: updatedBalls,
+          rotatorsState: nextRotators,
+          scorecards: updatedScorecards,
+          completedHolePlayerIds: nextCompleted,
+          phase: 'hole-clear',
+          lastScoreClassification: classification,
+        },
+        events,
+      };
+    }
+
+    // Switch to next active unfinished player
+    const nextActiveIndex = getNextActivePlayerIndex(
+      state.players,
+      state.activePlayerIndex,
+      nextCompleted,
+    );
+    const nextPlayer = state.players[nextActiveIndex];
+
     return {
       state: {
         ...state,
-        ball: ballCopy,
+        ball: updatedBalls[nextPlayer.id],
+        playerBalls: updatedBalls,
         rotatorsState: nextRotators,
         scorecards: updatedScorecards,
-        phase: 'hole-clear',
+        completedHolePlayerIds: nextCompleted,
+        activePlayerIndex: nextActiveIndex,
+        currentStrokes: state.playerHoleStrokes[nextPlayer.id] ?? 0,
+        phase: 'aiming',
         lastScoreClassification: classification,
       },
       events,
@@ -208,9 +316,10 @@ export function tickGame(
   // 3. Ball came to rest
   if (ballCopy.isResting && state.phase === 'rolling') {
     const maxStrokes = currentHole.par + 5;
-    if (state.currentStrokes >= maxStrokes) {
+    const strokes = state.playerHoleStrokes[activePlayer.id] ?? state.currentStrokes;
+
+    if (strokes >= maxStrokes) {
       // Stroke limit reached: auto-score as limit
-      const activePlayer = state.players[state.activePlayerIndex];
       const prevScorecard = state.scorecards[activePlayer.id];
       const newHoleScore: HoleScore = {
         holeNumber: currentHole.id,
@@ -229,14 +338,71 @@ export function tickGame(
         },
       };
 
+      const nextCompleted = state.completedHolePlayerIds.includes(activePlayer.id)
+        ? state.completedHolePlayerIds
+        : [...state.completedHolePlayerIds, activePlayer.id];
+
+      const updatedBalls = { ...state.playerBalls, [activePlayer.id]: ballCopy };
+
+      if (nextCompleted.length >= state.players.length) {
+        return {
+          state: {
+            ...state,
+            ball: ballCopy,
+            playerBalls: updatedBalls,
+            rotatorsState: nextRotators,
+            scorecards: updatedScorecards,
+            completedHolePlayerIds: nextCompleted,
+            phase: 'hole-clear',
+            lastScoreClassification: 'limit',
+          },
+          events,
+        };
+      }
+
+      const nextActiveIndex = getNextActivePlayerIndex(
+        state.players,
+        state.activePlayerIndex,
+        nextCompleted,
+      );
+      const nextPlayer = state.players[nextActiveIndex];
+
       return {
         state: {
           ...state,
-          ball: ballCopy,
+          ball: updatedBalls[nextPlayer.id],
+          playerBalls: updatedBalls,
           rotatorsState: nextRotators,
           scorecards: updatedScorecards,
-          phase: 'hole-clear',
+          completedHolePlayerIds: nextCompleted,
+          activePlayerIndex: nextActiveIndex,
+          currentStrokes: state.playerHoleStrokes[nextPlayer.id] ?? 0,
+          phase: 'aiming',
           lastScoreClassification: 'limit',
+        },
+        events,
+      };
+    }
+
+    const updatedBalls = { ...state.playerBalls, [activePlayer.id]: ballCopy };
+
+    if (state.players.length > 1) {
+      const nextActiveIndex = getNextActivePlayerIndex(
+        state.players,
+        state.activePlayerIndex,
+        state.completedHolePlayerIds,
+      );
+      const nextPlayer = state.players[nextActiveIndex];
+
+      return {
+        state: {
+          ...state,
+          ball: updatedBalls[nextPlayer.id],
+          playerBalls: updatedBalls,
+          rotatorsState: nextRotators,
+          activePlayerIndex: nextActiveIndex,
+          currentStrokes: state.playerHoleStrokes[nextPlayer.id] ?? 0,
+          phase: 'aiming',
         },
         events,
       };
@@ -246,6 +412,7 @@ export function tickGame(
       state: {
         ...state,
         ball: ballCopy,
+        playerBalls: updatedBalls,
         rotatorsState: nextRotators,
         phase: 'aiming',
       },
@@ -273,19 +440,33 @@ export function advanceToNextHole(state: MiniGolfState): MiniGolfState {
   }
 
   const nextHole = state.holes[nextHoleIndex];
+  const playerBalls: Record<string, Ball> = {};
+  const playerHoleStrokes: Record<string, number> = {};
+
+  for (const player of state.players) {
+    playerBalls[player.id] = createInitialBall(nextHole.tee);
+    playerHoleStrokes[player.id] = 0;
+  }
+
+  const initialPlayer = state.players[0];
+
   return {
     ...state,
     currentHoleIndex: nextHoleIndex,
     phase: 'aiming',
+    activePlayerIndex: 0,
     currentStrokes: 0,
-    ball: createInitialBall(nextHole.tee),
+    ball: playerBalls[initialPlayer.id] ?? createInitialBall(nextHole.tee),
+    playerBalls,
+    completedHolePlayerIds: [],
+    playerHoleStrokes,
     rotatorsState: nextHole.rotators.map((r) => ({ ...r })),
     lastScoreClassification: undefined,
   };
 }
 
 export function restartGame(state: MiniGolfState): MiniGolfState {
-  return createInitialMiniGolfState(state.mode, state.players, state.holes);
+  return createInitialMiniGolfState(state.mode, state.players, state.holes, state.coursePreset);
 }
 
 /**

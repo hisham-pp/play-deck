@@ -14,22 +14,6 @@ import {
 
 export const COMING_SOON_CASUAL_GAMES_1: GameDefinition[] = [
   {
-    id: 'human-conveyor-belt',
-    name: 'Human Conveyor Belt',
-    slug: 'human-conveyor-belt',
-    description:
-      'Players must position themselves to move objects through a constantly changing machine. Players ARE the machine parts.',
-    category: CATEGORY_CASUAL,
-    players: { min: 2, max: 6 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/human-conveyor-belt/icon.svg',
-    bannerUrl: '/games/human-conveyor-belt/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PHYSICS, TAG_COOPERATIVE],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
     id: 'unstable-elevator',
     name: 'Unstable Elevator',
     slug: 'unstable-elevator',
