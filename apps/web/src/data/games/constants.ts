@@ -1,0 +1,30 @@
+export const STATUS_AVAILABLE = 'available';
+export const STATUS_COMING_SOON = 'coming-soon';
+export const BADGE_READY_TO_PLAY = 'Ready to Play';
+export const BADGE_COMING_SOON = 'Coming Soon';
+export const RELEASE_DATE_2026_09_12 = '2026-09-12';
+export const RELEASE_DATE_2026_09_17 = '2026-09-17';
+export const RELEASE_DATE_COMING_SOON = 'Coming Soon';
+
+export const TAG_CLASSIC = 'Classic';
+export const TAG_LOCAL_PLAY = 'Local Play';
+export const TAG_PUZZLE = 'Puzzle';
+export const TAG_SOLO = 'Solo';
+export const TAG_HIGH_SCORE = 'High Score';
+export const TAG_MULTIPLAYER = 'Multiplayer';
+export const TAG_VOICE_CHAT = 'Voice Chat';
+export const TAG_PHYSICS = 'Physics';
+export const TAG_PARTY = 'Party';
+export const TAG_SOCIAL_DECEPTION = 'Social Deception';
+export const TAG_COOPERATIVE = 'Cooperative';
+export const TAG_WORD_PUZZLE = 'Word Puzzle';
+export const TAG_3D = '3D';
+export const TAG_AI_OPPONENT = 'AI Opponent';
+export const TAG_ARCADE = 'Arcade';
+
+export const CATEGORY_PUZZLE = 'puzzle';
+export const CATEGORY_ARCADE = 'arcade';
+export const CATEGORY_STRATEGY = 'strategy';
+export const CATEGORY_BOARD = 'board';
+export const CATEGORY_CARD = 'card';
+export const CATEGORY_CASUAL = 'casual';
