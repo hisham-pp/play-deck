@@ -9,6 +9,7 @@ import { minesweeperContent } from './minesweeper';
 import { miniGolfContent } from './mini-golf';
 import { penFightContent } from './pen-fight';
 import { pongContent } from './pong';
+import { pushYourLuckContent } from './push-your-luck';
 import { runicMemoryContent } from './runic-memory';
 import { snakeContent } from './snake';
 import { sudokuContent } from './sudoku';
@@ -34,6 +35,7 @@ const ALL_CONTENT: GameContent[] = [
   summitRushContent,
   flappyArcadeContent,
   miniGolfContent,
+  pushYourLuckContent,
   wordChainContent,
 ];
 

@@ -14,6 +14,7 @@ import { MinesweeperGame } from '@/features/games/minesweeper';
 import { MiniGolfGame } from '@/features/games/mini-golf';
 import { PenFightGame } from '@/features/games/pen-fight';
 import { PongGame } from '@/features/games/pong';
+import { PushYourLuckGame } from '@/features/games/push-your-luck';
 import { RunicMemoryGame } from '@/features/games/runic-memory';
 import { SnakeGame } from '@/features/games/snake';
 import { SudokuGame } from '@/features/games/sudoku';
@@ -42,6 +43,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'mini-golf': MiniGolfGame,
   'pen-fight': PenFightGame,
   pong: PongGame,
+  'push-your-luck': PushYourLuckGame,
   'runic-memory': RunicMemoryGame,
   snake: SnakeGame,
   sudoku: SudokuGame,
