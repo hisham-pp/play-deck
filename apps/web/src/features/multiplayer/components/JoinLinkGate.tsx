@@ -7,11 +7,13 @@ import type { GameDefinition, Player } from '@playdeck/game-types';
 import { Button } from '@playdeck/ui';
 import { useBombFactoryMultiplayerStore } from '@/stores/bomb-factory-multiplayer.store';
 import { useColorThiefMultiplayerStore } from '@/stores/color-thief-multiplayer.store';
+import { useElevatorMultiplayerStore } from '@/stores/elevator-multiplayer.store';
 import { useHumanConveyorMultiplayerStore } from '@/stores/human-conveyor-multiplayer.store';
 import { useLudoMultiplayerStore } from '@/stores/ludo-multiplayer.store';
 import { useMiniGolfMultiplayerStore } from '@/stores/mini-golf-multiplayer.store';
 import { useMultiplayerStore } from '@/stores/multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
+import { useShadowTagMultiplayerStore } from '@/stores/shadow-tag-multiplayer.store';
 import { useSnakeLadderMultiplayerStore } from '@/stores/snake-ladder-multiplayer.store';
 import { useTinyIslandMultiplayerStore } from '@/stores/tiny-island-multiplayer.store';
 import { JOIN_ROOM_PARAM, parseJoinCode } from '../services/join-link';
@@ -22,6 +24,8 @@ const SNAKE_LADDER_GAME_ID = 'snake-and-ladder';
 const HUMAN_CONVEYOR_GAME_ID = 'human-conveyor-belt';
 const TINY_ISLAND_GAME_ID = 'tiny-island';
 const COLOR_THIEF_GAME_ID = 'color-thief';
+const ELEVATOR_GAME_ID = 'unstable-elevator';
+const SHADOW_TAG_GAME_ID = 'shadow-tag';
 const BOMB_FACTORY_GAME_ID = 'bomb-factory';
 const DEFAULT_JOIN_ERROR = 'Could not join room';
 
@@ -36,6 +40,8 @@ function currentRoomCodeFor(gameId: string): string | null {
     return useHumanConveyorMultiplayerStore.getState().roomCode;
   if (gameId === TINY_ISLAND_GAME_ID) return useTinyIslandMultiplayerStore.getState().roomCode;
   if (gameId === COLOR_THIEF_GAME_ID) return useColorThiefMultiplayerStore.getState().roomCode;
+  if (gameId === ELEVATOR_GAME_ID) return useElevatorMultiplayerStore.getState().roomCode;
+  if (gameId === SHADOW_TAG_GAME_ID) return useShadowTagMultiplayerStore.getState().roomCode;
   if (gameId === BOMB_FACTORY_GAME_ID) return useBombFactoryMultiplayerStore.getState().roomCode;
   return useMultiplayerStore.getState().roomCode;
 }
@@ -99,6 +105,26 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       avatar: player.avatar || '🎨',
     });
     return ok ? null : (useColorThiefMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === ELEVATOR_GAME_ID) {
+    const store = useElevatorMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🛗',
+    });
+    return ok ? null : (useElevatorMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === SHADOW_TAG_GAME_ID) {
+    const store = useShadowTagMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🕹️',
+    });
+    return ok ? null : (useShadowTagMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
   }
 
   if (gameId === BOMB_FACTORY_GAME_ID) {

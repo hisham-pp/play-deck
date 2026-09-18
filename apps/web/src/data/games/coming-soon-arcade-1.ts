@@ -12,22 +12,6 @@ import {
 
 export const COMING_SOON_ARCADE_GAMES_1: GameDefinition[] = [
   {
-    id: 'shadow-tag',
-    name: 'Shadow Tag',
-    slug: 'shadow-tag',
-    description:
-      "You can't directly see opponents. You only see their shadows and environmental clues.",
-    category: CATEGORY_ARCADE,
-    players: { min: 3, max: 6 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/shadow-tag/icon.svg',
-    bannerUrl: '/games/shadow-tag/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PHYSICS],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
     id: 'gravity-golf',
     name: 'Gravity Golf',
     slug: 'gravity-golf',

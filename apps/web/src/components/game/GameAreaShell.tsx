@@ -19,6 +19,7 @@ import { PenFightGame } from '@/features/games/pen-fight';
 import { PongGame } from '@/features/games/pong';
 import { PushYourLuckGame } from '@/features/games/push-your-luck';
 import { RunicMemoryGame } from '@/features/games/runic-memory';
+import { ShadowTagGame } from '@/features/games/shadow-tag';
 import { SnakeGame } from '@/features/games/snake';
 import { SnakeLadderGame } from '@/features/games/snake-and-ladder';
 import { SudokuGame } from '@/features/games/sudoku';
@@ -26,6 +27,7 @@ import { SummitRushGame } from '@/features/games/summit-rush';
 import { TetrisGame } from '@/features/games/tetris';
 import { TicTacToeGame } from '@/features/games/tic-tac-toe';
 import { TinyIslandGame } from '@/features/games/tiny-island';
+import { ElevatorGame } from '@/features/games/unstable-elevator';
 import { WordChainGame } from '@/features/games/word-chain';
 import { useGameSessionStore } from '@/stores/game-session.store';
 import { useLibraryStore } from '@/stores/library.store';
@@ -53,6 +55,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   pong: PongGame,
   'push-your-luck': PushYourLuckGame,
   'runic-memory': RunicMemoryGame,
+  'shadow-tag': ShadowTagGame,
   snake: SnakeGame,
   'snake-and-ladder': SnakeLadderGame,
   sudoku: SudokuGame,
@@ -60,6 +63,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   tetris: TetrisGame,
   'tic-tac-toe': TicTacToeGame,
   'tiny-island': TinyIslandGame,
+  'unstable-elevator': ElevatorGame,
   'word-chain': WordChainGame,
 };
 
