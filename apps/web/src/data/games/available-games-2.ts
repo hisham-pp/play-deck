@@ -235,4 +235,20 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-18',
   },
+  {
+    id: 'shadow-tag',
+    name: 'Shadow Tag',
+    slug: 'shadow-tag',
+    description:
+      'Stealth tag in the dark where runners are invisible. Track elongated shadows cast by orbiting spotlights to hunt or evade.',
+    category: CATEGORY_ARCADE,
+    players: { min: 2, max: 6 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/shadow-tag/icon.svg',
+    bannerUrl: '/games/shadow-tag/cover.svg',
+    tags: [TAG_ARCADE, TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_AI_OPPONENT, TAG_LOCAL_PLAY],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-18',
+  },
 ];

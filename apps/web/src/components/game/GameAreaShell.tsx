@@ -18,6 +18,7 @@ import { PenFightGame } from '@/features/games/pen-fight';
 import { PongGame } from '@/features/games/pong';
 import { PushYourLuckGame } from '@/features/games/push-your-luck';
 import { RunicMemoryGame } from '@/features/games/runic-memory';
+import { ShadowTagGame } from '@/features/games/shadow-tag';
 import { SnakeGame } from '@/features/games/snake';
 import { SnakeLadderGame } from '@/features/games/snake-and-ladder';
 import { SudokuGame } from '@/features/games/sudoku';
@@ -52,6 +53,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   pong: PongGame,
   'push-your-luck': PushYourLuckGame,
   'runic-memory': RunicMemoryGame,
+  'shadow-tag': ShadowTagGame,
   snake: SnakeGame,
   'snake-and-ladder': SnakeLadderGame,
   sudoku: SudokuGame,
