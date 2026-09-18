@@ -8,10 +8,13 @@ import { Game2048 } from '@/features/games/2048';
 import { BallBounceGame } from '@/features/games/ball-bounce';
 import { ChessGame } from '@/features/games/chess';
 import { ConnectFourGame } from '@/features/games/connect-four';
+import { FlappyArcadeGame } from '@/features/games/flappy-arcade';
 import { LudoGame } from '@/features/games/ludo';
 import { MinesweeperGame } from '@/features/games/minesweeper';
+import { MiniGolfGame } from '@/features/games/mini-golf';
 import { PenFightGame } from '@/features/games/pen-fight';
 import { PongGame } from '@/features/games/pong';
+import { PushYourLuckGame } from '@/features/games/push-your-luck';
 import { RunicMemoryGame } from '@/features/games/runic-memory';
 import { SnakeGame } from '@/features/games/snake';
 import { SnakeLadderGame } from '@/features/games/snake-and-ladder';
@@ -19,11 +22,38 @@ import { SudokuGame } from '@/features/games/sudoku';
 import { SummitRushGame } from '@/features/games/summit-rush';
 import { TetrisGame } from '@/features/games/tetris';
 import { TicTacToeGame } from '@/features/games/tic-tac-toe';
+import { WordChainGame } from '@/features/games/word-chain';
 import { useGameSessionStore } from '@/stores/game-session.store';
 import { useLibraryStore } from '@/stores/library.store';
 import { usePlayerStore } from '@/stores/player.store';
 import { GameStatusBadge, GameCategoryBadge, GameFeatureBadge } from './GameBadge';
 import { GameStage } from './GameStage';
+
+/**
+ * Every shipped game renders its own component. The catalog is a lookup rather
+ * than a chain of branches so adding a game is one line, not one more `if`.
+ */
+const GAME_COMPONENTS: Record<string, React.ComponentType> = {
+  '2048': Game2048,
+  'ball-bounce': BallBounceGame,
+  chess: ChessGame,
+  'connect-four': ConnectFourGame,
+  'flappy-arcade': FlappyArcadeGame,
+  ludo: LudoGame,
+  minesweeper: MinesweeperGame,
+  'mini-golf': MiniGolfGame,
+  'pen-fight': PenFightGame,
+  pong: PongGame,
+  'push-your-luck': PushYourLuckGame,
+  'runic-memory': RunicMemoryGame,
+  snake: SnakeGame,
+  'snake-and-ladder': SnakeLadderGame,
+  sudoku: SudokuGame,
+  'summit-rush': SummitRushGame,
+  tetris: TetrisGame,
+  'tic-tac-toe': TicTacToeGame,
+  'word-chain': WordChainGame,
+};
 
 export function GameAreaShell({ game }: { game: GameDefinition }) {
   const { player } = usePlayerStore();
@@ -32,65 +62,9 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
   const [status, setStatus] = useState<'idle' | 'running' | 'over'>('idle');
   const [mockScore, setMockScore] = useState(0);
 
-  // Dedicated real game router
-  if (game.id === 'snake') {
-    return <SnakeGame />;
-  }
-
-  if (game.id === 'tic-tac-toe') {
-    return <TicTacToeGame />;
-  }
-
-  if (game.id === 'ludo') {
-    return <LudoGame />;
-  }
-
-  if (game.id === 'pen-fight') {
-    return <PenFightGame />;
-  }
-
-  if (game.id === 'tetris') {
-    return <TetrisGame />;
-  }
-
-  if (game.id === 'connect-four') {
-    return <ConnectFourGame />;
-  }
-
-  if (game.id === 'sudoku') {
-    return <SudokuGame />;
-  }
-
-  if (game.id === 'chess') {
-    return <ChessGame />;
-  }
-
-  if (game.id === 'runic-memory') {
-    return <RunicMemoryGame />;
-  }
-
-  if (game.id === 'minesweeper') {
-    return <MinesweeperGame />;
-  }
-
-  if (game.id === '2048') {
-    return <Game2048 />;
-  }
-
-  if (game.id === 'ball-bounce') {
-    return <BallBounceGame />;
-  }
-
-  if (game.id === 'pong') {
-    return <PongGame />;
-  }
-
-  if (game.id === 'summit-rush') {
-    return <SummitRushGame />;
-  }
-
-  if (game.id === 'snake-and-ladder') {
-    return <SnakeLadderGame />;
+  const GameComponent = GAME_COMPONENTS[game.id];
+  if (GameComponent) {
+    return <GameComponent />;
   }
 
   const handleStart = () => {

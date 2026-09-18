@@ -19,3 +19,6 @@ apps/web/CLAUDE.md
 
 # Local Agent & MCP Config (contains secrets)
 .mcp.json
+
+# Generated game assets (see scripts/generate-word-chain-dictionary.mjs)
+apps/web/public/games/word-chain/dictionary/
