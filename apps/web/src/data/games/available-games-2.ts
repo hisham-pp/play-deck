@@ -322,4 +322,20 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-19',
   },
+  {
+    id: 'gravity-shift',
+    name: 'Gravity Shift',
+    slug: 'gravity-shift',
+    description:
+      'High-velocity 4-way gravity inverting race. Invert walls into floors, dodge laser gauntlets, and outmaneuver rivals in chaotic real-time multiplayer.',
+    category: CATEGORY_ARCADE,
+    players: { min: 1, max: 6 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/gravity-shift/icon.svg',
+    bannerUrl: '/games/gravity-shift/cover.svg',
+    tags: [TAG_ARCADE, TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PHYSICS, TAG_LOCAL_PLAY, TAG_SOLO],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-19',
+  },
 ];

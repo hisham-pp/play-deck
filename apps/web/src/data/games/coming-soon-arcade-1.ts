@@ -27,22 +27,6 @@ export const COMING_SOON_ARCADE_GAMES_1: GameDefinition[] = [
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
   {
-    id: 'gravity-shift',
-    name: 'Gravity Shift',
-    slug: 'gravity-shift',
-    description:
-      'Everyone navigates the same obstacle course, but players can change the direction of gravity — affecting everyone simultaneously.',
-    category: CATEGORY_ARCADE,
-    players: { min: 2, max: 6 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/gravity-shift/icon.svg',
-    bannerUrl: '/games/gravity-shift/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PHYSICS],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
     id: 'magnet-mayhem',
     name: 'Magnet Mayhem',
     slug: 'magnet-mayhem',

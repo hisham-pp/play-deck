@@ -13,6 +13,7 @@ import { ColorThiefGame } from '@/features/games/color-thief';
 import { ConnectFourGame } from '@/features/games/connect-four';
 import { FlappyArcadeGame } from '@/features/games/flappy-arcade';
 import { GravityGolfGame } from '@/features/games/gravity-golf';
+import { GravityShiftGame } from '@/features/games/gravity-shift';
 import { HumanConveyorGame } from '@/features/games/human-conveyor-belt';
 import { LudoGame } from '@/features/games/ludo';
 import { MinesweeperGame } from '@/features/games/minesweeper';
@@ -53,6 +54,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'connect-four': ConnectFourGame,
   'flappy-arcade': FlappyArcadeGame,
   'gravity-golf': GravityGolfGame,
+  'gravity-shift': GravityShiftGame,
   'human-conveyor-belt': HumanConveyorGame,
   ludo: LudoGame,
   minesweeper: MinesweeperGame,
