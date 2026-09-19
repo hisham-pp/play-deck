@@ -290,4 +290,20 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-19',
   },
+  {
+    id: 'gravity-golf',
+    name: 'Gravity Golf',
+    slug: 'gravity-golf',
+    description:
+      'Manipulate cosmic gravity wells, repellers, and orbital fields to guide your golf orb into the galactic hole in the fewest placements.',
+    category: CATEGORY_ARCADE,
+    players: { min: 1, max: 4 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/gravity-golf/icon.svg',
+    bannerUrl: '/games/gravity-golf/cover.svg',
+    tags: [TAG_ARCADE, TAG_PHYSICS, TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_SOLO, TAG_LOCAL_PLAY],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-19',
+  },
 ];
