@@ -11,22 +11,6 @@ import {
 
 export const COMING_SOON_ARCADE_GAMES_1: GameDefinition[] = [
   {
-    id: 'reverse-racing',
-    name: 'Reverse Racing',
-    slug: 'reverse-racing',
-    description:
-      "You don't control your own vehicle. You control obstacles that try to stop ANOTHER player's vehicle. Each player simultaneously races AND sabotages, creating a chain of chaos.",
-    category: CATEGORY_ARCADE,
-    players: { min: 2, max: 6 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/reverse-racing/icon.svg',
-    bannerUrl: '/games/reverse-racing/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PHYSICS],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
     id: 'tiny-tank-arena',
     name: 'Tiny Tank Arena',
     slug: 'tiny-tank-arena',
