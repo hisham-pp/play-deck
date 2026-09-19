@@ -22,6 +22,7 @@ import { PushYourLuckGame } from '@/features/games/push-your-luck';
 import { ReverseRacingGame } from '@/features/games/reverse-racing';
 import { RunicMemoryGame } from '@/features/games/runic-memory';
 import { ShadowTagGame } from '@/features/games/shadow-tag';
+import { SharedBrainGame } from '@/features/games/shared-brain';
 import { SnakeGame } from '@/features/games/snake';
 import { SnakeLadderGame } from '@/features/games/snake-and-ladder';
 import { SudokuGame } from '@/features/games/sudoku';
@@ -60,6 +61,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'reverse-racing': ReverseRacingGame,
   'runic-memory': RunicMemoryGame,
   'shadow-tag': ShadowTagGame,
+  'shared-brain': SharedBrainGame,
   snake: SnakeGame,
   'snake-and-ladder': SnakeLadderGame,
   sudoku: SudokuGame,

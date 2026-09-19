@@ -46,4 +46,20 @@ export const AVAILABLE_CASUAL_GAMES: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-18',
   },
+  {
+    id: 'shared-brain',
+    name: 'Shared Brain',
+    slug: 'shared-brain',
+    description:
+      'Two players control the same character, each controlling different abilities. Voice communication is essential — without it, the character is helpless.',
+    category: CATEGORY_CASUAL,
+    players: { min: 2, max: 6 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/shared-brain/icon.svg',
+    bannerUrl: '/games/shared-brain/cover.svg',
+    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_COOPERATIVE, TAG_LOCAL_PLAY, TAG_AI_OPPONENT],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-19',
+  },
 ];
