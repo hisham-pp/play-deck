@@ -5,29 +5,12 @@ import {
   RELEASE_DATE_COMING_SOON,
   TAG_MULTIPLAYER,
   TAG_VOICE_CHAT,
-  TAG_COOPERATIVE,
   TAG_PARTY,
   TAG_SOCIAL_DECEPTION,
   CATEGORY_CASUAL,
 } from './constants';
 
 export const COMING_SOON_CASUAL_GAMES_1: GameDefinition[] = [
-  {
-    id: 'dont-wake-the-giant',
-    name: "Don't Wake the Giant",
-    slug: 'dont-wake-the-giant',
-    description:
-      'Players cooperate to collect treasure around a sleeping giant. Every action increases a noise meter. If the noise meter fills, the giant wakes and everyone loses.',
-    category: CATEGORY_CASUAL,
-    players: { min: 3, max: 6 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/dont-wake-the-giant/icon.svg',
-    bannerUrl: '/games/dont-wake-the-giant/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_COOPERATIVE],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
   {
     id: 'alibi',
     name: 'Alibi',
