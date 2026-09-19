@@ -6,27 +6,10 @@ import {
   TAG_MULTIPLAYER,
   TAG_VOICE_CHAT,
   TAG_PHYSICS,
-  TAG_SOLO,
   CATEGORY_ARCADE,
 } from './constants';
 
 export const COMING_SOON_ARCADE_GAMES_1: GameDefinition[] = [
-  {
-    id: 'gravity-golf',
-    name: 'Gravity Golf',
-    slug: 'gravity-golf',
-    description:
-      'Instead of hitting the ball, players manipulate gravity fields to guide the ball into the hole.',
-    category: CATEGORY_ARCADE,
-    players: { min: 1, max: 4 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/gravity-golf/icon.svg',
-    bannerUrl: '/games/gravity-golf/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PHYSICS, TAG_SOLO],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
   {
     id: 'reverse-racing',
     name: 'Reverse Racing',
