@@ -5,94 +5,87 @@ export const floorIsLavaContent: GameContent = {
   seo: {
     title: 'Floor Is Lava — Disappearing Tile Survival Battle | PlayDeck',
     description:
-      'Survive collapsing tiles over molten lava in real time. Push opponents into magma, grab power-up platforms, and be the last survivor on PlayDeck.',
+      'Scramble across crumbling tiles over rising molten lava. Bump rivals into the magma, grab power-ups, and be the last survivor in frantic multiplayer.',
     keywords: [
       'floor is lava',
-      'disappearing tile game',
-      'survival arena',
-      'multiplayer arcade game',
-      'physics battle',
-      'online lava game',
+      'floor is lava online',
+      'disappearing tiles game',
+      'multiplayer survival game',
+      'arcade battle royale',
+      'party game',
       'webrtc voice game',
     ],
   },
-  tagline: 'The floor is crumbling. Push rivals into the molten depths to be the last survivor.',
+  tagline: 'The ground is turning to magma. Bump rivals into the heat and stand your ground.',
   overview: [
-    'Floor Is Lava is a high-intensity multiplayer arena battle where the platform beneath your feet is constantly deteriorating into bubbling magma.',
-    'Outer rings sink first, forcing players into frantic close-quarters combat at the center. Standing still too long degrades tile stability, so you must keep moving while timing powerful pushes to blast opponents off the edge.',
-    'Scattered power-up tiles allow you to summon temporary platforms, freeze the arena, perform double jumps, or unleash super-pushes with shockwaves.',
-    'Play solo against tactical AI survival bots or host an online room for up to 6 players with spatial WebRTC mesh voice chat.',
+    'Floor Is Lava is a frantic survival arena where floating platform tiles crack, heat up, and dissolve into bubbling molten lava.',
+    'As the safe perimeter collapses toward the center, players must constantly reposition, anticipate fissure cascades, and bump adjacent competitors into the magma.',
+    'Play solo against reactive AI bots or launch an online multiplayer match for up to 6 players featuring real-time WebRTC mesh voice chat.',
   ],
   howToPlay: [
     {
-      title: 'Move Across Safe Tiles',
+      title: 'Keep Moving Across Safe Tiles',
       description:
-        'Navigate the 10x10 arena using Arrow keys or WASD. Green tiles are solid; yellow tiles are shaking; red tiles will plunge into magma within seconds.',
+        'Tiles shift from safe to warning, then begin cracking before collapsing into lava. Standing on a tile accelerates its decay.',
     },
     {
-      title: 'Avoid Dwell Degradation',
+      title: 'Shove Opponents with Space',
       description:
-        'Lava heat intensifies under stationary players. Standing on any tile for too long will crack it beneath your feet.',
+        'Use the push mechanic to knock nearby players off decaying edges and directly into the molten sea below.',
     },
     {
-      title: 'Push Rivals Into the Magma',
+      title: 'Snatch Tactical Power-Ups',
       description:
-        'Press Space or tap the Push button to blast nearby opponents backward with directional physics knockback.',
+        'Collect Platforms to spawn fresh footholds, Super Push for colossal knockback, Freeze to stabilize tiles, or Double Jump to leap across gaps.',
     },
     {
-      title: 'Claim Power-Up Items',
+      title: 'Outlast Every Competitor',
       description:
-        'Step on glowing power-up markers to obtain Emergency Platforms, Arena Freezes, Double Jumps, or Super Pushes.',
+        'Avoid elimination by remaining on solid ground as the arena shrinks. The last player standing wins the match.',
     },
   ],
   controls: [
-    { key: 'W / A / S / D or Arrows', action: 'Move survivor in 8 directions' },
-    { key: 'Space or Click Push', action: 'Execute push shockwave on rivals' },
-    { key: 'R', action: 'Restart battle (Solo mode)' },
-    { key: 'Esc', action: 'Close modal or menu' },
+    { key: 'W / A / S / D or Arrows', action: 'Move across arena tiles' },
+    { key: 'Space', action: 'Shove / Push nearby rivals' },
+    { key: 'R', action: 'Restart match (Solo mode)' },
   ],
   rules: [
     {
-      title: 'Inward Arena Sinking',
+      title: 'Progressive Arena Collapse',
       description:
-        'Every few seconds, the outermost ring of remaining tiles begins its collapse cycle, shrinking the playable space inward.',
+        'Tiles degrade from the outer rim inward in a semi-random pattern. Standing on tiles too long rapidly expedites their collapse.',
     },
     {
-      title: 'Molten Elimination',
+      title: 'Instant Elimination',
       description:
-        'Falling into lava instantly eliminates the player from the round. Last surviving player standing wins.',
+        'Touching a molten lava tile eliminates a player immediately from the current round.',
     },
     {
-      title: 'Push Cooldown & Recharging',
+      title: 'Push Impulses & Cooldowns',
       description:
-        'Pushing has a 1.2-second cooldown. Super-push power-ups temporarily triple the knockback distance and range.',
-    },
-    {
-      title: 'Temporary Platforms',
-      description:
-        'Emergency platform power-ups spawn temporary safe ground in surrounding lava for 6 seconds.',
+        'Pushing applies an explosive knockback impulse to opponents within range. Each push triggers a short tactical cooldown.',
     },
   ],
   tips: [
-    'Never stand still for too long: dwell time degrades tile health quickly, so circular movement patterns keep tiles intact longer.',
-    'Bait pushes near crumbling edges: lure aggressive opponents toward border tiles, then dodge their rush and counter-push them into the abyss.',
-    'Save double jumps for emergencies: double jumping lets you leap across sunken gaps to reach isolated safe islands in the middle of the caldera.',
+    'Stay near the center during early phases, but watch out for converging rivals who want to shove you.',
+    'Grab the Freeze power-up when multiple tiles are cracking to buy crucial breathing room.',
+    'Baited jumps: pretend to flee toward an edge and shove your pursuer as they attempt to cut you off.',
   ],
   faq: [
     {
-      question: 'How many players can participate in a Floor Is Lava match?',
+      question: 'How many players can participate in Floor Is Lava?',
       answer:
-        'Matches support 1 to 6 players. In solo mode, you can battle against 1 to 5 AI bots. In online multiplayer rooms, up to 6 players can battle with WebRTC voice chat.',
+        'Matches support 2 to 6 players, either locally against AI bots or online with friends via room codes.',
     },
     {
-      question: 'What happens when all remaining tiles collapse?',
+      question: 'Does the game feature built-in voice chat?',
       answer:
-        'If the match reaches the final center tile and no single player survives, the match ends in a draw.',
+        'Yes! Online rooms include seamless peer-to-peer WebRTC mesh voice chat with spatial awareness and muting options.',
     },
     {
-      question: 'Does voice chat require any external plugins?',
+      question: 'Can I play Floor Is Lava on touch devices?',
       answer:
-        'No. Voice chat uses native browser WebRTC peer connections coordinated automatically over the room channel.',
+        'Yes, mobile and touch interfaces are supported with on-screen virtual directional navigation and push buttons.',
     },
   ],
 };

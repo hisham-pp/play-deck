@@ -7,6 +7,7 @@ import { useFloorIsLavaMultiplayerStore } from '@/stores/floor-is-lava-multiplay
 import { usePlayerStore } from '@/stores/player.store';
 
 import { useFloorIsLavaGame } from '../hooks/use-floor-is-lava-game';
+import type { LavaPlayer } from '../types/floor-is-lava.types';
 import { FloorIsLavaCanvas } from './FloorIsLavaCanvas';
 import { FloorIsLavaHud } from './FloorIsLavaHud';
 import { FloorIsLavaLobby } from './FloorIsLavaLobby';
@@ -24,6 +25,7 @@ export function FloorIsLavaGame() {
   const [gameMode, setGameMode] = useState<'solo' | 'online'>(roomCodeQuery ? 'online' : 'solo');
   const [botCount, setBotCount] = useState(3);
   const [showVictory, setShowVictory] = useState(false);
+  const [_winner, setWinner] = useState<LavaPlayer | null>(null);
 
   const player = usePlayerStore((s) => s.player);
 
@@ -34,25 +36,25 @@ export function FloorIsLavaGame() {
   const localPlayerIdentity = useMemo(() => {
     return {
       id: player?.id || 'player-local',
-      displayName: player?.displayName || 'Magma Survivor',
+      displayName: player?.displayName || 'Lava Survivor',
       avatar: player?.avatar || '🔥',
     };
   }, [player]);
 
-  const { canvasRef, arena, localPlayer, elapsedSec, triggerPush, restartGame } =
+  const { canvasRef, arena, localPlayer, elapsedSec, isGameOver, triggerPush, restartGame } =
     useFloorIsLavaGame({
       isMultiplayer: gameMode === 'online',
       botCount,
-      onVictory: (_winner, _survivalSec) => {
+      onVictory: (wonPlayer) => {
+        setWinner(wonPlayer);
         setShowVictory(true);
       },
     });
 
-  const handleStartSolo = (selectedBotCount: number) => {
-    setBotCount(selectedBotCount);
+  const handleStartSolo = (count: number) => {
+    setBotCount(count);
     setGameMode('solo');
     setScreen('playing');
-    setShowVictory(false);
     restartGame();
   };
 
@@ -93,7 +95,6 @@ export function FloorIsLavaGame() {
         <FloorIsLavaRoomLobby
           onStartGame={() => {
             setScreen('playing');
-            setShowVictory(false);
             restartGame();
           }}
           onLeave={handleLeave}
@@ -103,15 +104,12 @@ export function FloorIsLavaGame() {
       {screen === 'playing' && (
         <div className="w-full flex flex-col space-y-3">
           <FloorIsLavaToolbar
-            onRestart={() => {
-              setShowVictory(false);
-              restartGame();
-            }}
+            onRestart={restartGame}
             onLeave={handleLeave}
             isMultiplayer={gameMode === 'online'}
           />
 
-          <div className="relative w-full h-[620px] rounded-xl overflow-hidden bg-[#0d0303] border border-[#450a0a]">
+          <div className="relative w-full h-[620px] rounded-xl overflow-hidden border border-[#450a0a] shadow-2xl">
             <FloorIsLavaCanvas canvasRef={canvasRef} />
             <FloorIsLavaHud
               arena={arena}
@@ -121,11 +119,11 @@ export function FloorIsLavaGame() {
             />
           </div>
 
-          {showVictory && (
+          {(showVictory || isGameOver) && (
             <FloorIsLavaVictoryModal
               players={arena.players}
               localPlayerId={localPlayer?.id ?? null}
-              survivalTimeMs={elapsedSec * 1000}
+              survivalTimeMs={Math.floor(elapsedSec * 1000)}
               onPlayAgain={() => {
                 setShowVictory(false);
                 restartGame();
