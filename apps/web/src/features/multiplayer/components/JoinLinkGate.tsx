@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import type { GameDefinition, Player } from '@playdeck/game-types';
 import { Button } from '@playdeck/ui';
+import { useAnagramMultiplayerStore } from '@/stores/anagram-multiplayer.store';
 import { useBombFactoryMultiplayerStore } from '@/stores/bomb-factory-multiplayer.store';
 import { useColorThiefMultiplayerStore } from '@/stores/color-thief-multiplayer.store';
 import { useElevatorMultiplayerStore } from '@/stores/elevator-multiplayer.store';
@@ -27,6 +28,7 @@ const COLOR_THIEF_GAME_ID = 'color-thief';
 const ELEVATOR_GAME_ID = 'unstable-elevator';
 const SHADOW_TAG_GAME_ID = 'shadow-tag';
 const BOMB_FACTORY_GAME_ID = 'bomb-factory';
+const ANAGRAM_GAME_ID = 'anagram-sprint';
 const DEFAULT_JOIN_ERROR = 'Could not join room';
 
 type GateStatus = 'idle' | 'joining' | 'failed';
@@ -43,6 +45,7 @@ function currentRoomCodeFor(gameId: string): string | null {
   if (gameId === ELEVATOR_GAME_ID) return useElevatorMultiplayerStore.getState().roomCode;
   if (gameId === SHADOW_TAG_GAME_ID) return useShadowTagMultiplayerStore.getState().roomCode;
   if (gameId === BOMB_FACTORY_GAME_ID) return useBombFactoryMultiplayerStore.getState().roomCode;
+  if (gameId === ANAGRAM_GAME_ID) return useAnagramMultiplayerStore.getState().roomCode;
   return useMultiplayerStore.getState().roomCode;
 }
 
@@ -135,6 +138,16 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       avatar: player.avatar || '🛠️',
     });
     return ok ? null : (useBombFactoryMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === ANAGRAM_GAME_ID) {
+    const store = useAnagramMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🔤',
+    });
+    return ok ? null : (useAnagramMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
   }
 
   const store = useMultiplayerStore.getState();
