@@ -6,6 +6,7 @@ import { bombFactoryContent } from './bomb-factory';
 import { colorThiefContent } from './color-thief';
 import { connectFourContent } from './connect-four';
 import { flappyArcadeContent } from './flappy-arcade';
+import { floorIsLavaContent } from './floor-is-lava';
 import { gravityGolfContent } from './gravity-golf';
 import { gravityShiftContent } from './gravity-shift';
 import { humanConveyorBeltContent } from './human-conveyor-belt';
@@ -61,6 +62,7 @@ const ALL_CONTENT: GameContent[] = [
   reverseRacingContent,
   sharedBrainContent,
   gravityShiftContent,
+  floorIsLavaContent,
 ];
 
 /**

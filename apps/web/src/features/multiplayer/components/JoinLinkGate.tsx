@@ -9,6 +9,7 @@ import { useAnagramMultiplayerStore } from '@/stores/anagram-multiplayer.store';
 import { useBombFactoryMultiplayerStore } from '@/stores/bomb-factory-multiplayer.store';
 import { useColorThiefMultiplayerStore } from '@/stores/color-thief-multiplayer.store';
 import { useElevatorMultiplayerStore } from '@/stores/elevator-multiplayer.store';
+import { useFloorIsLavaMultiplayerStore } from '@/stores/floor-is-lava-multiplayer.store';
 import { useGravityGolfMultiplayerStore } from '@/stores/gravity-golf-multiplayer.store';
 import { useGravityShiftMultiplayerStore } from '@/stores/gravity-shift-multiplayer.store';
 import { useHumanConveyorMultiplayerStore } from '@/stores/human-conveyor-multiplayer.store';
@@ -33,6 +34,7 @@ const ELEVATOR_GAME_ID = 'unstable-elevator';
 const SHADOW_TAG_GAME_ID = 'shadow-tag';
 const BOMB_FACTORY_GAME_ID = 'bomb-factory';
 const ANAGRAM_GAME_ID = 'anagram-sprint';
+const FLOOR_IS_LAVA_GAME_ID = 'floor-is-lava';
 const GRAVITY_GOLF_GAME_ID = 'gravity-golf';
 const GRAVITY_SHIFT_GAME_ID = 'gravity-shift';
 const REVERSE_RACING_GAME_ID = 'reverse-racing';
@@ -54,6 +56,7 @@ function currentRoomCodeFor(gameId: string): string | null {
   if (gameId === SHADOW_TAG_GAME_ID) return useShadowTagMultiplayerStore.getState().roomCode;
   if (gameId === BOMB_FACTORY_GAME_ID) return useBombFactoryMultiplayerStore.getState().roomCode;
   if (gameId === ANAGRAM_GAME_ID) return useAnagramMultiplayerStore.getState().roomCode;
+  if (gameId === FLOOR_IS_LAVA_GAME_ID) return useFloorIsLavaMultiplayerStore.getState().roomCode;
   if (gameId === GRAVITY_GOLF_GAME_ID) return useGravityGolfMultiplayerStore.getState().roomCode;
   if (gameId === GRAVITY_SHIFT_GAME_ID) return useGravityShiftMultiplayerStore.getState().roomCode;
   if (gameId === REVERSE_RACING_GAME_ID)
@@ -161,6 +164,16 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       avatar: player.avatar || '🔤',
     });
     return ok ? null : (useAnagramMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === FLOOR_IS_LAVA_GAME_ID) {
+    const store = useFloorIsLavaMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🔥',
+    });
+    return ok ? null : (useFloorIsLavaMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
   }
 
   if (gameId === GRAVITY_GOLF_GAME_ID) {
