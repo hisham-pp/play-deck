@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import type { GameDefinition, Player } from '@playdeck/game-types';
 import { Button } from '@playdeck/ui';
+import { useAnagramMultiplayerStore } from '@/stores/anagram-multiplayer.store';
 import { useBombFactoryMultiplayerStore } from '@/stores/bomb-factory-multiplayer.store';
 import { useColorThiefMultiplayerStore } from '@/stores/color-thief-multiplayer.store';
 import { useElevatorMultiplayerStore } from '@/stores/elevator-multiplayer.store';
@@ -30,6 +31,7 @@ const COLOR_THIEF_GAME_ID = 'color-thief';
 const ELEVATOR_GAME_ID = 'unstable-elevator';
 const SHADOW_TAG_GAME_ID = 'shadow-tag';
 const BOMB_FACTORY_GAME_ID = 'bomb-factory';
+const ANAGRAM_GAME_ID = 'anagram-sprint';
 const GRAVITY_GOLF_GAME_ID = 'gravity-golf';
 const REVERSE_RACING_GAME_ID = 'reverse-racing';
 const SHARED_BRAIN_GAME_ID = 'shared-brain';
@@ -49,6 +51,7 @@ function currentRoomCodeFor(gameId: string): string | null {
   if (gameId === ELEVATOR_GAME_ID) return useElevatorMultiplayerStore.getState().roomCode;
   if (gameId === SHADOW_TAG_GAME_ID) return useShadowTagMultiplayerStore.getState().roomCode;
   if (gameId === BOMB_FACTORY_GAME_ID) return useBombFactoryMultiplayerStore.getState().roomCode;
+  if (gameId === ANAGRAM_GAME_ID) return useAnagramMultiplayerStore.getState().roomCode;
   if (gameId === GRAVITY_GOLF_GAME_ID) return useGravityGolfMultiplayerStore.getState().roomCode;
   if (gameId === REVERSE_RACING_GAME_ID)
     return useReverseRacingMultiplayerStore.getState().roomCode;
@@ -145,6 +148,16 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       avatar: player.avatar || '🛠️',
     });
     return ok ? null : (useBombFactoryMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === ANAGRAM_GAME_ID) {
+    const store = useAnagramMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🔤',
+    });
+    return ok ? null : (useAnagramMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
   }
 
   if (gameId === GRAVITY_GOLF_GAME_ID) {

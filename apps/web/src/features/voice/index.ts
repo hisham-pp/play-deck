@@ -1,9 +1,10 @@
 export { VoiceChatDock } from './components/VoiceChatDock';
 export { RoomVoiceDock } from './components/RoomVoiceDock';
-export { LudoVoiceDock } from './components/LudoVoiceDock';
+export { AnagramVoiceDock } from './components/AnagramVoiceDock';
 export { BombFactoryVoiceDock } from './components/BombFactoryVoiceDock';
 export { MiniGolfVoiceDock } from './components/MiniGolfVoiceDock';
 export { HumanConveyorVoiceDock } from './components/HumanConveyorVoiceDock';
+export { LudoVoiceDock } from './components/LudoVoiceDock';
 export { TinyIslandVoiceDock } from './components/TinyIslandVoiceDock';
 export { ElevatorVoiceDock } from './components/ElevatorVoiceDock';
 export { ShadowTagVoiceDock } from './components/ShadowTagVoiceDock';

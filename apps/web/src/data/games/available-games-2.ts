@@ -275,6 +275,22 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     releaseDate: '2026-09-18',
   },
   {
+    id: 'anagram-sprint',
+    name: 'Anagram Sprint',
+    slug: 'anagram-sprint',
+    description:
+      'Race to unscramble the word before anyone else. Speed scoring, streak bonuses and difficulty that climbs every round — solo or in a room of eight.',
+    category: CATEGORY_PUZZLE,
+    players: { min: 1, max: 8 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/anagram-sprint/icon.svg',
+    bannerUrl: '/games/anagram-sprint/cover.svg',
+    tags: [TAG_WORD_PUZZLE, TAG_PUZZLE, TAG_SOLO, TAG_MULTIPLAYER, TAG_VOICE_CHAT],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-19',
+  },
+  {
     id: 'gravity-golf',
     name: 'Gravity Golf',
     slug: 'gravity-golf',

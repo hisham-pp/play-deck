@@ -12,22 +12,6 @@ import {
 
 export const COMING_SOON_PUZZLE_GAMES: GameDefinition[] = [
   {
-    id: 'anagram-sprint',
-    name: 'Anagram Sprint',
-    slug: 'anagram-sprint',
-    description:
-      'Fast-paced multiplayer word unscrambling race. Each round presents a scrambled word — players race to type the correct answer first. Features speed-based scoring, streak bonuses, and progressive difficulty.',
-    category: CATEGORY_PUZZLE,
-    players: { min: 2, max: 8 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/anagram-sprint/icon.svg',
-    bannerUrl: '/games/anagram-sprint/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_SOLO, TAG_WORD_PUZZLE],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
     id: 'spelling-bee',
     name: 'Spelling Bee',
     slug: 'spelling-bee',
