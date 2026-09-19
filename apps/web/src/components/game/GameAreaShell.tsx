@@ -20,6 +20,7 @@ import { MiniGolfGame } from '@/features/games/mini-golf';
 import { PenFightGame } from '@/features/games/pen-fight';
 import { PongGame } from '@/features/games/pong';
 import { PushYourLuckGame } from '@/features/games/push-your-luck';
+import { ReverseRacingGame } from '@/features/games/reverse-racing';
 import { RunicMemoryGame } from '@/features/games/runic-memory';
 import { ShadowTagGame } from '@/features/games/shadow-tag';
 import { SnakeGame } from '@/features/games/snake';
@@ -58,6 +59,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'pen-fight': PenFightGame,
   pong: PongGame,
   'push-your-luck': PushYourLuckGame,
+  'reverse-racing': ReverseRacingGame,
   'runic-memory': RunicMemoryGame,
   'shadow-tag': ShadowTagGame,
   snake: SnakeGame,
