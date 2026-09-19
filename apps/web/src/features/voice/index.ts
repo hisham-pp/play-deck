@@ -12,5 +12,6 @@ export { GravityGolfVoiceDock } from './components/GravityGolfVoiceDock';
 export { ReverseRacingVoiceDock } from './components/ReverseRacingVoiceDock';
 export { SharedBrainVoiceDock } from './components/SharedBrainVoiceDock';
 export { GravityShiftVoiceDock } from './components/GravityShiftVoiceDock';
+export { FloorIsLavaVoiceDock } from './components/FloorIsLavaVoiceDock';
 export { isVoiceChatSupported } from './services/microphone.service';
 export type { VoiceIdentity, VoiceRemotePeer } from './types/voice.types';

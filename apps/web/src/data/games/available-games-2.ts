@@ -338,4 +338,20 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-19',
   },
+  {
+    id: 'floor-is-lava',
+    name: 'Floor Is Lava',
+    slug: 'floor-is-lava',
+    description:
+      'The ground collapses beneath your feet! Push rivals into rising molten lava, secure power-up tiles, and be the last player standing in frantic real-time combat.',
+    category: CATEGORY_ARCADE,
+    players: { min: 1, max: 6 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/floor-is-lava/icon.svg',
+    bannerUrl: '/games/floor-is-lava/cover.svg',
+    tags: [TAG_ARCADE, TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PHYSICS, TAG_LOCAL_PLAY, TAG_SOLO],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-19',
+  },
 ];

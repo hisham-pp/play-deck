@@ -43,22 +43,6 @@ export const COMING_SOON_ARCADE_GAMES_1: GameDefinition[] = [
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
   {
-    id: 'floor-is-lava',
-    name: 'Floor Is Lava',
-    slug: 'floor-is-lava',
-    description:
-      'Safe tiles continuously disappear. Players must find new paths while pushing/avoiding opponents. Last player standing wins.',
-    category: CATEGORY_ARCADE,
-    players: { min: 2, max: 6 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/floor-is-lava/icon.svg',
-    bannerUrl: '/games/floor-is-lava/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PHYSICS],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
     id: 'loot-dash',
     name: 'Loot Dash',
     slug: 'loot-dash',

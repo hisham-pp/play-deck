@@ -7,6 +7,7 @@ import { colorThiefContent } from './color-thief';
 import { connectFourContent } from './connect-four';
 import { dontWakeTheGiantContent } from './dont-wake-the-giant';
 import { flappyArcadeContent } from './flappy-arcade';
+import { floorIsLavaContent } from './floor-is-lava';
 import { gravityGolfContent } from './gravity-golf';
 import { gravityShiftContent } from './gravity-shift';
 import { humanConveyorBeltContent } from './human-conveyor-belt';
@@ -63,6 +64,7 @@ const ALL_CONTENT: GameContent[] = [
   sharedBrainContent,
   gravityShiftContent,
   dontWakeTheGiantContent,
+  floorIsLavaContent,
 ];
 
 /**
