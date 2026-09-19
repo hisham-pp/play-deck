@@ -18,6 +18,7 @@ import { pushYourLuckContent } from './push-your-luck';
 import { reverseRacingContent } from './reverse-racing';
 import { runicMemoryContent } from './runic-memory';
 import { shadowTagContent } from './shadow-tag';
+import { sharedBrainContent } from './shared-brain';
 import { snakeContent } from './snake';
 import { snakeAndLadderContent } from './snake-and-ladder';
 import { sudokuContent } from './sudoku';
@@ -57,6 +58,7 @@ const ALL_CONTENT: GameContent[] = [
   anagramSprintContent,
   gravityGolfContent,
   reverseRacingContent,
+  sharedBrainContent,
 ];
 
 /**

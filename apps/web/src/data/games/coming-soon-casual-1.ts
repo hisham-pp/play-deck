@@ -29,22 +29,6 @@ export const COMING_SOON_CASUAL_GAMES_1: GameDefinition[] = [
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
   {
-    id: 'shared-brain',
-    name: 'Shared Brain',
-    slug: 'shared-brain',
-    description:
-      'Two players control the same character, each controlling different abilities. Voice communication is essential — without it, the character is helpless.',
-    category: CATEGORY_CASUAL,
-    players: { min: 2, max: 6 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/shared-brain/icon.svg',
-    bannerUrl: '/games/shared-brain/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_COOPERATIVE],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
     id: 'alibi',
     name: 'Alibi',
     slug: 'alibi',

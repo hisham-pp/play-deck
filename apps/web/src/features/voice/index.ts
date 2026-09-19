@@ -1,14 +1,15 @@
 export { VoiceChatDock } from './components/VoiceChatDock';
 export { RoomVoiceDock } from './components/RoomVoiceDock';
-export { LudoVoiceDock } from './components/LudoVoiceDock';
+export { AnagramVoiceDock } from './components/AnagramVoiceDock';
 export { BombFactoryVoiceDock } from './components/BombFactoryVoiceDock';
 export { MiniGolfVoiceDock } from './components/MiniGolfVoiceDock';
 export { HumanConveyorVoiceDock } from './components/HumanConveyorVoiceDock';
+export { LudoVoiceDock } from './components/LudoVoiceDock';
 export { TinyIslandVoiceDock } from './components/TinyIslandVoiceDock';
 export { ElevatorVoiceDock } from './components/ElevatorVoiceDock';
 export { ShadowTagVoiceDock } from './components/ShadowTagVoiceDock';
 export { GravityGolfVoiceDock } from './components/GravityGolfVoiceDock';
 export { ReverseRacingVoiceDock } from './components/ReverseRacingVoiceDock';
-export { AnagramVoiceDock } from './components/AnagramVoiceDock';
+export { SharedBrainVoiceDock } from './components/SharedBrainVoiceDock';
 export { isVoiceChatSupported } from './services/microphone.service';
 export type { VoiceIdentity, VoiceRemotePeer } from './types/voice.types';
