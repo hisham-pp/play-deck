@@ -14,6 +14,7 @@ import { miniGolfContent } from './mini-golf';
 import { penFightContent } from './pen-fight';
 import { pongContent } from './pong';
 import { pushYourLuckContent } from './push-your-luck';
+import { reverseRacingContent } from './reverse-racing';
 import { runicMemoryContent } from './runic-memory';
 import { shadowTagContent } from './shadow-tag';
 import { snakeContent } from './snake';
@@ -53,6 +54,7 @@ const ALL_CONTENT: GameContent[] = [
   shadowTagContent,
   bombFactoryContent,
   gravityGolfContent,
+  reverseRacingContent,
 ];
 
 /**

@@ -14,6 +14,7 @@ import { useLudoMultiplayerStore } from '@/stores/ludo-multiplayer.store';
 import { useMiniGolfMultiplayerStore } from '@/stores/mini-golf-multiplayer.store';
 import { useMultiplayerStore } from '@/stores/multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
+import { useReverseRacingMultiplayerStore } from '@/stores/reverse-racing-multiplayer.store';
 import { useShadowTagMultiplayerStore } from '@/stores/shadow-tag-multiplayer.store';
 import { useSnakeLadderMultiplayerStore } from '@/stores/snake-ladder-multiplayer.store';
 import { useTinyIslandMultiplayerStore } from '@/stores/tiny-island-multiplayer.store';
@@ -29,6 +30,7 @@ const ELEVATOR_GAME_ID = 'unstable-elevator';
 const SHADOW_TAG_GAME_ID = 'shadow-tag';
 const BOMB_FACTORY_GAME_ID = 'bomb-factory';
 const GRAVITY_GOLF_GAME_ID = 'gravity-golf';
+const REVERSE_RACING_GAME_ID = 'reverse-racing';
 const DEFAULT_JOIN_ERROR = 'Could not join room';
 
 type GateStatus = 'idle' | 'joining' | 'failed';
@@ -46,6 +48,8 @@ function currentRoomCodeFor(gameId: string): string | null {
   if (gameId === SHADOW_TAG_GAME_ID) return useShadowTagMultiplayerStore.getState().roomCode;
   if (gameId === BOMB_FACTORY_GAME_ID) return useBombFactoryMultiplayerStore.getState().roomCode;
   if (gameId === GRAVITY_GOLF_GAME_ID) return useGravityGolfMultiplayerStore.getState().roomCode;
+  if (gameId === REVERSE_RACING_GAME_ID)
+    return useReverseRacingMultiplayerStore.getState().roomCode;
   return useMultiplayerStore.getState().roomCode;
 }
 
@@ -148,6 +152,16 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       avatar: player.avatar || '⛳',
     });
     return ok ? null : (useGravityGolfMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === REVERSE_RACING_GAME_ID) {
+    const store = useReverseRacingMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🏎️',
+    });
+    return ok ? null : (useReverseRacingMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
   }
 
   const store = useMultiplayerStore.getState();

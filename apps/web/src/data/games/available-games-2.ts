@@ -290,4 +290,20 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-19',
   },
+  {
+    id: 'reverse-racing',
+    name: 'Reverse Racing',
+    slug: 'reverse-racing',
+    description:
+      'High-octane arcade racing meets circular sabotage. Race down your circuit at full throttle while dropping hazards onto your rival’s track.',
+    category: CATEGORY_ARCADE,
+    players: { min: 2, max: 6 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/reverse-racing/icon.svg',
+    bannerUrl: '/games/reverse-racing/cover.svg',
+    tags: [TAG_ARCADE, TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PHYSICS, TAG_LOCAL_PLAY],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-19',
+  },
 ];
