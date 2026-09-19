@@ -5,6 +5,7 @@ import { bombFactoryContent } from './bomb-factory';
 import { colorThiefContent } from './color-thief';
 import { connectFourContent } from './connect-four';
 import { flappyArcadeContent } from './flappy-arcade';
+import { gravityGolfContent } from './gravity-golf';
 import { humanConveyorBeltContent } from './human-conveyor-belt';
 import { ludoContent } from './ludo';
 import { chessContent } from './master-chess';
@@ -51,6 +52,7 @@ const ALL_CONTENT: GameContent[] = [
   unstableElevatorContent,
   shadowTagContent,
   bombFactoryContent,
+  gravityGolfContent,
 ];
 
 /**
