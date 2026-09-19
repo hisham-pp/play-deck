@@ -9,7 +9,12 @@ import type { SharedBrainActionEnvelope } from '../multiplayer/shared-brain-prot
 import { SB_MSG } from '../multiplayer/shared-brain-protocol';
 import { SharedBrainSoundService } from '../services/shared-brain-sound.service';
 import { SharedBrainStatsRepository } from '../services/shared-brain-stats-repository';
-import type { CourseDefinition, PlayerPair, SharedBrainRole } from '../types/shared-brain.types';
+import type {
+  BrainCharacterState,
+  CourseDefinition,
+  PlayerPair,
+  SharedBrainRole,
+} from '../types/shared-brain.types';
 
 export interface UseSharedBrainGameOptions {
   isMultiplayer?: boolean;
@@ -151,7 +156,12 @@ export function useSharedBrainGame({
           break;
 
         case SB_MSG.INPUT_EVENT: {
-          const { pairId, role, action, active } = envelope.payload;
+          const { pairId, role, action, active } = envelope.payload as {
+            pairId: string;
+            role: string;
+            action: string;
+            active: boolean;
+          };
           const targetPair = activePairs.find((p) => p.pairId === pairId);
           if (!targetPair) break;
 
@@ -169,7 +179,12 @@ export function useSharedBrainGame({
         }
 
         case SB_MSG.CHARACTER_SYNC: {
-          const { pairId, character, activeSwitches, collectedTokens } = envelope.payload;
+          const { pairId, character, activeSwitches, collectedTokens } = envelope.payload as {
+            pairId: string;
+            character: BrainCharacterState;
+            activeSwitches?: string[];
+            collectedTokens?: string[];
+          };
           const target = activePairs.find((p) => p.pairId === pairId);
           if (target && pairId !== localPair?.pairId) {
             Object.assign(target.character, character);
@@ -184,7 +199,15 @@ export function useSharedBrainGame({
         }
 
         case SB_MSG.COURSE_CLEAR: {
-          const { pairId: _pairId, timeMs, tokensCollected } = envelope.payload;
+          const {
+            pairId: _pairId,
+            timeMs,
+            tokensCollected,
+          } = envelope.payload as {
+            pairId: string;
+            timeMs: number;
+            tokensCollected: number;
+          };
           setRunStatus('completed');
           setVictoryStats({ time: timeMs, tokens: tokensCollected });
           SharedBrainSoundService.play('victory');
