@@ -9,5 +9,6 @@ export { ElevatorVoiceDock } from './components/ElevatorVoiceDock';
 export { ShadowTagVoiceDock } from './components/ShadowTagVoiceDock';
 export { GravityGolfVoiceDock } from './components/GravityGolfVoiceDock';
 export { ReverseRacingVoiceDock } from './components/ReverseRacingVoiceDock';
+export { AnagramVoiceDock } from './components/AnagramVoiceDock';
 export { isVoiceChatSupported } from './services/microphone.service';
 export type { VoiceIdentity, VoiceRemotePeer } from './types/voice.types';
