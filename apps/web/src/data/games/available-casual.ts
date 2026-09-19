@@ -62,4 +62,20 @@ export const AVAILABLE_CASUAL_GAMES: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-19',
   },
+  {
+    id: 'dont-wake-the-giant',
+    name: "Don't Wake the Giant",
+    slug: 'dont-wake-the-giant',
+    description:
+      'Rob a sleeping giant together. Every footstep, grab and collision fills one shared noise meter — and if it fills, he wakes and the whole crew loses.',
+    category: CATEGORY_CASUAL,
+    players: { min: 3, max: 6 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/dont-wake-the-giant/icon.svg',
+    bannerUrl: '/games/dont-wake-the-giant/cover.svg',
+    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_COOPERATIVE, TAG_AI_OPPONENT, TAG_LOCAL_PLAY],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-19',
+  },
 ];
