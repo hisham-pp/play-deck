@@ -354,4 +354,20 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-19',
   },
+  {
+    id: 'magnet-mayhem',
+    name: 'Magnet Mayhem',
+    slug: 'magnet-mayhem',
+    description:
+      'High-velocity magnetic arena combat. Sling around metallic anchors, fire repulsion shockwaves at rivals, and collect glowing target orbs.',
+    category: CATEGORY_ARCADE,
+    players: { min: 2, max: 4 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/magnet-mayhem/icon.svg',
+    bannerUrl: '/games/magnet-mayhem/cover.svg',
+    tags: [TAG_ARCADE, TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PHYSICS, TAG_LOCAL_PLAY],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-20',
+  },
 ];

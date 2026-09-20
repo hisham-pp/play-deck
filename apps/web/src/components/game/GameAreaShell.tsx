@@ -18,6 +18,7 @@ import { GravityGolfGame } from '@/features/games/gravity-golf';
 import { GravityShiftGame } from '@/features/games/gravity-shift';
 import { HumanConveyorGame } from '@/features/games/human-conveyor-belt';
 import { LudoGame } from '@/features/games/ludo';
+import { MagnetMayhemGame } from '@/features/games/magnet-mayhem';
 import { MinesweeperGame } from '@/features/games/minesweeper';
 import { MiniGolfGame } from '@/features/games/mini-golf';
 import { PenFightGame } from '@/features/games/pen-fight';
@@ -62,6 +63,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'gravity-shift': GravityShiftGame,
   'human-conveyor-belt': HumanConveyorGame,
   ludo: LudoGame,
+  'magnet-mayhem': MagnetMayhemGame,
   minesweeper: MinesweeperGame,
   'mini-golf': MiniGolfGame,
   'pen-fight': PenFightGame,
