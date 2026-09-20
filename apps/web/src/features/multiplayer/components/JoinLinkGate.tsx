@@ -30,6 +30,7 @@ import { useSaboteurMultiplayerStore } from '@/stores/secret-saboteur-multiplaye
 import { useShadowTagMultiplayerStore } from '@/stores/shadow-tag-multiplayer.store';
 import { useSharedBrainMultiplayerStore } from '@/stores/shared-brain-multiplayer.store';
 import { useSnakeLadderMultiplayerStore } from '@/stores/snake-ladder-multiplayer.store';
+import { useTelephoneMultiplayerStore } from '@/stores/telephone-drawing-multiplayer.store';
 import { useTinyIslandMultiplayerStore } from '@/stores/tiny-island-multiplayer.store';
 import { useTinyTankMultiplayerStore } from '@/stores/tiny-tank-multiplayer.store';
 import { useTrustMultiplayerStore } from '@/stores/trust-or-betray-multiplayer.store';
@@ -63,6 +64,7 @@ const ONE_WORD_STORY_GAME_ID = 'one-word-story';
 const BAD_ARCHITECT_GAME_ID = 'bad-architect';
 const GUESS_THE_LIE_GAME_ID = 'guess-the-lie';
 const WRONG_ANSWERS_GAME_ID = 'wrong-answers-only';
+const TELEPHONE_DRAWING_GAME_ID = 'telephone-drawing';
 const DEFAULT_JOIN_ERROR = 'Could not join room';
 
 type GateStatus = 'idle' | 'joining' | 'failed';
@@ -98,6 +100,7 @@ function currentRoomCodeFor(gameId: string): string | null {
   if (gameId === BAD_ARCHITECT_GAME_ID) return useArchitectMultiplayerStore.getState().roomCode;
   if (gameId === GUESS_THE_LIE_GAME_ID) return useLieMultiplayerStore.getState().roomCode;
   if (gameId === WRONG_ANSWERS_GAME_ID) return useWrongAnswersMultiplayerStore.getState().roomCode;
+  if (gameId === TELEPHONE_DRAWING_GAME_ID) return useTelephoneMultiplayerStore.getState().roomCode;
   return useMultiplayerStore.getState().roomCode;
 }
 
@@ -370,6 +373,16 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       avatar: player.avatar || '🤪',
     });
     return ok ? null : (useWrongAnswersMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === TELEPHONE_DRAWING_GAME_ID) {
+    const store = useTelephoneMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🎨',
+    });
+    return ok ? null : (useTelephoneMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
   }
 
   const store = useMultiplayerStore.getState();

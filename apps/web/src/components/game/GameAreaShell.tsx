@@ -39,6 +39,7 @@ import { SnakeGame } from '@/features/games/snake';
 import { SnakeLadderGame } from '@/features/games/snake-and-ladder';
 import { SudokuGame } from '@/features/games/sudoku';
 import { SummitRushGame } from '@/features/games/summit-rush';
+import { TelephoneDrawingGame } from '@/features/games/telephone-drawing';
 import { TetrisGame } from '@/features/games/tetris';
 import { TicTacToeGame } from '@/features/games/tic-tac-toe';
 import { TinyIslandGame } from '@/features/games/tiny-island';
@@ -102,6 +103,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'unstable-elevator': ElevatorGame,
   'word-chain': WordChainGame,
   'wrong-answers-only': WrongAnswersGame,
+  'telephone-drawing': TelephoneDrawingGame,
 };
 
 export function GameAreaShell({ game }: { game: GameDefinition }) {

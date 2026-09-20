@@ -34,6 +34,7 @@ import { snakeContent } from './snake';
 import { snakeAndLadderContent } from './snake-and-ladder';
 import { sudokuContent } from './sudoku';
 import { summitRushContent } from './summit-rush';
+import { telephoneDrawingContent } from './telephone-drawing';
 import { tetrisContent } from './tetris';
 import { ticTacToeContent } from './tic-tac-toe';
 import { tinyIslandContent } from './tiny-island';
@@ -87,6 +88,7 @@ const ALL_CONTENT: GameContent[] = [
   badArchitectContent,
   guessTheLieContent,
   wrongAnswersOnlyContent,
+  telephoneDrawingContent,
 ];
 
 /**

@@ -59,20 +59,4 @@ export const COMING_SOON_CASUAL_GAMES_1: GameDefinition[] = [
     badge: BADGE_COMING_SOON,
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
-  {
-    id: 'telephone-drawing',
-    name: 'Telephone Drawing',
-    slug: 'telephone-drawing',
-    description:
-      'Player A gets a phrase → draws it → Player B describes the drawing → Player C draws that description → chain continues → final result is compared with the original phrase.',
-    category: CATEGORY_CASUAL,
-    players: { min: 4, max: 8 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/telephone-drawing/icon.svg',
-    bannerUrl: '/games/telephone-drawing/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PARTY],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
 ];

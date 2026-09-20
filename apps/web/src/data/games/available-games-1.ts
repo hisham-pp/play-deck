@@ -217,4 +217,20 @@ export const AVAILABLE_GAMES_1: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-20',
   },
+  {
+    id: 'telephone-drawing',
+    name: 'Telephone Drawing',
+    slug: 'telephone-drawing',
+    description:
+      'Player A gets a phrase → draws it → Player B describes the drawing → Player C draws that description → chain continues → final result is compared with the original phrase.',
+    category: CATEGORY_CASUAL,
+    players: { min: 3, max: 8 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/telephone-drawing/icon.svg',
+    bannerUrl: '/games/telephone-drawing/cover.svg',
+    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PARTY, TAG_SOLO],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-20',
+  },
 ];
