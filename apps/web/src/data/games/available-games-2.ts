@@ -370,4 +370,20 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-20',
   },
+  {
+    id: 'tiny-tank-arena',
+    name: 'Tiny Tank Arena',
+    slug: 'tiny-tank-arena',
+    description:
+      'Small tanks fight in destructible arenas. Blast brick cover, detonate hazard barrels, scavenge unusual weapons, and be the last tank standing.',
+    category: CATEGORY_ARCADE,
+    players: { min: 2, max: 6 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/tiny-tank-arena/icon.svg',
+    bannerUrl: '/games/tiny-tank-arena/cover.svg',
+    tags: [TAG_ARCADE, TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PHYSICS, TAG_LOCAL_PLAY],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-20',
+  },
 ];
