@@ -267,3 +267,22 @@ canvas {
     animation: none;
   }
 }
+
+/* Native Fullscreen & Theater Mode rules */
+:fullscreen {
+  background-color: #070b14;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+:-webkit-full-screen {
+  background-color: #070b14;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.is-fullscreen {
+  background-color: #070b14 !important;
+}
