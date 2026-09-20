@@ -17,6 +17,7 @@ import { FloorIsLavaGame } from '@/features/games/floor-is-lava';
 import { GravityGolfGame } from '@/features/games/gravity-golf';
 import { GravityShiftGame } from '@/features/games/gravity-shift';
 import { HumanConveyorGame } from '@/features/games/human-conveyor-belt';
+import { LootDashGame } from '@/features/games/loot-dash';
 import { LudoGame } from '@/features/games/ludo';
 import { MagnetMayhemGame } from '@/features/games/magnet-mayhem';
 import { MinesweeperGame } from '@/features/games/minesweeper';
@@ -63,6 +64,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'gravity-golf': GravityGolfGame,
   'gravity-shift': GravityShiftGame,
   'human-conveyor-belt': HumanConveyorGame,
+  'loot-dash': LootDashGame,
   ludo: LudoGame,
   'magnet-mayhem': MagnetMayhemGame,
   minesweeper: MinesweeperGame,

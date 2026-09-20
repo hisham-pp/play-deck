@@ -386,4 +386,20 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-20',
   },
+  {
+    id: 'loot-dash',
+    name: 'Loot Dash',
+    slug: 'loot-dash',
+    description:
+      'Sprint through hazard-filled arenas scooping coins, gems, and chests. Dodge retractable spikes, avoid sticky slime, and steal loot from rival sprinters.',
+    category: CATEGORY_ARCADE,
+    players: { min: 2, max: 6 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/loot-dash/icon.svg',
+    bannerUrl: '/games/loot-dash/cover.svg',
+    tags: [TAG_ARCADE, TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PHYSICS, TAG_LOCAL_PLAY],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-20',
+  },
 ];

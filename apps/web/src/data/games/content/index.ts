@@ -11,6 +11,7 @@ import { floorIsLavaContent } from './floor-is-lava';
 import { gravityGolfContent } from './gravity-golf';
 import { gravityShiftContent } from './gravity-shift';
 import { humanConveyorBeltContent } from './human-conveyor-belt';
+import { lootDashContent } from './loot-dash';
 import { ludoContent } from './ludo';
 import { magnetMayhemContent } from './magnet-mayhem';
 import { chessContent } from './master-chess';
@@ -69,6 +70,7 @@ const ALL_CONTENT: GameContent[] = [
   floorIsLavaContent,
   magnetMayhemContent,
   tinyTankArenaContent,
+  lootDashContent,
 ];
 
 /**
