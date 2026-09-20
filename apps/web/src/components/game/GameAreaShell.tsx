@@ -40,6 +40,7 @@ import { ShadowTagGame } from '@/features/games/shadow-tag';
 import { SharedBrainGame } from '@/features/games/shared-brain';
 import { SnakeGame } from '@/features/games/snake';
 import { SnakeLadderGame } from '@/features/games/snake-and-ladder';
+import { SpellingBeeGame } from '@/features/games/spelling-bee';
 import { SpyNetworkGame } from '@/features/games/spy-network';
 import { SudokuGame } from '@/features/games/sudoku';
 import { SummitRushGame } from '@/features/games/summit-rush';
@@ -114,6 +115,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'imposter-builder': ImposterBuilderGame,
   'spy-network': SpyNetworkGame,
   alibi: AlibiGame,
+  'spelling-bee': SpellingBeeGame,
 };
 
 export function GameAreaShell({ game }: { game: GameDefinition }) {

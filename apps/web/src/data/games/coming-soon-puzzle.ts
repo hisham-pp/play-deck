@@ -12,22 +12,6 @@ import {
 
 export const COMING_SOON_PUZZLE_GAMES: GameDefinition[] = [
   {
-    id: 'spelling-bee',
-    name: 'Spelling Bee',
-    slug: 'spelling-bee',
-    description:
-      'Competitive multiplayer Spelling Bee. Players find as many valid words as possible using seven letters in a honeycomb arrangement. One center letter must appear in every word. Pangrams (all 7 letters) earn massive bonuses.',
-    category: CATEGORY_PUZZLE,
-    players: { min: 1, max: 6 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/spelling-bee/icon.svg',
-    bannerUrl: '/games/spelling-bee/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_SOLO, TAG_WORD_PUZZLE],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
     id: 'hangman-duel',
     name: 'Hangman Duel',
     slug: 'hangman-duel',

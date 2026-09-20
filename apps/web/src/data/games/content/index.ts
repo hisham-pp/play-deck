@@ -35,6 +35,7 @@ import { shadowTagContent } from './shadow-tag';
 import { sharedBrainContent } from './shared-brain';
 import { snakeContent } from './snake';
 import { snakeAndLadderContent } from './snake-and-ladder';
+import { spellingBeeContent } from './spelling-bee';
 import { spyNetworkContent } from './spy-network';
 import { sudokuContent } from './sudoku';
 import { summitRushContent } from './summit-rush';
@@ -99,6 +100,7 @@ const ALL_CONTENT: GameContent[] = [
   imposterBuilderContent,
   spyNetworkContent,
   alibiContent,
+  spellingBeeContent,
 ];
 
 /**

@@ -33,6 +33,7 @@ import { useSaboteurMultiplayerStore } from '@/stores/secret-saboteur-multiplaye
 import { useShadowTagMultiplayerStore } from '@/stores/shadow-tag-multiplayer.store';
 import { useSharedBrainMultiplayerStore } from '@/stores/shared-brain-multiplayer.store';
 import { useSnakeLadderMultiplayerStore } from '@/stores/snake-ladder-multiplayer.store';
+import { useSpellingBeeMultiplayerStore } from '@/stores/spelling-bee-multiplayer.store';
 import { useSpyNetworkMultiplayerStore } from '@/stores/spy-network-multiplayer.store';
 import { useTelephoneMultiplayerStore } from '@/stores/telephone-drawing-multiplayer.store';
 import { useTinyIslandMultiplayerStore } from '@/stores/tiny-island-multiplayer.store';
@@ -75,6 +76,7 @@ const SECRET_MISSION_GAME_ID = 'secret-mission';
 const IMPOSTER_BUILDER_GAME_ID = 'imposter-builder';
 const SPY_NETWORK_GAME_ID = 'spy-network';
 const ALIBI_GAME_ID = 'alibi';
+const SPELLING_BEE_GAME_ID = 'spelling-bee';
 const DEFAULT_JOIN_ERROR = 'Could not join room';
 
 type GateStatus = 'idle' | 'joining' | 'failed';
@@ -118,6 +120,7 @@ function currentRoomCodeFor(gameId: string): string | null {
     return useImposterBuilderMultiplayerStore.getState().roomCode;
   if (gameId === SPY_NETWORK_GAME_ID) return useSpyNetworkMultiplayerStore.getState().roomCode;
   if (gameId === ALIBI_GAME_ID) return useAlibiMultiplayerStore.getState().roomCode;
+  if (gameId === SPELLING_BEE_GAME_ID) return useSpellingBeeMultiplayerStore.getState().roomCode;
   return useMultiplayerStore.getState().roomCode;
 }
 
@@ -450,6 +453,16 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       avatar: player.avatar || '📋',
     });
     return ok ? null : (useAlibiMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === SPELLING_BEE_GAME_ID) {
+    const store = useSpellingBeeMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🐝',
+    });
+    return ok ? null : (useSpellingBeeMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
   }
 
   const store = useMultiplayerStore.getState();

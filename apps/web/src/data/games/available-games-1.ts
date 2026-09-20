@@ -21,6 +21,7 @@ import {
   TAG_SOCIAL_DECEPTION,
   TAG_SOLO,
   TAG_VOICE_CHAT,
+  TAG_WORD_PUZZLE,
 } from './constants';
 
 export const AVAILABLE_GAMES_1: GameDefinition[] = [
@@ -309,6 +310,22 @@ export const AVAILABLE_GAMES_1: GameDefinition[] = [
     thumbnailUrl: '/games/alibi/icon.svg',
     bannerUrl: '/games/alibi/cover.svg',
     tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PARTY, TAG_SOCIAL_DECEPTION],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-20',
+  },
+  {
+    id: 'spelling-bee',
+    name: 'Spelling Bee',
+    slug: 'spelling-bee',
+    description:
+      'Find as many words as possible using seven honeycomb letters. Every word must include the center letter in this addictive word puzzle and multiplayer game.',
+    category: CATEGORY_PUZZLE,
+    players: { min: 1, max: 6 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/spelling-bee/icon.svg',
+    bannerUrl: '/games/spelling-bee/cover.svg',
+    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_SOLO, TAG_WORD_PUZZLE],
     featured: true,
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-20',
