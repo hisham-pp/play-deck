@@ -34,6 +34,7 @@ import { useTelephoneMultiplayerStore } from '@/stores/telephone-drawing-multipl
 import { useTinyIslandMultiplayerStore } from '@/stores/tiny-island-multiplayer.store';
 import { useTinyTankMultiplayerStore } from '@/stores/tiny-tank-multiplayer.store';
 import { useTrustMultiplayerStore } from '@/stores/trust-or-betray-multiplayer.store';
+import { useWhoAmIMultiplayerStore } from '@/stores/who-am-i-multiplayer.store';
 import { useWrongAnswersMultiplayerStore } from '@/stores/wrong-answers-multiplayer.store';
 import { JOIN_ROOM_PARAM, parseJoinCode } from '../services/join-link';
 
@@ -65,6 +66,7 @@ const BAD_ARCHITECT_GAME_ID = 'bad-architect';
 const GUESS_THE_LIE_GAME_ID = 'guess-the-lie';
 const WRONG_ANSWERS_GAME_ID = 'wrong-answers-only';
 const TELEPHONE_DRAWING_GAME_ID = 'telephone-drawing';
+const WHO_AM_I_GAME_ID = 'who-am-i';
 const DEFAULT_JOIN_ERROR = 'Could not join room';
 
 type GateStatus = 'idle' | 'joining' | 'failed';
@@ -101,6 +103,7 @@ function currentRoomCodeFor(gameId: string): string | null {
   if (gameId === GUESS_THE_LIE_GAME_ID) return useLieMultiplayerStore.getState().roomCode;
   if (gameId === WRONG_ANSWERS_GAME_ID) return useWrongAnswersMultiplayerStore.getState().roomCode;
   if (gameId === TELEPHONE_DRAWING_GAME_ID) return useTelephoneMultiplayerStore.getState().roomCode;
+  if (gameId === WHO_AM_I_GAME_ID) return useWhoAmIMultiplayerStore.getState().roomCode;
   return useMultiplayerStore.getState().roomCode;
 }
 
@@ -383,6 +386,16 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       avatar: player.avatar || '🎨',
     });
     return ok ? null : (useTelephoneMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === WHO_AM_I_GAME_ID) {
+    const store = useWhoAmIMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '❓',
+    });
+    return ok ? null : (useWhoAmIMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
   }
 
   const store = useMultiplayerStore.getState();

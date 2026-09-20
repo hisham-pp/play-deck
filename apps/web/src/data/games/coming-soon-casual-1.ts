@@ -43,20 +43,4 @@ export const COMING_SOON_CASUAL_GAMES_1: GameDefinition[] = [
     badge: BADGE_COMING_SOON,
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
-  {
-    id: 'who-am-i',
-    name: 'Who Am I?',
-    slug: 'who-am-i',
-    description:
-      'Everyone gets a hidden identity assigned to them — visible to all OTHER players but NOT to themselves. Ask yes/no questions to discover your own identity.',
-    category: CATEGORY_CASUAL,
-    players: { min: 3, max: 8 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/who-am-i/icon.svg',
-    bannerUrl: '/games/who-am-i/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PARTY, TAG_SOCIAL_DECEPTION],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
 ];

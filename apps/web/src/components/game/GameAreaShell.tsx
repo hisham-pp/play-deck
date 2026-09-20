@@ -46,6 +46,7 @@ import { TinyIslandGame } from '@/features/games/tiny-island';
 import { TinyTankGame } from '@/features/games/tiny-tank';
 import { TrustOrBetrayGame } from '@/features/games/trust-or-betray';
 import { ElevatorGame } from '@/features/games/unstable-elevator';
+import { WhoAmIGame } from '@/features/games/who-am-i';
 import { WordChainGame } from '@/features/games/word-chain';
 import { WrongAnswersGame } from '@/features/games/wrong-answers-only';
 import { useGameSessionStore } from '@/stores/game-session.store';
@@ -104,6 +105,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'word-chain': WordChainGame,
   'wrong-answers-only': WrongAnswersGame,
   'telephone-drawing': TelephoneDrawingGame,
+  'who-am-i': WhoAmIGame,
 };
 
 export function GameAreaShell({ game }: { game: GameDefinition }) {

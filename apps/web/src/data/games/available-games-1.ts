@@ -233,4 +233,20 @@ export const AVAILABLE_GAMES_1: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-20',
   },
+  {
+    id: 'who-am-i',
+    name: 'Who Am I?',
+    slug: 'who-am-i',
+    description:
+      'Everyone gets a hidden identity assigned to them — visible to all OTHER players but NOT to themselves. Ask yes/no questions to discover your own identity.',
+    category: CATEGORY_CASUAL,
+    players: { min: 3, max: 8 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/who-am-i/icon.svg',
+    bannerUrl: '/games/who-am-i/cover.svg',
+    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PARTY, TAG_SOCIAL_DECEPTION, TAG_SOLO],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-20',
+  },
 ];

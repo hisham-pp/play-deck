@@ -41,6 +41,7 @@ import { tinyIslandContent } from './tiny-island';
 import { tinyTankArenaContent } from './tiny-tank-arena';
 import { trustOrBetrayContent } from './trust-or-betray';
 import { unstableElevatorContent } from './unstable-elevator';
+import { whoAmIContent } from './who-am-i';
 import { wordChainContent } from './word-chain';
 import { wrongAnswersOnlyContent } from './wrong-answers-only';
 
@@ -89,6 +90,7 @@ const ALL_CONTENT: GameContent[] = [
   guessTheLieContent,
   wrongAnswersOnlyContent,
   telephoneDrawingContent,
+  whoAmIContent,
 ];
 
 /**
