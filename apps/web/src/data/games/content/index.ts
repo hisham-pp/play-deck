@@ -19,6 +19,7 @@ import { magnetMayhemContent } from './magnet-mayhem';
 import { chessContent } from './master-chess';
 import { minesweeperContent } from './minesweeper';
 import { miniGolfContent } from './mini-golf';
+import { oneWordStoryContent } from './one-word-story';
 import { penFightContent } from './pen-fight';
 import { pongContent } from './pong';
 import { pushYourLuckContent } from './push-your-luck';
@@ -79,6 +80,7 @@ const ALL_CONTENT: GameContent[] = [
   secretSaboteurContent,
   auctionPanicContent,
   kingdomDraftContent,
+  oneWordStoryContent,
 ];
 
 /**

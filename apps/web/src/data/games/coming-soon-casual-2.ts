@@ -61,22 +61,6 @@ export const COMING_SOON_CASUAL_GAMES_2: GameDefinition[] = [
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
   {
-    id: 'one-word-story',
-    name: 'One Word Story',
-    slug: 'one-word-story',
-    description:
-      'Players collaboratively create a story, one word at a time. Unexpected combinations and deliberate chaos create hilarious results.',
-    category: CATEGORY_CASUAL,
-    players: { min: 3, max: 8 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/one-word-story/icon.svg',
-    bannerUrl: '/games/one-word-story/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PARTY, TAG_COOPERATIVE],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
     id: 'hide-and-seek',
     name: 'Hide & Seek',
     slug: 'hide-and-seek',

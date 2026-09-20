@@ -3,6 +3,7 @@ import {
   BADGE_READY_TO_PLAY,
   CATEGORY_ARCADE,
   CATEGORY_BOARD,
+  CATEGORY_CASUAL,
   CATEGORY_PUZZLE,
   CATEGORY_STRATEGY,
   RELEASE_DATE_2026_09_12,
@@ -11,10 +12,14 @@ import {
   TAG_AI_OPPONENT,
   TAG_ARCADE,
   TAG_CLASSIC,
+  TAG_COOPERATIVE,
   TAG_HIGH_SCORE,
   TAG_LOCAL_PLAY,
+  TAG_MULTIPLAYER,
+  TAG_PARTY,
   TAG_PUZZLE,
   TAG_SOLO,
+  TAG_VOICE_CHAT,
 } from './constants';
 
 export const AVAILABLE_GAMES_1: GameDefinition[] = [
@@ -146,5 +151,21 @@ export const AVAILABLE_GAMES_1: GameDefinition[] = [
     featured: true,
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-13',
+  },
+  {
+    id: 'one-word-story',
+    name: 'One Word Story',
+    slug: 'one-word-story',
+    description:
+      'Players collaboratively create a story, one word at a time. Unexpected combinations and deliberate chaos create hilarious results in 3–8 player voice rooms.',
+    category: CATEGORY_CASUAL,
+    players: { min: 3, max: 8 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/one-word-story/icon.svg',
+    bannerUrl: '/games/one-word-story/cover.svg',
+    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PARTY, TAG_COOPERATIVE, TAG_SOLO],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-20',
   },
 ];

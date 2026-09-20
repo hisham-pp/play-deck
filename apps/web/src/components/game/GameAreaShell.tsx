@@ -24,6 +24,7 @@ import { LudoGame } from '@/features/games/ludo';
 import { MagnetMayhemGame } from '@/features/games/magnet-mayhem';
 import { MinesweeperGame } from '@/features/games/minesweeper';
 import { MiniGolfGame } from '@/features/games/mini-golf';
+import { OneWordStoryGame } from '@/features/games/one-word-story';
 import { PenFightGame } from '@/features/games/pen-fight';
 import { PongGame } from '@/features/games/pong';
 import { PushYourLuckGame } from '@/features/games/push-your-luck';
@@ -75,6 +76,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'magnet-mayhem': MagnetMayhemGame,
   minesweeper: MinesweeperGame,
   'mini-golf': MiniGolfGame,
+  'one-word-story': OneWordStoryGame,
   'pen-fight': PenFightGame,
   pong: PongGame,
   'push-your-luck': PushYourLuckGame,
