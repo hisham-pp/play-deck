@@ -15,6 +15,7 @@ import { useFloorIsLavaMultiplayerStore } from '@/stores/floor-is-lava-multiplay
 import { useGiantMultiplayerStore } from '@/stores/giant-multiplayer.store';
 import { useGravityGolfMultiplayerStore } from '@/stores/gravity-golf-multiplayer.store';
 import { useGravityShiftMultiplayerStore } from '@/stores/gravity-shift-multiplayer.store';
+import { useLieMultiplayerStore } from '@/stores/guess-the-lie-multiplayer.store';
 import { useHumanConveyorMultiplayerStore } from '@/stores/human-conveyor-multiplayer.store';
 import { useKingdomMultiplayerStore } from '@/stores/kingdom-draft-multiplayer.store';
 import { useLootDashMultiplayerStore } from '@/stores/loot-dash-multiplayer.store';
@@ -59,6 +60,7 @@ const AUCTION_PANIC_GAME_ID = 'auction-panic';
 const KINGDOM_DRAFT_GAME_ID = 'kingdom-draft';
 const ONE_WORD_STORY_GAME_ID = 'one-word-story';
 const BAD_ARCHITECT_GAME_ID = 'bad-architect';
+const GUESS_THE_LIE_GAME_ID = 'guess-the-lie';
 const DEFAULT_JOIN_ERROR = 'Could not join room';
 
 type GateStatus = 'idle' | 'joining' | 'failed';
@@ -92,6 +94,7 @@ function currentRoomCodeFor(gameId: string): string | null {
   if (gameId === KINGDOM_DRAFT_GAME_ID) return useKingdomMultiplayerStore.getState().roomCode;
   if (gameId === ONE_WORD_STORY_GAME_ID) return useStoryMultiplayerStore.getState().roomCode;
   if (gameId === BAD_ARCHITECT_GAME_ID) return useArchitectMultiplayerStore.getState().roomCode;
+  if (gameId === GUESS_THE_LIE_GAME_ID) return useLieMultiplayerStore.getState().roomCode;
   return useMultiplayerStore.getState().roomCode;
 }
 
@@ -344,6 +347,16 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       avatar: player.avatar || '📐',
     });
     return ok ? null : (useArchitectMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === GUESS_THE_LIE_GAME_ID) {
+    const store = useLieMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🤥',
+    });
+    return ok ? null : (useLieMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
   }
 
   const store = useMultiplayerStore.getState();

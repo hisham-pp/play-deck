@@ -12,6 +12,7 @@ import { flappyArcadeContent } from './flappy-arcade';
 import { floorIsLavaContent } from './floor-is-lava';
 import { gravityGolfContent } from './gravity-golf';
 import { gravityShiftContent } from './gravity-shift';
+import { guessTheLieContent } from './guess-the-lie';
 import { humanConveyorBeltContent } from './human-conveyor-belt';
 import { kingdomDraftContent } from './kingdom-draft';
 import { lootDashContent } from './loot-dash';
@@ -83,6 +84,7 @@ const ALL_CONTENT: GameContent[] = [
   kingdomDraftContent,
   oneWordStoryContent,
   badArchitectContent,
+  guessTheLieContent,
 ];
 
 /**

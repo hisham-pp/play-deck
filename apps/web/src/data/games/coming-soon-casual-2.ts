@@ -6,7 +6,6 @@ import {
   TAG_MULTIPLAYER,
   TAG_VOICE_CHAT,
   TAG_PARTY,
-  TAG_SOCIAL_DECEPTION,
   CATEGORY_CASUAL,
 } from './constants';
 
@@ -23,22 +22,6 @@ export const COMING_SOON_CASUAL_GAMES_2: GameDefinition[] = [
     thumbnailUrl: '/games/wrong-answers-only/icon.svg',
     bannerUrl: '/games/wrong-answers-only/cover.svg',
     tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PARTY],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
-    id: 'guess-the-lie',
-    name: 'Guess the Lie',
-    slug: 'guess-the-lie',
-    description:
-      'Each round, a prompt appears. All players submit answers. One answer is deliberately fake. Everyone tries to identify the lie.',
-    category: CATEGORY_CASUAL,
-    players: { min: 3, max: 8 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/guess-the-lie/icon.svg',
-    bannerUrl: '/games/guess-the-lie/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PARTY, TAG_SOCIAL_DECEPTION],
     featured: false,
     badge: BADGE_COMING_SOON,
     releaseDate: RELEASE_DATE_COMING_SOON,
