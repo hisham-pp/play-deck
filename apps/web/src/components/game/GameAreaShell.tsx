@@ -27,6 +27,7 @@ import { PongGame } from '@/features/games/pong';
 import { PushYourLuckGame } from '@/features/games/push-your-luck';
 import { ReverseRacingGame } from '@/features/games/reverse-racing';
 import { RunicMemoryGame } from '@/features/games/runic-memory';
+import { SecretSaboteurGame } from '@/features/games/secret-saboteur';
 import { ShadowTagGame } from '@/features/games/shadow-tag';
 import { SharedBrainGame } from '@/features/games/shared-brain';
 import { SnakeGame } from '@/features/games/snake';
@@ -86,6 +87,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'tiny-island': TinyIslandGame,
   'tiny-tank-arena': TinyTankGame,
   'trust-or-betray': TrustOrBetrayGame,
+  'secret-saboteur': SecretSaboteurGame,
   'unstable-elevator': ElevatorGame,
   'word-chain': WordChainGame,
 };

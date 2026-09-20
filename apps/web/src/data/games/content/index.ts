@@ -22,6 +22,7 @@ import { pongContent } from './pong';
 import { pushYourLuckContent } from './push-your-luck';
 import { reverseRacingContent } from './reverse-racing';
 import { runicMemoryContent } from './runic-memory';
+import { secretSaboteurContent } from './secret-saboteur';
 import { shadowTagContent } from './shadow-tag';
 import { sharedBrainContent } from './shared-brain';
 import { snakeContent } from './snake';
@@ -73,6 +74,7 @@ const ALL_CONTENT: GameContent[] = [
   tinyTankArenaContent,
   lootDashContent,
   trustOrBetrayContent,
+  secretSaboteurContent,
 ];
 
 /**
