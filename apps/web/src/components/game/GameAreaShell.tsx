@@ -46,6 +46,7 @@ import { TinyTankGame } from '@/features/games/tiny-tank';
 import { TrustOrBetrayGame } from '@/features/games/trust-or-betray';
 import { ElevatorGame } from '@/features/games/unstable-elevator';
 import { WordChainGame } from '@/features/games/word-chain';
+import { WrongAnswersGame } from '@/features/games/wrong-answers-only';
 import { useGameSessionStore } from '@/stores/game-session.store';
 import { useLibraryStore } from '@/stores/library.store';
 import { usePlayerStore } from '@/stores/player.store';
@@ -100,6 +101,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'secret-saboteur': SecretSaboteurGame,
   'unstable-elevator': ElevatorGame,
   'word-chain': WordChainGame,
+  'wrong-answers-only': WrongAnswersGame,
 };
 
 export function GameAreaShell({ game }: { game: GameDefinition }) {

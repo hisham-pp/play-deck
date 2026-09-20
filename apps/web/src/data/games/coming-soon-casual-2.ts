@@ -5,27 +5,10 @@ import {
   RELEASE_DATE_COMING_SOON,
   TAG_MULTIPLAYER,
   TAG_VOICE_CHAT,
-  TAG_PARTY,
   CATEGORY_CASUAL,
 } from './constants';
 
 export const COMING_SOON_CASUAL_GAMES_2: GameDefinition[] = [
-  {
-    id: 'wrong-answers-only',
-    name: 'Wrong Answers Only',
-    slug: 'wrong-answers-only',
-    description:
-      'A question appears. Players deliberately submit believable-but-wrong answers. Everyone votes for the funniest or most creative fake answer.',
-    category: CATEGORY_CASUAL,
-    players: { min: 3, max: 8 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/wrong-answers-only/icon.svg',
-    bannerUrl: '/games/wrong-answers-only/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PARTY],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
   {
     id: 'hide-and-seek',
     name: 'Hide & Seek',

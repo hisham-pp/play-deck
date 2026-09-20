@@ -201,4 +201,20 @@ export const AVAILABLE_GAMES_1: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-20',
   },
+  {
+    id: 'wrong-answers-only',
+    name: 'Wrong Answers Only',
+    slug: 'wrong-answers-only',
+    description:
+      'A question appears. Players deliberately submit believable-but-wrong answers. Everyone votes for the funniest or most creative fake answer.',
+    category: CATEGORY_CASUAL,
+    players: { min: 3, max: 8 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/wrong-answers-only/icon.svg',
+    bannerUrl: '/games/wrong-answers-only/cover.svg',
+    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PARTY, TAG_SOLO],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-20',
+  },
 ];
