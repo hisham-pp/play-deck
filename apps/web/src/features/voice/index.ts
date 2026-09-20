@@ -15,5 +15,6 @@ export { GravityShiftVoiceDock } from './components/GravityShiftVoiceDock';
 export { FloorIsLavaVoiceDock } from './components/FloorIsLavaVoiceDock';
 export { MagnetMayhemVoiceDock } from './components/MagnetMayhemVoiceDock';
 export { TinyTankVoiceDock } from './components/TinyTankVoiceDock';
+export { LootDashVoiceDock } from './components/LootDashVoiceDock';
 export { isVoiceChatSupported } from './services/microphone.service';
 export type { VoiceIdentity, VoiceRemotePeer } from './types/voice.types';

@@ -14,6 +14,7 @@ import { useGiantMultiplayerStore } from '@/stores/giant-multiplayer.store';
 import { useGravityGolfMultiplayerStore } from '@/stores/gravity-golf-multiplayer.store';
 import { useGravityShiftMultiplayerStore } from '@/stores/gravity-shift-multiplayer.store';
 import { useHumanConveyorMultiplayerStore } from '@/stores/human-conveyor-multiplayer.store';
+import { useLootDashMultiplayerStore } from '@/stores/loot-dash-multiplayer.store';
 import { useLudoMultiplayerStore } from '@/stores/ludo-multiplayer.store';
 import { useMagnetMayhemMultiplayerStore } from '@/stores/magnet-mayhem-multiplayer.store';
 import { useMiniGolfMultiplayerStore } from '@/stores/mini-golf-multiplayer.store';
@@ -41,6 +42,7 @@ const GIANT_GAME_ID = 'dont-wake-the-giant';
 const FLOOR_IS_LAVA_GAME_ID = 'floor-is-lava';
 const MAGNET_MAYHEM_GAME_ID = 'magnet-mayhem';
 const TINY_TANK_GAME_ID = 'tiny-tank-arena';
+const LOOT_DASH_GAME_ID = 'loot-dash';
 const GRAVITY_GOLF_GAME_ID = 'gravity-golf';
 const GRAVITY_SHIFT_GAME_ID = 'gravity-shift';
 const REVERSE_RACING_GAME_ID = 'reverse-racing';
@@ -66,6 +68,7 @@ function currentRoomCodeFor(gameId: string): string | null {
   if (gameId === FLOOR_IS_LAVA_GAME_ID) return useFloorIsLavaMultiplayerStore.getState().roomCode;
   if (gameId === MAGNET_MAYHEM_GAME_ID) return useMagnetMayhemMultiplayerStore.getState().roomCode;
   if (gameId === TINY_TANK_GAME_ID) return useTinyTankMultiplayerStore.getState().roomCode;
+  if (gameId === LOOT_DASH_GAME_ID) return useLootDashMultiplayerStore.getState().roomCode;
   if (gameId === GRAVITY_GOLF_GAME_ID) return useGravityGolfMultiplayerStore.getState().roomCode;
   if (gameId === GRAVITY_SHIFT_GAME_ID) return useGravityShiftMultiplayerStore.getState().roomCode;
   if (gameId === REVERSE_RACING_GAME_ID)
@@ -203,6 +206,16 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       avatar: player.avatar || '🛡️',
     });
     return ok ? null : (useTinyTankMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === LOOT_DASH_GAME_ID) {
+    const store = useLootDashMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '💎',
+    });
+    return ok ? null : (useLootDashMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
   }
 
   if (gameId === GRAVITY_GOLF_GAME_ID) {
