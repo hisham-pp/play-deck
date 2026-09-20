@@ -16,5 +16,6 @@ export { FloorIsLavaVoiceDock } from './components/FloorIsLavaVoiceDock';
 export { MagnetMayhemVoiceDock } from './components/MagnetMayhemVoiceDock';
 export { TinyTankVoiceDock } from './components/TinyTankVoiceDock';
 export { LootDashVoiceDock } from './components/LootDashVoiceDock';
+export { TrustOrBetrayVoiceDock } from './components/TrustOrBetrayVoiceDock';
 export { isVoiceChatSupported } from './services/microphone.service';
 export type { VoiceIdentity, VoiceRemotePeer } from './types/voice.types';

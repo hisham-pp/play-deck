@@ -37,6 +37,7 @@ import { TetrisGame } from '@/features/games/tetris';
 import { TicTacToeGame } from '@/features/games/tic-tac-toe';
 import { TinyIslandGame } from '@/features/games/tiny-island';
 import { TinyTankGame } from '@/features/games/tiny-tank';
+import { TrustOrBetrayGame } from '@/features/games/trust-or-betray';
 import { ElevatorGame } from '@/features/games/unstable-elevator';
 import { WordChainGame } from '@/features/games/word-chain';
 import { useGameSessionStore } from '@/stores/game-session.store';
@@ -84,6 +85,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'tic-tac-toe': TicTacToeGame,
   'tiny-island': TinyIslandGame,
   'tiny-tank-arena': TinyTankGame,
+  'trust-or-betray': TrustOrBetrayGame,
   'unstable-elevator': ElevatorGame,
   'word-chain': WordChainGame,
 };
