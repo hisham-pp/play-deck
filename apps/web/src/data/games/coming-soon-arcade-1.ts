@@ -27,22 +27,6 @@ export const COMING_SOON_ARCADE_GAMES_1: GameDefinition[] = [
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
   {
-    id: 'magnet-mayhem',
-    name: 'Magnet Mayhem',
-    slug: 'magnet-mayhem',
-    description:
-      'Players control magnets. Pull yourself toward objects, push opponents away, and collect targets scattered across the arena.',
-    category: CATEGORY_ARCADE,
-    players: { min: 2, max: 4 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/magnet-mayhem/icon.svg',
-    bannerUrl: '/games/magnet-mayhem/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PHYSICS],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
     id: 'loot-dash',
     name: 'Loot Dash',
     slug: 'loot-dash',

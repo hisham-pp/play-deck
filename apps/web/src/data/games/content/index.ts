@@ -12,6 +12,7 @@ import { gravityGolfContent } from './gravity-golf';
 import { gravityShiftContent } from './gravity-shift';
 import { humanConveyorBeltContent } from './human-conveyor-belt';
 import { ludoContent } from './ludo';
+import { magnetMayhemContent } from './magnet-mayhem';
 import { chessContent } from './master-chess';
 import { minesweeperContent } from './minesweeper';
 import { miniGolfContent } from './mini-golf';
@@ -65,6 +66,7 @@ const ALL_CONTENT: GameContent[] = [
   gravityShiftContent,
   dontWakeTheGiantContent,
   floorIsLavaContent,
+  magnetMayhemContent,
 ];
 
 /**
