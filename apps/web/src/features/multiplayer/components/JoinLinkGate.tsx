@@ -24,6 +24,7 @@ import { useShadowTagMultiplayerStore } from '@/stores/shadow-tag-multiplayer.st
 import { useSharedBrainMultiplayerStore } from '@/stores/shared-brain-multiplayer.store';
 import { useSnakeLadderMultiplayerStore } from '@/stores/snake-ladder-multiplayer.store';
 import { useTinyIslandMultiplayerStore } from '@/stores/tiny-island-multiplayer.store';
+import { useTinyTankMultiplayerStore } from '@/stores/tiny-tank-multiplayer.store';
 import { JOIN_ROOM_PARAM, parseJoinCode } from '../services/join-link';
 
 const LUDO_GAME_ID = 'ludo';
@@ -39,6 +40,7 @@ const ANAGRAM_GAME_ID = 'anagram-sprint';
 const GIANT_GAME_ID = 'dont-wake-the-giant';
 const FLOOR_IS_LAVA_GAME_ID = 'floor-is-lava';
 const MAGNET_MAYHEM_GAME_ID = 'magnet-mayhem';
+const TINY_TANK_GAME_ID = 'tiny-tank-arena';
 const GRAVITY_GOLF_GAME_ID = 'gravity-golf';
 const GRAVITY_SHIFT_GAME_ID = 'gravity-shift';
 const REVERSE_RACING_GAME_ID = 'reverse-racing';
@@ -63,6 +65,7 @@ function currentRoomCodeFor(gameId: string): string | null {
   if (gameId === GIANT_GAME_ID) return useGiantMultiplayerStore.getState().roomCode;
   if (gameId === FLOOR_IS_LAVA_GAME_ID) return useFloorIsLavaMultiplayerStore.getState().roomCode;
   if (gameId === MAGNET_MAYHEM_GAME_ID) return useMagnetMayhemMultiplayerStore.getState().roomCode;
+  if (gameId === TINY_TANK_GAME_ID) return useTinyTankMultiplayerStore.getState().roomCode;
   if (gameId === GRAVITY_GOLF_GAME_ID) return useGravityGolfMultiplayerStore.getState().roomCode;
   if (gameId === GRAVITY_SHIFT_GAME_ID) return useGravityShiftMultiplayerStore.getState().roomCode;
   if (gameId === REVERSE_RACING_GAME_ID)
@@ -190,6 +193,16 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       avatar: player.avatar || '🧲',
     });
     return ok ? null : (useMagnetMayhemMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === TINY_TANK_GAME_ID) {
+    const store = useTinyTankMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🛡️',
+    });
+    return ok ? null : (useTinyTankMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
   }
 
   if (gameId === GRAVITY_GOLF_GAME_ID) {
