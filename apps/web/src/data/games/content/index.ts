@@ -1,6 +1,7 @@
 import type { GameContent } from '@playdeck/game-types';
 import { game2048Content } from './2048';
 import { anagramSprintContent } from './anagram-sprint';
+import { auctionPanicContent } from './auction-panic';
 import { ballBounceContent } from './ball-bounce';
 import { bombFactoryContent } from './bomb-factory';
 import { colorThiefContent } from './color-thief';
@@ -75,6 +76,7 @@ const ALL_CONTENT: GameContent[] = [
   lootDashContent,
   trustOrBetrayContent,
   secretSaboteurContent,
+  auctionPanicContent,
 ];
 
 /**

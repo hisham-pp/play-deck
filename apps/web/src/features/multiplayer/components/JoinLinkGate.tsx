@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import type { GameDefinition, Player } from '@playdeck/game-types';
 import { Button } from '@playdeck/ui';
 import { useAnagramMultiplayerStore } from '@/stores/anagram-multiplayer.store';
+import { useAuctionMultiplayerStore } from '@/stores/auction-panic-multiplayer.store';
 import { useBombFactoryMultiplayerStore } from '@/stores/bomb-factory-multiplayer.store';
 import { useColorThiefMultiplayerStore } from '@/stores/color-thief-multiplayer.store';
 import { useElevatorMultiplayerStore } from '@/stores/elevator-multiplayer.store';
@@ -51,6 +52,7 @@ const REVERSE_RACING_GAME_ID = 'reverse-racing';
 const SHARED_BRAIN_GAME_ID = 'shared-brain';
 const TRUST_OR_BETRAY_GAME_ID = 'trust-or-betray';
 const SECRET_SABOTEUR_GAME_ID = 'secret-saboteur';
+const AUCTION_PANIC_GAME_ID = 'auction-panic';
 const DEFAULT_JOIN_ERROR = 'Could not join room';
 
 type GateStatus = 'idle' | 'joining' | 'failed';
@@ -80,6 +82,7 @@ function currentRoomCodeFor(gameId: string): string | null {
   if (gameId === SHARED_BRAIN_GAME_ID) return useSharedBrainMultiplayerStore.getState().roomCode;
   if (gameId === TRUST_OR_BETRAY_GAME_ID) return useTrustMultiplayerStore.getState().roomCode;
   if (gameId === SECRET_SABOTEUR_GAME_ID) return useSaboteurMultiplayerStore.getState().roomCode;
+  if (gameId === AUCTION_PANIC_GAME_ID) return useAuctionMultiplayerStore.getState().roomCode;
   return useMultiplayerStore.getState().roomCode;
 }
 
@@ -292,6 +295,16 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       avatar: player.avatar || '☢️',
     });
     return ok ? null : (useSaboteurMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === AUCTION_PANIC_GAME_ID) {
+    const store = useAuctionMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🎩',
+    });
+    return ok ? null : (useAuctionMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
   }
 
   const store = useMultiplayerStore.getState();

@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { GameDefinition } from '@playdeck/game-types';
 import { Game2048 } from '@/features/games/2048';
 import { AnagramSprintGame } from '@/features/games/anagram-sprint';
+import { AuctionPanicGame } from '@/features/games/auction-panic';
 import { BallBounceGame } from '@/features/games/ball-bounce';
 import { BombFactoryGame } from '@/features/games/bomb-factory';
 import { ChessGame } from '@/features/games/chess';
@@ -55,6 +56,7 @@ import { GameStage } from './GameStage';
 const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   '2048': Game2048,
   'anagram-sprint': AnagramSprintGame,
+  'auction-panic': AuctionPanicGame,
   'ball-bounce': BallBounceGame,
   'bomb-factory': BombFactoryGame,
   chess: ChessGame,
