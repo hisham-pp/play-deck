@@ -96,6 +96,7 @@ describe('LootEngine', () => {
     state.timeRemaining = 0.02;
     state.players[0].score = 30;
     state.players[1].score = 10;
+    state.loot = [];
 
     const { nextState } = stepLootDashArena(state, {}, TEST_CONFIG, 0.05);
 

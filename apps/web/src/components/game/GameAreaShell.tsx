@@ -5,6 +5,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { GameDefinition } from '@playdeck/game-types';
 import { Game2048 } from '@/features/games/2048';
+import { AlibiGame } from '@/features/games/alibi';
 import { AnagramSprintGame } from '@/features/games/anagram-sprint';
 import { AuctionPanicGame } from '@/features/games/auction-panic';
 import { BadArchitectGame } from '@/features/games/bad-architect';
@@ -20,6 +21,7 @@ import { GravityGolfGame } from '@/features/games/gravity-golf';
 import { GravityShiftGame } from '@/features/games/gravity-shift';
 import { GuessTheLieGame } from '@/features/games/guess-the-lie';
 import { HumanConveyorGame } from '@/features/games/human-conveyor-belt';
+import { ImposterBuilderGame } from '@/features/games/imposter-builder';
 import { KingdomDraftGame } from '@/features/games/kingdom-draft';
 import { LootDashGame } from '@/features/games/loot-dash';
 import { LudoGame } from '@/features/games/ludo';
@@ -32,11 +34,13 @@ import { PongGame } from '@/features/games/pong';
 import { PushYourLuckGame } from '@/features/games/push-your-luck';
 import { ReverseRacingGame } from '@/features/games/reverse-racing';
 import { RunicMemoryGame } from '@/features/games/runic-memory';
+import { SecretMissionGame } from '@/features/games/secret-mission';
 import { SecretSaboteurGame } from '@/features/games/secret-saboteur';
 import { ShadowTagGame } from '@/features/games/shadow-tag';
 import { SharedBrainGame } from '@/features/games/shared-brain';
 import { SnakeGame } from '@/features/games/snake';
 import { SnakeLadderGame } from '@/features/games/snake-and-ladder';
+import { SpyNetworkGame } from '@/features/games/spy-network';
 import { SudokuGame } from '@/features/games/sudoku';
 import { SummitRushGame } from '@/features/games/summit-rush';
 import { TelephoneDrawingGame } from '@/features/games/telephone-drawing';
@@ -106,6 +110,10 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'wrong-answers-only': WrongAnswersGame,
   'telephone-drawing': TelephoneDrawingGame,
   'who-am-i': WhoAmIGame,
+  'secret-mission': SecretMissionGame,
+  'imposter-builder': ImposterBuilderGame,
+  'spy-network': SpyNetworkGame,
+  alibi: AlibiGame,
 };
 
 export function GameAreaShell({ game }: { game: GameDefinition }) {

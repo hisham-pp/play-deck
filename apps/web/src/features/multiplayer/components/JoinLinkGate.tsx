@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import type { GameDefinition, Player } from '@playdeck/game-types';
 import { Button } from '@playdeck/ui';
+import { useAlibiMultiplayerStore } from '@/stores/alibi-multiplayer.store';
 import { useAnagramMultiplayerStore } from '@/stores/anagram-multiplayer.store';
 import { useAuctionMultiplayerStore } from '@/stores/auction-panic-multiplayer.store';
 import { useArchitectMultiplayerStore } from '@/stores/bad-architect-multiplayer.store';
@@ -17,6 +18,7 @@ import { useGravityGolfMultiplayerStore } from '@/stores/gravity-golf-multiplaye
 import { useGravityShiftMultiplayerStore } from '@/stores/gravity-shift-multiplayer.store';
 import { useLieMultiplayerStore } from '@/stores/guess-the-lie-multiplayer.store';
 import { useHumanConveyorMultiplayerStore } from '@/stores/human-conveyor-multiplayer.store';
+import { useImposterBuilderMultiplayerStore } from '@/stores/imposter-builder-multiplayer.store';
 import { useKingdomMultiplayerStore } from '@/stores/kingdom-draft-multiplayer.store';
 import { useLootDashMultiplayerStore } from '@/stores/loot-dash-multiplayer.store';
 import { useLudoMultiplayerStore } from '@/stores/ludo-multiplayer.store';
@@ -26,10 +28,12 @@ import { useMultiplayerStore } from '@/stores/multiplayer.store';
 import { useStoryMultiplayerStore } from '@/stores/one-word-story-multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
 import { useReverseRacingMultiplayerStore } from '@/stores/reverse-racing-multiplayer.store';
+import { useSecretMissionMultiplayerStore } from '@/stores/secret-mission-multiplayer.store';
 import { useSaboteurMultiplayerStore } from '@/stores/secret-saboteur-multiplayer.store';
 import { useShadowTagMultiplayerStore } from '@/stores/shadow-tag-multiplayer.store';
 import { useSharedBrainMultiplayerStore } from '@/stores/shared-brain-multiplayer.store';
 import { useSnakeLadderMultiplayerStore } from '@/stores/snake-ladder-multiplayer.store';
+import { useSpyNetworkMultiplayerStore } from '@/stores/spy-network-multiplayer.store';
 import { useTelephoneMultiplayerStore } from '@/stores/telephone-drawing-multiplayer.store';
 import { useTinyIslandMultiplayerStore } from '@/stores/tiny-island-multiplayer.store';
 import { useTinyTankMultiplayerStore } from '@/stores/tiny-tank-multiplayer.store';
@@ -67,6 +71,10 @@ const GUESS_THE_LIE_GAME_ID = 'guess-the-lie';
 const WRONG_ANSWERS_GAME_ID = 'wrong-answers-only';
 const TELEPHONE_DRAWING_GAME_ID = 'telephone-drawing';
 const WHO_AM_I_GAME_ID = 'who-am-i';
+const SECRET_MISSION_GAME_ID = 'secret-mission';
+const IMPOSTER_BUILDER_GAME_ID = 'imposter-builder';
+const SPY_NETWORK_GAME_ID = 'spy-network';
+const ALIBI_GAME_ID = 'alibi';
 const DEFAULT_JOIN_ERROR = 'Could not join room';
 
 type GateStatus = 'idle' | 'joining' | 'failed';
@@ -104,6 +112,12 @@ function currentRoomCodeFor(gameId: string): string | null {
   if (gameId === WRONG_ANSWERS_GAME_ID) return useWrongAnswersMultiplayerStore.getState().roomCode;
   if (gameId === TELEPHONE_DRAWING_GAME_ID) return useTelephoneMultiplayerStore.getState().roomCode;
   if (gameId === WHO_AM_I_GAME_ID) return useWhoAmIMultiplayerStore.getState().roomCode;
+  if (gameId === SECRET_MISSION_GAME_ID)
+    return useSecretMissionMultiplayerStore.getState().roomCode;
+  if (gameId === IMPOSTER_BUILDER_GAME_ID)
+    return useImposterBuilderMultiplayerStore.getState().roomCode;
+  if (gameId === SPY_NETWORK_GAME_ID) return useSpyNetworkMultiplayerStore.getState().roomCode;
+  if (gameId === ALIBI_GAME_ID) return useAlibiMultiplayerStore.getState().roomCode;
   return useMultiplayerStore.getState().roomCode;
 }
 
@@ -396,6 +410,46 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       avatar: player.avatar || '❓',
     });
     return ok ? null : (useWhoAmIMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === SECRET_MISSION_GAME_ID) {
+    const store = useSecretMissionMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🕵️',
+    });
+    return ok ? null : (useSecretMissionMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === IMPOSTER_BUILDER_GAME_ID) {
+    const store = useImposterBuilderMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🏗️',
+    });
+    return ok ? null : (useImposterBuilderMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === SPY_NETWORK_GAME_ID) {
+    const store = useSpyNetworkMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🔍',
+    });
+    return ok ? null : (useSpyNetworkMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === ALIBI_GAME_ID) {
+    const store = useAlibiMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '📋',
+    });
+    return ok ? null : (useAlibiMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
   }
 
   const store = useMultiplayerStore.getState();

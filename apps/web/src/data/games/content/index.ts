@@ -1,5 +1,6 @@
 import type { GameContent } from '@playdeck/game-types';
 import { game2048Content } from './2048';
+import { alibiContent } from './alibi';
 import { anagramSprintContent } from './anagram-sprint';
 import { auctionPanicContent } from './auction-panic';
 import { badArchitectContent } from './bad-architect';
@@ -14,6 +15,7 @@ import { gravityGolfContent } from './gravity-golf';
 import { gravityShiftContent } from './gravity-shift';
 import { guessTheLieContent } from './guess-the-lie';
 import { humanConveyorBeltContent } from './human-conveyor-belt';
+import { imposterBuilderContent } from './imposter-builder';
 import { kingdomDraftContent } from './kingdom-draft';
 import { lootDashContent } from './loot-dash';
 import { ludoContent } from './ludo';
@@ -27,11 +29,13 @@ import { pongContent } from './pong';
 import { pushYourLuckContent } from './push-your-luck';
 import { reverseRacingContent } from './reverse-racing';
 import { runicMemoryContent } from './runic-memory';
+import { secretMissionContent } from './secret-mission';
 import { secretSaboteurContent } from './secret-saboteur';
 import { shadowTagContent } from './shadow-tag';
 import { sharedBrainContent } from './shared-brain';
 import { snakeContent } from './snake';
 import { snakeAndLadderContent } from './snake-and-ladder';
+import { spyNetworkContent } from './spy-network';
 import { sudokuContent } from './sudoku';
 import { summitRushContent } from './summit-rush';
 import { telephoneDrawingContent } from './telephone-drawing';
@@ -91,6 +95,10 @@ const ALL_CONTENT: GameContent[] = [
   wrongAnswersOnlyContent,
   telephoneDrawingContent,
   whoAmIContent,
+  secretMissionContent,
+  imposterBuilderContent,
+  spyNetworkContent,
+  alibiContent,
 ];
 
 /**

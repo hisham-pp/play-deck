@@ -6,7 +6,6 @@ import {
   TAG_MULTIPLAYER,
   TAG_VOICE_CHAT,
   TAG_PHYSICS,
-  TAG_SOCIAL_DECEPTION,
   TAG_SOLO,
   CATEGORY_STRATEGY,
   CATEGORY_CARD,
@@ -14,38 +13,6 @@ import {
 } from './constants';
 
 export const COMING_SOON_STRATEGY_GAMES: GameDefinition[] = [
-  {
-    id: 'spy-network',
-    name: 'Spy Network',
-    slug: 'spy-network',
-    description:
-      'Players exchange clues and information while trying to determine which player is the spy. The spy tries to blend in while gathering intel.',
-    category: CATEGORY_STRATEGY,
-    players: { min: 4, max: 8 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/spy-network/icon.svg',
-    bannerUrl: '/games/spy-network/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_SOCIAL_DECEPTION],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
-    id: 'secret-mission',
-    name: 'Secret Mission',
-    slug: 'secret-mission',
-    description:
-      'Every player receives a secret objective. Complete yours without revealing it to everyone else.',
-    category: CATEGORY_STRATEGY,
-    players: { min: 3, max: 8 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/secret-mission/icon.svg',
-    bannerUrl: '/games/secret-mission/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_SOCIAL_DECEPTION],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
   {
     id: 'train-rush',
     name: 'Train Rush',
