@@ -7,6 +7,7 @@ import type { GameDefinition, Player } from '@playdeck/game-types';
 import { Button } from '@playdeck/ui';
 import { useAnagramMultiplayerStore } from '@/stores/anagram-multiplayer.store';
 import { useAuctionMultiplayerStore } from '@/stores/auction-panic-multiplayer.store';
+import { useArchitectMultiplayerStore } from '@/stores/bad-architect-multiplayer.store';
 import { useBombFactoryMultiplayerStore } from '@/stores/bomb-factory-multiplayer.store';
 import { useColorThiefMultiplayerStore } from '@/stores/color-thief-multiplayer.store';
 import { useElevatorMultiplayerStore } from '@/stores/elevator-multiplayer.store';
@@ -57,6 +58,7 @@ const SECRET_SABOTEUR_GAME_ID = 'secret-saboteur';
 const AUCTION_PANIC_GAME_ID = 'auction-panic';
 const KINGDOM_DRAFT_GAME_ID = 'kingdom-draft';
 const ONE_WORD_STORY_GAME_ID = 'one-word-story';
+const BAD_ARCHITECT_GAME_ID = 'bad-architect';
 const DEFAULT_JOIN_ERROR = 'Could not join room';
 
 type GateStatus = 'idle' | 'joining' | 'failed';
@@ -89,6 +91,7 @@ function currentRoomCodeFor(gameId: string): string | null {
   if (gameId === AUCTION_PANIC_GAME_ID) return useAuctionMultiplayerStore.getState().roomCode;
   if (gameId === KINGDOM_DRAFT_GAME_ID) return useKingdomMultiplayerStore.getState().roomCode;
   if (gameId === ONE_WORD_STORY_GAME_ID) return useStoryMultiplayerStore.getState().roomCode;
+  if (gameId === BAD_ARCHITECT_GAME_ID) return useArchitectMultiplayerStore.getState().roomCode;
   return useMultiplayerStore.getState().roomCode;
 }
 
@@ -331,6 +334,16 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       avatar: player.avatar || '✍️',
     });
     return ok ? null : (useStoryMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === BAD_ARCHITECT_GAME_ID) {
+    const store = useArchitectMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '📐',
+    });
+    return ok ? null : (useArchitectMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
   }
 
   const store = useMultiplayerStore.getState();

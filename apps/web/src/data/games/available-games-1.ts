@@ -168,4 +168,20 @@ export const AVAILABLE_GAMES_1: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-20',
   },
+  {
+    id: 'bad-architect',
+    name: 'Bad Architect',
+    slug: 'bad-architect',
+    description:
+      'One player describes a secret blueprint using voice chat alone. Builders lay blocks on an 8x8 canvas, then reveal and vote on hilarious disasters.',
+    category: CATEGORY_CASUAL,
+    players: { min: 2, max: 8 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/bad-architect/icon.svg',
+    bannerUrl: '/games/bad-architect/cover.svg',
+    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PARTY, TAG_COOPERATIVE, TAG_SOLO],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-20',
+  },
 ];

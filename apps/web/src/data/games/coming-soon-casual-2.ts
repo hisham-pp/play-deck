@@ -7,7 +7,6 @@ import {
   TAG_VOICE_CHAT,
   TAG_PARTY,
   TAG_SOCIAL_DECEPTION,
-  TAG_COOPERATIVE,
   CATEGORY_CASUAL,
 } from './constants';
 
@@ -40,22 +39,6 @@ export const COMING_SOON_CASUAL_GAMES_2: GameDefinition[] = [
     thumbnailUrl: '/games/guess-the-lie/icon.svg',
     bannerUrl: '/games/guess-the-lie/cover.svg',
     tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PARTY, TAG_SOCIAL_DECEPTION],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
-    id: 'bad-architect',
-    name: 'Bad Architect',
-    slug: 'bad-architect',
-    description:
-      "One player sees a target structure or image. Everyone else must build/draw it based ONLY on that player's verbal instructions. At the end, reveal the reference and compare the results.",
-    category: CATEGORY_CASUAL,
-    players: { min: 3, max: 8 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/bad-architect/icon.svg',
-    bannerUrl: '/games/bad-architect/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PARTY, TAG_COOPERATIVE],
     featured: false,
     badge: BADGE_COMING_SOON,
     releaseDate: RELEASE_DATE_COMING_SOON,
