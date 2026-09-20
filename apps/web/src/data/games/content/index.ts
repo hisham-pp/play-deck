@@ -32,6 +32,7 @@ import { tetrisContent } from './tetris';
 import { ticTacToeContent } from './tic-tac-toe';
 import { tinyIslandContent } from './tiny-island';
 import { tinyTankArenaContent } from './tiny-tank-arena';
+import { trustOrBetrayContent } from './trust-or-betray';
 import { unstableElevatorContent } from './unstable-elevator';
 import { wordChainContent } from './word-chain';
 
@@ -71,6 +72,7 @@ const ALL_CONTENT: GameContent[] = [
   magnetMayhemContent,
   tinyTankArenaContent,
   lootDashContent,
+  trustOrBetrayContent,
 ];
 
 /**

@@ -402,4 +402,27 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-20',
   },
+  {
+    id: 'trust-or-betray',
+    name: 'Trust or Betray',
+    slug: 'trust-or-betray',
+    description:
+      'Cooperate on secret missions or betray comrades to plunder the group pot. Navigate tense discussions, bluff rivals, and survive exile trials in 3-8 player rooms.',
+    category: CATEGORY_STRATEGY,
+    players: { min: 3, max: 8 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/trust-or-betray/icon.svg',
+    bannerUrl: '/games/trust-or-betray/cover.svg',
+    tags: [
+      CATEGORY_STRATEGY,
+      TAG_MULTIPLAYER,
+      TAG_VOICE_CHAT,
+      'Social Deception',
+      'Bluffing',
+      TAG_SOLO,
+    ],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-20',
+  },
 ];

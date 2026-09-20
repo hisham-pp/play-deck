@@ -97,22 +97,6 @@ export const COMING_SOON_STRATEGY_GAMES: GameDefinition[] = [
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
   {
-    id: 'trust-or-betray',
-    name: 'Trust or Betray',
-    slug: 'trust-or-betray',
-    description:
-      'Players cooperate to complete shared tasks, but secretly one player can sabotage everyone. Each round, players vote to take a cooperative or selfish action. Cooperation rewards everyone, but betrayal rewards only the betrayer — at the cost of the group.',
-    category: CATEGORY_STRATEGY,
-    players: { min: 3, max: 8 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/trust-or-betray/icon.svg',
-    bannerUrl: '/games/trust-or-betray/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_SOCIAL_DECEPTION, TAG_COOPERATIVE],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
     id: 'train-rush',
     name: 'Train Rush',
     slug: 'train-rush',

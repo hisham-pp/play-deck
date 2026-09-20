@@ -26,6 +26,7 @@ import { useSharedBrainMultiplayerStore } from '@/stores/shared-brain-multiplaye
 import { useSnakeLadderMultiplayerStore } from '@/stores/snake-ladder-multiplayer.store';
 import { useTinyIslandMultiplayerStore } from '@/stores/tiny-island-multiplayer.store';
 import { useTinyTankMultiplayerStore } from '@/stores/tiny-tank-multiplayer.store';
+import { useTrustMultiplayerStore } from '@/stores/trust-or-betray-multiplayer.store';
 import { JOIN_ROOM_PARAM, parseJoinCode } from '../services/join-link';
 
 const LUDO_GAME_ID = 'ludo';
@@ -47,6 +48,7 @@ const GRAVITY_GOLF_GAME_ID = 'gravity-golf';
 const GRAVITY_SHIFT_GAME_ID = 'gravity-shift';
 const REVERSE_RACING_GAME_ID = 'reverse-racing';
 const SHARED_BRAIN_GAME_ID = 'shared-brain';
+const TRUST_OR_BETRAY_GAME_ID = 'trust-or-betray';
 const DEFAULT_JOIN_ERROR = 'Could not join room';
 
 type GateStatus = 'idle' | 'joining' | 'failed';
@@ -74,6 +76,7 @@ function currentRoomCodeFor(gameId: string): string | null {
   if (gameId === REVERSE_RACING_GAME_ID)
     return useReverseRacingMultiplayerStore.getState().roomCode;
   if (gameId === SHARED_BRAIN_GAME_ID) return useSharedBrainMultiplayerStore.getState().roomCode;
+  if (gameId === TRUST_OR_BETRAY_GAME_ID) return useTrustMultiplayerStore.getState().roomCode;
   return useMultiplayerStore.getState().roomCode;
 }
 
@@ -266,6 +269,16 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       avatar: player.avatar || '🕯️',
     });
     return ok ? null : (useGiantMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === TRUST_OR_BETRAY_GAME_ID) {
+    const store = useTrustMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '⭐',
+    });
+    return ok ? null : (useTrustMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
   }
 
   const store = useMultiplayerStore.getState();
