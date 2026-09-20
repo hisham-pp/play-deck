@@ -2,8 +2,9 @@
 
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { GameCategoryBadge, GameStatusBadge } from '@/components/game/GameBadge';
+import { useFullscreen } from '@/features/games/hooks/use-fullscreen';
 import { RoomVoiceDock } from '@/features/voice/components/RoomVoiceDock';
 import { usePlayerStore } from '@/stores/player.store';
 import { usePreferencesStore } from '@/stores/preferences.store';
@@ -18,22 +19,6 @@ import { SummitPedals } from './SummitPedals';
 import { SummitUpgrades } from './SummitUpgrades';
 
 const HUD_INSET = 84;
-
-function useFullscreen(target: React.RefObject<HTMLElement | null>) {
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  useEffect(() => {
-    const sync = () => setIsFullscreen(document.fullscreenElement === target.current);
-    document.addEventListener('fullscreenchange', sync);
-    return () => document.removeEventListener('fullscreenchange', sync);
-  }, [target]);
-  const toggle = useCallback(() => {
-    const el = target.current;
-    if (!el) return;
-    if (document.fullscreenElement) void document.exitFullscreen().catch(() => undefined);
-    else void el.requestFullscreen?.().catch(() => undefined);
-  }, [target]);
-  return { isFullscreen, toggle };
-}
 
 export function SummitRushGame() {
   const game = useSummitGame();

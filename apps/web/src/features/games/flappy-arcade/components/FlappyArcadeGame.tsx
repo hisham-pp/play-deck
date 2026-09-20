@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import React, { useCallback, useState } from 'react';
 import { GameCategoryBadge, GameStatusBadge } from '@/components/game/GameBadge';
+import { useFullscreen } from '@/features/games/hooks/use-fullscreen';
 import { useGameSessionStore } from '@/stores/game-session.store';
 import { useLibraryStore } from '@/stores/library.store';
 import { usePlayerStore } from '@/stores/player.store';
@@ -13,28 +14,6 @@ import { FlappyCanvas } from './FlappyCanvas';
 import { FlappyGameOverModal } from './FlappyGameOverModal';
 import { FlappyHUD } from './FlappyHUD';
 import { FlappyStatsModal } from './FlappyStatsModal';
-
-function useFullscreen(target: React.RefObject<HTMLElement | null>) {
-  const [isFullscreen, setIsFullscreen] = useState(false);
-
-  React.useEffect(() => {
-    const sync = () => setIsFullscreen(document.fullscreenElement === target.current);
-    document.addEventListener('fullscreenchange', sync);
-    return () => document.removeEventListener('fullscreenchange', sync);
-  }, [target]);
-
-  const toggle = useCallback(() => {
-    const el = target.current;
-    if (!el) return;
-    if (document.fullscreenElement) {
-      void document.exitFullscreen().catch(() => undefined);
-    } else {
-      void el.requestFullscreen?.().catch(() => undefined);
-    }
-  }, [target]);
-
-  return { isFullscreen, toggle };
-}
 
 export function FlappyArcadeGame() {
   const { player, recordGamePlayed } = usePlayerStore();
