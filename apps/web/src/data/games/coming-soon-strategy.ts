@@ -47,22 +47,6 @@ export const COMING_SOON_STRATEGY_GAMES: GameDefinition[] = [
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
   {
-    id: 'kingdom-draft',
-    name: 'Kingdom Draft',
-    slug: 'kingdom-draft',
-    description:
-      'Players draft resources from a shared pool and build tiny kingdoms while secretly competing for hidden objectives.',
-    category: CATEGORY_STRATEGY,
-    players: { min: 2, max: 6 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/kingdom-draft/icon.svg',
-    bannerUrl: '/games/kingdom-draft/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
     id: 'train-rush',
     name: 'Train Rush',
     slug: 'train-rush',

@@ -15,6 +15,7 @@ import { useGiantMultiplayerStore } from '@/stores/giant-multiplayer.store';
 import { useGravityGolfMultiplayerStore } from '@/stores/gravity-golf-multiplayer.store';
 import { useGravityShiftMultiplayerStore } from '@/stores/gravity-shift-multiplayer.store';
 import { useHumanConveyorMultiplayerStore } from '@/stores/human-conveyor-multiplayer.store';
+import { useKingdomMultiplayerStore } from '@/stores/kingdom-draft-multiplayer.store';
 import { useLootDashMultiplayerStore } from '@/stores/loot-dash-multiplayer.store';
 import { useLudoMultiplayerStore } from '@/stores/ludo-multiplayer.store';
 import { useMagnetMayhemMultiplayerStore } from '@/stores/magnet-mayhem-multiplayer.store';
@@ -53,6 +54,7 @@ const SHARED_BRAIN_GAME_ID = 'shared-brain';
 const TRUST_OR_BETRAY_GAME_ID = 'trust-or-betray';
 const SECRET_SABOTEUR_GAME_ID = 'secret-saboteur';
 const AUCTION_PANIC_GAME_ID = 'auction-panic';
+const KINGDOM_DRAFT_GAME_ID = 'kingdom-draft';
 const DEFAULT_JOIN_ERROR = 'Could not join room';
 
 type GateStatus = 'idle' | 'joining' | 'failed';
@@ -83,6 +85,7 @@ function currentRoomCodeFor(gameId: string): string | null {
   if (gameId === TRUST_OR_BETRAY_GAME_ID) return useTrustMultiplayerStore.getState().roomCode;
   if (gameId === SECRET_SABOTEUR_GAME_ID) return useSaboteurMultiplayerStore.getState().roomCode;
   if (gameId === AUCTION_PANIC_GAME_ID) return useAuctionMultiplayerStore.getState().roomCode;
+  if (gameId === KINGDOM_DRAFT_GAME_ID) return useKingdomMultiplayerStore.getState().roomCode;
   return useMultiplayerStore.getState().roomCode;
 }
 
@@ -305,6 +308,16 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       avatar: player.avatar || '🎩',
     });
     return ok ? null : (useAuctionMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === KINGDOM_DRAFT_GAME_ID) {
+    const store = useKingdomMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '👑',
+    });
+    return ok ? null : (useKingdomMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
   }
 
   const store = useMultiplayerStore.getState();

@@ -467,4 +467,27 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-20',
   },
+  {
+    id: 'kingdom-draft',
+    name: 'Kingdom Draft',
+    slug: 'kingdom-draft',
+    description:
+      'Draft resources, construct 3x3 realm grids, trigger spatial adjacency synergies, and achieve secret objectives in 2–6 player rooms with WebRTC voice chat.',
+    category: CATEGORY_STRATEGY,
+    players: { min: 2, max: 6 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/kingdom-draft/icon.svg',
+    bannerUrl: '/games/kingdom-draft/cover.svg',
+    tags: [
+      CATEGORY_STRATEGY,
+      TAG_MULTIPLAYER,
+      TAG_VOICE_CHAT,
+      TAG_SOLO,
+      'Card Drafting',
+      'Grid Building',
+    ],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-20',
+  },
 ];
