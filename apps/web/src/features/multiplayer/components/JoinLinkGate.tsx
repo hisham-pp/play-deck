@@ -5,7 +5,10 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import type { GameDefinition, Player } from '@playdeck/game-types';
 import { Button } from '@playdeck/ui';
+import { useAlibiMultiplayerStore } from '@/stores/alibi-multiplayer.store';
 import { useAnagramMultiplayerStore } from '@/stores/anagram-multiplayer.store';
+import { useAuctionMultiplayerStore } from '@/stores/auction-panic-multiplayer.store';
+import { useArchitectMultiplayerStore } from '@/stores/bad-architect-multiplayer.store';
 import { useBombFactoryMultiplayerStore } from '@/stores/bomb-factory-multiplayer.store';
 import { useColorThiefMultiplayerStore } from '@/stores/color-thief-multiplayer.store';
 import { useElevatorMultiplayerStore } from '@/stores/elevator-multiplayer.store';
@@ -13,20 +16,32 @@ import { useFloorIsLavaMultiplayerStore } from '@/stores/floor-is-lava-multiplay
 import { useGiantMultiplayerStore } from '@/stores/giant-multiplayer.store';
 import { useGravityGolfMultiplayerStore } from '@/stores/gravity-golf-multiplayer.store';
 import { useGravityShiftMultiplayerStore } from '@/stores/gravity-shift-multiplayer.store';
+import { useLieMultiplayerStore } from '@/stores/guess-the-lie-multiplayer.store';
 import { useHumanConveyorMultiplayerStore } from '@/stores/human-conveyor-multiplayer.store';
+import { useImposterBuilderMultiplayerStore } from '@/stores/imposter-builder-multiplayer.store';
+import { useKingdomMultiplayerStore } from '@/stores/kingdom-draft-multiplayer.store';
 import { useLootDashMultiplayerStore } from '@/stores/loot-dash-multiplayer.store';
 import { useLudoMultiplayerStore } from '@/stores/ludo-multiplayer.store';
 import { useMagnetMayhemMultiplayerStore } from '@/stores/magnet-mayhem-multiplayer.store';
 import { useMiniGolfMultiplayerStore } from '@/stores/mini-golf-multiplayer.store';
 import { useMultiplayerStore } from '@/stores/multiplayer.store';
+import { useStoryMultiplayerStore } from '@/stores/one-word-story-multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
 import { useReverseRacingMultiplayerStore } from '@/stores/reverse-racing-multiplayer.store';
+import { useSecretMissionMultiplayerStore } from '@/stores/secret-mission-multiplayer.store';
+import { useSaboteurMultiplayerStore } from '@/stores/secret-saboteur-multiplayer.store';
 import { useShadowTagMultiplayerStore } from '@/stores/shadow-tag-multiplayer.store';
 import { useSharedBrainMultiplayerStore } from '@/stores/shared-brain-multiplayer.store';
 import { useSnakeLadderMultiplayerStore } from '@/stores/snake-ladder-multiplayer.store';
+import { useSpellingBeeMultiplayerStore } from '@/stores/spelling-bee-multiplayer.store';
+import { useSpyNetworkMultiplayerStore } from '@/stores/spy-network-multiplayer.store';
+import { useTelephoneMultiplayerStore } from '@/stores/telephone-drawing-multiplayer.store';
 import { useTinyIslandMultiplayerStore } from '@/stores/tiny-island-multiplayer.store';
 import { useTinyTankMultiplayerStore } from '@/stores/tiny-tank-multiplayer.store';
 import { useTrustMultiplayerStore } from '@/stores/trust-or-betray-multiplayer.store';
+import { useWhoAmIMultiplayerStore } from '@/stores/who-am-i-multiplayer.store';
+import { useWordSearchMultiplayerStore } from '@/stores/word-search-multiplayer.store';
+import { useWrongAnswersMultiplayerStore } from '@/stores/wrong-answers-multiplayer.store';
 import { JOIN_ROOM_PARAM, parseJoinCode } from '../services/join-link';
 
 const LUDO_GAME_ID = 'ludo';
@@ -49,6 +64,21 @@ const GRAVITY_SHIFT_GAME_ID = 'gravity-shift';
 const REVERSE_RACING_GAME_ID = 'reverse-racing';
 const SHARED_BRAIN_GAME_ID = 'shared-brain';
 const TRUST_OR_BETRAY_GAME_ID = 'trust-or-betray';
+const SECRET_SABOTEUR_GAME_ID = 'secret-saboteur';
+const AUCTION_PANIC_GAME_ID = 'auction-panic';
+const KINGDOM_DRAFT_GAME_ID = 'kingdom-draft';
+const ONE_WORD_STORY_GAME_ID = 'one-word-story';
+const BAD_ARCHITECT_GAME_ID = 'bad-architect';
+const GUESS_THE_LIE_GAME_ID = 'guess-the-lie';
+const WRONG_ANSWERS_GAME_ID = 'wrong-answers-only';
+const TELEPHONE_DRAWING_GAME_ID = 'telephone-drawing';
+const WHO_AM_I_GAME_ID = 'who-am-i';
+const SECRET_MISSION_GAME_ID = 'secret-mission';
+const IMPOSTER_BUILDER_GAME_ID = 'imposter-builder';
+const SPY_NETWORK_GAME_ID = 'spy-network';
+const ALIBI_GAME_ID = 'alibi';
+const SPELLING_BEE_GAME_ID = 'spelling-bee';
+const WORD_SEARCH_GAME_ID = 'word-search-arena';
 const DEFAULT_JOIN_ERROR = 'Could not join room';
 
 type GateStatus = 'idle' | 'joining' | 'failed';
@@ -77,6 +107,23 @@ function currentRoomCodeFor(gameId: string): string | null {
     return useReverseRacingMultiplayerStore.getState().roomCode;
   if (gameId === SHARED_BRAIN_GAME_ID) return useSharedBrainMultiplayerStore.getState().roomCode;
   if (gameId === TRUST_OR_BETRAY_GAME_ID) return useTrustMultiplayerStore.getState().roomCode;
+  if (gameId === SECRET_SABOTEUR_GAME_ID) return useSaboteurMultiplayerStore.getState().roomCode;
+  if (gameId === AUCTION_PANIC_GAME_ID) return useAuctionMultiplayerStore.getState().roomCode;
+  if (gameId === KINGDOM_DRAFT_GAME_ID) return useKingdomMultiplayerStore.getState().roomCode;
+  if (gameId === ONE_WORD_STORY_GAME_ID) return useStoryMultiplayerStore.getState().roomCode;
+  if (gameId === BAD_ARCHITECT_GAME_ID) return useArchitectMultiplayerStore.getState().roomCode;
+  if (gameId === GUESS_THE_LIE_GAME_ID) return useLieMultiplayerStore.getState().roomCode;
+  if (gameId === WRONG_ANSWERS_GAME_ID) return useWrongAnswersMultiplayerStore.getState().roomCode;
+  if (gameId === TELEPHONE_DRAWING_GAME_ID) return useTelephoneMultiplayerStore.getState().roomCode;
+  if (gameId === WHO_AM_I_GAME_ID) return useWhoAmIMultiplayerStore.getState().roomCode;
+  if (gameId === SECRET_MISSION_GAME_ID)
+    return useSecretMissionMultiplayerStore.getState().roomCode;
+  if (gameId === IMPOSTER_BUILDER_GAME_ID)
+    return useImposterBuilderMultiplayerStore.getState().roomCode;
+  if (gameId === SPY_NETWORK_GAME_ID) return useSpyNetworkMultiplayerStore.getState().roomCode;
+  if (gameId === ALIBI_GAME_ID) return useAlibiMultiplayerStore.getState().roomCode;
+  if (gameId === SPELLING_BEE_GAME_ID) return useSpellingBeeMultiplayerStore.getState().roomCode;
+  if (gameId === WORD_SEARCH_GAME_ID) return useWordSearchMultiplayerStore.getState().roomCode;
   return useMultiplayerStore.getState().roomCode;
 }
 
@@ -279,6 +326,156 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       avatar: player.avatar || '⭐',
     });
     return ok ? null : (useTrustMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === SECRET_SABOTEUR_GAME_ID) {
+    const store = useSaboteurMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '☢️',
+    });
+    return ok ? null : (useSaboteurMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === AUCTION_PANIC_GAME_ID) {
+    const store = useAuctionMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🎩',
+    });
+    return ok ? null : (useAuctionMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === KINGDOM_DRAFT_GAME_ID) {
+    const store = useKingdomMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '👑',
+    });
+    return ok ? null : (useKingdomMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === ONE_WORD_STORY_GAME_ID) {
+    const store = useStoryMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '✍️',
+    });
+    return ok ? null : (useStoryMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === BAD_ARCHITECT_GAME_ID) {
+    const store = useArchitectMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '📐',
+    });
+    return ok ? null : (useArchitectMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === GUESS_THE_LIE_GAME_ID) {
+    const store = useLieMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🤥',
+    });
+    return ok ? null : (useLieMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === WRONG_ANSWERS_GAME_ID) {
+    const store = useWrongAnswersMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🤪',
+    });
+    return ok ? null : (useWrongAnswersMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === TELEPHONE_DRAWING_GAME_ID) {
+    const store = useTelephoneMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🎨',
+    });
+    return ok ? null : (useTelephoneMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === WHO_AM_I_GAME_ID) {
+    const store = useWhoAmIMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '❓',
+    });
+    return ok ? null : (useWhoAmIMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === SECRET_MISSION_GAME_ID) {
+    const store = useSecretMissionMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🕵️',
+    });
+    return ok ? null : (useSecretMissionMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === IMPOSTER_BUILDER_GAME_ID) {
+    const store = useImposterBuilderMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🏗️',
+    });
+    return ok ? null : (useImposterBuilderMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === SPY_NETWORK_GAME_ID) {
+    const store = useSpyNetworkMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🔍',
+    });
+    return ok ? null : (useSpyNetworkMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === ALIBI_GAME_ID) {
+    const store = useAlibiMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '📋',
+    });
+    return ok ? null : (useAlibiMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === SPELLING_BEE_GAME_ID) {
+    const store = useSpellingBeeMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🐝',
+    });
+    return ok ? null : (useSpellingBeeMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === WORD_SEARCH_GAME_ID) {
+    const store = useWordSearchMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🔍',
+    });
+    return ok ? null : (useWordSearchMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
   }
 
   const store = useMultiplayerStore.getState();

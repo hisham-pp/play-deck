@@ -5,7 +5,10 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { GameDefinition } from '@playdeck/game-types';
 import { Game2048 } from '@/features/games/2048';
+import { AlibiGame } from '@/features/games/alibi';
 import { AnagramSprintGame } from '@/features/games/anagram-sprint';
+import { AuctionPanicGame } from '@/features/games/auction-panic';
+import { BadArchitectGame } from '@/features/games/bad-architect';
 import { BallBounceGame } from '@/features/games/ball-bounce';
 import { BombFactoryGame } from '@/features/games/bomb-factory';
 import { ChessGame } from '@/features/games/chess';
@@ -16,30 +19,42 @@ import { FlappyArcadeGame } from '@/features/games/flappy-arcade';
 import { FloorIsLavaGame } from '@/features/games/floor-is-lava';
 import { GravityGolfGame } from '@/features/games/gravity-golf';
 import { GravityShiftGame } from '@/features/games/gravity-shift';
+import { GuessTheLieGame } from '@/features/games/guess-the-lie';
 import { HumanConveyorGame } from '@/features/games/human-conveyor-belt';
+import { ImposterBuilderGame } from '@/features/games/imposter-builder';
+import { KingdomDraftGame } from '@/features/games/kingdom-draft';
 import { LootDashGame } from '@/features/games/loot-dash';
 import { LudoGame } from '@/features/games/ludo';
 import { MagnetMayhemGame } from '@/features/games/magnet-mayhem';
 import { MinesweeperGame } from '@/features/games/minesweeper';
 import { MiniGolfGame } from '@/features/games/mini-golf';
+import { OneWordStoryGame } from '@/features/games/one-word-story';
 import { PenFightGame } from '@/features/games/pen-fight';
 import { PongGame } from '@/features/games/pong';
 import { PushYourLuckGame } from '@/features/games/push-your-luck';
 import { ReverseRacingGame } from '@/features/games/reverse-racing';
 import { RunicMemoryGame } from '@/features/games/runic-memory';
+import { SecretMissionGame } from '@/features/games/secret-mission';
+import { SecretSaboteurGame } from '@/features/games/secret-saboteur';
 import { ShadowTagGame } from '@/features/games/shadow-tag';
 import { SharedBrainGame } from '@/features/games/shared-brain';
 import { SnakeGame } from '@/features/games/snake';
 import { SnakeLadderGame } from '@/features/games/snake-and-ladder';
+import { SpellingBeeGame } from '@/features/games/spelling-bee';
+import { SpyNetworkGame } from '@/features/games/spy-network';
 import { SudokuGame } from '@/features/games/sudoku';
 import { SummitRushGame } from '@/features/games/summit-rush';
+import { TelephoneDrawingGame } from '@/features/games/telephone-drawing';
 import { TetrisGame } from '@/features/games/tetris';
 import { TicTacToeGame } from '@/features/games/tic-tac-toe';
 import { TinyIslandGame } from '@/features/games/tiny-island';
 import { TinyTankGame } from '@/features/games/tiny-tank';
 import { TrustOrBetrayGame } from '@/features/games/trust-or-betray';
 import { ElevatorGame } from '@/features/games/unstable-elevator';
+import { WhoAmIGame } from '@/features/games/who-am-i';
 import { WordChainGame } from '@/features/games/word-chain';
+import { WordSearchGame } from '@/features/games/word-search-arena';
+import { WrongAnswersGame } from '@/features/games/wrong-answers-only';
 import { useGameSessionStore } from '@/stores/game-session.store';
 import { useLibraryStore } from '@/stores/library.store';
 import { usePlayerStore } from '@/stores/player.store';
@@ -54,6 +69,8 @@ import { GameStage } from './GameStage';
 const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   '2048': Game2048,
   'anagram-sprint': AnagramSprintGame,
+  'auction-panic': AuctionPanicGame,
+  'bad-architect': BadArchitectGame,
   'ball-bounce': BallBounceGame,
   'bomb-factory': BombFactoryGame,
   chess: ChessGame,
@@ -64,12 +81,15 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'floor-is-lava': FloorIsLavaGame,
   'gravity-golf': GravityGolfGame,
   'gravity-shift': GravityShiftGame,
+  'guess-the-lie': GuessTheLieGame,
   'human-conveyor-belt': HumanConveyorGame,
+  'kingdom-draft': KingdomDraftGame,
   'loot-dash': LootDashGame,
   ludo: LudoGame,
   'magnet-mayhem': MagnetMayhemGame,
   minesweeper: MinesweeperGame,
   'mini-golf': MiniGolfGame,
+  'one-word-story': OneWordStoryGame,
   'pen-fight': PenFightGame,
   pong: PongGame,
   'push-your-luck': PushYourLuckGame,
@@ -86,8 +106,18 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'tiny-island': TinyIslandGame,
   'tiny-tank-arena': TinyTankGame,
   'trust-or-betray': TrustOrBetrayGame,
+  'secret-saboteur': SecretSaboteurGame,
   'unstable-elevator': ElevatorGame,
   'word-chain': WordChainGame,
+  'word-search-arena': WordSearchGame,
+  'wrong-answers-only': WrongAnswersGame,
+  'telephone-drawing': TelephoneDrawingGame,
+  'who-am-i': WhoAmIGame,
+  'secret-mission': SecretMissionGame,
+  'imposter-builder': ImposterBuilderGame,
+  'spy-network': SpyNetworkGame,
+  alibi: AlibiGame,
+  'spelling-bee': SpellingBeeGame,
 };
 
 export function GameAreaShell({ game }: { game: GameDefinition }) {

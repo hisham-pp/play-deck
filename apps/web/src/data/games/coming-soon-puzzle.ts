@@ -12,22 +12,6 @@ import {
 
 export const COMING_SOON_PUZZLE_GAMES: GameDefinition[] = [
   {
-    id: 'spelling-bee',
-    name: 'Spelling Bee',
-    slug: 'spelling-bee',
-    description:
-      'Competitive multiplayer Spelling Bee. Players find as many valid words as possible using seven letters in a honeycomb arrangement. One center letter must appear in every word. Pangrams (all 7 letters) earn massive bonuses.',
-    category: CATEGORY_PUZZLE,
-    players: { min: 1, max: 6 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/spelling-bee/icon.svg',
-    bannerUrl: '/games/spelling-bee/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_SOLO, TAG_WORD_PUZZLE],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
     id: 'hangman-duel',
     name: 'Hangman Duel',
     slug: 'hangman-duel',
@@ -43,22 +27,7 @@ export const COMING_SOON_PUZZLE_GAMES: GameDefinition[] = [
     badge: BADGE_COMING_SOON,
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
-  {
-    id: 'word-search-arena',
-    name: 'Word Search Arena',
-    slug: 'word-search-arena',
-    description:
-      'Fast-paced multiplayer word search game. Players compete to find hidden words in a shared letter grid by clicking/dragging to select letters. First to claim a word scores it. Features themed word lists and multiple grid sizes.',
-    category: CATEGORY_PUZZLE,
-    players: { min: 1, max: 6 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/word-search-arena/icon.svg',
-    bannerUrl: '/games/word-search-arena/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_SOLO, TAG_WORD_PUZZLE],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
+
   {
     id: 'crossword-clash',
     name: 'Crossword Clash',
