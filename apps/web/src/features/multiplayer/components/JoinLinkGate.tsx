@@ -40,6 +40,7 @@ import { useTinyIslandMultiplayerStore } from '@/stores/tiny-island-multiplayer.
 import { useTinyTankMultiplayerStore } from '@/stores/tiny-tank-multiplayer.store';
 import { useTrustMultiplayerStore } from '@/stores/trust-or-betray-multiplayer.store';
 import { useWhoAmIMultiplayerStore } from '@/stores/who-am-i-multiplayer.store';
+import { useWordSearchMultiplayerStore } from '@/stores/word-search-multiplayer.store';
 import { useWrongAnswersMultiplayerStore } from '@/stores/wrong-answers-multiplayer.store';
 import { JOIN_ROOM_PARAM, parseJoinCode } from '../services/join-link';
 
@@ -77,6 +78,7 @@ const IMPOSTER_BUILDER_GAME_ID = 'imposter-builder';
 const SPY_NETWORK_GAME_ID = 'spy-network';
 const ALIBI_GAME_ID = 'alibi';
 const SPELLING_BEE_GAME_ID = 'spelling-bee';
+const WORD_SEARCH_GAME_ID = 'word-search-arena';
 const DEFAULT_JOIN_ERROR = 'Could not join room';
 
 type GateStatus = 'idle' | 'joining' | 'failed';
@@ -121,6 +123,7 @@ function currentRoomCodeFor(gameId: string): string | null {
   if (gameId === SPY_NETWORK_GAME_ID) return useSpyNetworkMultiplayerStore.getState().roomCode;
   if (gameId === ALIBI_GAME_ID) return useAlibiMultiplayerStore.getState().roomCode;
   if (gameId === SPELLING_BEE_GAME_ID) return useSpellingBeeMultiplayerStore.getState().roomCode;
+  if (gameId === WORD_SEARCH_GAME_ID) return useWordSearchMultiplayerStore.getState().roomCode;
   return useMultiplayerStore.getState().roomCode;
 }
 
@@ -463,6 +466,16 @@ async function joinRoomFor(gameId: string, code: string, player: Player): Promis
       avatar: player.avatar || '🐝',
     });
     return ok ? null : (useSpellingBeeMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
+  }
+
+  if (gameId === WORD_SEARCH_GAME_ID) {
+    const store = useWordSearchMultiplayerStore.getState();
+    const ok = await store.joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🔍',
+    });
+    return ok ? null : (useWordSearchMultiplayerStore.getState().error ?? DEFAULT_JOIN_ERROR);
   }
 
   const store = useMultiplayerStore.getState();

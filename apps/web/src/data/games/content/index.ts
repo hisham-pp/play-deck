@@ -48,6 +48,7 @@ import { trustOrBetrayContent } from './trust-or-betray';
 import { unstableElevatorContent } from './unstable-elevator';
 import { whoAmIContent } from './who-am-i';
 import { wordChainContent } from './word-chain';
+import { wordSearchArenaContent } from './word-search-arena';
 import { wrongAnswersOnlyContent } from './wrong-answers-only';
 
 const ALL_CONTENT: GameContent[] = [
@@ -101,6 +102,7 @@ const ALL_CONTENT: GameContent[] = [
   spyNetworkContent,
   alibiContent,
   spellingBeeContent,
+  wordSearchArenaContent,
 ];
 
 /**

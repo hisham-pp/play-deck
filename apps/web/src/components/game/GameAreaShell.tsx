@@ -53,6 +53,7 @@ import { TrustOrBetrayGame } from '@/features/games/trust-or-betray';
 import { ElevatorGame } from '@/features/games/unstable-elevator';
 import { WhoAmIGame } from '@/features/games/who-am-i';
 import { WordChainGame } from '@/features/games/word-chain';
+import { WordSearchGame } from '@/features/games/word-search-arena';
 import { WrongAnswersGame } from '@/features/games/wrong-answers-only';
 import { useGameSessionStore } from '@/stores/game-session.store';
 import { useLibraryStore } from '@/stores/library.store';
@@ -108,6 +109,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'secret-saboteur': SecretSaboteurGame,
   'unstable-elevator': ElevatorGame,
   'word-chain': WordChainGame,
+  'word-search-arena': WordSearchGame,
   'wrong-answers-only': WrongAnswersGame,
   'telephone-drawing': TelephoneDrawingGame,
   'who-am-i': WhoAmIGame,

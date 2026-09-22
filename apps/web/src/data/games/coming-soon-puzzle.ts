@@ -27,22 +27,7 @@ export const COMING_SOON_PUZZLE_GAMES: GameDefinition[] = [
     badge: BADGE_COMING_SOON,
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
-  {
-    id: 'word-search-arena',
-    name: 'Word Search Arena',
-    slug: 'word-search-arena',
-    description:
-      'Fast-paced multiplayer word search game. Players compete to find hidden words in a shared letter grid by clicking/dragging to select letters. First to claim a word scores it. Features themed word lists and multiple grid sizes.',
-    category: CATEGORY_PUZZLE,
-    players: { min: 1, max: 6 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/word-search-arena/icon.svg',
-    bannerUrl: '/games/word-search-arena/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_SOLO, TAG_WORD_PUZZLE],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
+
   {
     id: 'crossword-clash',
     name: 'Crossword Clash',

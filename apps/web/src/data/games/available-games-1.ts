@@ -330,4 +330,20 @@ export const AVAILABLE_GAMES_1: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-20',
   },
+  {
+    id: 'word-search-arena',
+    name: 'Word Search Arena',
+    slug: 'word-search-arena',
+    description:
+      'Race to find hidden words in a shared letter grid before your opponents do! Words hide in all 8 directions across 6 themes and 3 grid sizes.',
+    category: CATEGORY_PUZZLE,
+    players: { min: 1, max: 6 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/word-search-arena/icon.svg',
+    bannerUrl: '/games/word-search-arena/cover.svg',
+    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_SOLO, TAG_WORD_PUZZLE],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-22',
+  },
 ];
