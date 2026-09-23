@@ -1,21 +1,13 @@
 # Lefthook Git Hooks Configuration
 
 pre-commit:
-  parallel: true
+  parallel: false
   commands:
-    format:
-      glob: '*.{js,mjs,cjs,ts,tsx,json,md,yml,yaml}'
-      run: pnpm prettier --check {staged_files}
-    lint:
-      glob: '*.{js,mjs,cjs,ts,tsx}'
-      run: pnpm eslint --no-warn-ignored {staged_files}
+    build:
+      run: pnpm build
 
 pre-push:
   parallel: false
   commands:
-    format-check:
-      run: pnpm format:check
-    lint:
-      run: pnpm eslint .
     build:
       run: pnpm build

@@ -273,14 +273,19 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { calculateRoundOutcome, nextRoundNumber, resolvePlayerChoice } from '../game-logic';
 
+const ACTION_COOPERATE = 'cooperate' as const;
+const ACTION_BETRAY = 'betray' as const;
+const ICON_SIZE_CLASS = 'h-3.5 w-3.5';
 const roundSteps = [1, 2, 3, 4, 5];
+
+type ActionChoice = typeof ACTION_COOPERATE | typeof ACTION_BETRAY;
 
 export function TrustOrBetrayGame() {
   const [round, setRound] = useState(1);
   const [groupPool, setGroupPool] = useState(120);
   const [personalScore, setPersonalScore] = useState(0);
   const [trustScore, setTrustScore] = useState(3);
-  const [selectedChoice, setSelectedChoice] = useState<'cooperate' | 'betray'>('cooperate');
+  const [selectedChoice, setSelectedChoice] = useState<ActionChoice>(ACTION_COOPERATE);
   const [paused, setPaused] = useState(false);
 
   const currentRound = useMemo(
@@ -291,15 +296,15 @@ export function TrustOrBetrayGame() {
   const handleResolve = () => {
     const resolved = resolvePlayerChoice(selectedChoice, currentRound, trustScore);
     const outcome = calculateRoundOutcome({
-      coopCount: selectedChoice === 'cooperate' ? 3 : 2,
-      betrayCount: selectedChoice === 'betray' ? 1 : 0,
+      coopCount: selectedChoice === ACTION_COOPERATE ? 3 : 2,
+      betrayCount: selectedChoice === ACTION_BETRAY ? 1 : 0,
       round: currentRound,
     });
 
     setPersonalScore((value) => value + resolved + outcome.betrayBonus);
     setGroupPool((value) => Math.max(0, value + outcome.groupReward));
     setTrustScore((value) =>
-      selectedChoice === 'betray' ? Math.max(0, value - 1) : Math.min(5, value + 1),
+      selectedChoice === ACTION_BETRAY ? Math.max(0, value - 1) : Math.min(5, value + 1),
     );
     setRound((value) => nextRoundNumber(value));
   };
@@ -309,7 +314,7 @@ export function TrustOrBetrayGame() {
     setGroupPool(120);
     setPersonalScore(0);
     setTrustScore(3);
-    setSelectedChoice('cooperate');
+    setSelectedChoice(ACTION_COOPERATE);
     setPaused(false);
   };
 
@@ -372,7 +377,7 @@ export function TrustOrBetrayGame() {
               </div>
 
               <div className="absolute inset-x-8 bottom-24 grid grid-cols-2 gap-3">
-                {(['cooperate', 'betray'] as const).map((option) => (
+                {[ACTION_COOPERATE, ACTION_BETRAY].map((option) => (
                   <button
                     key={option}
                     onClick={() => setSelectedChoice(option)}
@@ -383,15 +388,15 @@ export function TrustOrBetrayGame() {
                     }`}
                   >
                     <div className="mb-2 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-deck-400">
-                      {option === 'cooperate' ? (
-                        <Sparkles className="h-3.5 w-3.5" />
+                      {option === ACTION_COOPERATE ? (
+                        <Sparkles className={ICON_SIZE_CLASS} />
                       ) : (
-                        <Vote className="h-3.5 w-3.5" />
+                        <Vote className={ICON_SIZE_CLASS} />
                       )}
                       <span>{option}</span>
                     </div>
                     <div className="text-lg font-black uppercase">
-                      {option === 'cooperate' ? 'Team play' : 'Selfish play'}
+                      {option === ACTION_COOPERATE ? 'Team play' : 'Selfish play'}
                     </div>
                   </button>
                 ))}
@@ -442,13 +447,13 @@ export function TrustOrBetrayGame() {
               <li>Players: 3–8</li>
               <li>Voice sync: Ready</li>
               <li>Choice timer: 12s</li>
-              <li>Risk: {selectedChoice === 'betray' ? 'High' : 'Low'}</li>
+              <li>Risk: {selectedChoice === ACTION_BETRAY ? 'High' : 'Low'}</li>
             </ul>
           </div>
 
           <div className="rounded-xl border border-dashed border-violet-500/50 bg-violet-500/5 p-3 text-sm text-violet-200">
             <div className="mb-2 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-violet-400">
-              <Sparkles className="h-3.5 w-3.5" />
+              <Sparkles className={ICON_SIZE_CLASS} />
               <span>Social tension</span>
             </div>
             Choose wisely: cooperation builds trust, but one selfish move can flip the table.

@@ -4,8 +4,12 @@ import { ArrowLeft, Swords, Zap, Shield } from 'lucide-react';
 import Link from 'next/link';
 import React, { useMemo, useState } from 'react';
 
+const STARTING_WEAPON = 'Wooden Sword' as const;
+const WEAPON_OPTIONS = ['Wooden Sword', 'Iron Blade', 'Katana'] as const;
+type Weapon = (typeof WEAPON_OPTIONS)[number];
+
 const levelStats = [
-  { level: 1, label: 'Rookie climb', xp: 100, reward: 'Wooden Sword' },
+  { level: 1, label: 'Rookie climb', xp: 100, reward: STARTING_WEAPON },
   { level: 2, label: 'Rising foes', xp: 250, reward: 'Iron Blade' },
   { level: 3, label: 'Guarded ascent', xp: 450, reward: 'Shield Charm' },
   { level: 4, label: 'Elite ascent', xp: 700, reward: 'Spear' },
@@ -18,7 +22,7 @@ export function StickmanClimberGame() {
   const [xp, setXp] = useState(0);
   const [coins, setCoins] = useState(32);
   const [level, setLevel] = useState(1);
-  const [weapon, setWeapon] = useState('Wooden Sword');
+  const [weapon, setWeapon] = useState<Weapon>(STARTING_WEAPON);
   const [paused, setPaused] = useState(false);
 
   const currentLevel = useMemo(
@@ -38,7 +42,7 @@ export function StickmanClimberGame() {
     setSelectedLevel((value) => Math.min(5, value + 1));
     setHealth(100);
     setWeapon((current) => {
-      if (current === 'Wooden Sword') return 'Iron Blade';
+      if (current === STARTING_WEAPON) return 'Iron Blade';
       if (current === 'Iron Blade') return 'Katana';
       return current;
     });
@@ -50,7 +54,7 @@ export function StickmanClimberGame() {
     setCoins(32);
     setLevel(1);
     setSelectedLevel(1);
-    setWeapon('Wooden Sword');
+    setWeapon(STARTING_WEAPON);
     setPaused(false);
   };
 
