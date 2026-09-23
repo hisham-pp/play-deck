@@ -8,7 +8,7 @@
     "dev": "pnpm --filter @playdeck/web dev",
     "prebuild": "node scripts/generate-word-chain-dictionary.mjs",
     "build": "pnpm --filter @playdeck/web build",
-    "test": "node --import ./scripts/test-register.mjs --test 'apps/web/src/**/*.test.ts'",
+    "test": "node ./scripts/run-tests.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
