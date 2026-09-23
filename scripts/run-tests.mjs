@@ -22,9 +22,13 @@ function collect(dir) {
 collect(rootDir);
 files.sort();
 
-const result = spawnSync(process.execPath, ['--import', './scripts/test-register.mjs', '--test', ...files], {
-  stdio: 'inherit',
-  env: process.env,
-});
+const result = spawnSync(
+  process.execPath,
+  ['--import', './scripts/test-register.mjs', '--test', ...files],
+  {
+    stdio: 'inherit',
+    env: process.env,
+  },
+);
 
 process.exit(result.status ?? 1);

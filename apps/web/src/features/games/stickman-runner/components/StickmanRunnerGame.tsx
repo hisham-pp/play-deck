@@ -152,10 +152,7 @@ export function StickmanRunnerGame() {
             />
           ))}
 
-          <div
-            className="absolute"
-            style={playerStyle}
-          >
+          <div className="absolute" style={playerStyle}>
             <div className="relative h-full w-full">
               <div className="absolute left-1/2 top-1 h-5 w-5 -translate-x-1/2 rounded-full border-2 border-slate-100 bg-slate-950" />
               <div className="absolute left-1/2 top-5 h-8 w-1 -translate-x-1/2 bg-slate-100" />
