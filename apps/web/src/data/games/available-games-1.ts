@@ -347,6 +347,22 @@ export const AVAILABLE_GAMES_1: GameDefinition[] = [
     releaseDate: '2026-09-23',
   },
   {
+    id: 'stickman-runner',
+    name: 'Stickman Runner',
+    slug: 'stickman-runner',
+    description:
+      'Sprint through a rising gauntlet of hazards, time your jumps, and chase a new personal best in this endless arcade run.',
+    category: CATEGORY_ARCADE,
+    players: { min: 1, max: 1 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/stickman-runner/icon.svg',
+    bannerUrl: '/games/stickman-runner/cover.svg',
+    tags: ['Action', 'Endless', 'Jump', 'Speedrun', TAG_HIGH_SCORE],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-24',
+  },
+  {
     id: 'word-search-arena',
     name: 'Word Search Arena',
     slug: 'word-search-arena',

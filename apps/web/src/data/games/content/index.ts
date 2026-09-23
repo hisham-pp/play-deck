@@ -37,6 +37,7 @@ import { snakeContent } from './snake';
 import { snakeAndLadderContent } from './snake-and-ladder';
 import { spellingBeeContent } from './spelling-bee';
 import { spyNetworkContent } from './spy-network';
+import { stickmanRunnerContent } from './stickman-runner';
 import { sudokuContent } from './sudoku';
 import { summitRushContent } from './summit-rush';
 import { telephoneDrawingContent } from './telephone-drawing';
@@ -102,6 +103,7 @@ const ALL_CONTENT: GameContent[] = [
   spyNetworkContent,
   alibiContent,
   spellingBeeContent,
+  stickmanRunnerContent,
   wordSearchArenaContent,
 ];
 
