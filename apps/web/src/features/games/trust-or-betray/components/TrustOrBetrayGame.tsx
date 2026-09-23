@@ -1,5 +1,6 @@
 'use client';
 
+<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
 
 import { useTrustMultiplayerStore } from '@/stores/trust-or-betray-multiplayer.store';
@@ -266,6 +267,195 @@ export function TrustOrBetrayGame({ onGameOver }: TrustOrBetrayGameProps) {
           </div>
         </div>
       )}
+=======
+import { ArrowLeft, Shield, Sparkles, UserRound, Vote, Zap } from 'lucide-react';
+import Link from 'next/link';
+import { useMemo, useState } from 'react';
+import { calculateRoundOutcome, nextRoundNumber, resolvePlayerChoice } from '../game-logic';
+
+const roundSteps = [1, 2, 3, 4, 5];
+
+export function TrustOrBetrayGame() {
+  const [round, setRound] = useState(1);
+  const [groupPool, setGroupPool] = useState(120);
+  const [personalScore, setPersonalScore] = useState(0);
+  const [trustScore, setTrustScore] = useState(3);
+  const [selectedChoice, setSelectedChoice] = useState<'cooperate' | 'betray'>('cooperate');
+  const [paused, setPaused] = useState(false);
+
+  const currentRound = useMemo(
+    () => roundSteps[Math.min(round - 1, roundSteps.length - 1)],
+    [round],
+  );
+
+  const handleResolve = () => {
+    const resolved = resolvePlayerChoice(selectedChoice, currentRound, trustScore);
+    const outcome = calculateRoundOutcome({
+      coopCount: selectedChoice === 'cooperate' ? 3 : 2,
+      betrayCount: selectedChoice === 'betray' ? 1 : 0,
+      round: currentRound,
+    });
+
+    setPersonalScore((value) => value + resolved + outcome.betrayBonus);
+    setGroupPool((value) => Math.max(0, value + outcome.groupReward));
+    setTrustScore((value) =>
+      selectedChoice === 'betray' ? Math.max(0, value - 1) : Math.min(5, value + 1),
+    );
+    setRound((value) => nextRoundNumber(value));
+  };
+
+  const handleRestart = () => {
+    setRound(1);
+    setGroupPool(120);
+    setPersonalScore(0);
+    setTrustScore(3);
+    setSelectedChoice('cooperate');
+    setPaused(false);
+  };
+
+  return (
+    <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-3 py-4">
+      <div className="flex items-center justify-between">
+        <Link
+          href="/games"
+          className="inline-flex items-center gap-2 text-xs font-medium text-deck-500 transition-colors hover:text-white"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          <span>Back to catalog</span>
+        </Link>
+        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-violet-400">
+          <UserRound className="h-3.5 w-3.5" />
+          <span>Trust or Betray</span>
+        </div>
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-[1.35fr_0.65fr]">
+        <div className="rounded-2xl border border-surface-border bg-surface-raised p-3 shadow-arcade">
+          <div className="mb-3 flex items-center justify-between rounded-xl border border-surface-border bg-surface-base/80 px-3 py-2">
+            <div>
+              <div className="text-[10px] uppercase tracking-[0.22em] text-violet-400">
+                Round {round}
+              </div>
+              <div className="text-lg font-black text-white">Secret action phase</div>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setPaused((value) => !value)}
+                className="rounded-lg border border-surface-border bg-surface-overlay px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-deck-200 transition hover:border-violet-500"
+              >
+                {paused ? 'Resume' : 'Pause'}
+              </button>
+              <button
+                onClick={handleRestart}
+                className="rounded-lg bg-violet-500 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-950 transition hover:bg-violet-400"
+              >
+                Restart
+              </button>
+            </div>
+          </div>
+
+          <div className="relative overflow-hidden rounded-2xl border border-surface-border bg-[#111827]">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(168,85,247,0.18),_transparent_40%),linear-gradient(180deg,_rgba(17,24,39,0.4),_rgba(2,6,23,0.95))]" />
+            <div className="relative h-[420px] w-full p-4">
+              <div className="absolute left-4 top-4 flex items-center gap-2 text-sm font-semibold text-deck-200">
+                <Shield className="h-4 w-4 text-violet-400" />
+                <span>Group pool {groupPool}</span>
+              </div>
+              <div className="absolute right-4 top-4 flex items-center gap-2 text-sm font-semibold text-deck-200">
+                <Zap className="h-4 w-4 text-amber-400" />
+                <span>{personalScore} pts</span>
+              </div>
+
+              <div className="absolute inset-x-4 top-20 flex items-center justify-between gap-3 rounded-xl border border-violet-500/40 bg-slate-900/80 p-3 shadow-[0_0_30px_rgba(168,85,247,0.12)]">
+                <div className="text-[10px] uppercase tracking-[0.2em] text-deck-400">Trust</div>
+                <div className="text-sm font-bold text-white">{trustScore}/5</div>
+              </div>
+
+              <div className="absolute inset-x-8 bottom-24 grid grid-cols-2 gap-3">
+                {(['cooperate', 'betray'] as const).map((option) => (
+                  <button
+                    key={option}
+                    onClick={() => setSelectedChoice(option)}
+                    className={`rounded-2xl border px-4 py-5 text-left transition ${
+                      selectedChoice === option
+                        ? 'border-violet-500 bg-violet-500/15 text-white'
+                        : 'border-surface-border bg-slate-900/70 text-deck-200 hover:border-violet-500/50'
+                    }`}
+                  >
+                    <div className="mb-2 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-deck-400">
+                      {option === 'cooperate' ? (
+                        <Sparkles className="h-3.5 w-3.5" />
+                      ) : (
+                        <Vote className="h-3.5 w-3.5" />
+                      )}
+                      <span>{option}</span>
+                    </div>
+                    <div className="text-lg font-black uppercase">
+                      {option === 'cooperate' ? 'Team play' : 'Selfish play'}
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              <div className="absolute bottom-5 right-5 flex gap-2">
+                <button
+                  onClick={handleResolve}
+                  className="rounded-xl bg-violet-500 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-slate-950 transition hover:bg-violet-400"
+                >
+                  Resolve
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside className="space-y-4 rounded-2xl border border-surface-border bg-surface-raised p-4 shadow-arcade">
+          <div>
+            <div className="mb-2 text-[10px] uppercase tracking-[0.2em] text-violet-400">
+              Round state
+            </div>
+            <div className="space-y-2">
+              {roundSteps.map((step) => (
+                <button
+                  key={step}
+                  onClick={() => setRound(step)}
+                  className={`flex w-full items-center justify-between rounded-xl border px-3 py-2 text-left transition ${
+                    step === round
+                      ? 'border-violet-500 bg-violet-500/10 text-white'
+                      : 'border-surface-border bg-surface-base/80 text-deck-300'
+                  }`}
+                >
+                  <span className="font-bold">Round {step}</span>
+                  <span className="text-[10px] uppercase tracking-[0.18em] text-deck-500">
+                    {step === round ? 'Active' : 'Idle'}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-surface-border bg-surface-base/80 p-3">
+            <div className="mb-2 text-[10px] uppercase tracking-[0.2em] text-violet-400">
+              Status
+            </div>
+            <ul className="space-y-2 text-sm text-deck-300">
+              <li>Players: 3–8</li>
+              <li>Voice sync: Ready</li>
+              <li>Choice timer: 12s</li>
+              <li>Risk: {selectedChoice === 'betray' ? 'High' : 'Low'}</li>
+            </ul>
+          </div>
+
+          <div className="rounded-xl border border-dashed border-violet-500/50 bg-violet-500/5 p-3 text-sm text-violet-200">
+            <div className="mb-2 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-violet-400">
+              <Sparkles className="h-3.5 w-3.5" />
+              <span>Social tension</span>
+            </div>
+            Choose wisely: cooperation builds trust, but one selfish move can flip the table.
+          </div>
+        </aside>
+      </div>
+>>>>>>> 0a57c0e (feat(trust-or-betray): add social deception shell)
     </div>
   );
 }

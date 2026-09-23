@@ -74,7 +74,9 @@ export function StickmanClimberGame() {
         <div className="rounded-2xl border border-surface-border bg-surface-raised p-3 shadow-arcade">
           <div className="mb-3 flex items-center justify-between rounded-xl border border-surface-border bg-surface-base/80 px-3 py-2">
             <div>
-              <div className="text-[10px] uppercase tracking-[0.22em] text-deck-500">Level {level}</div>
+              <div className="text-[10px] uppercase tracking-[0.22em] text-deck-500">
+                Level {level}
+              </div>
               <div className="text-lg font-black text-white">{currentLevel.label}</div>
             </div>
             <div className="flex items-center gap-2">
@@ -108,7 +110,9 @@ export function StickmanClimberGame() {
               <div className="absolute inset-x-4 top-20 rounded-xl border border-amber-500/50 bg-slate-900/80 p-3 shadow-[0_0_30px_rgba(245,158,11,0.12)]">
                 <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-[0.18em] text-deck-400">
                   <span>XP</span>
-                  <span>{xp} / {currentLevel.xp}</span>
+                  <span>
+                    {xp} / {currentLevel.xp}
+                  </span>
                 </div>
                 <div className="h-2.5 overflow-hidden rounded-full bg-slate-800">
                   <div
