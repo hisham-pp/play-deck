@@ -2,7 +2,8 @@
 
 import { ArrowLeft, Swords, Zap, Shield } from 'lucide-react';
 import Link from 'next/link';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { createEnemyWave, resolveCombat } from '../engine/stickman-climber-logic';
 
 const STARTING_WEAPON = 'Wooden Sword' as const;
 const WEAPON_OPTIONS = ['Wooden Sword', 'Iron Blade', 'Katana'] as const;
@@ -23,6 +24,7 @@ export function StickmanClimberGame() {
   const [coins, setCoins] = useState(32);
   const [level, setLevel] = useState(1);
   const [weapon, setWeapon] = useState<Weapon>(STARTING_WEAPON);
+  const [enemyHp, setEnemyHp] = useState<number>(() => createEnemyWave(1).enemy.hp);
   const [paused, setPaused] = useState(false);
 
   const currentLevel = useMemo(
@@ -30,11 +32,34 @@ export function StickmanClimberGame() {
     [selectedLevel],
   );
 
+  const wave = useMemo(() => createEnemyWave(selectedLevel), [selectedLevel]);
   const levelProgress = Math.min(100, (xp % 100) + 15);
 
+  useEffect(() => {
+    setEnemyHp(wave.enemy.hp);
+  }, [wave]);
+
   const handleAttack = () => {
-    setXp((value) => value + 14);
-    setCoins((value) => value + 1);
+    const result = resolveCombat({
+      weapon,
+      level: selectedLevel,
+      health,
+      xp,
+      coins,
+      enemyHp,
+    });
+
+    setHealth(result.health);
+    setXp(result.xp);
+    setCoins(result.coins);
+    setEnemyHp(result.enemyHp);
+
+    if (result.defeated) {
+      const nextLevel = Math.min(5, selectedLevel + 1);
+      setSelectedLevel(nextLevel);
+      setLevel((value) => value + 1);
+      setEnemyHp(createEnemyWave(nextLevel).enemy.hp);
+    }
   };
 
   const handleLevelUp = () => {
@@ -55,6 +80,7 @@ export function StickmanClimberGame() {
     setLevel(1);
     setSelectedLevel(1);
     setWeapon(STARTING_WEAPON);
+    setEnemyHp(createEnemyWave(1).enemy.hp);
     setPaused(false);
   };
 
@@ -126,6 +152,10 @@ export function StickmanClimberGame() {
                 </div>
               </div>
 
+              <div className="absolute left-4 top-[122px] rounded-lg border border-amber-500/40 bg-slate-900/80 px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-amber-200">
+                Enemy HP {enemyHp}
+              </div>
+
               <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-amber-500/50 bg-[#0f172a]/70 shadow-[0_0_40px_rgba(245,158,11,0.22)]" />
 
               <div className="absolute left-1/2 top-[56%] -translate-x-1/2 -translate-y-1/2">
@@ -142,6 +172,10 @@ export function StickmanClimberGame() {
               <div className="absolute bottom-5 left-5 flex items-center gap-3 rounded-xl border border-surface-border bg-slate-950/70 px-3 py-2">
                 <div className="text-[10px] uppercase tracking-[0.18em] text-deck-400">Weapon</div>
                 <div className="text-sm font-bold text-white">{weapon}</div>
+              </div>
+
+              <div className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-xl border border-amber-500/30 bg-slate-950/70 px-3 py-2 text-[10px] uppercase tracking-[0.18em] text-amber-200">
+                {wave.enemy.name}
               </div>
 
               <div className="absolute bottom-5 right-5 flex gap-2">
