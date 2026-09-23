@@ -331,6 +331,22 @@ export const AVAILABLE_GAMES_1: GameDefinition[] = [
     releaseDate: '2026-09-20',
   },
   {
+    id: 'stickman-climber',
+    name: 'Stickman Climber',
+    slug: 'stickman-climber',
+    description:
+      'Scale a dangerous vertical tower, defeat escalating enemies, upgrade your weapon, and climb your way toward the next arena.',
+    category: CATEGORY_ARCADE,
+    players: { min: 1, max: 1 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/stickman-climber/icon.svg',
+    bannerUrl: '/games/stickman-climber/cover.svg',
+    tags: ['Action', 'Vertical', 'Sword', 'Climb', 'Boss Fight', TAG_HIGH_SCORE],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-23',
+  },
+  {
     id: 'word-search-arena',
     name: 'Word Search Arena',
     slug: 'word-search-arena',
