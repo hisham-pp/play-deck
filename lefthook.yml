@@ -1,9 +1,0 @@
-# Lefthook Git Hooks Configuration
-
-pre-commit:
-  parallel: false
-  commands: {}
-
-pre-push:
-  parallel: false
-  commands: {}

@@ -13,7 +13,6 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "lefthook install || true",
     "clean": "rm -rf node_modules apps/*/node_modules packages/*/node_modules .next apps/*/.next"
   },
   "packageManager": "pnpm@11.1.2",
@@ -23,8 +22,7 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "sharp",
-      "unrs-resolver",
-      "lefthook"
+      "unrs-resolver"
     ]
   },
   "devDependencies": {
@@ -34,7 +32,6 @@
     "eslint": "^10.10.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.12.0",
-    "lefthook": "^2.1.12",
     "prettier": "^3.9.6",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.70.0"

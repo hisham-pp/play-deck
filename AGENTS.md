@@ -67,7 +67,6 @@ playdeck/
 ├── AGENTS.md
 ├── CLAUDE.md
 ├── .mcp.json
-├── lefthook.yml
 └── package.json
 ```
 
