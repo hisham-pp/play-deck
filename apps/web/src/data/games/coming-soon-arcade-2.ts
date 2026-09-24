@@ -42,20 +42,4 @@ export const COMING_SOON_ARCADE_GAMES_2: GameDefinition[] = [
     badge: BADGE_COMING_SOON,
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
-  {
-    id: 'bomber-arena',
-    name: 'Bomber Arena',
-    slug: 'bomber-arena',
-    description:
-      'Fast-paced multiplayer top-down Bomber Arena game. Players move around destructible arenas, place bombs, avoid explosions, collect power-ups, and compete to be last standing. Features procedural arena generation and multiple game modes.',
-    category: CATEGORY_ARCADE,
-    players: { min: 2, max: 6 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/bomber-arena/icon.svg',
-    bannerUrl: '/games/bomber-arena/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PHYSICS],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
 ];

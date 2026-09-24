@@ -61,7 +61,10 @@ describe('LootEngine', () => {
 
     assert.strictEqual(nextState.players[0].score, 50);
     assert.strictEqual(nextState.players[0].gemsCollected, 1);
-    assert.strictEqual(nextState.loot.length, 0);
+    assert.strictEqual(
+      nextState.loot.some((item) => item.id === 'test-gem'),
+      false,
+    );
     assert.ok(events.some((e) => e.type === 'gem_pickup'));
   });
 

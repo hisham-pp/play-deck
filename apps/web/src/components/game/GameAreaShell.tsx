@@ -11,6 +11,7 @@ import { AuctionPanicGame } from '@/features/games/auction-panic';
 import { BadArchitectGame } from '@/features/games/bad-architect';
 import { BallBounceGame } from '@/features/games/ball-bounce';
 import { BombFactoryGame } from '@/features/games/bomb-factory';
+import { BomberArenaGame } from '@/features/games/bomber-arena';
 import { ChessGame } from '@/features/games/chess';
 import { ColorThiefGame } from '@/features/games/color-thief';
 import { ConnectFourGame } from '@/features/games/connect-four';
@@ -80,6 +81,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'bad-architect': BadArchitectGame,
   'ball-bounce': BallBounceGame,
   'bomb-factory': BombFactoryGame,
+  'bomber-arena': BomberArenaGame,
   chess: ChessGame,
   'color-thief': ColorThiefGame,
   'connect-four': ConnectFourGame,

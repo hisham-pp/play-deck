@@ -522,4 +522,20 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-24',
   },
+  {
+    id: 'bomber-arena',
+    name: 'Bomber Arena',
+    slug: 'bomber-arena',
+    description:
+      'Fast-paced multiplayer action in destructible arenas. Place bombs, collect power-ups, trigger chain reactions, and be the last player standing.',
+    category: CATEGORY_ARCADE,
+    players: { min: 1, max: 4 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/bomber-arena/icon.svg',
+    bannerUrl: '/games/bomber-arena/cover.svg',
+    tags: [TAG_ARCADE, TAG_SOLO, TAG_LOCAL_PLAY, TAG_MULTIPLAYER, TAG_AI_OPPONENT],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-24',
+  },
 ];
