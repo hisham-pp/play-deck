@@ -379,6 +379,22 @@ export const AVAILABLE_GAMES_1: GameDefinition[] = [
     releaseDate: '2026-09-24',
   },
   {
+    id: 'stickman-archery',
+    name: 'Stickman Archery',
+    slug: 'stickman-archery',
+    description:
+      'Draw your bow, calculate crosswinds, and hit high-scoring bullseyes in this physics archery challenge.',
+    category: CATEGORY_ARCADE,
+    players: { min: 1, max: 1 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/stickman-archery/icon.svg',
+    bannerUrl: '/games/stickman-archery/cover.svg',
+    tags: ['Action', 'Physics', 'Bow', 'Aim', TAG_HIGH_SCORE],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-24',
+  },
+  {
     id: 'word-search-arena',
     name: 'Word Search Arena',
     slug: 'word-search-arena',

@@ -42,6 +42,7 @@ import { SnakeGame } from '@/features/games/snake';
 import { SnakeLadderGame } from '@/features/games/snake-and-ladder';
 import { SpellingBeeGame } from '@/features/games/spelling-bee';
 import { SpyNetworkGame } from '@/features/games/spy-network';
+import { StickmanArcheryGame } from '@/features/games/stickman-archery';
 import { StickmanClimberGame } from '@/features/games/stickman-climber';
 import { StickmanPlatformerGame } from '@/features/games/stickman-platformer';
 import { StickmanRunnerGame } from '@/features/games/stickman-runner';
@@ -102,6 +103,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'shared-brain': SharedBrainGame,
   snake: SnakeGame,
   'snake-and-ladder': SnakeLadderGame,
+  'stickman-archery': StickmanArcheryGame,
   'stickman-climber': StickmanClimberGame,
   'stickman-platformer': StickmanPlatformerGame,
   'stickman-runner': StickmanRunnerGame,
