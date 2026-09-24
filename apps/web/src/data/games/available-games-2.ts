@@ -490,4 +490,20 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-20',
   },
+  {
+    id: 'tower-builder',
+    name: 'Tower Builder',
+    slug: 'tower-builder',
+    description:
+      'Competitive physics-based skyscraper construction game. Time swinging crane releases, stack diverse blocks with center-of-mass balance, and reach high into the stratosphere.',
+    category: CATEGORY_ARCADE,
+    players: { min: 1, max: 4 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/tower-builder/icon.svg',
+    bannerUrl: '/games/tower-builder/cover.svg',
+    tags: [TAG_ARCADE, TAG_PHYSICS, TAG_HIGH_SCORE, TAG_SOLO, TAG_LOCAL_PLAY],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-24',
+  },
 ];

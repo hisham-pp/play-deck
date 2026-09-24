@@ -49,6 +49,7 @@ import { tetrisContent } from './tetris';
 import { ticTacToeContent } from './tic-tac-toe';
 import { tinyIslandContent } from './tiny-island';
 import { tinyTankArenaContent } from './tiny-tank-arena';
+import { towerBuilderContent } from './tower-builder';
 import { trustOrBetrayContent } from './trust-or-betray';
 import { unstableElevatorContent } from './unstable-elevator';
 import { whoAmIContent } from './who-am-i';
@@ -92,6 +93,7 @@ const ALL_CONTENT: GameContent[] = [
   floorIsLavaContent,
   magnetMayhemContent,
   tinyTankArenaContent,
+  towerBuilderContent,
   lootDashContent,
   trustOrBetrayContent,
   secretSaboteurContent,
