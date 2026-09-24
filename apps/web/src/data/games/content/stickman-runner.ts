@@ -5,7 +5,7 @@ export const stickmanRunnerContent: GameContent = {
   seo: {
     title: 'Stickman Runner — Endless Sprint Game | PlayDeck',
     description:
-      'Dash through a neon sprint, leap over obstacles, and chase a new high score in Stickman Runner on PlayDeck.',
+      'Dash through an endless neon sprint, leap over dangerous obstacles, and chase a new high score in Stickman Runner on PlayDeck.',
     keywords: [
       'stickman runner',
       'endless runner game',

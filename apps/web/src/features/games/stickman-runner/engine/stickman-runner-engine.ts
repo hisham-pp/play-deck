@@ -45,7 +45,6 @@ export interface StickmanRunnerState {
 }
 
 const WORLD_WIDTH = 960;
-const WORLD_HEIGHT = 420;
 const BASE_GROUND = 340;
 const BASE_SPEED = 240;
 
@@ -117,9 +116,9 @@ export function stepStickmanRunnerGame(
   }
 
   let score = state.score;
-  let distance = state.distance + state.speed * dt;
-  let elapsed = state.elapsed + dt;
-  let speed = state.speed + dt * 2.6;
+  const distance = state.distance + state.speed * dt;
+  const elapsed = state.elapsed + dt;
+  const speed = state.speed + dt * 2.6;
   let spawnTimer = state.spawnTimer + dt;
   let pickupTimer = state.pickupTimer + dt;
 
@@ -133,7 +132,7 @@ export function stepStickmanRunnerGame(
     y: Math.min(state.groundY - state.player.height, player.y + player.vy * dt),
   };
 
-  let grounded = nextPlayer.y >= state.groundY - state.player.height;
+  const grounded = nextPlayer.y >= state.groundY - state.player.height;
   let finalPlayer = {
     ...nextPlayer,
     y: grounded ? state.groundY - state.player.height : nextPlayer.y,

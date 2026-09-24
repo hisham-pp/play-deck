@@ -6,8 +6,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { createEnemyWave, resolveCombat } from '../engine/stickman-climber-logic';
 
 const STARTING_WEAPON = 'Wooden Sword' as const;
-const WEAPON_OPTIONS = ['Wooden Sword', 'Iron Blade', 'Katana'] as const;
-type Weapon = (typeof WEAPON_OPTIONS)[number];
+type Weapon = 'Wooden Sword' | 'Iron Blade' | 'Katana';
 
 const levelStats = [
   { level: 1, label: 'Rookie climb', xp: 100, reward: STARTING_WEAPON },
