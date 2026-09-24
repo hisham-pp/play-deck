@@ -14,6 +14,7 @@ import { BombFactoryGame } from '@/features/games/bomb-factory';
 import { ChessGame } from '@/features/games/chess';
 import { ColorThiefGame } from '@/features/games/color-thief';
 import { ConnectFourGame } from '@/features/games/connect-four';
+import { DontPopItGame } from '@/features/games/dont-pop-it';
 import { GiantGame } from '@/features/games/dont-wake-the-giant';
 import { FlappyArcadeGame } from '@/features/games/flappy-arcade';
 import { FloorIsLavaGame } from '@/features/games/floor-is-lava';
@@ -80,6 +81,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   chess: ChessGame,
   'color-thief': ColorThiefGame,
   'connect-four': ConnectFourGame,
+  'dont-pop-it': DontPopItGame,
   'dont-wake-the-giant': GiantGame,
   'flappy-arcade': FlappyArcadeGame,
   'floor-is-lava': FloorIsLavaGame,

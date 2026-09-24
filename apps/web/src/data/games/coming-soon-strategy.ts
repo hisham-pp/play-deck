@@ -30,22 +30,6 @@ export const COMING_SOON_STRATEGY_GAMES: GameDefinition[] = [
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
   {
-    id: 'dont-pop-it',
-    name: "Don't Pop It",
-    slug: 'dont-pop-it',
-    description:
-      'Multiplayer strategy game where players take turns selecting tiles from a shared board. Most tiles are safe, some carry risk, and one triggers the losing event. Survive longer than your opponents. Features special tiles that modify the board state.',
-    category: CATEGORY_STRATEGY,
-    players: { min: 2, max: 6 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/dont-pop-it/icon.svg',
-    bannerUrl: '/games/dont-pop-it/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
     id: 'uno-cards',
     name: 'UNO-Style Cards',
     slug: 'uno-cards',

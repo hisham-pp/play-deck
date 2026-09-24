@@ -8,6 +8,7 @@ import { ballBounceContent } from './ball-bounce';
 import { bombFactoryContent } from './bomb-factory';
 import { colorThiefContent } from './color-thief';
 import { connectFourContent } from './connect-four';
+import { dontPopItContent } from './dont-pop-it';
 import { dontWakeTheGiantContent } from './dont-wake-the-giant';
 import { flappyArcadeContent } from './flappy-arcade';
 import { floorIsLavaContent } from './floor-is-lava';
@@ -86,6 +87,7 @@ const ALL_CONTENT: GameContent[] = [
   reverseRacingContent,
   sharedBrainContent,
   gravityShiftContent,
+  dontPopItContent,
   dontWakeTheGiantContent,
   floorIsLavaContent,
   magnetMayhemContent,
