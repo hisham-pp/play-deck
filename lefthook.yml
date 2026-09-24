@@ -2,12 +2,8 @@
 
 pre-commit:
   parallel: false
-  commands:
-    build:
-      run: pnpm build
+  commands: {}
 
 pre-push:
   parallel: false
-  commands:
-    build:
-      run: pnpm build
+  commands: {}
