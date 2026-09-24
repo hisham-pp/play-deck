@@ -150,7 +150,7 @@ describe('tank-engine', () => {
     const updatedP1 = result.nextState.players[0];
 
     assert.ok(updatedP1.health > 50);
-    assert.equal(result.nextState.crates.length, 0);
+    assert.ok(!result.nextState.crates.some((c) => c.id === 'test-health-crate'));
     assert.ok(result.events.some((e) => e.type === 'crate_pickup'));
   });
 

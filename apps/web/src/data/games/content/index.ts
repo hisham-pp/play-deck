@@ -28,6 +28,7 @@ import { oneWordStoryContent } from './one-word-story';
 import { penFightContent } from './pen-fight';
 import { pongContent } from './pong';
 import { pushYourLuckContent } from './push-your-luck';
+import { reactionArenaContent } from './reaction-arena';
 import { reverseRacingContent } from './reverse-racing';
 import { runicMemoryContent } from './runic-memory';
 import { secretMissionContent } from './secret-mission';
@@ -85,6 +86,7 @@ const ALL_CONTENT: GameContent[] = [
   bombFactoryContent,
   anagramSprintContent,
   gravityGolfContent,
+  reactionArenaContent,
   reverseRacingContent,
   sharedBrainContent,
   gravityShiftContent,

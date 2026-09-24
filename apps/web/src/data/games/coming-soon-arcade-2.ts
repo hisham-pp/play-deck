@@ -27,22 +27,6 @@ export const COMING_SOON_ARCADE_GAMES_2: GameDefinition[] = [
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
   {
-    id: 'reaction-arena',
-    name: 'Reaction Arena',
-    slug: 'reaction-arena',
-    description:
-      'Fast multiplayer Reaction Arena — a series of short reaction challenges where players compete on speed, accuracy, and consistency. Features modular mini-games behind a common interface for easy expansion.',
-    category: CATEGORY_ARCADE,
-    players: { min: 2, max: 8 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/reaction-arena/icon.svg',
-    bannerUrl: '/games/reaction-arena/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
     id: 'platform-race',
     name: 'Platform Race',
     slug: 'platform-race',

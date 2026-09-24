@@ -506,4 +506,20 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-24',
   },
+  {
+    id: 'reaction-arena',
+    name: 'Reaction Arena',
+    slug: 'reaction-arena',
+    description:
+      'Fast reflex mini-game collection. Compete across rapid-fire trials testing reaction speed, color matching, mental arithmetic, and visual focus.',
+    category: CATEGORY_ARCADE,
+    players: { min: 1, max: 4 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/reaction-arena/icon.svg',
+    bannerUrl: '/games/reaction-arena/cover.svg',
+    tags: [TAG_ARCADE, TAG_SOLO, TAG_LOCAL_PLAY, TAG_HIGH_SCORE, TAG_AI_OPPONENT],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-24',
+  },
 ];
