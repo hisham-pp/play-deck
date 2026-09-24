@@ -363,6 +363,22 @@ export const AVAILABLE_GAMES_1: GameDefinition[] = [
     releaseDate: '2026-09-24',
   },
   {
+    id: 'stickman-platformer',
+    name: 'Stickman Platformer',
+    slug: 'stickman-platformer',
+    description:
+      'Leap across floating platforms, stomp patrol enemies, collect coins, and reach the exit portal in this 2D platforming adventure.',
+    category: CATEGORY_ARCADE,
+    players: { min: 1, max: 1 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/stickman-platformer/icon.svg',
+    bannerUrl: '/games/stickman-platformer/cover.svg',
+    tags: ['Action', 'Platformer', 'Jump', 'Adventure', TAG_HIGH_SCORE],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-24',
+  },
+  {
     id: 'word-search-arena',
     name: 'Word Search Arena',
     slug: 'word-search-arena',

@@ -1,0 +1,33 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="36" fill="#090D16"/>
+  <rect x="40" y="40" width="1120" height="550" rx="28" fill="url(#platformer_bg)"/>
+  <!-- Floating platforms -->
+  <rect x="180" y="460" width="280" height="40" rx="8" fill="#10B981" stroke="#34D399" stroke-width="4"/>
+  <rect x="520" y="380" width="220" height="36" rx="8" fill="#8B5CF6" stroke="#C084FC" stroke-width="4"/>
+  <rect x="800" y="300" width="260" height="36" rx="8" fill="#06B6D4" stroke="#38BDF8" stroke-width="4"/>
+  <!-- Exit portal on right ledge -->
+  <rect x="980" y="190" width="60" height="110" rx="12" fill="#10B981" stroke="#34D399" stroke-width="6"/>
+  <!-- Floating golden coin pickups -->
+  <circle cx="630" cy="280" r="24" fill="#FBBF24" stroke="#F59E0B" stroke-width="6"/>
+  <circle cx="890" cy="210" r="24" fill="#FBBF24" stroke="#F59E0B" stroke-width="6"/>
+  <!-- Hero Stickman jumping between platforms -->
+  <circle cx="430" cy="250" r="50" fill="#F8FAFC"/>
+  <!-- Torso -->
+  <path d="M430 300V390" stroke="#F8FAFC" stroke-width="12" stroke-linecap="round"/>
+  <!-- Jump Arms -->
+  <path d="M430 330L340 280" stroke="#F8FAFC" stroke-width="12" stroke-linecap="round"/>
+  <path d="M430 330L510 290" stroke="#3B82F6" stroke-width="12" stroke-linecap="round"/>
+  <!-- Jump Legs -->
+  <path d="M430 390L370 450" stroke="#F8FAFC" stroke-width="12" stroke-linecap="round"/>
+  <path d="M430 390L480 430L520 450" stroke="#3B82F6" stroke-width="12" stroke-linecap="round"/>
+  <!-- Typography -->
+  <text x="120" y="110" fill="#F59E0B" font-family="Arial, sans-serif" font-size="46" font-weight="700" letter-spacing="6">PLAYDECK</text>
+  <text x="120" y="420" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="96" font-weight="800">STICKMAN</text>
+  <text x="120" y="505" fill="#3B82F6" font-family="Arial, sans-serif" font-size="96" font-weight="800">PLATFORMER</text>
+  <defs>
+    <linearGradient id="platformer_bg" x1="120" y1="60" x2="1080" y2="582" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111827"/>
+      <stop offset="1" stop-color="#0B1220"/>
+    </linearGradient>
+  </defs>
+</svg>
