@@ -636,4 +636,20 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-25',
   },
+  {
+    id: 'hide-and-seek',
+    name: 'Hide & Seek',
+    slug: 'hide-and-seek',
+    description:
+      'Play high-stakes Hide & Seek on PlayDeck. Outsmart seekers with camouflage and ghost invisibility, duck into secret closets, and survive the countdown timer.',
+    category: CATEGORY_CASUAL,
+    players: { min: 3, max: 8 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/hide-and-seek/icon.svg',
+    bannerUrl: '/games/hide-and-seek/cover.svg',
+    tags: [TAG_PARTY, TAG_MULTIPLAYER, TAG_SOLO, TAG_AI_OPPONENT, TAG_VOICE_CHAT],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-25',
+  },
 ];

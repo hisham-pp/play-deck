@@ -19,6 +19,7 @@ import { floorIsLavaContent } from './floor-is-lava';
 import { gravityGolfContent } from './gravity-golf';
 import { gravityShiftContent } from './gravity-shift';
 import { guessTheLieContent } from './guess-the-lie';
+import { hideAndSeekContent } from './hide-and-seek';
 import { humanConveyorBeltContent } from './human-conveyor-belt';
 import { imposterBuilderContent } from './imposter-builder';
 import { kingdomDraftContent } from './kingdom-draft';
@@ -131,6 +132,7 @@ const ALL_CONTENT: GameContent[] = [
   wordSearchArenaContent,
   drawingGuessingContent,
   fishingCompetitionContent,
+  hideAndSeekContent,
 ];
 
 /**
