@@ -56,6 +56,7 @@ import { tinyIslandContent } from './tiny-island';
 import { tinyTankArenaContent } from './tiny-tank-arena';
 import { towerBuilderContent } from './tower-builder';
 import { trustOrBetrayContent } from './trust-or-betray';
+import { unoCardsContent } from './uno-cards';
 import { unstableElevatorContent } from './unstable-elevator';
 import { whoAmIContent } from './who-am-i';
 import { wordChainContent } from './word-chain';
@@ -89,6 +90,7 @@ const ALL_CONTENT: GameContent[] = [
   wordChainContent,
   colorThiefContent,
   unstableElevatorContent,
+  unoCardsContent,
   shadowTagContent,
   bombFactoryContent,
   bomberArenaContent,

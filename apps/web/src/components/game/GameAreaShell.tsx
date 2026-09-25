@@ -61,6 +61,7 @@ import { TinyIslandGame } from '@/features/games/tiny-island';
 import { TinyTankGame } from '@/features/games/tiny-tank';
 import { TowerBuilderGame } from '@/features/games/tower-builder';
 import { TrustOrBetrayGame } from '@/features/games/trust-or-betray';
+import { UnoCardsGame } from '@/features/games/uno-cards';
 import { ElevatorGame } from '@/features/games/unstable-elevator';
 import { WhoAmIGame } from '@/features/games/who-am-i';
 import { WordChainGame } from '@/features/games/word-chain';
@@ -130,6 +131,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'trust-or-betray': TrustOrBetrayGame,
   'secret-saboteur': SecretSaboteurGame,
   'unstable-elevator': ElevatorGame,
+  'uno-cards': UnoCardsGame,
   'word-chain': WordChainGame,
   'word-search-arena': WordSearchGame,
   'wrong-answers-only': WrongAnswersGame,

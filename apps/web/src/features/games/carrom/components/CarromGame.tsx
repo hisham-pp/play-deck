@@ -206,11 +206,7 @@ export function CarromGame() {
   // Bot automation turn handler
   useEffect(() => {
     const state = gameState;
-    if (
-      mode === 'vs-ai' &&
-      state.activePlayer === 'player2' &&
-      state.phase === 'positioning'
-    ) {
+    if (mode === 'vs-ai' && state.activePlayer === 'player2' && state.phase === 'positioning') {
       botThinkingTimeoutRef.current = setTimeout(() => {
         const shot = calculateBotShot(state);
         setStrikerPosition(state, shot.strikerX);
@@ -680,9 +676,7 @@ export function CarromGame() {
               <div className="flex flex-col gap-1.5">
                 <div className="flex justify-between text-xs font-semibold text-slate-400">
                   <span>Striker Placement</span>
-                  <span className="font-mono text-amber-400">
-                    {Math.round(strikerBaselineX)}px
-                  </span>
+                  <span className="font-mono text-amber-400">{Math.round(strikerBaselineX)}px</span>
                 </div>
                 <input
                   type="range"
