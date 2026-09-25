@@ -668,4 +668,20 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-25',
   },
+  {
+    id: 'train-rush',
+    name: 'Train Rush',
+    slug: 'train-rush',
+    description:
+      'Build and connect railway tracks from start to terminus in Train Rush on PlayDeck. Rotate pieces, bridge rivers, avoid boulders, and race rival rail barons.',
+    category: CATEGORY_STRATEGY,
+    players: { min: 2, max: 6 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/train-rush/icon.svg',
+    bannerUrl: '/games/train-rush/cover.svg',
+    tags: [TAG_MULTIPLAYER, TAG_SOLO, TAG_AI_OPPONENT, TAG_VOICE_CHAT, TAG_PUZZLE],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-25',
+  },
 ];

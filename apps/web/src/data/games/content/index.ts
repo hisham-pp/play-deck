@@ -58,6 +58,7 @@ import { ticTacToeContent } from './tic-tac-toe';
 import { tinyIslandContent } from './tiny-island';
 import { tinyTankArenaContent } from './tiny-tank-arena';
 import { towerBuilderContent } from './tower-builder';
+import { trainRushContent } from './train-rush';
 import { trustOrBetrayContent } from './trust-or-betray';
 import { unoCardsContent } from './uno-cards';
 import { unstableElevatorContent } from './unstable-elevator';
@@ -135,6 +136,7 @@ const ALL_CONTENT: GameContent[] = [
   fishingCompetitionContent,
   hideAndSeekContent,
   wordBattleContent,
+  trainRushContent,
 ];
 
 /**

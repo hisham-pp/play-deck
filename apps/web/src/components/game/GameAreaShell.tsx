@@ -63,6 +63,7 @@ import { TicTacToeGame } from '@/features/games/tic-tac-toe';
 import { TinyIslandGame } from '@/features/games/tiny-island';
 import { TinyTankGame } from '@/features/games/tiny-tank';
 import { TowerBuilderGame } from '@/features/games/tower-builder';
+import { TrainRushGame } from '@/features/games/train-rush';
 import { TrustOrBetrayGame } from '@/features/games/trust-or-betray';
 import { UnoCardsGame } from '@/features/games/uno-cards';
 import { ElevatorGame } from '@/features/games/unstable-elevator';
@@ -135,6 +136,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'tiny-island': TinyIslandGame,
   'tiny-tank-arena': TinyTankGame,
   'tower-builder': TowerBuilderGame,
+  'train-rush': TrainRushGame,
   'trust-or-betray': TrustOrBetrayGame,
   'secret-saboteur': SecretSaboteurGame,
   'unstable-elevator': ElevatorGame,
