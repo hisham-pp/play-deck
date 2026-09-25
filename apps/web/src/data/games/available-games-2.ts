@@ -554,4 +554,20 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-25',
   },
+  {
+    id: 'platform-race',
+    name: 'Platform Race',
+    slug: 'platform-race',
+    description:
+      'Race across neon obstacle courses in Platform Race on PlayDeck. Master moving platforms, spring launchers, and speed boosts to cross the finish line first.',
+    category: CATEGORY_ARCADE,
+    players: { min: 1, max: 4 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/platform-race/icon.svg',
+    bannerUrl: '/games/platform-race/cover.svg',
+    tags: [TAG_ARCADE, TAG_PHYSICS, TAG_SOLO, TAG_LOCAL_PLAY, TAG_AI_OPPONENT],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-25',
+  },
 ];
