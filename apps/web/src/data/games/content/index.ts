@@ -27,6 +27,7 @@ import { minesweeperContent } from './minesweeper';
 import { miniGolfContent } from './mini-golf';
 import { oneWordStoryContent } from './one-word-story';
 import { penFightContent } from './pen-fight';
+import { physicsFootballContent } from './physics-football';
 import { pongContent } from './pong';
 import { pushYourLuckContent } from './push-your-luck';
 import { reactionArenaContent } from './reaction-arena';
@@ -64,6 +65,7 @@ const ALL_CONTENT: GameContent[] = [
   tetrisContent,
   ticTacToeContent,
   penFightContent,
+  physicsFootballContent,
   ludoContent,
   sudokuContent,
   chessContent,

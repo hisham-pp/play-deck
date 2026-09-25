@@ -538,4 +538,20 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-24',
   },
+  {
+    id: 'physics-football',
+    name: 'Physics Football',
+    slug: 'physics-football',
+    description:
+      'Fast-paced 2D arcade soccer showdown. Control momentum, execute impulse strikes, bend shots off goalposts, and dominate the pitch in Physics Football on PlayDeck.',
+    category: CATEGORY_ARCADE,
+    players: { min: 1, max: 4 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/physics-football/icon.svg',
+    bannerUrl: '/games/physics-football/cover.svg',
+    tags: [TAG_ARCADE, TAG_PHYSICS, TAG_SOLO, TAG_LOCAL_PLAY, TAG_AI_OPPONENT],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-25',
+  },
 ];
