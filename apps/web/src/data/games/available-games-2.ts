@@ -570,4 +570,20 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-25',
   },
+  {
+    id: 'carrom',
+    name: 'Carrom',
+    slug: 'carrom',
+    description:
+      'Play classic 2D Carrom on PlayDeck. Flick the striker, pot white and black coins, master bank shots, and cover the Queen in solo vs AI or local 2-player matches.',
+    category: CATEGORY_BOARD,
+    players: { min: 1, max: 4 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/carrom/icon.svg',
+    bannerUrl: '/games/carrom/cover.svg',
+    tags: [TAG_CLASSIC, TAG_PHYSICS, TAG_SOLO, TAG_LOCAL_PLAY, TAG_AI_OPPONENT],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-25',
+  },
 ];

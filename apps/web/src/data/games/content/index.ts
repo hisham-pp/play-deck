@@ -7,6 +7,7 @@ import { badArchitectContent } from './bad-architect';
 import { ballBounceContent } from './ball-bounce';
 import { bombFactoryContent } from './bomb-factory';
 import { bomberArenaContent } from './bomber-arena';
+import { carromContent } from './carrom';
 import { colorThiefContent } from './color-thief';
 import { connectFourContent } from './connect-four';
 import { dontPopItContent } from './dont-pop-it';
@@ -68,6 +69,7 @@ const ALL_CONTENT: GameContent[] = [
   penFightContent,
   physicsFootballContent,
   platformRaceContent,
+  carromContent,
   ludoContent,
   sudokuContent,
   chessContent,

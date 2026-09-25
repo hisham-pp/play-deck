@@ -5,11 +5,8 @@ import {
   RELEASE_DATE_COMING_SOON,
   TAG_MULTIPLAYER,
   TAG_VOICE_CHAT,
-  TAG_PHYSICS,
-  TAG_SOLO,
   CATEGORY_STRATEGY,
   CATEGORY_CARD,
-  CATEGORY_BOARD,
 } from './constants';
 
 export const COMING_SOON_STRATEGY_GAMES: GameDefinition[] = [
@@ -41,22 +38,6 @@ export const COMING_SOON_STRATEGY_GAMES: GameDefinition[] = [
     thumbnailUrl: '/games/uno-cards/icon.svg',
     bannerUrl: '/games/uno-cards/cover.svg',
     tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
-    id: 'carrom',
-    name: 'Carrom',
-    slug: 'carrom',
-    description:
-      'Polished multiplayer 2D Carrom game. Realistic but approachable physics, directional aiming with power control, pocketing mechanics, queen rules, and full multiplayer sync.',
-    category: CATEGORY_BOARD,
-    players: { min: 2, max: 4 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/carrom/icon.svg',
-    bannerUrl: '/games/carrom/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_PHYSICS, TAG_SOLO],
     featured: false,
     badge: BADGE_COMING_SOON,
     releaseDate: RELEASE_DATE_COMING_SOON,
