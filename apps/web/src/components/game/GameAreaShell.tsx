@@ -19,6 +19,7 @@ import { ConnectFourGame } from '@/features/games/connect-four';
 import { DontPopItGame } from '@/features/games/dont-pop-it';
 import { GiantGame } from '@/features/games/dont-wake-the-giant';
 import { DrawingGuessingGame } from '@/features/games/drawing-guessing';
+import { FishingCompetitionGame } from '@/features/games/fishing-competition';
 import { FlappyArcadeGame } from '@/features/games/flappy-arcade';
 import { FloorIsLavaGame } from '@/features/games/floor-is-lava';
 import { GravityGolfGame } from '@/features/games/gravity-golf';
@@ -94,6 +95,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'dont-pop-it': DontPopItGame,
   'dont-wake-the-giant': GiantGame,
   'drawing-guessing': DrawingGuessingGame,
+  'fishing-competition': FishingCompetitionGame,
   'flappy-arcade': FlappyArcadeGame,
   'floor-is-lava': FloorIsLavaGame,
   'gravity-golf': GravityGolfGame,

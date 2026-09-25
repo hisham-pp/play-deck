@@ -25,20 +25,4 @@ export const COMING_SOON_CASUAL_GAMES_2: GameDefinition[] = [
     badge: BADGE_COMING_SOON,
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
-  {
-    id: 'fishing-competition',
-    name: 'Fishing Competition',
-    slug: 'fishing-competition',
-    description:
-      'Relaxing but competitive multiplayer fishing game. Players compete to catch the most valuable fish within a time limit. Features casting, bite indicators, reel-in timing mechanics, line tension management, and multiple fishing locations.',
-    category: CATEGORY_CASUAL,
-    players: { min: 2, max: 6 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/fishing-competition/icon.svg',
-    bannerUrl: '/games/fishing-competition/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
 ];

@@ -620,4 +620,20 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-25',
   },
+  {
+    id: 'fishing-competition',
+    name: 'Fishing Competition',
+    slug: 'fishing-competition',
+    description:
+      'Cast, strike, and reel in trophy fish in Fishing Competition on PlayDeck. Balance line tension, navigate weather events, and top the leaderboard across five waters.',
+    category: CATEGORY_CASUAL,
+    players: { min: 2, max: 6 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/fishing-competition/icon.svg',
+    bannerUrl: '/games/fishing-competition/cover.svg',
+    tags: [TAG_PARTY, TAG_MULTIPLAYER, TAG_SOLO, TAG_AI_OPPONENT, TAG_VOICE_CHAT],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-25',
+  },
 ];
