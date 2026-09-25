@@ -684,4 +684,20 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-25',
   },
+  {
+    id: 'crossword-clash',
+    name: 'Crossword Clash',
+    slug: 'crossword-clash',
+    description:
+      'Solve clues and race opponents in Crossword Clash on PlayDeck. Lock letters into shared grids, claim word completion bounties, and battle in real-time word duels.',
+    category: CATEGORY_PUZZLE,
+    players: { min: 1, max: 4 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/crossword-clash/icon.svg',
+    bannerUrl: '/games/crossword-clash/cover.svg',
+    tags: [TAG_WORD_PUZZLE, TAG_MULTIPLAYER, TAG_SOLO, TAG_AI_OPPONENT, TAG_VOICE_CHAT],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-25',
+  },
 ];

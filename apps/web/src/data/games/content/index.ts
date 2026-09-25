@@ -10,6 +10,7 @@ import { bomberArenaContent } from './bomber-arena';
 import { carromContent } from './carrom';
 import { colorThiefContent } from './color-thief';
 import { connectFourContent } from './connect-four';
+import { crosswordClashContent } from './crossword-clash';
 import { dontPopItContent } from './dont-pop-it';
 import { dontWakeTheGiantContent } from './dont-wake-the-giant';
 import { drawingGuessingContent } from './drawing-guessing';
@@ -137,6 +138,7 @@ const ALL_CONTENT: GameContent[] = [
   hideAndSeekContent,
   wordBattleContent,
   trainRushContent,
+  crosswordClashContent,
 ];
 
 /**

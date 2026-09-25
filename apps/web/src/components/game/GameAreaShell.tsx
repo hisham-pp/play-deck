@@ -16,6 +16,7 @@ import { CarromGame } from '@/features/games/carrom';
 import { ChessGame } from '@/features/games/chess';
 import { ColorThiefGame } from '@/features/games/color-thief';
 import { ConnectFourGame } from '@/features/games/connect-four';
+import { CrosswordClashGame } from '@/features/games/crossword-clash';
 import { DontPopItGame } from '@/features/games/dont-pop-it';
 import { GiantGame } from '@/features/games/dont-wake-the-giant';
 import { DrawingGuessingGame } from '@/features/games/drawing-guessing';
@@ -95,6 +96,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   chess: ChessGame,
   'color-thief': ColorThiefGame,
   'connect-four': ConnectFourGame,
+  'crossword-clash': CrosswordClashGame,
   'dont-pop-it': DontPopItGame,
   'dont-wake-the-giant': GiantGame,
   'drawing-guessing': DrawingGuessingGame,
