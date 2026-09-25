@@ -652,4 +652,20 @@ export const AVAILABLE_GAMES_2: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-25',
   },
+  {
+    id: 'word-battle',
+    name: 'Word Battle',
+    slug: 'word-battle',
+    description:
+      'Race against opponents with shared letters in Word Battle on PlayDeck. Unearth rare words, outscore rival players, and clash in fast multiplayer anagram rounds.',
+    category: CATEGORY_PUZZLE,
+    players: { min: 2, max: 8 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/word-battle/icon.svg',
+    bannerUrl: '/games/word-battle/cover.svg',
+    tags: [TAG_WORD_PUZZLE, TAG_MULTIPLAYER, TAG_SOLO, TAG_AI_OPPONENT, TAG_VOICE_CHAT],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-25',
+  },
 ];

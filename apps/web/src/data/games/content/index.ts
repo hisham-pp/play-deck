@@ -62,6 +62,7 @@ import { trustOrBetrayContent } from './trust-or-betray';
 import { unoCardsContent } from './uno-cards';
 import { unstableElevatorContent } from './unstable-elevator';
 import { whoAmIContent } from './who-am-i';
+import { wordBattleContent } from './word-battle';
 import { wordChainContent } from './word-chain';
 import { wordSearchArenaContent } from './word-search-arena';
 import { wrongAnswersOnlyContent } from './wrong-answers-only';
@@ -133,6 +134,7 @@ const ALL_CONTENT: GameContent[] = [
   drawingGuessingContent,
   fishingCompetitionContent,
   hideAndSeekContent,
+  wordBattleContent,
 ];
 
 /**
