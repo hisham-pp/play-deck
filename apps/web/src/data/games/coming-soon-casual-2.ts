@@ -41,20 +41,4 @@ export const COMING_SOON_CASUAL_GAMES_2: GameDefinition[] = [
     badge: BADGE_COMING_SOON,
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
-  {
-    id: 'drawing-guessing',
-    name: 'Drawing & Guessing',
-    slug: 'drawing-guessing',
-    description:
-      'Real-time multiplayer Drawing & Guessing party game. One player draws a secret word while others guess in real-time chat. Features a full drawing toolset, word system, time-based scoring, and compact stroke-based network protocol.',
-    category: CATEGORY_CASUAL,
-    players: { min: 2, max: 8 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/drawing-guessing/icon.svg',
-    bannerUrl: '/games/drawing-guessing/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
 ];

@@ -12,6 +12,7 @@ import { colorThiefContent } from './color-thief';
 import { connectFourContent } from './connect-four';
 import { dontPopItContent } from './dont-pop-it';
 import { dontWakeTheGiantContent } from './dont-wake-the-giant';
+import { drawingGuessingContent } from './drawing-guessing';
 import { flappyArcadeContent } from './flappy-arcade';
 import { floorIsLavaContent } from './floor-is-lava';
 import { gravityGolfContent } from './gravity-golf';
@@ -127,6 +128,7 @@ const ALL_CONTENT: GameContent[] = [
   stickmanPlatformerContent,
   stickmanRunnerContent,
   wordSearchArenaContent,
+  drawingGuessingContent,
 ];
 
 /**

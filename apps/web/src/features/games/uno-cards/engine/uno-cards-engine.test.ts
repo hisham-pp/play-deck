@@ -77,7 +77,7 @@ describe('Uno Cards Engine', () => {
 
   describe('Turn Execution & Action Cards', () => {
     function setupPredictableMatch(): UnoGameState {
-      const state = createInitialUnoState({ playerCount: 4 });
+      const state = createInitialUnoState({ playerCount: 4, targetWinningScore: 1000 });
       state.discardPile = [{ id: 'start', color: 'red', type: 'number', value: 5, symbol: '5' }];
       state.activeColor = 'red';
       state.currentTurnIndex = 0;
