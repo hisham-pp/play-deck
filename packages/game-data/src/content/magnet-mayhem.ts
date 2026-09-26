@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -95,7 +96,7 @@ export const magnetMayhemGame = defineGameModule({
       action: 'Dedicated PULL and BLAST on-screen buttons',
     },
     {
-      key: 'Esc',
+      key: GameControlKeys.ESC,
       action: 'Close dialogs or leave room',
     },
   ],

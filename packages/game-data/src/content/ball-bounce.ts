@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -86,11 +87,11 @@ export const ballBounceGame = defineGameModule({
   ],
   controls: [
     {
-      key: 'A / ←',
+      key: GameControlKeys.MOVE_LEFT,
       action: 'Move paddle left',
     },
     {
-      key: 'D / →',
+      key: GameControlKeys.MOVE_RIGHT,
       action: 'Move paddle right',
     },
     {
@@ -98,11 +99,11 @@ export const ballBounceGame = defineGameModule({
       action: 'Steer paddle directly',
     },
     {
-      key: 'Space / Enter',
+      key: GameControlKeys.SPACE_ENTER,
       action: 'Serve / launch ball',
     },
     {
-      key: 'P / Esc',
+      key: GameControlKeys.PAUSE,
       action: 'Pause / resume',
     },
   ],

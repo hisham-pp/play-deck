@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -94,11 +95,11 @@ export const pushYourLuckGame = defineGameModule({
       action: 'Bank the pot and pass the turn',
     },
     {
-      key: 'R',
+      key: GameControlKeys.R_RESTART,
       action: 'Start a new match',
     },
     {
-      key: 'Mouse / touch',
+      key: GameControlKeys.MOUSE_TOUCH,
       action: 'Tap the Push and Bank buttons',
     },
   ],

@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -79,19 +80,19 @@ export const runicMemoryGame = defineGameModule({
   ],
   controls: [
     {
-      key: 'Arrow keys',
+      key: GameControlKeys.ARROWS,
       action: 'Move tile selection',
     },
     {
-      key: 'Space / Enter',
+      key: GameControlKeys.SPACE_ENTER,
       action: 'Flip selected tile',
     },
     {
-      key: 'R',
+      key: GameControlKeys.R_RESTART,
       action: 'Restart board',
     },
     {
-      key: 'Mouse / touch',
+      key: GameControlKeys.MOUSE_TOUCH,
       action: 'Click or tap a tile',
     },
   ],

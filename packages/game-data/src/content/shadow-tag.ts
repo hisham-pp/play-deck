@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -77,11 +78,11 @@ export const shadowTagGame = defineGameModule({
   ],
   controls: [
     {
-      key: 'W / A / S / D or Arrows',
+      key: GameControlKeys.WASD_ARROWS,
       action: 'Move runner',
     },
     {
-      key: 'Shift',
+      key: GameControlKeys.SHIFT,
       action: 'Sneak (silent, leaves no dust)',
     },
     {
@@ -89,11 +90,11 @@ export const shadowTagGame = defineGameModule({
       action: 'Cover nearest lamp',
     },
     {
-      key: 'Q',
+      key: GameControlKeys.KEY_Q,
       action: 'Reverse nearest lamp orbit',
     },
     {
-      key: 'Touch / On-Screen Pad',
+      key: GameControlKeys.TOUCH_PAD,
       action: 'Mobile virtual controls',
     },
   ],

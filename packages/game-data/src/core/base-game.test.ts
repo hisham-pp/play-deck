@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameStatuses } from '../enums/status.enum';
+import { CommonControls } from '../helpers/controls.utils';
 import { resolveGameAssets, resolveGameBanner, resolveGameIcon } from './asset-resolver';
 import { BaseGameEntry, defineGame, defineGamePackage } from './base-game';
 import { BADGE_COMING_SOON, BADGE_READY_TO_PLAY } from './constants';
@@ -138,5 +140,18 @@ describe('BaseGameEntry & Asset Resolution', () => {
     });
 
     assert.equal(game.name, "Custom's Game!");
+  });
+
+  it('supports GameControlKeys enum and CommonControls presets', () => {
+    const restartCtrl = CommonControls.restart();
+    const pauseCtrl = CommonControls.pause();
+    const wasdCtrl = CommonControls.wasdArrows('Steer vehicle');
+
+    assert.equal(restartCtrl.key, GameControlKeys.R_RESTART);
+    assert.equal(restartCtrl.action, 'Restart game');
+    assert.equal(pauseCtrl.key, GameControlKeys.PAUSE);
+    assert.equal(pauseCtrl.action, 'Pause / resume');
+    assert.equal(wasdCtrl.key, GameControlKeys.WASD_ARROWS);
+    assert.equal(wasdCtrl.action, 'Steer vehicle');
   });
 });

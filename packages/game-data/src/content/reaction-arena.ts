@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -84,7 +85,7 @@ export const reactionArenaGame = defineGameModule({
       action: 'Select True (Match) or False (Different) on cognitive trials.',
     },
     {
-      key: 'Arrow Keys',
+      key: GameControlKeys.ARROWS,
       action: 'Instantly execute direction targets (Up, Down, Left, Right).',
     },
   ],

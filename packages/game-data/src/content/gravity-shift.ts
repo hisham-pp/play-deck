@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -72,7 +73,7 @@ export const gravityShiftGame = defineGameModule({
   ],
   controls: [
     {
-      key: 'A / D or Left / Right',
+      key: GameControlKeys.LEFT_RIGHT,
       action: 'Move along surface tangent',
     },
     {
@@ -80,7 +81,7 @@ export const gravityShiftGame = defineGameModule({
       action: 'Jump / Leap off walls',
     },
     {
-      key: 'Q / E',
+      key: GameControlKeys.KEY_Q_E,
       action: 'Rotate Gravity Counter-Clockwise / Clockwise',
     },
     {
@@ -88,7 +89,7 @@ export const gravityShiftGame = defineGameModule({
       action: 'Instant 4-Way Gravity Direction Shift',
     },
     {
-      key: 'R',
+      key: GameControlKeys.R_RESTART,
       action: 'Restart race (Solo Mode)',
     },
   ],

@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -90,7 +91,7 @@ export const guessTheLieGame = defineGameModule({
       action: 'Select which anonymous card you believe contains the fabrication',
     },
     {
-      key: 'Microphone (M)',
+      key: GameControlKeys.MIC_VOICE,
       action: 'Speak during the open voice debate stage to interrogate or defend',
     },
     {

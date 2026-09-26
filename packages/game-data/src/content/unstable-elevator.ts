@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -81,7 +82,7 @@ export const unstableElevatorGame = defineGameModule({
       action: 'Nudge claw horizontally',
     },
     {
-      key: 'Q / E',
+      key: GameControlKeys.KEY_Q_E,
       action: 'Rotate cargo angle',
     },
     {
@@ -89,7 +90,7 @@ export const unstableElevatorGame = defineGameModule({
       action: 'Release and drop cargo',
     },
     {
-      key: 'Mouse / Touch Drag',
+      key: GameControlKeys.MOUSE_DRAG,
       action: 'Direct crane positioning',
     },
   ],

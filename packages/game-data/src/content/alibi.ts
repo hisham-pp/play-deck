@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -89,7 +90,7 @@ export const alibiGame = defineGameModule({
       action: 'Select the player whose story you believe has inconsistencies',
     },
     {
-      key: 'Microphone',
+      key: GameControlKeys.MIC_VOICE,
       action: 'Compare stories and probe for inconsistencies on voice chat',
     },
     {

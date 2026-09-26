@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -95,15 +96,15 @@ export const secretSaboteurGame = defineGameModule({
   ],
   controls: [
     {
-      key: 'Click / Tap',
+      key: GameControlKeys.CLICK_TAP,
       action: 'Select a contribution card or accusation target',
     },
     {
-      key: 'Enter',
+      key: GameControlKeys.ENTER,
       action: 'Confirm card lock-in or send chat message',
     },
     {
-      key: 'Mouse / Touch',
+      key: GameControlKeys.MOUSE_TOUCH,
       action: 'Interact with accusation pills and trial ballot',
     },
   ],

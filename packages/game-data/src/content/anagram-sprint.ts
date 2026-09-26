@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -85,23 +86,23 @@ export const anagramSprintGame = defineGameModule({
   ],
   controls: [
     {
-      key: 'A–Z',
+      key: GameControlKeys.LETTERS_A_Z,
       action: 'Type your answer',
     },
     {
-      key: 'Enter',
+      key: GameControlKeys.ENTER,
       action: 'Submit the word',
     },
     {
-      key: 'Backspace',
+      key: GameControlKeys.BACKSPACE,
       action: 'Correct your entry',
     },
     {
-      key: 'Tab',
+      key: GameControlKeys.TAB,
       action: 'Reach the shuffle and hint buttons',
     },
     {
-      key: 'Click / tap',
+      key: GameControlKeys.CLICK_TAP,
       action: 'Shuffle the tiles or reveal the hint',
     },
   ],

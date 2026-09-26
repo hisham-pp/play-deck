@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -79,11 +80,11 @@ export const tinyTankArenaGame = defineGameModule({
   ],
   controls: [
     {
-      key: 'W / S or Up / Down',
+      key: GameControlKeys.UP_DOWN,
       action: 'Drive tank forward or reverse',
     },
     {
-      key: 'A / D or Left / Right',
+      key: GameControlKeys.LEFT_RIGHT,
       action: 'Steer tank hull left or right',
     },
     {
@@ -99,7 +100,7 @@ export const tinyTankArenaGame = defineGameModule({
       action: 'Cycle and switch equipped special munitions',
     },
     {
-      key: 'Esc',
+      key: GameControlKeys.ESC,
       action: 'Pause match or return to deployment bay',
     },
   ],

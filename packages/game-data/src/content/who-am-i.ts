@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -100,7 +101,7 @@ export const whoAmIGame = defineGameModule({
       action: 'Conclude your turn without risking a wrong guess',
     },
     {
-      key: 'Microphone (M)',
+      key: GameControlKeys.MIC_VOICE,
       action: 'Ask questions and laugh with friends over voice chat',
     },
   ],

@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -74,27 +75,27 @@ export const snakeGame = defineGameModule({
   ],
   controls: [
     {
-      key: 'W / ↑',
+      key: GameControlKeys.MOVE_UP,
       action: 'Move up',
     },
     {
-      key: 'S / ↓',
+      key: GameControlKeys.MOVE_DOWN,
       action: 'Move down',
     },
     {
-      key: 'A / ←',
+      key: GameControlKeys.MOVE_LEFT,
       action: 'Move left',
     },
     {
-      key: 'D / →',
+      key: GameControlKeys.MOVE_RIGHT,
       action: 'Move right',
     },
     {
-      key: 'Space',
+      key: GameControlKeys.SPACE,
       action: 'Pause / resume',
     },
     {
-      key: 'R',
+      key: GameControlKeys.R_RESTART,
       action: 'Restart game',
     },
   ],

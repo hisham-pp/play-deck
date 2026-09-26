@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -78,11 +79,11 @@ export const physicsFootballGame = defineGameModule({
   ],
   controls: [
     {
-      key: 'WASD / Arrow Keys',
+      key: GameControlKeys.WASD_ARROWS,
       action: 'Steer Player 1 (Blue) across the pitch',
     },
     {
-      key: 'Spacebar',
+      key: GameControlKeys.SPACEBAR,
       action: 'Execute power strike for Player 1',
     },
     {

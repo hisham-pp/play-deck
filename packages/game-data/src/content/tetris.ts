@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -85,19 +86,19 @@ export const tetrisGame = defineGameModule({
   ],
   controls: [
     {
-      key: 'A / ←',
+      key: GameControlKeys.MOVE_LEFT,
       action: 'Move left',
     },
     {
-      key: 'D / →',
+      key: GameControlKeys.MOVE_RIGHT,
       action: 'Move right',
     },
     {
-      key: 'S / ↓',
+      key: GameControlKeys.MOVE_DOWN,
       action: 'Soft drop',
     },
     {
-      key: 'Space',
+      key: GameControlKeys.SPACE,
       action: 'Hard drop',
     },
     {
@@ -113,11 +114,11 @@ export const tetrisGame = defineGameModule({
       action: 'Hold piece',
     },
     {
-      key: 'P / Esc',
+      key: GameControlKeys.PAUSE,
       action: 'Pause / resume',
     },
     {
-      key: 'R',
+      key: GameControlKeys.R_RESTART,
       action: 'Restart game',
     },
   ],

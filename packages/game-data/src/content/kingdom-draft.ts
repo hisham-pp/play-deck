@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -95,7 +96,7 @@ export const kingdomDraftGame = defineGameModule({
   ],
   controls: [
     {
-      key: 'Click / Tap',
+      key: GameControlKeys.CLICK_TAP,
       action: 'Select a card from the draft pool or click an empty grid cell to construct.',
     },
     {

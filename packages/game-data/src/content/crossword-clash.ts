@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -82,7 +83,7 @@ export const crosswordClashGame = defineGameModule({
       action: 'Enter letters into the active grid cell',
     },
     {
-      key: 'Arrow Keys',
+      key: GameControlKeys.ARROWS,
       action: 'Navigate cursor across adjacent non-black grid cells',
     },
     {

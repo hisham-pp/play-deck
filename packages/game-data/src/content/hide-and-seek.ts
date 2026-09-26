@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -73,7 +74,7 @@ export const hideAndSeekGame = defineGameModule({
   ],
   controls: [
     {
-      key: 'WASD / Arrow Keys',
+      key: GameControlKeys.WASD_ARROWS,
       action: 'Move player across the arena',
     },
     {
@@ -89,7 +90,7 @@ export const hideAndSeekGame = defineGameModule({
       action: 'Activate temporary ghost invisibility cloak (Hider)',
     },
     {
-      key: 'Spacebar',
+      key: GameControlKeys.SPACEBAR,
       action: 'Trigger speed sprint dash',
     },
   ],

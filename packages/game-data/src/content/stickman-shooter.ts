@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -83,7 +84,7 @@ export const stickmanShooterGame = defineGameModule({
       action: 'Aim crosshairs at hostile targets',
     },
     {
-      key: 'Left Click / Tap',
+      key: GameControlKeys.CLICK_TAP,
       action: 'Fire currently equipped weapon',
     },
     {

@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -94,7 +95,7 @@ export const imposterBuilderGame = defineGameModule({
       action: 'Select the player you believe is the Imposter',
     },
     {
-      key: 'Microphone',
+      key: GameControlKeys.MIC_VOICE,
       action: 'Discuss, bluff, and deduce via voice chat',
     },
   ],

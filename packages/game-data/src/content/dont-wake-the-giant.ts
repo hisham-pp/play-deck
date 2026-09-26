@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -79,11 +80,11 @@ export const dontWakeTheGiantGame = defineGameModule({
   ],
   controls: [
     {
-      key: 'W / A / S / D or Arrows',
+      key: GameControlKeys.WASD_ARROWS,
       action: 'Move',
     },
     {
-      key: 'Shift',
+      key: GameControlKeys.SHIFT,
       action: 'Run — fast and loud',
     },
     {
@@ -95,7 +96,7 @@ export const dontWakeTheGiantGame = defineGameModule({
       action: 'Take the treasure or charm in reach',
     },
     {
-      key: 'Touch / On-Screen Pad',
+      key: GameControlKeys.TOUCH_PAD,
       action: 'Mobile stick, gait toggle and take button',
     },
   ],

@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -75,19 +76,19 @@ export const game2048Game = defineGameModule({
   ],
   controls: [
     {
-      key: 'W / ↑',
+      key: GameControlKeys.MOVE_UP,
       action: 'Slide up',
     },
     {
-      key: 'S / ↓',
+      key: GameControlKeys.MOVE_DOWN,
       action: 'Slide down',
     },
     {
-      key: 'A / ←',
+      key: GameControlKeys.MOVE_LEFT,
       action: 'Slide left',
     },
     {
-      key: 'D / →',
+      key: GameControlKeys.MOVE_RIGHT,
       action: 'Slide right',
     },
     {
@@ -95,11 +96,11 @@ export const game2048Game = defineGameModule({
       action: 'Undo last move',
     },
     {
-      key: 'R',
+      key: GameControlKeys.R_RESTART,
       action: 'Restart game',
     },
     {
-      key: 'Swipe',
+      key: GameControlKeys.SWIPE,
       action: 'Slide in that direction (touch)',
     },
   ],

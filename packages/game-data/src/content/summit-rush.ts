@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -85,23 +86,23 @@ export const summitRushGame = defineGameModule({
   ],
   controls: [
     {
-      key: 'D / →',
+      key: GameControlKeys.MOVE_RIGHT,
       action: 'Throttle',
     },
     {
-      key: 'A / ←',
+      key: GameControlKeys.MOVE_LEFT,
       action: 'Brake / reverse',
     },
     {
-      key: 'Space / Enter',
+      key: GameControlKeys.SPACE_ENTER,
       action: 'Start / throttle',
     },
     {
-      key: 'P / Esc',
+      key: GameControlKeys.PAUSE,
       action: 'Pause / resume',
     },
     {
-      key: 'R',
+      key: GameControlKeys.R_RESTART,
       action: 'Restart run',
     },
     {

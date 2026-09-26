@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -81,7 +82,7 @@ export const trustOrBetrayGame = defineGameModule({
   ],
   controls: [
     {
-      key: 'C',
+      key: GameControlKeys.KEY_C,
       action: 'Select Cooperate decision',
     },
     {
@@ -89,11 +90,11 @@ export const trustOrBetrayGame = defineGameModule({
       action: 'Select Betray decision',
     },
     {
-      key: 'Enter',
+      key: GameControlKeys.ENTER,
       action: 'Confirm and lock in secret decision',
     },
     {
-      key: 'Mouse / Touch',
+      key: GameControlKeys.MOUSE_TOUCH,
       action: 'Tap options, accusation pills, or candidate cards',
     },
   ],

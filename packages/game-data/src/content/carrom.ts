@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -95,7 +96,7 @@ export const carromGame = defineGameModule({
       action: 'Flick striker onto the carrom board',
     },
     {
-      key: 'Mouse / Touch Drag',
+      key: GameControlKeys.MOUSE_DRAG,
       action: 'Drag striker along baseline or drag to aim and pull shot power',
     },
   ],

@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -76,23 +77,23 @@ export const ticTacToeGame = defineGameModule({
   ],
   controls: [
     {
-      key: '1 – 9',
+      key: GameControlKeys.DIGITS_1_9,
       action: 'Direct cell placement',
     },
     {
-      key: 'Arrow keys',
+      key: GameControlKeys.ARROWS,
       action: 'Navigate grid focus',
     },
     {
-      key: 'Enter / Space',
+      key: GameControlKeys.ENTER_SPACE,
       action: 'Confirm cell selection',
     },
     {
-      key: 'R',
+      key: GameControlKeys.R_RESTART,
       action: 'Restart current round',
     },
     {
-      key: 'Mouse / touch',
+      key: GameControlKeys.MOUSE_TOUCH,
       action: 'Tap or click a cell',
     },
   ],

@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -77,7 +78,7 @@ export const tinyIslandGame = defineGameModule({
   ],
   controls: [
     {
-      key: 'W / A / S / D or Arrows',
+      key: GameControlKeys.WASD_ARROWS,
       action: 'Move to adjacent tile',
     },
     {
@@ -85,11 +86,11 @@ export const tinyIslandGame = defineGameModule({
       action: 'Gather / scavenge resources',
     },
     {
-      key: 'Space',
+      key: GameControlKeys.SPACE,
       action: 'Pass remainder of turn',
     },
     {
-      key: 'Mouse / Touch',
+      key: GameControlKeys.MOUSE_TOUCH,
       action: 'Click tiles and action buttons',
     },
   ],

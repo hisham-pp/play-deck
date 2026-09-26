@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -81,11 +82,11 @@ export const hangmanDuelGame = defineGameModule({
       action: 'Guess Letter',
     },
     {
-      key: 'Enter',
+      key: GameControlKeys.ENTER,
       action: 'Submit Guess',
     },
     {
-      key: 'Space',
+      key: GameControlKeys.SPACE,
       action: 'Restart / Next Round',
     },
   ],

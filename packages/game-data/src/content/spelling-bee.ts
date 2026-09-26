@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -92,7 +93,7 @@ export const spellingBeeGame = defineGameModule({
       action: 'Submit your word for validation and scoring.',
     },
     {
-      key: 'Backspace',
+      key: GameControlKeys.BACKSPACE,
       action: 'Delete the last entered letter from your word.',
     },
     {

@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -84,11 +85,11 @@ export const stickmanPlatformerGame = defineGameModule({
       action: 'Jump',
     },
     {
-      key: 'P',
+      key: GameControlKeys.KEY_P,
       action: 'Pause / Resume game',
     },
     {
-      key: 'R',
+      key: GameControlKeys.R_RESTART,
       action: 'Restart run from level 1',
     },
     {

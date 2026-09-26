@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -85,11 +86,11 @@ export const gravityGolfGame = defineGameModule({
       action: 'Deploy or reposition gravity field',
     },
     {
-      key: 'Spacebar',
+      key: GameControlKeys.SPACEBAR,
       action: 'Launch orb or reset ball to tee',
     },
     {
-      key: 'R',
+      key: GameControlKeys.R_RESTART,
       action: 'Reset hole and clear placed fields',
     },
     {

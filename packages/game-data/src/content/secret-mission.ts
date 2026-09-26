@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -95,7 +96,7 @@ export const secretMissionGame = defineGameModule({
       action: 'Confirm or deny pending accusations from other players',
     },
     {
-      key: 'Microphone',
+      key: GameControlKeys.MIC_VOICE,
       action: 'Interact with players and complete social missions via voice chat',
     },
   ],

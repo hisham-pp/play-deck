@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -92,23 +93,23 @@ export const minesweeperGame = defineGameModule({
       action: 'Toggle flag',
     },
     {
-      key: 'Arrow keys / WASD',
+      key: GameControlKeys.WASD_ARROWS,
       action: 'Move selection',
     },
     {
-      key: 'Space / Enter',
+      key: GameControlKeys.SPACE_ENTER,
       action: 'Reveal selected cell',
     },
     {
-      key: 'F',
+      key: GameControlKeys.KEY_F,
       action: 'Flag selected cell',
     },
     {
-      key: 'C',
+      key: GameControlKeys.KEY_C,
       action: 'Chord selected cell',
     },
     {
-      key: 'R',
+      key: GameControlKeys.R_RESTART,
       action: 'Restart board',
     },
     {

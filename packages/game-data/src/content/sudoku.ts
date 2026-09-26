@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -82,11 +83,11 @@ export const sudokuGame = defineGameModule({
   ],
   controls: [
     {
-      key: 'Arrow keys / WASD',
+      key: GameControlKeys.WASD_ARROWS,
       action: 'Move selection',
     },
     {
-      key: '1 – 9',
+      key: GameControlKeys.DIGITS_1_9,
       action: 'Place digit',
     },
     {
@@ -110,11 +111,11 @@ export const sudokuGame = defineGameModule({
       action: 'Reveal a hint',
     },
     {
-      key: 'P / Esc',
+      key: GameControlKeys.PAUSE,
       action: 'Pause / resume',
     },
     {
-      key: 'R',
+      key: GameControlKeys.R_RESTART,
       action: 'Restart puzzle',
     },
   ],

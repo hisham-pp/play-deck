@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -86,27 +87,27 @@ export const colorThiefGame = defineGameModule({
   ],
   controls: [
     {
-      key: 'Arrow keys / WASD',
+      key: GameControlKeys.WASD_ARROWS,
       action: 'Move across the grid',
     },
     {
-      key: 'Enter / Space',
+      key: GameControlKeys.ENTER_SPACE,
       action: 'Claim the focused tile, or pick it as an ability target',
     },
     {
-      key: 'Q',
+      key: GameControlKeys.KEY_Q,
       action: 'Aim your colour’s ability',
     },
     {
-      key: 'E',
+      key: GameControlKeys.KEY_E,
       action: 'End your turn',
     },
     {
-      key: 'Escape',
+      key: GameControlKeys.ESC,
       action: 'Cancel an ability you are aiming',
     },
     {
-      key: 'Mouse / touch',
+      key: GameControlKeys.MOUSE_TOUCH,
       action: 'Tap a tile to claim or target it',
     },
   ],

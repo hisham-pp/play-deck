@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -87,7 +88,7 @@ export const oneWordStoryGame = defineGameModule({
       action: 'Click quick punctuation buttons (. , ! ? ...) to append grammar to your word.',
     },
     {
-      key: 'Click / Tap',
+      key: GameControlKeys.CLICK_TAP,
       action: 'Click words during the voting stage to cast ballots for funny and wild moments.',
     },
   ],

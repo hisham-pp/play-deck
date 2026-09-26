@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameControlKeys } from '../enums/controls.enum';
 import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
@@ -82,7 +83,7 @@ export const telephoneDrawingGame = defineGameModule({
   ],
   controls: [
     {
-      key: 'Mouse / Touch Drag',
+      key: GameControlKeys.MOUSE_DRAG,
       action: 'Draw strokes on the canvas using pencil or eraser',
     },
     {
@@ -98,7 +99,7 @@ export const telephoneDrawingGame = defineGameModule({
       action: 'Type description guesses during describe turns',
     },
     {
-      key: 'Microphone (M)',
+      key: GameControlKeys.MIC_VOICE,
       action: 'React and laugh with friends over live voice chat',
     },
   ],
