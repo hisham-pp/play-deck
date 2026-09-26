@@ -1,8 +1,7 @@
 import { defineGameModule } from '../core/base-game';
-import { GameCategories } from '../enums/category.enum';
-import { GameReleaseDates } from '../enums/release-date.enum';
-import { GameTags } from '../enums/tags.enum';
+import { GameCategories, GameReleaseDates, GameTags } from '../enums';
 import { getPCount } from '../helpers/players.utils';
+
 export const trainRushGame = defineGameModule({
   id: 'train-rush',
   description:

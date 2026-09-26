@@ -13,20 +13,18 @@ export async function resolve(specifier, context, nextResolve) {
   try {
     return await nextResolve(target, context);
   } catch (err) {
-    try {
-      return await nextResolve(target + '.ts', context);
-    } catch {
-      try {
-        return await nextResolve(target + '.tsx', context);
-      } catch {
+    const baseUrls = [target];
+    if (err && typeof err === 'object' && err.url) {
+      baseUrls.push(err.url);
+    }
+
+    for (const base of baseUrls) {
+      const candidates = [base + '.ts', base + '.tsx', base + '/index.ts', base + '/index.tsx'];
+      for (const candidate of candidates) {
         try {
-          return await nextResolve(target + '/index.ts', context);
+          return await nextResolve(candidate, context);
         } catch {
-          try {
-            return await nextResolve(target + '/index.tsx', context);
-          } catch {
-            // Throw original error
-          }
+          // continue
         }
       }
     }
