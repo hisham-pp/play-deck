@@ -56,6 +56,7 @@ import { StickmanArcheryGame } from '@/features/games/stickman-archery';
 import { StickmanClimberGame } from '@/features/games/stickman-climber';
 import { StickmanParkourGame } from '@/features/games/stickman-parkour';
 import { StickmanPlatformerGame } from '@/features/games/stickman-platformer';
+import { StickmanRacingGame } from '@/features/games/stickman-racing';
 import { StickmanRunnerGame } from '@/features/games/stickman-runner';
 import { SudokuGame } from '@/features/games/sudoku';
 import { SummitRushGame } from '@/features/games/summit-rush';
@@ -132,6 +133,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'stickman-climber': StickmanClimberGame,
   'stickman-parkour': StickmanParkourGame,
   'stickman-platformer': StickmanPlatformerGame,
+  'stickman-racing': StickmanRacingGame,
   'stickman-runner': StickmanRunnerGame,
   sudoku: SudokuGame,
   'summit-rush': SummitRushGame,

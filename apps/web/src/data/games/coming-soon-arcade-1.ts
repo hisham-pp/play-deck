@@ -31,28 +31,6 @@ export const COMING_SOON_ARCADE_GAMES_1: GameDefinition[] = [
     ],
   },
   {
-    id: 'stickman-racing',
-    name: 'Stickman Racing',
-    slug: 'stickman-racing',
-    description:
-      'Fast-paced arcade sprint gauntlet with hurdle leaps, slipstream speed boosts, and hazard lane evasion.',
-    category: CATEGORY_ARCADE,
-    players: { min: 1, max: 2 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/stickman-climber/icon.svg',
-    bannerUrl: '/games/stickman-climber/cover.svg',
-    tags: ['Action', 'Racing', 'Speed', 'Reflexes', TAG_HIGH_SCORE],
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-    subtype: 'racing',
-    difficultyPresets: ['easy', 'normal', 'hard'],
-    controls: [
-      { action: 'Lane Shift', key: 'A / D or Left / Right', touchAction: 'Swipe Left / Right' },
-      { action: 'Hurdle Jump', key: 'W / ArrowUp / Space', touchAction: 'Swipe Up' },
-      { action: 'Turbo Sprint', key: 'Shift', touchAction: 'Hold Boost Button' },
-    ],
-  },
-  {
     id: 'stickman-sword-fight',
     name: 'Stickman Sword Fight',
     slug: 'stickman-sword-fight',
