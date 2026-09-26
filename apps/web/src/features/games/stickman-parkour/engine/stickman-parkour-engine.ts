@@ -4,7 +4,8 @@
  * momentum multipliers, gap leap physics, wall kick vaults, and obstacle slides.
  */
 
-export type ParkourActionState = 'running' | 'jumping' | 'sliding' | 'wall_kick' | 'stumbled' | 'falling';
+export type ParkourActionState =
+  'running' | 'jumping' | 'sliding' | 'wall_kick' | 'stumbled' | 'falling';
 export type ObstacleType = 'pipe' | 'vent' | 'wall' | 'booster';
 
 export interface ParkourObstacle {
@@ -299,7 +300,7 @@ export function slidePlayer(state: StickmanParkourState): StickmanParkourState {
     p.state = 'sliding';
     p.slideTimer = SLIDE_DURATION;
     p.height = SLIDING_HEIGHT;
-    p.y += (STANDING_HEIGHT - SLIDING_HEIGHT); // lower to ground
+    p.y += STANDING_HEIGHT - SLIDING_HEIGHT; // lower to ground
 
     return {
       ...state,
@@ -343,7 +344,7 @@ export function stepParkourEngine(
     if (p.slideTimer <= 0) {
       p.state = 'running';
       p.height = STANDING_HEIGHT;
-      p.y -= (STANDING_HEIGHT - SLIDING_HEIGHT); // return to standing
+      p.y -= STANDING_HEIGHT - SLIDING_HEIGHT; // return to standing
     }
   }
 
@@ -354,7 +355,7 @@ export function stepParkourEngine(
   }
 
   // 4. Horizontal Velocity based on Momentum
-  const targetVx = (BASE_RUN_SPEED + (momentum - 1.0) * 150);
+  const targetVx = BASE_RUN_SPEED + (momentum - 1.0) * 150;
   p.vx = p.stumbleTimer > 0 ? BASE_RUN_SPEED * 0.4 : targetVx;
 
   // 5. Apply Gravity & Velocity
@@ -415,8 +416,7 @@ export function stepParkourEngine(
       const oTop = obs.y;
       const oBottom = obs.y + obs.height;
 
-      const isColliding =
-        pRight >= oLeft && pLeft <= oRight && pBottom >= oTop && pTop <= oBottom;
+      const isColliding = pRight >= oLeft && pLeft <= oRight && pBottom >= oTop && pTop <= oBottom;
 
       if (isColliding) {
         if (obs.type === 'booster') {

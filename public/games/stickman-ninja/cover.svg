@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#050814" />
+      <stop offset="45%" stop-color="#0c1326" />
+      <stop offset="75%" stop-color="#091c28" />
+      <stop offset="100%" stop-color="#03080d" />
+    </linearGradient>
+
+    <!-- Moonlight radial glow -->
+    <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+      <stop offset="35%" stop-color="#e2e8f0" stop-opacity="0.9" />
+      <stop offset="70%" stop-color="#38bdf8" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#0c1326" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Shuriken Cyan Energy Glow -->
+    <filter id="cyanGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="visionGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Smoke Bomb Fog Filter -->
+    <radialGradient id="smokeCloud" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#64748b" stop-opacity="0.4" />
+      <stop offset="50%" stop-color="#334155" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Background Sky -->
+  <rect width="1200" height="630" fill="url(#skyGrad)" />
+
+  <!-- Stars -->
+  <g fill="#ffffff" opacity="0.6">
+    <circle cx="120" cy="80" r="1.5" />
+    <circle cx="280" cy="140" r="1.2" />
+    <circle cx="450" cy="60" r="2" />
+    <circle cx="780" cy="90" r="1.5" />
+    <circle cx="920" cy="130" r="1.8" />
+    <circle cx="1060" cy="70" r="1.2" />
+    <circle cx="1140" cy="150" r="2.2" />
+    <circle cx="190" cy="220" r="1" />
+    <circle cx="340" cy="180" r="1.5" />
+  </g>
+
+  <!-- Giant Luminous Moon -->
+  <circle cx="720" cy="200" r="160" fill="url(#moonGlow)" />
+  <circle cx="720" cy="200" r="120" fill="#f8fafc" />
+
+  <!-- Distant Pagoda & Fortress Silhouettes -->
+  <path d="M850,440 L880,380 L870,380 L900,320 L890,320 L910,260 L920,260 L940,320 L930,320 L960,380 L950,380 L980,440 Z" fill="#070c17" opacity="0.85" />
+  <path d="M100,480 L180,430 L320,440 L450,420 L580,470 L720,450 L950,480 L1200,440 L1200,630 L0,630 L0,480 Z" fill="#0a101d" />
+
+  <!-- Smoke Cloud Effect in shadows -->
+  <circle cx="380" cy="480" r="110" fill="url(#smokeCloud)" />
+  <circle cx="440" cy="460" r="90" fill="url(#smokeCloud)" />
+
+  <!-- Castle Courtyard Floor & Balconies -->
+  <rect x="0" y="490" width="1200" height="140" fill="#050811" />
+  <line x1="0" y1="490" x2="1200" y2="490" stroke="#1e293b" stroke-width="3" />
+
+  <!-- Enemy Guard Vision Cone (Amber Searching) -->
+  <polygon points="960,520 740,460 720,560" fill="#f59e0b" fill-opacity="0.14" filter="url(#visionGlow)" />
+  <line x1="960" y1="520" x2="740" y2="460" stroke="#f59e0b" stroke-opacity="0.3" stroke-width="1.5" stroke-dasharray="6,4" />
+  <line x1="960" y1="520" x2="720" y2="560" stroke="#f59e0b" stroke-opacity="0.3" stroke-width="1.5" stroke-dasharray="6,4" />
+
+  <!-- Guard Stickman (Patrolling) -->
+  <g stroke="#f43f5e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Helmet / Horns -->
+    <path d="M950,475 L960,460 L970,475 Z" fill="#f43f5e" />
+    <circle cx="960" cy="480" r="12" fill="#050811" />
+    <line x1="960" y1="492" x2="960" y2="535" />
+    <!-- Spear -->
+    <line x1="945" y1="455" x2="945" y2="560" stroke="#cbd5e1" stroke-width="3" />
+    <polygon points="942,455 945,438 948,455" fill="#f43f5e" stroke="none" />
+    <!-- Arms holding spear -->
+    <line x1="960" y1="505" x2="945" y2="515" />
+    <!-- Legs in walking patrol -->
+    <line x1="960" y1="535" x2="948" y2="570" />
+    <line x1="960" y1="535" x2="974" y2="570" />
+  </g>
+
+  <!-- Foreground Rooftop Gable (Ninja Perch) -->
+  <path d="M120,440 L380,290 L520,380 L520,630 L0,630 L0,440 Z" fill="#04060b" />
+  <!-- Japanese Curved Tile Ridge -->
+  <path d="M110,445 Q240,360 380,285 Q460,335 530,385" stroke="#38bdf8" stroke-opacity="0.4" stroke-width="4" fill="none" />
+  <circle cx="380" cy="285" r="8" fill="#38bdf8" />
+
+  <!-- PLAYER STICKMAN NINJA (Agile Crouched Stance on Roof Ridge) -->
+  <g stroke="#f8fafc" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Ninja Head & Mask -->
+    <circle cx="370" cy="210" r="14" fill="#090d16" stroke="#38bdf8" stroke-width="4" filter="url(#cyanGlow)" />
+    <!-- Glowing Cyan Visor Eyes -->
+    <line x1="364" y1="210" x2="376" y2="210" stroke="#38bdf8" stroke-width="3" />
+    <!-- Trailing Red Ninja Scarf / Headband -->
+    <path d="M360,208 Q320,195 280,215 Q250,225 220,210" stroke="#ef4444" stroke-width="5" fill="none" />
+    <path d="M360,212 Q330,205 290,225" stroke="#b91c1c" stroke-width="4" fill="none" />
+
+    <!-- Torso (low center of gravity) -->
+    <line x1="370" y1="224" x2="385" y2="255" />
+
+    <!-- Crouched Legs on roof beam -->
+    <polyline points="385,255 405,270 388,285" />
+    <polyline points="385,255 365,272 355,285" />
+
+    <!-- Extended Throwing Arm -->
+    <line x1="373" y1="230" x2="425" y2="215" />
+    <!-- Back Balancing Arm -->
+    <line x1="373" y1="230" x2="340" y2="245" />
+  </g>
+
+  <!-- Lethal Glowing Shuriken in Hand / Orbit -->
+  <g transform="translate(435, 212)" filter="url(#cyanGlow)">
+    <path d="M0,-16 L4,-4 L16,0 L4,4 L0,16 L-4,4 L-16,0 L-4,-4 Z" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5" />
+    <circle cx="0" cy="0" r="3.5" fill="#04060b" />
+    <!-- Arc Motion Trails -->
+    <path d="M-20,-8 Q0,-24 20,-8" stroke="#38bdf8" stroke-width="2" stroke-opacity="0.8" fill="none" />
+    <path d="M20,8 Q0,24 -20,8" stroke="#38bdf8" stroke-width="2" stroke-opacity="0.8" fill="none" />
+  </g>
+
+  <!-- Typography & Badges -->
+  <g transform="translate(80, 110)">
+    <rect x="-10" y="-30" width="160" height="34" rx="8" fill="#0f172a" fill-opacity="0.9" stroke="#38bdf8" stroke-width="1.5" />
+    <text x="70" y="-8" fill="#38bdf8" font-family="monospace" font-size="14" font-weight="900" text-anchor="middle" letter-spacing="2">ARCADE STEALTH</text>
+
+    <text x="0" y="55" fill="#f8fafc" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="900" letter-spacing="1">STICKMAN</text>
+    <text x="0" y="125" fill="#38bdf8" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="900" letter-spacing="3" filter="url(#cyanGlow)">NINJA</text>
+
+    <!-- Japanese Kanji Silhouette Accent: 忍 (Shinobi / Stealth) -->
+    <text x="320" y="115" fill="#ef4444" font-family="sans-serif" font-size="95" font-weight="900" opacity="0.4">忍</text>
+
+    <text x="0" y="165" fill="#94a3b8" font-family="monospace" font-size="16" letter-spacing="1">SHADOW INFILTRATION • SHURIKENS • SILENT TAKEDOWNS</text>
+  </g>
+</svg>

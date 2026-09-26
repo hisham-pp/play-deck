@@ -26,6 +26,7 @@ import { FloorIsLavaGame } from '@/features/games/floor-is-lava';
 import { GravityGolfGame } from '@/features/games/gravity-golf';
 import { GravityShiftGame } from '@/features/games/gravity-shift';
 import { GuessTheLieGame } from '@/features/games/guess-the-lie';
+import { HangmanDuelGame } from '@/features/games/hangman-duel';
 import { HideSeekGame } from '@/features/games/hide-and-seek';
 import { HumanConveyorGame } from '@/features/games/human-conveyor-belt';
 import { ImposterBuilderGame } from '@/features/games/imposter-builder';
@@ -53,10 +54,15 @@ import { SnakeLadderGame } from '@/features/games/snake-and-ladder';
 import { SpellingBeeGame } from '@/features/games/spelling-bee';
 import { SpyNetworkGame } from '@/features/games/spy-network';
 import { StickmanArcheryGame } from '@/features/games/stickman-archery';
+import { StickmanBasketballGame } from '@/features/games/stickman-basketball';
 import { StickmanClimberGame } from '@/features/games/stickman-climber';
+import { StickmanNinjaGame } from '@/features/games/stickman-ninja';
 import { StickmanParkourGame } from '@/features/games/stickman-parkour';
 import { StickmanPlatformerGame } from '@/features/games/stickman-platformer';
+import { StickmanRacingGame } from '@/features/games/stickman-racing';
 import { StickmanRunnerGame } from '@/features/games/stickman-runner';
+import { StickmanShooterGame } from '@/features/games/stickman-shooter';
+import { StickmanSwordFightGame } from '@/features/games/stickman-sword-fight';
 import { SudokuGame } from '@/features/games/sudoku';
 import { SummitRushGame } from '@/features/games/summit-rush';
 import { TelephoneDrawingGame } from '@/features/games/telephone-drawing';
@@ -107,6 +113,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'gravity-golf': GravityGolfGame,
   'gravity-shift': GravityShiftGame,
   'guess-the-lie': GuessTheLieGame,
+  'hangman-duel': HangmanDuelGame,
   'hide-and-seek': HideSeekGame,
   'human-conveyor-belt': HumanConveyorGame,
   'kingdom-draft': KingdomDraftGame,
@@ -129,10 +136,15 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   snake: SnakeGame,
   'snake-and-ladder': SnakeLadderGame,
   'stickman-archery': StickmanArcheryGame,
+  'stickman-basketball': StickmanBasketballGame,
   'stickman-climber': StickmanClimberGame,
+  'stickman-ninja': StickmanNinjaGame,
   'stickman-parkour': StickmanParkourGame,
   'stickman-platformer': StickmanPlatformerGame,
+  'stickman-racing': StickmanRacingGame,
   'stickman-runner': StickmanRunnerGame,
+  'stickman-shooter': StickmanShooterGame,
+  'stickman-sword-fight': StickmanSwordFightGame,
   sudoku: SudokuGame,
   'summit-rush': SummitRushGame,
   tetris: TetrisGame,

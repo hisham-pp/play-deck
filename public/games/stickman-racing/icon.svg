@@ -1,0 +1,24 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="160" height="160" rx="24" fill="#0B1220"/>
+  <rect x="14" y="14" width="132" height="132" rx="18" fill="#111827" stroke="#F59E0B" stroke-width="2"/>
+  
+  <!-- Hurdle on track -->
+  <rect x="58" y="98" width="44" height="14" rx="2" fill="#EF4444" stroke="#F87171" stroke-width="1.5"/>
+  <line x1="64" y1="112" x2="64" y2="128" stroke="#94A3B8" stroke-width="2.5"/>
+  <line x1="96" y1="112" x2="96" y2="128" stroke="#94A3B8" stroke-width="2.5"/>
+
+  <!-- Speed Dash Streaks -->
+  <line x1="30" y1="75" x2="60" y2="75" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
+  <line x1="40" y1="90" x2="70" y2="90" stroke="#FBBF24" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Sprinter Stickman Leaping Hurdle -->
+  <circle cx="82" cy="46" r="13" fill="#F8FAFC"/>
+  <!-- Torso in forward lean -->
+  <path d="M82 59L88 84" stroke="#F8FAFC" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Arms pumping -->
+  <path d="M84 66L102 62L112 52" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M84 66L68 74L58 68" stroke="#F8FAFC" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Hurdle Clearance Legs -->
+  <path d="M88 84L108 85L122 78" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M88 84L76 96L62 105" stroke="#F8FAFC" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0c192c" />
+      <stop offset="70%" stop-color="#070c18" />
+      <stop offset="100%" stop-color="#02040a" />
+    </radialGradient>
+    <linearGradient id="bladeMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="40%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3.5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="160" height="160" rx="36" fill="url(#bgGlow)" stroke="#38bdf8" stroke-opacity="0.35" stroke-width="2" />
+
+  <!-- Shadow Moon Glow -->
+  <circle cx="80" cy="80" r="42" fill="#38bdf8" fill-opacity="0.08" />
+
+  <!-- Ninja Head Mask Silhouette with Red Headband Knot -->
+  <circle cx="80" cy="80" r="32" fill="#090d16" stroke="#1e293b" stroke-width="3" />
+  <!-- Red trailing headband knot -->
+  <path d="M54,78 Q36,66 22,76" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round" fill="none" />
+  <path d="M54,82 Q34,76 18,90" stroke="#b91c1c" stroke-width="3.5" stroke-linecap="round" fill="none" />
+
+  <!-- Glowing Cyan Shinobi Eyes -->
+  <polygon points="68,78 76,76 77,80 69,81" fill="#38bdf8" filter="url(#glow)" />
+  <polygon points="92,78 84,76 83,80 91,81" fill="#38bdf8" filter="url(#glow)" />
+
+  <!-- Spinning Shuriken in Foreground -->
+  <g transform="translate(108, 106) scale(0.9)" filter="url(#glow)">
+    <!-- 4-Pointed Ninja Star -->
+    <path d="M0,-28 L5,-7 L28,0 L5,7 L0,28 L-5,7 L-28,0 L-5,-7 Z" fill="url(#bladeMetal)" stroke="#38bdf8" stroke-width="1.5" />
+    <circle cx="0" cy="0" r="5" fill="#02040a" stroke="#38bdf8" stroke-width="1.5" />
+    <!-- Center Hole -->
+    <circle cx="0" cy="0" r="2.5" fill="#38bdf8" />
+  </g>
+</svg>

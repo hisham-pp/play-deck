@@ -169,9 +169,7 @@ const CANVAS_HEIGHT = 540;
 
 export function StickmanParkourGame() {
   const { recordGamePlayed } = usePlayerStore();
-  const savedHighScore = usePlayerStore(
-    (s) => s.stats.bestScores?.['stickman-parkour'] ?? 0,
-  );
+  const savedHighScore = usePlayerStore((s) => s.stats.bestScores?.['stickman-parkour'] ?? 0);
 
   const [state, setState] = useState<StickmanParkourState>(() =>
     createInitialParkourState(savedHighScore),
@@ -255,10 +253,7 @@ export function StickmanParkourGame() {
           // Audio triggers
           if (updated.stats.boostersHit > prev.stats.boostersHit) {
             parkourAudio.playBoost();
-          } else if (
-            updated.player.stumbleTimer > 0 &&
-            prev.player.stumbleTimer <= 0
-          ) {
+          } else if (updated.player.stumbleTimer > 0 && prev.player.stumbleTimer <= 0) {
             parkourAudio.playStumble();
           }
 
@@ -302,14 +297,14 @@ export function StickmanParkourGame() {
     // Far Skyline (Slow parallax 0.1x)
     ctx.fillStyle = '#0f182c';
     for (let i = 0; i < 15; i++) {
-      const bX = (i * 140 - (cameraX * 0.1) % 1400) - 200;
+      const bX = i * 140 - ((cameraX * 0.1) % 1400) - 200;
       ctx.fillRect(bX, 220 + (i % 4) * 30, 90, 320);
     }
 
     // Midground Skyline (0.3x)
     ctx.fillStyle = '#141d33';
     for (let i = 0; i < 12; i++) {
-      const bX = (i * 180 - (cameraX * 0.3) % 2160) - 200;
+      const bX = i * 180 - ((cameraX * 0.3) % 2160) - 200;
       ctx.fillRect(bX, 160 + (i % 3) * 45, 120, 380);
 
       // Neon roof top antenna light
@@ -525,14 +520,22 @@ export function StickmanParkourGame() {
             className="rounded-lg border border-surface-border bg-surface-base p-1.5 text-slate-400 hover:text-white transition"
             aria-label={isMuted ? 'Unmute' : 'Mute'}
           >
-            {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4 text-cyan-400" />}
+            {isMuted ? (
+              <VolumeX className="h-4 w-4" />
+            ) : (
+              <Volume2 className="h-4 w-4 text-cyan-400" />
+            )}
           </button>
           <button
             onClick={() => setIsPaused((p) => !p)}
             className="rounded-lg border border-surface-border bg-surface-base p-1.5 text-slate-400 hover:text-white transition"
             aria-label="Pause"
           >
-            {isPaused ? <Play className="h-4 w-4 text-emerald-400" /> : <Pause className="h-4 w-4" />}
+            {isPaused ? (
+              <Play className="h-4 w-4 text-emerald-400" />
+            ) : (
+              <Pause className="h-4 w-4" />
+            )}
           </button>
         </div>
       </div>
@@ -575,11 +578,16 @@ export function StickmanParkourGame() {
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/85 backdrop-blur-md p-6 text-center">
             <h2 className="text-3xl font-black text-cyan-400 tracking-wider">STICKMAN PARKOUR</h2>
             <p className="mt-2 max-w-md text-sm text-slate-300">
-              High-speed rooftop freerunning across a neon skyline. Leap chasms, kick off walls, and slide under ventilation pipes!
+              High-speed rooftop freerunning across a neon skyline. Leap chasms, kick off walls, and
+              slide under ventilation pipes!
             </p>
             <div className="mt-4 flex flex-wrap justify-center gap-2 text-xs text-slate-400">
-              <span className="rounded bg-surface-raised px-2 py-1 border border-surface-border">⬆️ Space / W: Jump &amp; Wall Vault</span>
-              <span className="rounded bg-surface-raised px-2 py-1 border border-surface-border">⬇️ S / Down: Slide &amp; Roll</span>
+              <span className="rounded bg-surface-raised px-2 py-1 border border-surface-border">
+                ⬆️ Space / W: Jump &amp; Wall Vault
+              </span>
+              <span className="rounded bg-surface-raised px-2 py-1 border border-surface-border">
+                ⬇️ S / Down: Slide &amp; Roll
+              </span>
             </div>
             <button
               onClick={handleStart}
@@ -595,8 +603,12 @@ export function StickmanParkourGame() {
         {state.status === 'game_over' && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/90 backdrop-blur-md p-6 text-center">
             <Sparkles className="h-12 w-12 text-cyan-400 animate-bounce" />
-            <h2 className="mt-2 text-3xl font-black text-slate-100 tracking-wider">RUN TERMINATED</h2>
-            <p className="text-sm text-slate-300">Fell from the skyline after {state.distanceMeters} meters.</p>
+            <h2 className="mt-2 text-3xl font-black text-slate-100 tracking-wider">
+              RUN TERMINATED
+            </h2>
+            <p className="text-sm text-slate-300">
+              Fell from the skyline after {state.distanceMeters} meters.
+            </p>
 
             <div className="mt-5 grid grid-cols-2 gap-3 w-full max-w-xs text-left text-xs">
               <div className="rounded-lg bg-surface-base p-2.5 border border-surface-border">

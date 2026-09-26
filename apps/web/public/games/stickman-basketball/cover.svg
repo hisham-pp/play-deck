@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0a0f1d" />
+      <stop offset="45%" stop-color="#141a29" />
+      <stop offset="75%" stop-color="#1e1822" />
+      <stop offset="100%" stop-color="#0b080c" />
+    </linearGradient>
+
+    <!-- Stadium Floodlight Glow -->
+    <radialGradient id="stadiumGlow" cx="50%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="#f97316" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#0a0f1d" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="ballFire" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="40%" stop-color="#f97316" />
+      <stop offset="90%" stop-color="#ea580c" />
+      <stop offset="100%" stop-color="#9a3412" />
+    </radialGradient>
+
+    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#skyGrad)" />
+  <rect width="1200" height="630" fill="url(#stadiumGlow)" />
+
+  <!-- City Skyline in Distance -->
+  <path d="M0,450 L60,410 L140,430 L220,380 L310,400 L440,360 L560,410 L700,370 L840,420 L960,350 L1080,390 L1200,360 L1200,630 L0,630 Z" fill="#080c14" opacity="0.8" />
+
+  <!-- Court Floor (Urban Blacktop / Neon Acrylic) -->
+  <rect x="0" y="470" width="1200" height="160" fill="#0c101a" />
+  <line x1="0" y1="470" x2="1200" y2="470" stroke="#f59e0b" stroke-width="4" filter="url(#neonGlow)" />
+
+  <!-- Court Key & Free Throw Arc -->
+  <path d="M400,630 L400,490 L800,490 L800,630" stroke="#38bdf8" stroke-width="3" stroke-opacity="0.4" fill="none" />
+  <circle cx="600" cy="490" r="110" stroke="#38bdf8" stroke-width="3" stroke-opacity="0.4" fill="none" />
+
+  <!-- Basketball Hoop Structure (Right Side) -->
+  <!-- Support Pole -->
+  <line x1="1020" y1="470" x2="1020" y2="150" stroke="#334155" stroke-width="12" />
+  <line x1="1020" y1="190" x2="940" y2="210" stroke="#475569" stroke-width="8" />
+  <!-- Glass Backboard -->
+  <rect x="920" y="140" width="16" height="150" rx="4" fill="#0f172a" fill-opacity="0.85" stroke="#f8fafc" stroke-width="3" />
+  <rect x="924" y="180" width="10" height="65" stroke="#f43f5e" stroke-width="3" fill="none" />
+  <!-- Orange Rim -->
+  <line x1="840" y1="235" x2="920" y2="235" stroke="#ea580c" stroke-width="6" stroke-linecap="round" filter="url(#neonGlow)" />
+  <!-- Net (Chain links) -->
+  <polygon points="840,235 920,235 905,305 855,305" fill="#f8fafc" fill-opacity="0.1" stroke="#f8fafc" stroke-width="2" stroke-dasharray="8,4" />
+
+  <!-- DEFENDER STICKMAN (Leaping to block) -->
+  <g stroke="#f43f5e" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Head -->
+    <circle cx="780" cy="270" r="14" fill="#0c101a" />
+    <!-- Torso -->
+    <line x1="780" y1="284" x2="775" y2="340" />
+    <!-- Extended Contesting Arms -->
+    <line x1="780" y1="295" x2="815" y2="235" />
+    <line x1="780" y1="295" x2="760" y2="245" />
+    <!-- Splayed Legs (jumping) -->
+    <line x1="775" y1="340" x2="750" y2="395" />
+    <line x1="775" y1="340" x2="795" y2="390" />
+  </g>
+
+  <!-- Fire Dunk Comet Trails -->
+  <path d="M580,240 Q680,180 820,185" stroke="#f97316" stroke-width="8" stroke-linecap="round" opacity="0.6" filter="url(#neonGlow)" fill="none" />
+  <path d="M620,260 Q720,200 830,195" stroke="#f59e0b" stroke-width="4" stroke-linecap="round" opacity="0.8" filter="url(#neonGlow)" fill="none" />
+
+  <!-- PLAYER STICKMAN (Soaring High-Flying Slam Dunk Pose) -->
+  <g stroke="#38bdf8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Head with cyan sweatband -->
+    <circle cx="700" cy="180" r="15" fill="#0c101a" />
+    <line x1="688" y1="178" x2="712" y2="178" stroke="#38bdf8" stroke-width="4" />
+    <!-- Curved athletic torso -->
+    <path d="M700,195 Q725,230 715,260" fill="none" />
+    <!-- Cocked Dunk Arm holding flaming ball -->
+    <polyline points="710,210 760,175 830,170" />
+    <!-- Guide Arm -->
+    <polyline points="710,210 680,230 660,250" stroke="#f8fafc" />
+    <!-- Trailing dynamic legs in mid-air hang time -->
+    <polyline points="715,260 670,290 645,340" />
+    <polyline points="715,260 705,305 690,360" />
+  </g>
+
+  <!-- Flaming Basketball at (840, 165) -->
+  <g transform="translate(840, 165)" filter="url(#neonGlow)">
+    <circle cx="0" cy="0" r="26" fill="url(#ballFire)" stroke="#7c2d12" stroke-width="2" />
+    <!-- Seams -->
+    <line x1="-26" y1="0" x2="26" y2="0" stroke="#431407" stroke-width="2.5" />
+    <path d="M0,-26 Q-12,0 0,26" stroke="#431407" stroke-width="2" fill="none" />
+    <path d="M0,-26 Q12,0 0,26" stroke="#431407" stroke-width="2" fill="none" />
+  </g>
+
+  <!-- Impact Sparks around hoop -->
+  <g fill="#fbbf24" filter="url(#neonGlow)">
+    <circle cx="860" cy="140" r="3" />
+    <circle cx="880" cy="190" r="2.5" />
+    <circle cx="820" cy="150" r="4" />
+    <circle cx="800" cy="200" r="3" />
+    <circle cx="910" cy="220" r="3.5" />
+  </g>
+
+  <!-- Typography & Badges -->
+  <g transform="translate(80, 110)">
+    <rect x="-10" y="-30" width="170" height="34" rx="8" fill="#0f172a" fill-opacity="0.9" stroke="#f59e0b" stroke-width="1.5" />
+    <text x="75" y="-8" fill="#f59e0b" font-family="monospace" font-size="14" font-weight="900" text-anchor="middle" letter-spacing="2">ARCADE STREETBALL</text>
+
+    <text x="0" y="55" fill="#f8fafc" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="900" letter-spacing="1">STICKMAN</text>
+    <text x="0" y="125" fill="#f59e0b" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="900" letter-spacing="3" filter="url(#neonGlow)">BASKETBALL</text>
+
+    <text x="0" y="165" fill="#94a3b8" font-family="monospace" font-size="16" letter-spacing="1">GRAVITY TRAJECTORY • CROSSOVERS • RIM-ROCKING DUNKS</text>
+  </g>
+</svg>

@@ -1,0 +1,61 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="36" fill="#090D16"/>
+  <rect x="40" y="40" width="1120" height="550" rx="28" fill="url(#racing_sky)"/>
+  
+  <!-- Stadium Lights & Neon Bleachers -->
+  <circle cx="280" cy="120" r="4" fill="#38BDF8"/>
+  <circle cx="340" cy="115" r="4" fill="#38BDF8"/>
+  <circle cx="400" cy="120" r="4" fill="#38BDF8"/>
+  <circle cx="800" cy="120" r="4" fill="#F59E0B"/>
+  <circle cx="860" cy="115" r="4" fill="#F59E0B"/>
+  <circle cx="920" cy="120" r="4" fill="#F59E0B"/>
+
+  <!-- Perspective 3-Lane Track Surface -->
+  <path d="M420 280L160 590H1040L780 280H420Z" fill="#1E293B"/>
+  
+  <!-- Track Lane Dividers (Glowing Lines) -->
+  <line x1="540" y1="280" x2="450" y2="590" stroke="#F59E0B" stroke-width="4" stroke-dasharray="16 12"/>
+  <line x1="660" y1="280" x2="750" y2="590" stroke="#F59E0B" stroke-width="4" stroke-dasharray="16 12"/>
+  <line x1="420" y1="280" x2="160" y2="590" stroke="#EF4444" stroke-width="5"/>
+  <line x1="780" y1="280" x2="1040" y2="590" stroke="#EF4444" stroke-width="5"/>
+
+  <!-- Neon Hurdles on Track -->
+  <rect x="560" y="380" width="80" height="24" rx="4" fill="#EF4444" stroke="#F87171" stroke-width="2"/>
+  <line x1="570" y1="404" x2="570" y2="425" stroke="#94A3B8" stroke-width="3"/>
+  <line x1="630" y1="404" x2="630" y2="425" stroke="#94A3B8" stroke-width="3"/>
+
+  <!-- Rival Stickman in Lane 1 -->
+  <circle cx="380" cy="410" r="16" fill="#94A3B8"/>
+  <path d="M380 426L370 470" stroke="#94A3B8" stroke-width="6" stroke-linecap="round"/>
+  <path d="M370 470L345 505" stroke="#94A3B8" stroke-width="6" stroke-linecap="round"/>
+  <path d="M370 470L390 500" stroke="#94A3B8" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- Lead Hero Stickman Leaping Hurdle in Lane 2 -->
+  <circle cx="600" cy="290" r="28" fill="#F8FAFC"/>
+  <!-- Torso & Stride in air -->
+  <path d="M600 318L615 380" stroke="#F8FAFC" stroke-width="10" stroke-linecap="round"/>
+  <!-- Sprinting Arms -->
+  <path d="M605 335L650 330L685 315" stroke="#F59E0B" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M605 335L565 355L535 345" stroke="#F8FAFC" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Leaping Hurdle Clearance Legs -->
+  <path d="M615 380L670 385L720 375" stroke="#F59E0B" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M615 380L575 410L540 435" stroke="#F8FAFC" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Slipstream Turbo Boost Particles -->
+  <path d="M490 350H550" stroke="#F59E0B" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 8"/>
+  <path d="M470 370H540" stroke="#FBBF24" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Typography -->
+  <text x="120" y="110" fill="#F59E0B" font-family="Arial, sans-serif" font-size="46" font-weight="700" letter-spacing="6">PLAYDECK</text>
+  <text x="120" y="380" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="96" font-weight="800">STICKMAN</text>
+  <text x="120" y="475" fill="#F59E0B" font-family="Arial, sans-serif" font-size="96" font-weight="800">RACING</text>
+  <text x="120" y="530" fill="#94A3B8" font-family="Arial, sans-serif" font-size="28" font-weight="600" letter-spacing="3">ARCADE SPRINT &amp; HURDLE GAUNTLET</text>
+
+  <defs>
+    <linearGradient id="racing_sky" x1="120" y1="60" x2="1080" y2="582" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="0.6" stop-color="#090D16"/>
+      <stop offset="1" stop-color="#1A1104"/>
+    </linearGradient>
+  </defs>
+</svg>
