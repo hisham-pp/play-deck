@@ -1,299 +1,82 @@
-import type { AuctionItem, ComboSet } from '../types/auction-panic.types';
+import type { AuctionItem } from '../types/auction-panic.types';
 
-export const COMBO_SETS: ComboSet[] = [
-  {
-    id: 'pharaoh-legacy',
-    name: "The Pharaoh's Legacy",
-    requiredItemIds: ['pharaoh-mask', 'scarab-amulet', 'canopic-jar'],
-    bonusPoints: 600,
-    description: 'Assemble all 3 sacred relics of the ancient desert kings.',
-  },
-  {
-    id: 'cyberpunk-trove',
-    name: 'Cyberpunk Trove',
-    requiredItemIds: ['neural-chip', 'plasma-blade', 'quantum-core'],
-    bonusPoints: 550,
-    description: 'Collect high-end cybernetic hardware from 2099.',
-  },
-  {
-    id: 'masterpiece-vault',
-    name: 'Masterpiece Vault',
-    requiredItemIds: ['mona-sketch', 'golden-chalice', 'baroque-frame'],
-    bonusPoints: 500,
-    description: 'Curate a trio of European renaissance museum treasures.',
-  },
-  {
-    id: 'oddity-cabinet',
-    name: 'Curio Cabinet',
-    requiredItemIds: ['crystal-skull', 'mermaid-fossil', 'mystic-orb'],
-    bonusPoints: 450,
-    description: 'Gather legendary supernatural specimens from the occult fringe.',
-  },
-];
+export { COMBO_SETS } from './auction-combos';
+
+const CAT_ANTIQUITIES = 'antiquities' as const;
+const CAT_GALACTIC_TECH = 'galactic-tech' as const;
+const CAT_FINE_ART = 'fine-art' as const;
+const CAT_ODDITIES = 'oddities' as const;
+const CAT_JUNK = 'junk' as const;
+
+const RARITY_COMMON = 'common' as const;
+const RARITY_UNCOMMON = 'uncommon' as const;
+const RARITY_RARE = 'rare' as const;
+const RARITY_LEGENDARY = 'legendary' as const;
+const RARITY_CURSED = 'cursed' as const;
+
+const SET_PHARAOH = 'pharaoh-legacy' as const;
+const SET_CYBERPUNK = 'cyberpunk-trove' as const;
+const SET_MASTERPIECE = 'masterpiece-vault' as const;
+const SET_ODDITY = 'oddity-cabinet' as const;
+
+function makeItem(
+  id: string,
+  name: string,
+  category: AuctionItem['category'],
+  rarity: AuctionItem['rarity'],
+  hint: string,
+  crypticDescription: string,
+  baseValue: number,
+  icon: string,
+  extra?: Partial<AuctionItem>,
+): AuctionItem {
+  return {
+    id,
+    name,
+    category,
+    rarity,
+    hint,
+    crypticDescription,
+    baseValue,
+    isJunk: extra?.isJunk ?? false,
+    icon,
+    ...extra,
+  };
+}
 
 export const AUCTION_ITEMS_CATALOG: AuctionItem[] = [
   // Antiquities
-  {
-    id: 'pharaoh-mask',
-    name: 'Gilded Burial Mask',
-    category: 'antiquities',
-    rarity: 'legendary',
-    hint: 'Gleams under torchlight; heavy solid gold with lapis lazuli eyes.',
-    crypticDescription: 'Unearthed from the Valley of the Kings. Weighs 12 kilograms of pure gold.',
-    baseValue: 950,
-    isJunk: false,
-    comboSetId: 'pharaoh-legacy',
-    icon: '👑',
-  },
-  {
-    id: 'scarab-amulet',
-    name: 'Obsidian Scarab Amulet',
-    category: 'antiquities',
-    rarity: 'rare',
-    hint: 'Carved beetle amulet pulsing with faint mystical energy.',
-    crypticDescription:
-      'Anointed by priests during the third dynasty. Highly sought by occultists.',
-    baseValue: 550,
-    isJunk: false,
-    comboSetId: 'pharaoh-legacy',
-    icon: '🪲',
-  },
-  {
-    id: 'canopic-jar',
-    name: 'Alabaster Canopic Jar',
-    category: 'antiquities',
-    rarity: 'uncommon',
-    hint: 'A sealed stone jar adorned with a falcon head stopper.',
-    crypticDescription: 'Preserved royal urn containing ancient perfumes and resins.',
-    baseValue: 400,
-    isJunk: false,
-    comboSetId: 'pharaoh-legacy',
-    icon: '🏺',
-  },
+  makeItem('pharaoh-mask', 'Gilded Burial Mask', CAT_ANTIQUITIES, RARITY_LEGENDARY, 'Gleams under torchlight; heavy solid gold with lapis lazuli eyes.', 'Unearthed from the Valley of the Kings. Weighs 12 kilograms of pure gold.', 950, '👑', { comboSetId: SET_PHARAOH }),
+  makeItem('scarab-amulet', 'Obsidian Scarab Amulet', CAT_ANTIQUITIES, RARITY_RARE, 'Carved beetle amulet pulsing with faint mystical energy.', 'Anointed by priests during the third dynasty. Highly sought by occultists.', 550, '🪲', { comboSetId: SET_PHARAOH }),
+  makeItem('canopic-jar', 'Alabaster Canopic Jar', CAT_ANTIQUITIES, RARITY_UNCOMMON, 'A sealed stone jar adorned with a falcon head stopper.', 'Preserved royal urn containing ancient perfumes and resins.', 400, '🏺', { comboSetId: SET_PHARAOH }),
 
   // Galactic Tech
-  {
-    id: 'quantum-core',
-    name: 'Sub-Zero Quantum Core',
-    category: 'galactic-tech',
-    rarity: 'legendary',
-    hint: 'Humming cylindrical reactor cell venting cryogenic vapor.',
-    crypticDescription: 'Power source capable of warping local spacetime. Extremely valuable.',
-    baseValue: 1000,
-    isJunk: false,
-    comboSetId: 'cyberpunk-trove',
-    icon: '🔮',
-  },
-  {
-    id: 'plasma-blade',
-    name: 'Overcharged Plasma Blade',
-    category: 'galactic-tech',
-    rarity: 'rare',
-    hint: 'Chrome hilt emitting a blinding ionizing beam.',
-    crypticDescription: 'Military-grade prototype from an orbital black-site laboratory.',
-    baseValue: 600,
-    isJunk: false,
-    comboSetId: 'cyberpunk-trove',
-    icon: '⚡',
-  },
-  {
-    id: 'neural-chip',
-    name: 'Cortex Neural Interface',
-    category: 'galactic-tech',
-    rarity: 'uncommon',
-    hint: 'Microscopic gold wire array encased in synthetic diamond.',
-    crypticDescription: 'Direct brain-computer link used by high-frequency market operators.',
-    baseValue: 420,
-    isJunk: false,
-    comboSetId: 'cyberpunk-trove',
-    icon: '💾',
-  },
+  makeItem('quantum-core', 'Sub-Zero Quantum Core', CAT_GALACTIC_TECH, RARITY_LEGENDARY, 'Humming cylindrical reactor cell venting cryogenic vapor.', 'Power source capable of warping local spacetime. Extremely valuable.', 1000, '🔮', { comboSetId: SET_CYBERPUNK }),
+  makeItem('plasma-blade', 'Overcharged Plasma Blade', CAT_GALACTIC_TECH, RARITY_RARE, 'Chrome hilt emitting a blinding ionizing beam.', 'Military-grade prototype from an orbital black-site laboratory.', 600, '⚡', { comboSetId: SET_CYBERPUNK }),
+  makeItem('neural-chip', 'Cortex Neural Interface', CAT_GALACTIC_TECH, RARITY_UNCOMMON, 'Microscopic gold wire array encased in synthetic diamond.', 'Direct brain-computer link used by high-frequency market operators.', 420, '💾', { comboSetId: SET_CYBERPUNK }),
 
   // Fine Art
-  {
-    id: 'mona-sketch',
-    name: 'Original Charcoal Study',
-    category: 'fine-art',
-    rarity: 'legendary',
-    hint: 'Framed parchment with delicate hand-drawn enigmatic smile.',
-    crypticDescription:
-      'Lost preliminary study by an Italian polymath. Verified by top auction houses.',
-    baseValue: 900,
-    isJunk: false,
-    comboSetId: 'masterpiece-vault',
-    icon: '🎨',
-  },
-  {
-    id: 'golden-chalice',
-    name: 'Imperial Coronation Chalice',
-    category: 'fine-art',
-    rarity: 'rare',
-    hint: 'Chased goblet encrusted with emeralds and rubies.',
-    crypticDescription: 'Used in 16th-century European coronation ceremonies.',
-    baseValue: 620,
-    isJunk: false,
-    comboSetId: 'masterpiece-vault',
-    icon: '🏆',
-  },
-  {
-    id: 'baroque-frame',
-    name: 'Hand-Carved Gilt Frame',
-    category: 'fine-art',
-    rarity: 'uncommon',
-    hint: 'Opulent wooden frame with ornate floral filigree.',
-    crypticDescription: 'Empty 18th-century Venetian frame valued for its pristine gold leaf.',
-    baseValue: 380,
-    isJunk: false,
-    comboSetId: 'masterpiece-vault',
-    icon: '🖼️',
-  },
+  makeItem('mona-sketch', 'Original Charcoal Study', CAT_FINE_ART, RARITY_LEGENDARY, 'Framed parchment with delicate hand-drawn enigmatic smile.', 'Lost preliminary study by an Italian polymath. Verified by top auction houses.', 900, '🎨', { comboSetId: SET_MASTERPIECE }),
+  makeItem('golden-chalice', 'Imperial Coronation Chalice', CAT_FINE_ART, RARITY_RARE, 'Chased goblet encrusted with emeralds and rubies.', 'Used in 16th-century European coronation ceremonies.', 620, '🏆', { comboSetId: SET_MASTERPIECE }),
+  makeItem('baroque-frame', 'Hand-Carved Gilt Frame', CAT_FINE_ART, RARITY_UNCOMMON, 'Opulent wooden frame with ornate floral filigree.', 'Empty 18th-century Venetian frame valued for its pristine gold leaf.', 380, '🖼️', { comboSetId: SET_MASTERPIECE }),
 
   // Oddities
-  {
-    id: 'crystal-skull',
-    name: 'Prismatic Quartz Skull',
-    category: 'oddities',
-    rarity: 'rare',
-    hint: 'Translucent skull refracting rainbow beams onto the gallery walls.',
-    crypticDescription: 'Carved against the grain of natural quartz with impossible precision.',
-    baseValue: 650,
-    isJunk: false,
-    comboSetId: 'oddity-cabinet',
-    icon: '💀',
-  },
-  {
-    id: 'mermaid-fossil',
-    name: 'Fiji Mummified Specimen',
-    category: 'oddities',
-    rarity: 'uncommon',
-    hint: 'Bizarre chimera skeleton preserved in a glass dome.',
-    crypticDescription:
-      'Victorian carnival spectacle of ape and fish taxidermy. Rare novelty value.',
-    baseValue: 430,
-    isJunk: false,
-    comboSetId: 'oddity-cabinet',
-    icon: '🧜',
-  },
-  {
-    id: 'mystic-orb',
-    name: 'Swirling Aether Orb',
-    category: 'oddities',
-    rarity: 'uncommon',
-    hint: 'Heavy sphere containing bioluminescent mist.',
-    crypticDescription:
-      'Victorian parlor curiosity filled with phosphorescent deep-sea plankton oil.',
-    baseValue: 390,
-    isJunk: false,
-    comboSetId: 'oddity-cabinet',
-    icon: '🧿',
-  },
+  makeItem('crystal-skull', 'Prismatic Quartz Skull', CAT_ODDITIES, RARITY_RARE, 'Translucent skull refracting rainbow beams onto the gallery walls.', 'Carved against the grain of natural quartz with impossible precision.', 650, '💀', { comboSetId: SET_ODDITY }),
+  makeItem('mermaid-fossil', 'Fiji Mummified Specimen', CAT_ODDITIES, RARITY_UNCOMMON, 'Bizarre chimera skeleton preserved in a glass dome.', 'Victorian carnival spectacle of ape and fish taxidermy. Rare novelty value.', 430, '🧜', { comboSetId: SET_ODDITY }),
+  makeItem('mystic-orb', 'Swirling Aether Orb', CAT_ODDITIES, RARITY_UNCOMMON, 'Heavy sphere containing bioluminescent mist.', 'Victorian parlor curiosity filled with phosphorescent deep-sea plankton oil.', 390, '🧿', { comboSetId: SET_ODDITY }),
 
   // Standalone Treasures
-  {
-    id: 'pirate-chest',
-    name: 'Sunken Doubloon Chest',
-    category: 'antiquities',
-    rarity: 'legendary',
-    hint: 'Barnacle-encrusted ironbound chest with a heavy padlock.',
-    crypticDescription: 'Recovered from a Caribbean galleon. Bursting with silver and gold coins.',
-    baseValue: 850,
-    isJunk: false,
-    icon: '📦',
-  },
-  {
-    id: 'diamond-watch',
-    name: 'Tourbillon Pocket Chronometer',
-    category: 'fine-art',
-    rarity: 'rare',
-    hint: 'Intricate ticking timepiece featuring diamond escapement.',
-    crypticDescription: 'Swiss master craft. Accurate to one second per millennium.',
-    baseValue: 700,
-    isJunk: false,
-    icon: '⏱️',
-  },
+  makeItem('pirate-chest', 'Sunken Doubloon Chest', CAT_ANTIQUITIES, RARITY_LEGENDARY, 'Barnacle-encrusted ironbound chest with a heavy padlock.', 'Recovered from a Caribbean galleon. Bursting with silver and gold coins.', 850, '📦'),
+  makeItem('diamond-watch', 'Tourbillon Pocket Chronometer', CAT_FINE_ART, RARITY_RARE, 'Intricate ticking timepiece featuring diamond escapement.', 'Swiss master craft. Accurate to one second per millennium.', 700, '⏱️'),
 
   // Cursed & Dangerous Items
-  {
-    id: 'haunted-doll',
-    name: 'Porcelain Victorian Doll',
-    category: 'oddities',
-    rarity: 'cursed',
-    hint: 'Antique porcelain face with glass eyes that seem to track you.',
-    crypticDescription: 'Previous owners reported chilly breezes and unexplained missing coins.',
-    baseValue: -250,
-    isJunk: false,
-    isCursed: true,
-    penalty: 250,
-    icon: '🪆',
-  },
-  {
-    id: 'gremlin-crate',
-    name: 'Scratched Wooden Shipping Crate',
-    category: 'oddities',
-    rarity: 'cursed',
-    hint: 'Something inside is violently shaking the box and growling.',
-    crypticDescription: 'Whatever was inside chewed through the packaging and caused havoc.',
-    baseValue: -300,
-    isJunk: false,
-    isCursed: true,
-    penalty: 300,
-    icon: '📦',
-  },
+  makeItem('haunted-doll', 'Porcelain Victorian Doll', CAT_ODDITIES, RARITY_CURSED, 'Antique porcelain face with glass eyes that seem to track you.', 'Previous owners reported chilly breezes and unexplained missing coins.', -250, '🪆', { isCursed: true, penalty: 250 }),
+  makeItem('gremlin-crate', 'Scratched Wooden Shipping Crate', CAT_ODDITIES, RARITY_CURSED, 'Something inside is violently shaking the box and growling.', 'Whatever was inside chewed through the packaging and caused havoc.', -300, '📦', { isCursed: true, penalty: 300 }),
 
   // Junk Items
-  {
-    id: 'rusty-can',
-    name: 'Vintage Rusty Tin Can',
-    category: 'junk',
-    rarity: 'common',
-    hint: 'A cylindrical container wrapped in faded, peeling tin foil.',
-    crypticDescription: 'It was just an empty soup can from 1984. Total junk.',
-    baseValue: 15,
-    isJunk: true,
-    icon: '🥫',
-  },
-  {
-    id: 'broken-toaster',
-    name: 'Two-Slice Retro Toaster',
-    category: 'junk',
-    rarity: 'common',
-    hint: 'Metallic kitchen appliance with vintage chrome sheen.',
-    crypticDescription: 'Missing heating coils and power cord. Worthless junk.',
-    baseValue: 10,
-    isJunk: true,
-    icon: '🍞',
-  },
-  {
-    id: 'moldy-sandwich',
-    name: 'Petrified Deli Sub',
-    category: 'junk',
-    rarity: 'common',
-    hint: 'Wrapped in brown paper parchment labeled "Special Delivery".',
-    crypticDescription: 'A six-month-old meatball sub that turned green. Negative appraisal value.',
-    baseValue: -50,
-    isJunk: true,
-    icon: '🥪',
-  },
-  {
-    id: 'deflated-balloon',
-    name: 'Latex Birthday Relic',
-    category: 'junk',
-    rarity: 'common',
-    hint: 'Wrinkled colorful rubber membrane with attached string.',
-    crypticDescription: 'A sad deflated helium balloon from someone elses party.',
-    baseValue: 5,
-    isJunk: true,
-    icon: '🎈',
-  },
-  {
-    id: 'loose-screws',
-    name: 'Mystery Jar of Hardware',
-    category: 'junk',
-    rarity: 'common',
-    hint: 'Heavy glass jar rattling with miscellaneous metallic pieces.',
-    crypticDescription: 'Assorted mismatched wood screws and washers from a garage cleanup.',
-    baseValue: 20,
-    isJunk: true,
-    icon: '🔩',
-  },
+  makeItem('rusty-can', 'Vintage Rusty Tin Can', CAT_JUNK, RARITY_COMMON, 'A cylindrical container wrapped in faded, peeling tin foil.', 'It was just an empty soup can from 1984. Total junk.', 15, '🥫', { isJunk: true }),
+  makeItem('broken-toaster', 'Two-Slice Retro Toaster', CAT_JUNK, RARITY_COMMON, 'Metallic kitchen appliance with vintage chrome sheen.', 'Missing heating coils and power cord. Worthless junk.', 10, '🍞', { isJunk: true }),
+  makeItem('moldy-sandwich', 'Petrified Deli Sub', CAT_JUNK, RARITY_COMMON, 'Wrapped in brown paper parchment labeled "Special Delivery".', 'A six-month-old meatball sub that turned green. Negative appraisal value.', -50, '🥪', { isJunk: true }),
+  makeItem('deflated-balloon', 'Latex Birthday Relic', CAT_JUNK, RARITY_COMMON, 'Wrinkled colorful rubber membrane with attached string.', 'A sad deflated helium balloon from someone elses party.', 5, '🎈', { isJunk: true }),
+  makeItem('loose-screws', 'Mystery Jar of Hardware', CAT_JUNK, RARITY_COMMON, 'Heavy glass jar rattling with miscellaneous metallic pieces.', 'Assorted mismatched wood screws and washers from a garage cleanup.', 20, '🔩', { isJunk: true }),
 ];
