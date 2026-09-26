@@ -154,7 +154,10 @@ export function SnakeLadderGame() {
     });
     setIsJoining(false);
     if (!ok) {
-      setOnlineError(useSnakeLadderMultiplayerStore.getState().error || 'Failed to join room. Please check the code.');
+      setOnlineError(
+        useSnakeLadderMultiplayerStore.getState().error ||
+          'Failed to join room. Please check the code.',
+      );
     }
   };
 

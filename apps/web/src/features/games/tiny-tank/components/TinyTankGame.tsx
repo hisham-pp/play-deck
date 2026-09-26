@@ -47,8 +47,7 @@ export function TinyTankGame() {
     handleCanvasMouseUp,
   } = useTinyTankGame();
 
-  const { roomCode, error, createRoom, joinRoomByCode, leaveRoom } =
-    useTinyTankMultiplayerStore();
+  const { roomCode, error, createRoom, joinRoomByCode, leaveRoom } = useTinyTankMultiplayerStore();
 
   useEffect(() => {
     if (roomParam && !roomCode) {

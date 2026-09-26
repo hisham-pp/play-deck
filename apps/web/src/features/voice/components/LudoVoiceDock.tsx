@@ -11,11 +11,7 @@ export interface LudoVoiceDockProps {
 }
 
 /** Ludo keeps its own room store, and seats up to six players in one mesh. */
-export function LudoVoiceDock({
-  anchorClassName,
-  variant,
-  defaultOpen,
-}: LudoVoiceDockProps = {}) {
+export function LudoVoiceDock({ anchorClassName, variant, defaultOpen }: LudoVoiceDockProps = {}) {
   const roomCode = useLudoMultiplayerStore((state) => state.roomCode);
   const transport = useLudoMultiplayerStore((state) => state.transport);
 

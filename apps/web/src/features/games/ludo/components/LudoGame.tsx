@@ -233,7 +233,9 @@ export function LudoGame() {
     });
     setIsJoining(false);
     if (!success) {
-      setOnlineError(useLudoMultiplayerStore.getState().error || 'Failed to join room. Please check the code.');
+      setOnlineError(
+        useLudoMultiplayerStore.getState().error || 'Failed to join room. Please check the code.',
+      );
     }
   };
 

@@ -41,10 +41,7 @@ export interface CarromMultiplayerHandlers {
   onRequestRestart: (setupType: CarromSetupType) => void;
 }
 
-export function useCarromMultiplayer(
-  isOnline: boolean,
-  handlers: CarromMultiplayerHandlers,
-) {
+export function useCarromMultiplayer(isOnline: boolean, handlers: CarromMultiplayerHandlers) {
   const { player } = usePlayerStore();
   const { roomCode, role, opponent, sendGameAction, onActionReceived, leaveRoom } =
     useMultiplayerStore();

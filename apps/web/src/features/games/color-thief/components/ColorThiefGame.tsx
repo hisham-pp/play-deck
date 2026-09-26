@@ -147,7 +147,10 @@ export function ColorThiefGame() {
     });
     setIsJoining(false);
     if (!ok) {
-      setOnlineError(useColorThiefMultiplayerStore.getState().error || 'Failed to join room. Please check the code.');
+      setOnlineError(
+        useColorThiefMultiplayerStore.getState().error ||
+          'Failed to join room. Please check the code.',
+      );
     }
   };
 

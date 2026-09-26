@@ -38,8 +38,7 @@ export function LootDashGame() {
     handleCanvasMouseMove,
   } = useLootDashGame('Sprinter');
 
-  const { roomCode, error, createRoom, joinRoomByCode, leaveRoom } =
-    useLootDashMultiplayerStore();
+  const { roomCode, error, createRoom, joinRoomByCode, leaveRoom } = useLootDashMultiplayerStore();
 
   // Handle URL room code parameter
   useEffect(() => {

@@ -17,7 +17,11 @@ export function PongScoreboard({ state, p1Name, p2Name, role }: PongScoreboardPr
   const isOnline = config.mode === 'online';
 
   const displayName1 = isOnline ? p1Name || 'Host' : 'Player 1';
-  const displayName2 = isOnline ? p2Name || 'Challenger' : isAi ? `CPU (${config.difficulty})` : 'Player 2';
+  const displayName2 = isOnline
+    ? p2Name || 'Challenger'
+    : isAi
+      ? `CPU (${config.difficulty})`
+      : 'Player 2';
 
   return (
     <div className="w-full bg-surface-raised/90 backdrop-blur-sm border border-surface-border rounded-xl p-3 md:p-4 shadow-arcade flex flex-col md:flex-row items-center justify-between gap-4">
@@ -91,9 +95,7 @@ export function PongScoreboard({ state, p1Name, p2Name, role }: PongScoreboardPr
                   SERVE
                 </span>
               )}
-              <span className="text-sm font-semibold text-white">
-                {displayName2}
-              </span>
+              <span className="text-sm font-semibold text-white">{displayName2}</span>
               {isOnline && role === 'guest' && (
                 <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono font-bold">
                   YOU
@@ -101,11 +103,7 @@ export function PongScoreboard({ state, p1Name, p2Name, role }: PongScoreboardPr
               )}
             </div>
             <span className="text-[11px] text-deck-400 font-mono">
-              {isOnline && role === 'host'
-                ? 'Opponent'
-                : isAi
-                  ? 'Smart Bot'
-                  : '↑ / ↓ keys • Touch'}
+              {isOnline && role === 'host' ? 'Opponent' : isAi ? 'Smart Bot' : '↑ / ↓ keys • Touch'}
             </span>
           </div>
 

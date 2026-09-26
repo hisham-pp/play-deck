@@ -584,9 +584,7 @@ export function CarromGame() {
       ) : (
         <>
           {/* WebRTC Voice Chat Dock */}
-          {mode === 'online' && roomCode && (
-            <RoomVoiceDock defaultOpen={false} />
-          )}
+          {mode === 'online' && roomCode && <RoomVoiceDock defaultOpen={false} />}
 
           {/* Mode & Setup Selector Bar */}
           <div className="mb-4 flex w-full max-w-5xl flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-800/80 bg-slate-900/70 p-2.5 backdrop-blur-md">
@@ -785,8 +783,9 @@ export function CarromGame() {
                     </span>
                   ) : gameState.queenState.pendingCoverBy ? (
                     <span className="text-amber-300">
-                      Potted by {gameState.queenState.pendingCoverBy === 'player1' ? p1Name : p2Name}{' '}
-                      (Pending Cover coin!)
+                      Potted by{' '}
+                      {gameState.queenState.pendingCoverBy === 'player1' ? p1Name : p2Name} (Pending
+                      Cover coin!)
                     </span>
                   ) : (
                     <span className="text-slate-400">In play (Center Red)</span>
@@ -929,7 +928,7 @@ export function CarromGame() {
                   <span className="text-xs text-slate-500">
                     {mode === 'online' && !isMyTurn
                       ? "Waiting for opponent's shot…"
-                      : "Drag on board to aim, or click Strike / press Space"}
+                      : 'Drag on board to aim, or click Strike / press Space'}
                   </span>
                   <button
                     type="button"
@@ -956,12 +955,12 @@ export function CarromGame() {
                 <h3 className="text-lg font-bold text-amber-400">Official Carrom Rules</h3>
                 <ul className="mt-3 list-disc space-y-2 pl-5 text-xs text-slate-300">
                   <li>
-                    <strong>Pieces:</strong> White coins (Player 1), Black coins (Player 2), Red Queen
-                    (Bonus 3 pts).
+                    <strong>Pieces:</strong> White coins (Player 1), Black coins (Player 2), Red
+                    Queen (Bonus 3 pts).
                   </li>
                   <li>
-                    <strong>Turn Flow:</strong> Pocketing your own coin gives you an extra turn. Missing
-                    passes the turn.
+                    <strong>Turn Flow:</strong> Pocketing your own coin gives you an extra turn.
+                    Missing passes the turn.
                   </li>
                   <li>
                     <strong>Queen Rule:</strong> To claim the Red Queen, you must pocket it and
@@ -969,8 +968,8 @@ export function CarromGame() {
                     shot. If uncovered, the Queen returns to the center!
                   </li>
                   <li>
-                    <strong>Fouls:</strong> Pocketing the striker returns one of your potted coins to
-                    the center.
+                    <strong>Fouls:</strong> Pocketing the striker returns one of your potted coins
+                    to the center.
                   </li>
                   <li>
                     <strong>Online Play:</strong> Play 1v1 with low latency and real-time voice chat

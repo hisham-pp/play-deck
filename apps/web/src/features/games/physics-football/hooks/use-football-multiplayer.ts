@@ -79,7 +79,11 @@ export function useFootballMultiplayer(
     const interval = setInterval(() => {
       const cur = stateRef.current;
       const now = performance.now();
-      if (cur.status === 'playing' || cur.status === 'kickoff' || now - lastBroadcastRef.current >= 33) {
+      if (
+        cur.status === 'playing' ||
+        cur.status === 'kickoff' ||
+        now - lastBroadcastRef.current >= 33
+      ) {
         lastBroadcastRef.current = now;
         sendGameAction(
           'FOOTBALL_SNAPSHOT',

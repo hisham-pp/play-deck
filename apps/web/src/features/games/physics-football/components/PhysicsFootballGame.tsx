@@ -409,31 +409,11 @@ export function PhysicsFootballGame() {
     // Goalmouth Nets
     ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
     // Left net
-    ctx.fillRect(
-      PITCH_PADDING_X - 45,
-      GOAL_Y_MIN,
-      45,
-      GOAL_Y_MAX - GOAL_Y_MIN,
-    );
-    ctx.strokeRect(
-      PITCH_PADDING_X - 45,
-      GOAL_Y_MIN,
-      45,
-      GOAL_Y_MAX - GOAL_Y_MIN,
-    );
+    ctx.fillRect(PITCH_PADDING_X - 45, GOAL_Y_MIN, 45, GOAL_Y_MAX - GOAL_Y_MIN);
+    ctx.strokeRect(PITCH_PADDING_X - 45, GOAL_Y_MIN, 45, GOAL_Y_MAX - GOAL_Y_MIN);
     // Right net
-    ctx.fillRect(
-      PITCH_WIDTH - PITCH_PADDING_X,
-      GOAL_Y_MIN,
-      45,
-      GOAL_Y_MAX - GOAL_Y_MIN,
-    );
-    ctx.strokeRect(
-      PITCH_WIDTH - PITCH_PADDING_X,
-      GOAL_Y_MIN,
-      45,
-      GOAL_Y_MAX - GOAL_Y_MIN,
-    );
+    ctx.fillRect(PITCH_WIDTH - PITCH_PADDING_X, GOAL_Y_MIN, 45, GOAL_Y_MAX - GOAL_Y_MIN);
+    ctx.strokeRect(PITCH_WIDTH - PITCH_PADDING_X, GOAL_Y_MIN, 45, GOAL_Y_MAX - GOAL_Y_MIN);
 
     // Goalposts (4 corner posts)
     GOALPOSTS.forEach((post) => {
@@ -713,7 +693,9 @@ export function PhysicsFootballGame() {
                   <span className="font-mono text-sm font-bold text-amber-400">
                     {Math.ceil(gameState.timeRemainingSec)}s
                   </span>
-                  <span className="text-[10px] text-deck-500">First to {gameState.targetScore}</span>
+                  <span className="text-[10px] text-deck-500">
+                    First to {gameState.targetScore}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="font-arcade text-2xl font-black text-white">

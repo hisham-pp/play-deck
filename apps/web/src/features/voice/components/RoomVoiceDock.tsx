@@ -11,11 +11,7 @@ export interface RoomVoiceDockProps {
 }
 
 /** Voice for the games that share `multiplayer.store` (Tic-Tac-Toe, Connect Four, Pen Fight, Pong, Carrom, etc.). */
-export function RoomVoiceDock({
-  anchorClassName,
-  variant,
-  defaultOpen,
-}: RoomVoiceDockProps = {}) {
+export function RoomVoiceDock({ anchorClassName, variant, defaultOpen }: RoomVoiceDockProps = {}) {
   const roomCode = useMultiplayerStore((state) => state.roomCode);
   const getTransport = useMultiplayerStore((state) => state.getTransport);
 
