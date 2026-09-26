@@ -1,0 +1,24 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="160" height="160" rx="24" fill="#0B1220"/>
+  <rect x="14" y="14" width="132" height="132" rx="18" fill="#111827" stroke="#06B6D4" stroke-width="2"/>
+  
+  <!-- Rooftop Edge -->
+  <path d="M25 110H85V135H25Z" fill="#1E293B" stroke="#334155" stroke-width="2"/>
+  <path d="M105 95H135V135H105Z" fill="#1E293B" stroke="#06B6D4" stroke-width="2"/>
+
+  <!-- Speed Trail -->
+  <line x1="35" y1="65" x2="65" y2="65" stroke="#06B6D4" stroke-width="3" stroke-linecap="round"/>
+  <line x1="45" y1="80" x2="80" y2="80" stroke="#38BDF8" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Leaping Stickman -->
+  <circle cx="92" cy="48" r="14" fill="#F8FAFC"/>
+  <!-- Torso -->
+  <path d="M92 62L102 88" stroke="#F8FAFC" stroke-width="5" stroke-linecap="round"/>
+  <!-- Reaching Arm -->
+  <path d="M95 68L118 64L128 55" stroke="#06B6D4" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Trailing Arm -->
+  <path d="M95 68L78 76L68 70" stroke="#F8FAFC" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Tucked Stride Legs -->
+  <path d="M102 88L120 95L132 86" stroke="#06B6D4" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M102 88L88 102L75 96" stroke="#F8FAFC" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

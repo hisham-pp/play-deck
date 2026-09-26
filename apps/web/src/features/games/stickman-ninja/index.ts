@@ -1,0 +1,1 @@
+export { StickmanNinjaGame } from './StickmanNinjaGame';

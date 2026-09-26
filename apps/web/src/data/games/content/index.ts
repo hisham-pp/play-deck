@@ -20,6 +20,7 @@ import { floorIsLavaContent } from './floor-is-lava';
 import { gravityGolfContent } from './gravity-golf';
 import { gravityShiftContent } from './gravity-shift';
 import { guessTheLieContent } from './guess-the-lie';
+import { hangmanDuelContent } from './hangman-duel';
 import { hideAndSeekContent } from './hide-and-seek';
 import { humanConveyorBeltContent } from './human-conveyor-belt';
 import { imposterBuilderContent } from './imposter-builder';
@@ -48,9 +49,15 @@ import { snakeAndLadderContent } from './snake-and-ladder';
 import { spellingBeeContent } from './spelling-bee';
 import { spyNetworkContent } from './spy-network';
 import { stickmanArcheryContent } from './stickman-archery';
+import { stickmanBasketballContent } from './stickman-basketball';
 import { stickmanClimberContent } from './stickman-climber';
+import { stickmanNinjaContent } from './stickman-ninja';
+import { stickmanParkourContent } from './stickman-parkour';
 import { stickmanPlatformerContent } from './stickman-platformer';
+import { stickmanRacingContent } from './stickman-racing';
 import { stickmanRunnerContent } from './stickman-runner';
+import { stickmanShooterContent } from './stickman-shooter';
+import { stickmanSwordFightContent } from './stickman-sword-fight';
 import { sudokuContent } from './sudoku';
 import { summitRushContent } from './summit-rush';
 import { telephoneDrawingContent } from './telephone-drawing';
@@ -129,9 +136,15 @@ const ALL_CONTENT: GameContent[] = [
   alibiContent,
   spellingBeeContent,
   stickmanArcheryContent,
+  stickmanBasketballContent,
   stickmanClimberContent,
+  stickmanNinjaContent,
+  stickmanParkourContent,
   stickmanPlatformerContent,
+  stickmanRacingContent,
   stickmanRunnerContent,
+  stickmanShooterContent,
+  stickmanSwordFightContent,
   wordSearchArenaContent,
   drawingGuessingContent,
   fishingCompetitionContent,
@@ -139,6 +152,7 @@ const ALL_CONTENT: GameContent[] = [
   wordBattleContent,
   trainRushContent,
   crosswordClashContent,
+  hangmanDuelContent,
 ];
 
 /**
