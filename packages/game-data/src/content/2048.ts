@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const game2048Game = defineGameModule({
@@ -8,7 +9,7 @@ export const game2048Game = defineGameModule({
     'Slide, merge, and forge tiles on a 4x4 grid to reach the coveted 2048 milestone. Featuring undo, smooth transitions, and persistent records.',
   category: GameCategories.P,
   players: getPCount(1),
-  releaseDate: '2026-09-17',
+  releaseDate: GameReleaseDates.D_2026_09_17,
   tags: [GameTags.PZ, GameTags.LOG, GameTags.S, GameTags.C, GameTags.HS, GameTags.T],
   seo: {
     title: 'Play 2048 Online Free — Slide, Merge, Reach 2048',

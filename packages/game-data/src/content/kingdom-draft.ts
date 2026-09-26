@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const kingdomDraftGame = defineGameModule({
@@ -8,7 +9,7 @@ export const kingdomDraftGame = defineGameModule({
     'Draft resources, construct 3x3 realm grids, trigger spatial adjacency synergies, and achieve secret objectives in 2–6 player rooms with WebRTC voice chat.',
   category: GameCategories.S,
   players: getPCount(2, 6),
-  releaseDate: '2026-09-20',
+  releaseDate: GameReleaseDates.D_2026_09_20,
   tags: [
     GameTags.ST,
     GameTags.M_P,

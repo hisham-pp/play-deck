@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const summitRushGame = defineGameModule({
@@ -8,7 +9,7 @@ export const summitRushGame = defineGameModule({
     'Hill-climb through endless ridges in a springy dune buggy. Balance on the throttle, grab fuel, land flips, upgrade your ride, and race a friend online with voice chat.',
   category: GameCategories.A,
   players: getPCount(1, 2),
-  releaseDate: '2026-09-17',
+  releaseDate: GameReleaseDates.D_2026_09_17,
   tags: [
     GameTags.A,
     GameTags.PH,

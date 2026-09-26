@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const gravityGolfGame = defineGameModule({
@@ -8,7 +9,7 @@ export const gravityGolfGame = defineGameModule({
     'Manipulate cosmic gravity wells, repellers, and orbital fields to guide your golf orb into the galactic hole in the fewest placements.',
   category: GameCategories.A,
   players: getPCount(1, 4),
-  releaseDate: '2026-09-19',
+  releaseDate: GameReleaseDates.D_2026_09_19,
   tags: [GameTags.A, GameTags.PH, GameTags.M_P, GameTags.V_C, GameTags.S, GameTags.LP],
   seo: {
     title: 'Gravity Golf — Orbital Physics Puzzle Game | PlayDeck',

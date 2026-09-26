@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const bombFactoryGame = defineGameModule({
@@ -8,7 +9,7 @@ export const bombFactoryGame = defineGameModule({
     'Players collaboratively assemble machines under time pressure, but each player sees different information.',
   category: GameCategories.P,
   players: getPCount(2, 6),
-  releaseDate: '2026-09-18',
+  releaseDate: GameReleaseDates.D_2026_09_18,
   tags: [
     GameTags.M_P,
     GameTags.V_C,

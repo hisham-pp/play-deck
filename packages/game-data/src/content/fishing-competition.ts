@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const fishingCompetitionGame = defineGameModule({
@@ -8,7 +9,7 @@ export const fishingCompetitionGame = defineGameModule({
     'Cast, strike, and reel in trophy fish in Fishing Competition on PlayDeck. Balance line tension, navigate weather events, and top the leaderboard across five waters.',
   category: GameCategories.CS,
   players: getPCount(2, 6),
-  releaseDate: '2026-09-25',
+  releaseDate: GameReleaseDates.D_2026_09_25,
   tags: [GameTags.P, GameTags.M_P, GameTags.S, GameTags.AI, GameTags.V_C],
   seo: {
     title: 'Fishing Competition — Relaxing Angling Tournament | PlayDeck',

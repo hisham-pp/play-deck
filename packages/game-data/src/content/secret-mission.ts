@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const secretMissionGame = defineGameModule({
@@ -8,7 +9,7 @@ export const secretMissionGame = defineGameModule({
     'Every player carries a secret objective to complete without being caught by the others. Stealth, bluffing, and sharp observation in a voice-driven social deduction game for 3–8 agents.',
   category: GameCategories.CS,
   players: getPCount(3, 8),
-  releaseDate: '2026-09-20',
+  releaseDate: GameReleaseDates.D_2026_09_20,
   tags: [GameTags.M_P, GameTags.V_C, GameTags.P, GameTags.SD],
   seo: {
     title: 'Secret Mission — Stealth Social Deduction Party Game',

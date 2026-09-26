@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const physicsFootballGame = defineGameModule({
@@ -8,7 +9,7 @@ export const physicsFootballGame = defineGameModule({
     'Fast-paced 2D arcade soccer showdown. Control momentum, execute impulse strikes, bend shots off goalposts, and dominate the pitch in Physics Football on PlayDeck.',
   category: GameCategories.A,
   players: getPCount(1, 4),
-  releaseDate: '2026-09-25',
+  releaseDate: GameReleaseDates.D_2026_09_25,
   tags: [GameTags.A, GameTags.PH, GameTags.S, GameTags.LP, GameTags.AI],
   seo: {
     title: 'Physics Football — 2D Arcade Soccer | PlayDeck',

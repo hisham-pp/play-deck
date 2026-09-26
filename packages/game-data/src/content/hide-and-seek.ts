@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const hideAndSeekGame = defineGameModule({
@@ -9,7 +10,7 @@ export const hideAndSeekGame = defineGameModule({
     'Play high-stakes Hide & Seek on PlayDeck. Outsmart seekers with camouflage and ghost invisibility, duck into secret closets, and survive the countdown timer.',
   category: GameCategories.CS,
   players: getPCount(3, 8),
-  releaseDate: '2026-09-25',
+  releaseDate: GameReleaseDates.D_2026_09_25,
   tags: [GameTags.P, GameTags.M_P, GameTags.S, GameTags.AI, GameTags.V_C],
   seo: {
     title: 'Hide & Seek — Multiplayer Social Stealth Party Game | PlayDeck',

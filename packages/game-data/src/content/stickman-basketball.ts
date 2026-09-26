@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const stickmanBasketballGame = defineGameModule({
@@ -8,7 +9,7 @@ export const stickmanBasketballGame = defineGameModule({
     'Arcade streetball showdown with gravity basketball trajectory, ankle-breaking crossovers, and rim-rocking dunks.',
   category: GameCategories.A,
   players: getPCount(1, 2),
-  releaseDate: '2026-09-26',
+  releaseDate: GameReleaseDates.D_2026_09_26,
   tags: [GameTags.SPORTS, GameTags.A, GameTags.PH, GameTags.BASKETBALL, GameTags.HS],
   subtype: 'basketball',
   difficultyPresets: ['easy', 'normal', 'hard'],

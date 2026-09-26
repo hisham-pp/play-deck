@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const badArchitectGame = defineGameModule({
@@ -8,7 +9,7 @@ export const badArchitectGame = defineGameModule({
     'One player describes a secret blueprint using voice chat alone. Builders lay blocks on an 8x8 canvas, then reveal and vote on hilarious disasters.',
   category: GameCategories.CS,
   players: getPCount(2, 8),
-  releaseDate: '2026-09-20',
+  releaseDate: GameReleaseDates.D_2026_09_20,
   tags: [GameTags.M_P, GameTags.V_C, GameTags.P, GameTags.CO, GameTags.S],
   seo: {
     title: 'Bad Architect — Voice-Only Construction Party Game',

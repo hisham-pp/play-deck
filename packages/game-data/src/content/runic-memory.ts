@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const runicMemoryGame = defineGameModule({
@@ -8,7 +9,7 @@ export const runicMemoryGame = defineGameModule({
     'Test your cognitive recall across ancient glowing sigils. Flip pairs to clear the board in minimum turns.',
   category: GameCategories.P,
   players: getPCount(1, 2),
-  releaseDate: '2026-09-17',
+  releaseDate: GameReleaseDates.D_2026_09_17,
   tags: [
     GameTags.BRAIN_TRAINING,
     GameTags.MEM,

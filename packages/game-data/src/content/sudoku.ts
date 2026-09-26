@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const sudokuGame = defineGameModule({
@@ -8,7 +9,7 @@ export const sudokuGame = defineGameModule({
     'Seven difficulty levels of freshly generated grids, each with exactly one solution. Pencil marks, conflict highlighting, mistake budgets and per-level best times.',
   category: GameCategories.P,
   players: getPCount(1),
-  releaseDate: '2026-09-13',
+  releaseDate: GameReleaseDates.D_2026_09_13,
   tags: [GameTags.PZ, GameTags.LOG, GameTags.S, GameTags.BRAIN_TRAINING, GameTags.LEVELS_7],
   seo: {
     title: 'Play Sudoku Online Free — 7 Difficulty Levels',

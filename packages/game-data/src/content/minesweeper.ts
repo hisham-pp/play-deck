@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const minesweeperGame = defineGameModule({
@@ -8,7 +9,7 @@ export const minesweeperGame = defineGameModule({
     'The definitive deduction classic. Clear hidden minefields with first-click safety, tactical chording, customizable boards, and record-tracking speedruns.',
   category: GameCategories.P,
   players: getPCount(1),
-  releaseDate: '2026-09-17',
+  releaseDate: GameReleaseDates.D_2026_09_17,
   tags: [GameTags.PZ, GameTags.LOG, GameTags.S, GameTags.C, GameTags.SR, GameTags.KEYBOARD_READY],
   seo: {
     title: 'Play Minesweeper Online Free — Beginner to Expert',

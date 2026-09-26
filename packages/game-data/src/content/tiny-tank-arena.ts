@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const tinyTankArenaGame = defineGameModule({
@@ -8,7 +9,7 @@ export const tinyTankArenaGame = defineGameModule({
     'Small tanks fight in destructible arenas. Blast brick cover, detonate hazard barrels, scavenge unusual weapons, and be the last tank standing.',
   category: GameCategories.A,
   players: getPCount(2, 6),
-  releaseDate: '2026-09-20',
+  releaseDate: GameReleaseDates.D_2026_09_20,
   tags: [GameTags.A, GameTags.M_P, GameTags.V_C, GameTags.PH, GameTags.LP],
   seo: {
     title: 'Tiny Tank Arena — Destructible Arena Tank Warfare | PlayDeck',

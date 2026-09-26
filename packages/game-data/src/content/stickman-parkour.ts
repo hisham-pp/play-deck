@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const stickmanParkourGame = defineGameModule({
@@ -8,7 +9,7 @@ export const stickmanParkourGame = defineGameModule({
     'High-speed rooftop freerunning, precision wall vaults, momentum chaining, and gap leaps across skyline obstacles.',
   category: GameCategories.A,
   players: getPCount(1),
-  releaseDate: '2026-09-26',
+  releaseDate: GameReleaseDates.D_2026_09_26,
   tags: [GameTags.ACT, GameTags.PARKOUR, GameTags.SR, GameTags.PRECISION, GameTags.HS],
   subtype: 'parkour',
   difficultyPresets: ['normal', 'hard', 'expert'],

@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const humanConveyorBeltGame = defineGameModule({
@@ -8,7 +9,7 @@ export const humanConveyorBeltGame = defineGameModule({
     'Players must position themselves to move objects through a constantly changing machine. Players ARE the machine parts.',
   category: GameCategories.CS,
   players: getPCount(2, 6),
-  releaseDate: '2026-09-18',
+  releaseDate: GameReleaseDates.D_2026_09_18,
   tags: [GameTags.M_P, GameTags.V_C, GameTags.PH, GameTags.CO],
   seo: {
     title: 'Human Conveyor Belt — Co-op Physics Online',

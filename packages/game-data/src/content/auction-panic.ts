@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const auctionPanicGame = defineGameModule({
@@ -8,7 +9,7 @@ export const auctionPanicGame = defineGameModule({
     'Bid on mystery items with limited coins, then discover what you actually bought. Uncover legendary treasures, avoid cursed junk, and trigger combo set bonuses in 2–6 player rooms.',
   category: GameCategories.S,
   players: getPCount(2, 6),
-  releaseDate: '2026-09-20',
+  releaseDate: GameReleaseDates.D_2026_09_20,
   tags: [GameTags.ST, GameTags.M_P, GameTags.V_C, GameTags.P, GameTags.S],
   seo: {
     title: 'Auction Panic — Mystery Bidding & Treasure Game | PlayDeck',

@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const tetrisGame = defineGameModule({
@@ -8,7 +9,7 @@ export const tetrisGame = defineGameModule({
     'Rotate and stack falling tetrominoes to clear lines before the board overflows. Speed ramps up with every level.',
   category: GameCategories.P,
   players: getPCount(1),
-  releaseDate: '2026-09-12',
+  releaseDate: GameReleaseDates.D_2026_09_12,
   tags: [GameTags.A, GameTags.C, GameTags.PZ, GameTags.HS],
   seo: {
     title: 'Play Tetris Online Free — Stack, Clear, Survive',

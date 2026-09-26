@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const towerBuilderGame = defineGameModule({
@@ -8,7 +9,7 @@ export const towerBuilderGame = defineGameModule({
     'Competitive physics-based skyscraper construction game. Time swinging crane releases, stack diverse blocks with center-of-mass balance, and reach high into the stratosphere.',
   category: GameCategories.A,
   players: getPCount(1, 4),
-  releaseDate: '2026-09-24',
+  releaseDate: GameReleaseDates.D_2026_09_24,
   tags: [GameTags.A, GameTags.PH, GameTags.HS, GameTags.S, GameTags.LP],
   seo: {
     title: 'Tower Builder — Physics Stacking Game | PlayDeck',

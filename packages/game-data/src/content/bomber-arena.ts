@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const bomberArenaGame = defineGameModule({
@@ -8,7 +9,7 @@ export const bomberArenaGame = defineGameModule({
     'Fast-paced multiplayer action in destructible arenas. Place bombs, collect power-ups, trigger chain reactions, and be the last player standing.',
   category: GameCategories.A,
   players: getPCount(1, 4),
-  releaseDate: '2026-09-24',
+  releaseDate: GameReleaseDates.D_2026_09_24,
   tags: [GameTags.A, GameTags.S, GameTags.LP, GameTags.M_P, GameTags.AI],
   seo: {
     title: 'Bomber Arena — Classic Arcade Action | PlayDeck',

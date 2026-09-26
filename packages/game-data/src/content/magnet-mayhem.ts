@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const magnetMayhemGame = defineGameModule({
@@ -8,7 +9,7 @@ export const magnetMayhemGame = defineGameModule({
     'High-velocity magnetic arena combat. Sling around metallic anchors, fire repulsion shockwaves at rivals, and collect glowing target orbs.',
   category: GameCategories.A,
   players: getPCount(2, 4),
-  releaseDate: '2026-09-20',
+  releaseDate: GameReleaseDates.D_2026_09_20,
   tags: [GameTags.A, GameTags.M_P, GameTags.V_C, GameTags.PH, GameTags.LP],
   seo: {
     title: 'Magnet Mayhem — Magnetic Physics Arena Battle | PlayDeck',

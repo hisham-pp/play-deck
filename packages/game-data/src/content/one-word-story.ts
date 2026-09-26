@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const oneWordStoryGame = defineGameModule({
@@ -8,7 +9,7 @@ export const oneWordStoryGame = defineGameModule({
     'Players collaboratively create a story, one word at a time. Unexpected combinations and deliberate chaos create hilarious results in 3–8 player voice rooms.',
   category: GameCategories.CS,
   players: getPCount(3, 8),
-  releaseDate: '2026-09-20',
+  releaseDate: GameReleaseDates.D_2026_09_20,
   tags: [GameTags.M_P, GameTags.V_C, GameTags.P, GameTags.CO, GameTags.S],
   seo: {
     title: 'One Word Story — Collaborative Party Storytelling | PlayDeck',

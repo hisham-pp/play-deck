@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const spellingBeeGame = defineGameModule({
@@ -8,7 +9,7 @@ export const spellingBeeGame = defineGameModule({
     'Find as many words as possible using seven honeycomb letters. Every word must include the center letter in this addictive word puzzle and multiplayer game.',
   category: GameCategories.P,
   players: getPCount(1, 6),
-  releaseDate: '2026-09-20',
+  releaseDate: GameReleaseDates.D_2026_09_20,
   tags: [GameTags.M_P, GameTags.V_C, GameTags.S, GameTags.WP],
   seo: {
     title: 'Spelling Bee — Honeycomb Word Finder Puzzle Game',

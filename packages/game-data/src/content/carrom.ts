@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const carromGame = defineGameModule({
@@ -8,7 +9,7 @@ export const carromGame = defineGameModule({
     'Play classic 2D Carrom on PlayDeck. Flick the striker, pot white and black coins, master bank shots, and cover the Queen in solo vs AI or local 2-player matches.',
   category: GameCategories.B,
   players: getPCount(1, 4),
-  releaseDate: '2026-09-25',
+  releaseDate: GameReleaseDates.D_2026_09_25,
   tags: [GameTags.C, GameTags.PH, GameTags.S, GameTags.LP, GameTags.AI],
   seo: {
     title: 'Carrom — 2D Physics Board Game | PlayDeck',

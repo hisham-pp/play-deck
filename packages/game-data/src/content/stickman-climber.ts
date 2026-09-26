@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const stickmanClimberGame = defineGameModule({
@@ -8,7 +9,7 @@ export const stickmanClimberGame = defineGameModule({
     'Scale a dangerous vertical tower, defeat escalating enemies, upgrade your weapon, and climb your way toward the next arena.',
   category: GameCategories.A,
   players: getPCount(1),
-  releaseDate: '2026-09-23',
+  releaseDate: GameReleaseDates.D_2026_09_23,
   tags: [
     GameTags.ACT,
     GameTags.VERTICAL,

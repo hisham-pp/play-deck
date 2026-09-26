@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const penFightGame = defineGameModule({
@@ -8,7 +9,7 @@ export const penFightGame = defineGameModule({
     'The classic desktop duel, remade in 3D. Flick your pen to knock your rival off the arena table before they knock you off first.',
   category: GameCategories.A,
   players: getPCount(1, 2),
-  releaseDate: '2026-09-12',
+  releaseDate: GameReleaseDates.D_2026_09_12,
   tags: [GameTags.TD, GameTags.PH, GameTags.LP, GameTags.AI, GameTags.NOSTALGIA],
   seo: {
     title: 'Play Pen Fight Online — 3D Desk Duel Game',

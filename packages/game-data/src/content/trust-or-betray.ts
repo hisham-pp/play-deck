@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const trustOrBetrayGame = defineGameModule({
@@ -9,7 +10,7 @@ export const trustOrBetrayGame = defineGameModule({
     'Cooperate on secret missions or betray comrades to plunder the group pot. Navigate tense discussions, bluff rivals, and survive exile trials in 3-8 player rooms.',
   category: GameCategories.S,
   players: getPCount(3, 8),
-  releaseDate: '2026-09-20',
+  releaseDate: GameReleaseDates.D_2026_09_20,
   tags: [GameTags.ST, GameTags.M_P, GameTags.V_C, GameTags.SD, GameTags.BLUFFING, GameTags.S],
   seo: {
     title: 'Trust or Betray — Social Deception Strategy | PlayDeck',

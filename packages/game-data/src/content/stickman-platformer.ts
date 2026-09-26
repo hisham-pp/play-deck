@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const stickmanPlatformerGame = defineGameModule({
@@ -8,7 +9,7 @@ export const stickmanPlatformerGame = defineGameModule({
     'Leap across floating platforms, stomp patrol enemies, collect coins, and reach the exit portal in this 2D platforming adventure.',
   category: GameCategories.A,
   players: getPCount(1),
-  releaseDate: '2026-09-24',
+  releaseDate: GameReleaseDates.D_2026_09_24,
   tags: [GameTags.ACT, GameTags.PLATFORMER, GameTags.JUMP, GameTags.ADVENTURE, GameTags.HS],
   seo: {
     title: 'Stickman Platformer — 2D Jump & Run Game | PlayDeck',

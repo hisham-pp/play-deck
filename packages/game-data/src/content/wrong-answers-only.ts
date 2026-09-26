@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const wrongAnswersOnlyGame = defineGameModule({
@@ -8,7 +9,7 @@ export const wrongAnswersOnlyGame = defineGameModule({
     'A question appears. Players deliberately submit believable-but-wrong answers. Everyone votes for the funniest or most creative fake answer.',
   category: GameCategories.CS,
   players: getPCount(3, 8),
-  releaseDate: '2026-09-20',
+  releaseDate: GameReleaseDates.D_2026_09_20,
   tags: [GameTags.M_P, GameTags.V_C, GameTags.P, GameTags.S],
   seo: {
     title: 'Wrong Answers Only — Creative Fake Answers Party Game',

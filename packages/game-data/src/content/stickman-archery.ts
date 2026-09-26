@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const stickmanArcheryGame = defineGameModule({
@@ -8,7 +9,7 @@ export const stickmanArcheryGame = defineGameModule({
     'Draw your bow, calculate crosswinds, and hit high-scoring bullseyes in this physics archery challenge.',
   category: GameCategories.A,
   players: getPCount(1),
-  releaseDate: '2026-09-24',
+  releaseDate: GameReleaseDates.D_2026_09_24,
   tags: [GameTags.ACT, GameTags.PH, GameTags.BOW, GameTags.AIM, GameTags.HS],
   seo: {
     title: 'Stickman Archery — Bow & Arrow Physics Game | PlayDeck',

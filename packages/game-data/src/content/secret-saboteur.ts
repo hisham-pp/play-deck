@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const secretSaboteurGame = defineGameModule({
@@ -8,7 +9,7 @@ export const secretSaboteurGame = defineGameModule({
     'Build the Reactor Core or trigger catastrophic meltdown. Hidden-role deduction for 4–8 players with anonymous card contributions and real-time voice accusation trials.',
   category: GameCategories.S,
   players: getPCount(4, 8),
-  releaseDate: '2026-09-20',
+  releaseDate: GameReleaseDates.D_2026_09_20,
   tags: [GameTags.ST, GameTags.M_P, GameTags.V_C, GameTags.SD, GameTags.CO, GameTags.S],
   seo: {
     title: 'Secret Saboteur — Hidden Role Reactor Deduction | PlayDeck',

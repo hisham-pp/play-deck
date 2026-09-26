@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const connectFourGame = defineGameModule({
@@ -8,7 +9,7 @@ export const connectFourGame = defineGameModule({
     'A vertical gravity duel. Drop discs to align four in a row horizontally, vertically, or diagonally before your opponent.',
   category: GameCategories.S,
   players: getPCount(1, 2),
-  releaseDate: '2026-09-13',
+  releaseDate: GameReleaseDates.D_2026_09_13,
   tags: [GameTags.C, GameTags.ST, GameTags.GRAVITY_GRID, GameTags.LP, GameTags.AI],
   seo: {
     title: 'Play Connect Four Online — 2 Player or vs AI',

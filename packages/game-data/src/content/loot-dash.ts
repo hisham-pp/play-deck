@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const lootDashGame = defineGameModule({
@@ -8,7 +9,7 @@ export const lootDashGame = defineGameModule({
     'Sprint through hazard-filled arenas scooping coins, gems, and chests. Dodge retractable spikes, avoid sticky slime, and steal loot from rival sprinters.',
   category: GameCategories.A,
   players: getPCount(2, 6),
-  releaseDate: '2026-09-20',
+  releaseDate: GameReleaseDates.D_2026_09_20,
   tags: [GameTags.A, GameTags.M_P, GameTags.V_C, GameTags.PH, GameTags.LP],
   seo: {
     title: 'Loot Dash — Fast-Paced Arena Loot Scavenger | PlayDeck',

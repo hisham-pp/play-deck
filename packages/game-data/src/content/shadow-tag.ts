@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const shadowTagGame = defineGameModule({
@@ -8,7 +9,7 @@ export const shadowTagGame = defineGameModule({
     'Stealth tag in the dark where runners are invisible. Track elongated shadows cast by orbiting spotlights to hunt or evade.',
   category: GameCategories.A,
   players: getPCount(2, 6),
-  releaseDate: '2026-09-18',
+  releaseDate: GameReleaseDates.D_2026_09_18,
   tags: [GameTags.A, GameTags.M_P, GameTags.V_C, GameTags.AI, GameTags.LP],
   seo: {
     title: 'Shadow Tag — Stealth Arena Tag Game Online',

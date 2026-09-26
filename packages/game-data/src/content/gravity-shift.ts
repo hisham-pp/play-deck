@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const gravityShiftGame = defineGameModule({
@@ -8,7 +9,7 @@ export const gravityShiftGame = defineGameModule({
     'High-velocity 4-way gravity inverting race. Invert walls into floors, dodge laser gauntlets, and outmaneuver rivals in chaotic real-time multiplayer.',
   category: GameCategories.A,
   players: getPCount(1, 6),
-  releaseDate: '2026-09-19',
+  releaseDate: GameReleaseDates.D_2026_09_19,
   tags: [GameTags.A, GameTags.M_P, GameTags.V_C, GameTags.PH, GameTags.LP, GameTags.S],
   seo: {
     title: 'Gravity Shift — 4-Way Gravity Inverting Race | PlayDeck',

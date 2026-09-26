@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const wordBattleGame = defineGameModule({
@@ -8,7 +9,7 @@ export const wordBattleGame = defineGameModule({
     'Race against opponents with shared letters in Word Battle on PlayDeck. Unearth rare words, outscore rival players, and clash in fast multiplayer anagram rounds.',
   category: GameCategories.P,
   players: getPCount(2, 8),
-  releaseDate: '2026-09-25',
+  releaseDate: GameReleaseDates.D_2026_09_25,
   tags: [GameTags.WP, GameTags.M_P, GameTags.S, GameTags.AI, GameTags.V_C],
   seo: {
     title: 'Word Battle — Real-Time Anagram & Vocabulary Game | PlayDeck',

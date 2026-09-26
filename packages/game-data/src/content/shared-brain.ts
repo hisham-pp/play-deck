@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const sharedBrainGame = defineGameModule({
@@ -8,7 +9,7 @@ export const sharedBrainGame = defineGameModule({
     'Two players control the same character, each controlling different abilities. Voice communication is essential — without it, the character is helpless.',
   category: GameCategories.CS,
   players: getPCount(2, 6),
-  releaseDate: '2026-09-19',
+  releaseDate: GameReleaseDates.D_2026_09_19,
   tags: [GameTags.M_P, GameTags.V_C, GameTags.CO, GameTags.LP, GameTags.AI],
   seo: {
     title: 'Shared Brain — 2-Player Dual-Control Platformer | PlayDeck',

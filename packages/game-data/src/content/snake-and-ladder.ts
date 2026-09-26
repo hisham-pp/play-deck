@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const snakeAndLadderGame = defineGameModule({
@@ -9,7 +10,7 @@ export const snakeAndLadderGame = defineGameModule({
     'The classic 100-square race, with animated climbs and slides. Play pass-and-play, against bots, or online with friends over voice chat.',
   category: GameCategories.B,
   players: getPCount(2, 4),
-  releaseDate: '2026-09-18',
+  releaseDate: GameReleaseDates.D_2026_09_18,
   tags: [GameTags.C, GameTags.B, GameTags.DICE, GameTags.LP, GameTags.PLAYERS_2_4, GameTags.V_C],
   seo: {
     title: 'Snake & Ladder — Play Online Free with Friends | PlayDeck',

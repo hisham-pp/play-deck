@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const reactionArenaGame = defineGameModule({
@@ -8,7 +9,7 @@ export const reactionArenaGame = defineGameModule({
     'Fast reflex mini-game collection. Compete across rapid-fire trials testing reaction speed, color matching, mental arithmetic, and visual focus.',
   category: GameCategories.A,
   players: getPCount(1, 4),
-  releaseDate: '2026-09-24',
+  releaseDate: GameReleaseDates.D_2026_09_24,
   tags: [GameTags.A, GameTags.S, GameTags.LP, GameTags.HS, GameTags.AI],
   seo: {
     title: 'Reaction Arena — Fast Reflex Games | PlayDeck',

@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const spyNetworkGame = defineGameModule({
@@ -8,7 +9,7 @@ export const spyNetworkGame = defineGameModule({
     "One player is the spy who doesn't know the secret location. Players ask each other questions; the spy bluffs along. Vote for the spy before they guess the location!",
   category: GameCategories.CS,
   players: getPCount(4, 8),
-  releaseDate: '2026-09-20',
+  releaseDate: GameReleaseDates.D_2026_09_20,
   tags: [GameTags.M_P, GameTags.V_C, GameTags.P, GameTags.SD],
   seo: {
     title: 'Spy Network — Espionage Social Deduction Party Game',

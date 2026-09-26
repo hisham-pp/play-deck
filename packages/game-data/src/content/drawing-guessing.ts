@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const drawingGuessingGame = defineGameModule({
@@ -9,7 +10,7 @@ export const drawingGuessingGame = defineGameModule({
     'Play real-time Drawing & Guessing on PlayDeck. Sketch secret words, decipher sketches against the clock, and score points with smart near-miss typo alerts.',
   category: GameCategories.CS,
   players: getPCount(2, 8),
-  releaseDate: '2026-09-25',
+  releaseDate: GameReleaseDates.D_2026_09_25,
   tags: [GameTags.P, GameTags.M_P, GameTags.S, GameTags.AI, GameTags.V_C],
   seo: {
     title: 'Drawing & Guessing — Sketch & Word Party Game | PlayDeck',

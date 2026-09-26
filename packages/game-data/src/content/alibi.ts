@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const alibiGame = defineGameModule({
@@ -8,7 +9,7 @@ export const alibiGame = defineGameModule({
     "Everyone receives a slightly different version of an event. One player's alibi has deliberate inconsistencies. Compare details on voice chat and unmask the suspect!",
   category: GameCategories.CS,
   players: getPCount(4, 8),
-  releaseDate: '2026-09-20',
+  releaseDate: GameReleaseDates.D_2026_09_20,
   tags: [GameTags.M_P, GameTags.V_C, GameTags.P, GameTags.SD],
   seo: {
     title: 'Alibi — Story Inconsistency Deduction Party Game',

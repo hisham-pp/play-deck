@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const platformRaceGame = defineGameModule({
@@ -8,7 +9,7 @@ export const platformRaceGame = defineGameModule({
     'Race across neon obstacle courses in Platform Race on PlayDeck. Master moving platforms, spring launchers, and speed boosts to cross the finish line first.',
   category: GameCategories.A,
   players: getPCount(1, 4),
-  releaseDate: '2026-09-25',
+  releaseDate: GameReleaseDates.D_2026_09_25,
   tags: [GameTags.A, GameTags.PH, GameTags.S, GameTags.LP, GameTags.AI],
   seo: {
     title: 'Platform Race — 2D Speedrun Parkour | PlayDeck',

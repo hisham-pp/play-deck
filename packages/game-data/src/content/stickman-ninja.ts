@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const stickmanNinjaGame = defineGameModule({
@@ -8,7 +9,7 @@ export const stickmanNinjaGame = defineGameModule({
     'Shadow stealth infiltration, throwing star trajectory physics, ceiling grappling, and silent takedowns.',
   category: GameCategories.A,
   players: getPCount(1),
-  releaseDate: '2026-09-26',
+  releaseDate: GameReleaseDates.D_2026_09_26,
   tags: [GameTags.ACT, GameTags.STEALTH, GameTags.NINJA, GameTags.SHADOW, GameTags.HS],
   subtype: 'ninja',
   difficultyPresets: ['normal', 'hard', 'expert'],

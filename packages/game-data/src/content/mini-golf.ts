@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const miniGolfGame = defineGameModule({
@@ -8,7 +9,7 @@ export const miniGolfGame = defineGameModule({
     'Polished 2D physics mini golf with drag-to-aim putting, 18 championship holes, banking cushions, portals, online multiplayer, and integrated voice chat.',
   category: GameCategories.A,
   players: getPCount(1, 4),
-  releaseDate: '2026-09-18',
+  releaseDate: GameReleaseDates.D_2026_09_18,
   tags: [
     GameTags.A,
     GameTags.PH,

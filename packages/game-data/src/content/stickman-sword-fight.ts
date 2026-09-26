@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const stickmanSwordFightGame = defineGameModule({
@@ -8,7 +9,7 @@ export const stickmanSwordFightGame = defineGameModule({
     'Tactile sword duels featuring timed parries, counter-slashes, feints, and arena martial arts mastery.',
   category: GameCategories.A,
   players: getPCount(1, 2),
-  releaseDate: '2026-09-26',
+  releaseDate: GameReleaseDates.D_2026_09_26,
   tags: [GameTags.ACT, GameTags.COMBAT, GameTags.SWORD, GameTags.PARRY, GameTags.HS],
   subtype: 'sword-fight',
   difficultyPresets: ['easy', 'normal', 'hard', 'expert'],

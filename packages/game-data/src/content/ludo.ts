@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const ludoGame = defineGameModule({
@@ -8,7 +9,7 @@ export const ludoGame = defineGameModule({
     'Classic board race for 2 to 6 players featuring 3D physics dice, AI bot personalities, and custom rule configurations.',
   category: GameCategories.B,
   players: getPCount(2, 6),
-  releaseDate: '2026-09-12',
+  releaseDate: GameReleaseDates.D_2026_09_12,
   tags: [GameTags.B, GameTags.DICE, GameTags.TD, GameTags.PH, GameTags.PLAYERS_2_6, GameTags.BOTS],
   seo: {
     title: 'Play Ludo Online Free — 2 to 6 Players with Bots',

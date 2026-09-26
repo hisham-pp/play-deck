@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const wordChainGame = defineGameModule({
@@ -8,7 +9,7 @@ export const wordChainGame = defineGameModule({
     'Take turns playing words that start where the last one ended. Miss the timer and you lose a life — last player standing wins.',
   category: GameCategories.P,
   players: getPCount(1, 8),
-  releaseDate: '2026-09-18',
+  releaseDate: GameReleaseDates.D_2026_09_18,
   tags: [GameTags.WP, GameTags.PZ, GameTags.S, GameTags.LP, GameTags.M_P],
   seo: {
     title: 'Play Word Chain Online Free — Last Letter Word Game',

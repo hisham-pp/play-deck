@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const crosswordClashGame = defineGameModule({
@@ -8,7 +9,7 @@ export const crosswordClashGame = defineGameModule({
     'Solve clues and race opponents in Crossword Clash on PlayDeck. Lock letters into shared grids, claim word completion bounties, and battle in real-time word duels.',
   category: GameCategories.P,
   players: getPCount(1, 4),
-  releaseDate: '2026-09-25',
+  releaseDate: GameReleaseDates.D_2026_09_25,
   tags: [GameTags.WP, GameTags.M_P, GameTags.S, GameTags.AI, GameTags.V_C],
   seo: {
     title: 'Crossword Clash — Multiplayer Word Puzzle Game | PlayDeck',

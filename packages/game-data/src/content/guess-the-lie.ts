@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const guessTheLieGame = defineGameModule({
@@ -9,7 +10,7 @@ export const guessTheLieGame = defineGameModule({
     'Each round, a prompt appears. All players submit answers. One answer is deliberately fake. Everyone tries to identify the lie.',
   category: GameCategories.CS,
   players: getPCount(3, 8),
-  releaseDate: '2026-09-20',
+  releaseDate: GameReleaseDates.D_2026_09_20,
   tags: [GameTags.M_P, GameTags.V_C, GameTags.P, GameTags.SD, GameTags.S],
   seo: {
     title: 'Guess the Lie — Social Deduction Q&A Party Game',

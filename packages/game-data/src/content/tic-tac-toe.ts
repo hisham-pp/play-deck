@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const ticTacToeGame = defineGameModule({
@@ -9,7 +10,7 @@ export const ticTacToeGame = defineGameModule({
     'The classic two-player grid battle. Align three marks horizontally, vertically, or diagonally before your opponent.',
   category: GameCategories.S,
   players: getPCount(1, 2),
-  releaseDate: '2026-09-12',
+  releaseDate: GameReleaseDates.D_2026_09_12,
   tags: [GameTags.C, GameTags.TB, GameTags.QUICK_PLAY, GameTags.LP, GameTags.AI],
   seo: {
     title: 'Play Tic-Tac-Toe Online — 2 Player or vs AI',

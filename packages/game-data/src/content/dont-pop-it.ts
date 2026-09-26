@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const dontPopItGame = defineGameModule({
@@ -9,7 +10,7 @@ export const dontPopItGame = defineGameModule({
     'Multiplayer push-your-luck strategy game where players take turns uncovering mystery tiles while dodging hidden pop hazards. Collect shields, bonus gems, and multipliers.',
   category: GameCategories.S,
   players: getPCount(1, 4),
-  releaseDate: '2026-09-24',
+  releaseDate: GameReleaseDates.D_2026_09_24,
   tags: [GameTags.LP, GameTags.AI, GameTags.M_P, GameTags.V_C, GameTags.TB],
   seo: {
     title: "Don't Pop It — Tile Strategy Game | PlayDeck",

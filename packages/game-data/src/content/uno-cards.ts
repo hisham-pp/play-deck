@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const unoCardsGame = defineGameModule({
@@ -9,7 +10,7 @@ export const unoCardsGame = defineGameModule({
     'Play fast-paced UNO-Style shedding cards on PlayDeck. Match vibrant colors and numbers, unleash Skip, Reverse, and Wild Draw Four cards against tactical AI bots.',
   category: GameCategories.C,
   players: getPCount(2, 4),
-  releaseDate: '2026-09-25',
+  releaseDate: GameReleaseDates.D_2026_09_25,
   tags: [GameTags.P, GameTags.S, GameTags.LP, GameTags.AI, GameTags.M_P],
   seo: {
     title: 'UNO-Style Cards — Color & Number Shedding Game | PlayDeck',

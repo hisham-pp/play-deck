@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const telephoneDrawingGame = defineGameModule({
@@ -8,7 +9,7 @@ export const telephoneDrawingGame = defineGameModule({
     'Player A gets a phrase → draws it → Player B describes the drawing → Player C draws that description → chain continues → final result is compared with the original phrase.',
   category: GameCategories.CS,
   players: getPCount(3, 8),
-  releaseDate: '2026-09-20',
+  releaseDate: GameReleaseDates.D_2026_09_20,
   tags: [GameTags.M_P, GameTags.V_C, GameTags.P, GameTags.S],
   seo: {
     title: 'Telephone Drawing — Hilarious Chain Drawing Party Game',

@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const anagramSprintGame = defineGameModule({
@@ -8,7 +9,7 @@ export const anagramSprintGame = defineGameModule({
     'Race to unscramble the word before anyone else. Speed scoring, streak bonuses and difficulty that climbs every round — solo or in a room of eight.',
   category: GameCategories.P,
   players: getPCount(1, 8),
-  releaseDate: '2026-09-19',
+  releaseDate: GameReleaseDates.D_2026_09_19,
   tags: [GameTags.WP, GameTags.PZ, GameTags.S, GameTags.M_P, GameTags.V_C],
   seo: {
     title: 'Play Anagram Sprint Online Free — Word Unscramble Race',

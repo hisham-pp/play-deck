@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const snakeGame = defineGameModule({
@@ -8,7 +9,7 @@ export const snakeGame = defineGameModule({
     'Guide the snake, eat energy pellets, and grow without crashing into walls or your own tail.',
   category: GameCategories.A,
   players: getPCount(1),
-  releaseDate: '2026-09-11',
+  releaseDate: GameReleaseDates.D_2026_09_11,
   tags: [GameTags.A, GameTags.C, GameTags.RETRO, GameTags.HS],
   seo: {
     title: 'Play Snake Online — Free Classic Arcade Game',

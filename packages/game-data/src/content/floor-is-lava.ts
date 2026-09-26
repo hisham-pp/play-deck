@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const floorIsLavaGame = defineGameModule({
@@ -8,7 +9,7 @@ export const floorIsLavaGame = defineGameModule({
     'The ground collapses beneath your feet! Push rivals into rising molten lava, secure power-up tiles, and be the last player standing in frantic real-time combat.',
   category: GameCategories.A,
   players: getPCount(1, 6),
-  releaseDate: '2026-09-19',
+  releaseDate: GameReleaseDates.D_2026_09_19,
   tags: [GameTags.A, GameTags.M_P, GameTags.V_C, GameTags.PH, GameTags.LP, GameTags.S],
   seo: {
     title: 'Floor Is Lava — Disappearing Tile Survival Battle | PlayDeck',

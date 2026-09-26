@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const stickmanShooterGame = defineGameModule({
@@ -8,7 +9,7 @@ export const stickmanShooterGame = defineGameModule({
     'Tactical cover shooting, timed bullet dodges, and precision weapon recoil mastery in an escalating stickman warzone.',
   category: GameCategories.A,
   players: getPCount(1),
-  releaseDate: '2026-09-26',
+  releaseDate: GameReleaseDates.D_2026_09_26,
   tags: [GameTags.ACT, GameTags.SHOOTER, GameTags.AIM, GameTags.REFLEXES, GameTags.HS],
   subtype: 'shooter',
   difficultyPresets: ['easy', 'normal', 'hard', 'expert'],

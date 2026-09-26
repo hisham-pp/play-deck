@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const imposterBuilderGame = defineGameModule({
@@ -8,7 +9,7 @@ export const imposterBuilderGame = defineGameModule({
     'Everyone builds the same thing on an 8x8 canvas — but one player got subtly different instructions. Reveal all builds, discuss on voice, and vote for the Imposter.',
   category: GameCategories.CS,
   players: getPCount(4, 8),
-  releaseDate: '2026-09-20',
+  releaseDate: GameReleaseDates.D_2026_09_20,
   tags: [GameTags.M_P, GameTags.V_C, GameTags.P, GameTags.SD],
   seo: {
     title: 'Imposter Builder — Social Deduction Grid Building Party Game',

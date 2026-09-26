@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const chessGame = defineGameModule({
@@ -9,7 +10,7 @@ export const chessGame = defineGameModule({
     'Full tournament rules on a 3D board: castling, en passant, promotion, check, stalemate and every draw. Pass and play, or challenge a friend online with voice and chat.',
   category: GameCategories.B,
   players: getPCount(2),
-  releaseDate: '2026-09-13',
+  releaseDate: GameReleaseDates.D_2026_09_13,
   tags: [
     GameTags.GRANDMASTER,
     GameTags.B,

@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const tinyIslandGame = defineGameModule({
@@ -8,7 +9,7 @@ export const tinyIslandGame = defineGameModule({
     'The island shrinks every round. Players collect resources, build bridges, block paths, and steal from each other to survive.',
   category: GameCategories.S,
   players: getPCount(2, 6),
-  releaseDate: '2026-09-18',
+  releaseDate: GameReleaseDates.D_2026_09_18,
   tags: [GameTags.M_P, GameTags.V_C, GameTags.AI, GameTags.LP, GameTags.SURVIVAL, GameTags.TB],
   seo: {
     title: 'Tiny Island — Sinking Island Survival Online',

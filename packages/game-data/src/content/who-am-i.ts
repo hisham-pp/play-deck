@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const whoAmIGame = defineGameModule({
@@ -9,7 +10,7 @@ export const whoAmIGame = defineGameModule({
     'Everyone gets a hidden identity assigned to them — visible to all OTHER players but NOT to themselves. Ask yes/no questions to discover your own identity.',
   category: GameCategories.CS,
   players: getPCount(3, 8),
-  releaseDate: '2026-09-20',
+  releaseDate: GameReleaseDates.D_2026_09_20,
   tags: [GameTags.M_P, GameTags.V_C, GameTags.P, GameTags.SD, GameTags.S],
   seo: {
     title: 'Who Am I? — Headband Mystery Identity Party Game',

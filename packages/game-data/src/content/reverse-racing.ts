@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const reverseRacingGame = defineGameModule({
@@ -8,7 +9,7 @@ export const reverseRacingGame = defineGameModule({
     'High-octane arcade racing meets circular sabotage. Race down your circuit at full throttle while dropping hazards onto your rival’s track.',
   category: GameCategories.A,
   players: getPCount(2, 6),
-  releaseDate: '2026-09-19',
+  releaseDate: GameReleaseDates.D_2026_09_19,
   tags: [GameTags.A, GameTags.M_P, GameTags.V_C, GameTags.PH, GameTags.LP],
   seo: {
     title: 'Reverse Racing — Racer vs Saboteur Arcade | PlayDeck',

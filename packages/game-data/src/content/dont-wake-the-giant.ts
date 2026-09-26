@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const dontWakeTheGiantGame = defineGameModule({
@@ -9,7 +10,7 @@ export const dontWakeTheGiantGame = defineGameModule({
     'Rob a sleeping giant together. Every footstep, grab and collision fills one shared noise meter — and if it fills, he wakes and the whole crew loses.',
   category: GameCategories.CS,
   players: getPCount(3, 6),
-  releaseDate: '2026-09-19',
+  releaseDate: GameReleaseDates.D_2026_09_19,
   tags: [GameTags.M_P, GameTags.V_C, GameTags.CO, GameTags.AI, GameTags.LP],
   seo: {
     title: "Don't Wake the Giant — Co-op Stealth Party Game",

@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const stickmanRunnerGame = defineGameModule({
@@ -8,7 +9,7 @@ export const stickmanRunnerGame = defineGameModule({
     'Sprint through a rising gauntlet of hazards, time your jumps, and chase a new personal best in this endless arcade run.',
   category: GameCategories.A,
   players: getPCount(1),
-  releaseDate: '2026-09-24',
+  releaseDate: GameReleaseDates.D_2026_09_24,
   tags: [GameTags.ACT, GameTags.ENDLESS, GameTags.JUMP, GameTags.SR, GameTags.HS],
   seo: {
     title: 'Stickman Runner — Endless Sprint Game | PlayDeck',

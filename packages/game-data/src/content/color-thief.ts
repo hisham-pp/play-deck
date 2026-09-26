@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const colorThiefGame = defineGameModule({
@@ -8,7 +9,7 @@ export const colorThiefGame = defineGameModule({
     'Steal the grid one tile at a time. Paint that touches your own territory is cheap, isolated captures cost dearly, and every colour hides an ability nobody sees until it fires.',
   category: GameCategories.S,
   players: getPCount(2, 6),
-  releaseDate: '2026-09-18',
+  releaseDate: GameReleaseDates.D_2026_09_18,
   tags: [GameTags.M_P, GameTags.V_C, GameTags.LP, GameTags.AI, GameTags.TB],
   seo: {
     title: 'Color Thief — Free Territory Control Game Online',

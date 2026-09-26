@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const trainRushGame = defineGameModule({
@@ -8,7 +9,7 @@ export const trainRushGame = defineGameModule({
     'Build and connect railway tracks from start to terminus in Train Rush on PlayDeck. Rotate pieces, bridge rivers, avoid boulders, and race rival rail barons.',
   category: GameCategories.S,
   players: getPCount(2, 6),
-  releaseDate: '2026-09-25',
+  releaseDate: GameReleaseDates.D_2026_09_25,
   tags: [GameTags.M_P, GameTags.S, GameTags.AI, GameTags.V_C, GameTags.PZ],
   seo: {
     title: 'Train Rush — Competitive Railway Track Puzzle | PlayDeck',

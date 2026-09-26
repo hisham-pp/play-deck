@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const ballBounceGame = defineGameModule({
@@ -8,7 +9,7 @@ export const ballBounceGame = defineGameModule({
     'Steer the paddle, keep the ball alive, and smash through ever-tougher block layouts. Chain combos, grab power-ups, and chase your high score.',
   category: GameCategories.A,
   players: getPCount(1),
-  releaseDate: '2026-09-17',
+  releaseDate: GameReleaseDates.D_2026_09_17,
   tags: [
     GameTags.A,
     GameTags.S,

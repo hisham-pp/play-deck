@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const flappyArcadeGame = defineGameModule({
@@ -8,7 +9,7 @@ export const flappyArcadeGame = defineGameModule({
     'Pilot the cyber-glider through hazardous energy conduits. Tap or press space to thrust against gravity, dodge pulsing pylons, and climb the flight leaderboards.',
   category: GameCategories.A,
   players: getPCount(1),
-  releaseDate: '2026-09-18',
+  releaseDate: GameReleaseDates.D_2026_09_18,
   tags: [GameTags.A, GameTags.S, GameTags.HS, GameTags.RETRO],
   seo: {
     title: 'Play Flappy Arcade Online Free — Tap to Fly Game',

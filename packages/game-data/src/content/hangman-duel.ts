@@ -1,5 +1,6 @@
 import { defineGameModule } from '../core/base-game';
 import { GameCategories } from '../enums/category.enum';
+import { GameReleaseDates } from '../enums/release-date.enum';
 import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const hangmanDuelGame = defineGameModule({
@@ -8,7 +9,7 @@ export const hangmanDuelGame = defineGameModule({
     'Polished multiplayer hangman game. Guess letters, deduce secret words, and survive the gallows in competitive word duels.',
   category: GameCategories.P,
   players: getPCount(1, 6),
-  releaseDate: '2026-09-26',
+  releaseDate: GameReleaseDates.D_2026_09_26,
   tags: [GameTags.M_P, GameTags.V_C, GameTags.S, GameTags.WP],
   seo: {
     title: 'Hangman Duel — Multiplayer Word Guessing Battle | PlayDeck',
