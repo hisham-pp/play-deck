@@ -11,7 +11,6 @@ export const wordBattleGame = defineGameModule({
   players: getPCount(2, 8),
   releaseDate: '2026-09-25',
   tags: [GameTags.WP, GameTags.M_P, GameTags.S, GameTags.AI, GameTags.V_C],
-  featured: true,
   seo: {
     title: 'Word Battle — Real-Time Anagram & Vocabulary Game | PlayDeck',
     description:

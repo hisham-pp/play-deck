@@ -11,7 +11,6 @@ export const dontPopItGame = defineGameModule({
   players: getPCount(1, 4),
   releaseDate: '2026-09-24',
   tags: [GameTags.LP, GameTags.AI, GameTags.M_P, GameTags.V_C, GameTags.TB],
-  featured: true,
   seo: {
     title: "Don't Pop It — Tile Strategy Game | PlayDeck",
     description:

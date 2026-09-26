@@ -11,7 +11,6 @@ export const stickmanBasketballGame = defineGameModule({
   players: getPCount(1, 2),
   releaseDate: '2026-09-26',
   tags: [GameTags.SPORTS, GameTags.A, GameTags.PH, GameTags.BASKETBALL, GameTags.HS],
-  featured: true,
   subtype: 'basketball',
   difficultyPresets: ['easy', 'normal', 'hard'],
   seo: {

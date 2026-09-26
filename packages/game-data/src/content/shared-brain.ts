@@ -11,7 +11,6 @@ export const sharedBrainGame = defineGameModule({
   players: getPCount(2, 6),
   releaseDate: '2026-09-19',
   tags: [GameTags.M_P, GameTags.V_C, GameTags.CO, GameTags.LP, GameTags.AI],
-  featured: true,
   seo: {
     title: 'Shared Brain — 2-Player Dual-Control Platformer | PlayDeck',
     description:

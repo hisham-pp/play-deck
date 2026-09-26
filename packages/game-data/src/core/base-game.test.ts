@@ -39,11 +39,11 @@ describe('BaseGameEntry & Asset Resolution', () => {
     assert.equal(game.thumbnailUrl, '/games/super-arcade/icon.svg');
     assert.equal(game.bannerUrl, '/games/super-arcade/cover.svg');
     assert.equal(game.badge, BADGE_READY_TO_PLAY);
-    assert.equal(game.featured, false);
+    assert.equal(game.featured, true);
     assert.deepEqual(game.tags, []);
   });
 
-  it('allows explicit overrides for thumbnail and banner URLs', () => {
+  it('allows explicit overrides for thumbnail, banner URLs and featured', () => {
     const game = defineGame({
       id: 'custom-art',
       name: 'Custom Art Game',
@@ -54,11 +54,13 @@ describe('BaseGameEntry & Asset Resolution', () => {
       thumbnailUrl: '/custom/icon.png',
       bannerUrl: '/custom/banner.webp',
       badge: 'Exclusive',
+      featured: false,
     });
 
     assert.equal(game.thumbnailUrl, '/custom/icon.png');
     assert.equal(game.bannerUrl, '/custom/banner.webp');
     assert.equal(game.badge, 'Exclusive');
+    assert.equal(game.featured, false);
   });
 
   it('supports custom extension resolution', () => {

@@ -11,7 +11,6 @@ export const stickmanParkourGame = defineGameModule({
   players: getPCount(1),
   releaseDate: '2026-09-26',
   tags: [GameTags.ACT, GameTags.PARKOUR, GameTags.SR, GameTags.PRECISION, GameTags.HS],
-  featured: true,
   subtype: 'parkour',
   difficultyPresets: ['normal', 'hard', 'expert'],
   seo: {

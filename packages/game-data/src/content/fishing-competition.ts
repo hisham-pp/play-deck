@@ -11,7 +11,6 @@ export const fishingCompetitionGame = defineGameModule({
   players: getPCount(2, 6),
   releaseDate: '2026-09-25',
   tags: [GameTags.P, GameTags.M_P, GameTags.S, GameTags.AI, GameTags.V_C],
-  featured: true,
   seo: {
     title: 'Fishing Competition — Relaxing Angling Tournament | PlayDeck',
     description:

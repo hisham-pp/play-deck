@@ -11,7 +11,6 @@ export const connectFourGame = defineGameModule({
   players: getPCount(1, 2),
   releaseDate: '2026-09-13',
   tags: [GameTags.C, GameTags.ST, GameTags.GRAVITY_GRID, GameTags.LP, GameTags.AI],
-  featured: true,
   seo: {
     title: 'Play Connect Four Online — 2 Player or vs AI',
     description:

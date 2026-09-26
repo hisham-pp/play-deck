@@ -11,7 +11,6 @@ export const pushYourLuckGame = defineGameModule({
   players: getPCount(1, 8),
   releaseDate: '2026-09-18',
   tags: [GameTags.P, GameTags.LP, GameTags.AI, GameTags.TB, GameTags.RISK],
-  featured: true,
   seo: {
     title: 'Push Your Luck — Free Press-Your-Luck Game Online',
     description:

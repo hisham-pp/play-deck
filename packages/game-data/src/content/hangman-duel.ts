@@ -11,7 +11,6 @@ export const hangmanDuelGame = defineGameModule({
   players: getPCount(1, 6),
   releaseDate: '2026-09-26',
   tags: [GameTags.M_P, GameTags.V_C, GameTags.S, GameTags.WP],
-  featured: true,
   seo: {
     title: 'Hangman Duel — Multiplayer Word Guessing Battle | PlayDeck',
     description:

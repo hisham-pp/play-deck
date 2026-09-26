@@ -11,7 +11,6 @@ export const gravityGolfGame = defineGameModule({
   players: getPCount(1, 4),
   releaseDate: '2026-09-19',
   tags: [GameTags.A, GameTags.PH, GameTags.M_P, GameTags.V_C, GameTags.S, GameTags.LP],
-  featured: true,
   seo: {
     title: 'Gravity Golf — Orbital Physics Puzzle Game | PlayDeck',
     description:

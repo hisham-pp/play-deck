@@ -11,7 +11,6 @@ export const carromGame = defineGameModule({
   players: getPCount(1, 4),
   releaseDate: '2026-09-25',
   tags: [GameTags.C, GameTags.PH, GameTags.S, GameTags.LP, GameTags.AI],
-  featured: true,
   seo: {
     title: 'Carrom — 2D Physics Board Game | PlayDeck',
     description:

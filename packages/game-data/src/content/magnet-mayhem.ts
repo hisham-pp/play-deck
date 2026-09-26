@@ -11,7 +11,6 @@ export const magnetMayhemGame = defineGameModule({
   players: getPCount(2, 4),
   releaseDate: '2026-09-20',
   tags: [GameTags.A, GameTags.M_P, GameTags.V_C, GameTags.PH, GameTags.LP],
-  featured: true,
   seo: {
     title: 'Magnet Mayhem — Magnetic Physics Arena Battle | PlayDeck',
     description:

@@ -11,7 +11,6 @@ export const trainRushGame = defineGameModule({
   players: getPCount(2, 6),
   releaseDate: '2026-09-25',
   tags: [GameTags.M_P, GameTags.S, GameTags.AI, GameTags.V_C, GameTags.PZ],
-  featured: true,
   seo: {
     title: 'Train Rush — Competitive Railway Track Puzzle | PlayDeck',
     description:

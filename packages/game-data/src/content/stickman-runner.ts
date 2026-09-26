@@ -11,7 +11,6 @@ export const stickmanRunnerGame = defineGameModule({
   players: getPCount(1),
   releaseDate: '2026-09-24',
   tags: [GameTags.ACT, GameTags.ENDLESS, GameTags.JUMP, GameTags.SR, GameTags.HS],
-  featured: true,
   seo: {
     title: 'Stickman Runner — Endless Sprint Game | PlayDeck',
     description:

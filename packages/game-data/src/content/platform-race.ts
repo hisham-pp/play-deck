@@ -11,7 +11,6 @@ export const platformRaceGame = defineGameModule({
   players: getPCount(1, 4),
   releaseDate: '2026-09-25',
   tags: [GameTags.A, GameTags.PH, GameTags.S, GameTags.LP, GameTags.AI],
-  featured: true,
   seo: {
     title: 'Platform Race — 2D Speedrun Parkour | PlayDeck',
     description:

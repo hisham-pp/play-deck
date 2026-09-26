@@ -11,7 +11,6 @@ export const tetrisGame = defineGameModule({
   players: getPCount(1),
   releaseDate: '2026-09-12',
   tags: [GameTags.A, GameTags.C, GameTags.PZ, GameTags.HS],
-  featured: true,
   seo: {
     title: 'Play Tetris Online Free — Stack, Clear, Survive',
     description:

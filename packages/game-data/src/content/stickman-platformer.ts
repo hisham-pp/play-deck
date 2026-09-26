@@ -11,7 +11,6 @@ export const stickmanPlatformerGame = defineGameModule({
   players: getPCount(1),
   releaseDate: '2026-09-24',
   tags: [GameTags.ACT, GameTags.PLATFORMER, GameTags.JUMP, GameTags.ADVENTURE, GameTags.HS],
-  featured: true,
   seo: {
     title: 'Stickman Platformer — 2D Jump & Run Game | PlayDeck',
     description:

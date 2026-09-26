@@ -11,7 +11,6 @@ export const secretSaboteurGame = defineGameModule({
   players: getPCount(4, 8),
   releaseDate: '2026-09-20',
   tags: [GameTags.ST, GameTags.M_P, GameTags.V_C, GameTags.SD, GameTags.CO, GameTags.S],
-  featured: true,
   seo: {
     title: 'Secret Saboteur — Hidden Role Reactor Deduction | PlayDeck',
     description:

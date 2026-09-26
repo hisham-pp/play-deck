@@ -11,7 +11,6 @@ export const game2048Game = defineGameModule({
   players: getPCount(1),
   releaseDate: '2026-09-17',
   tags: [GameTags.PZ, GameTags.LOG, GameTags.S, GameTags.C, GameTags.HS, GameTags.T],
-  featured: true,
   seo: {
     title: 'Play 2048 Online Free — Slide, Merge, Reach 2048',
     description:

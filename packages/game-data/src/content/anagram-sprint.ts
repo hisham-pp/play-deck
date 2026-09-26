@@ -11,7 +11,6 @@ export const anagramSprintGame = defineGameModule({
   players: getPCount(1, 8),
   releaseDate: '2026-09-19',
   tags: [GameTags.WP, GameTags.PZ, GameTags.S, GameTags.M_P, GameTags.V_C],
-  featured: true,
   seo: {
     title: 'Play Anagram Sprint Online Free — Word Unscramble Race',
     description:

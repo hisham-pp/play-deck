@@ -11,7 +11,6 @@ export const snakeGame = defineGameModule({
   players: getPCount(1),
   releaseDate: '2026-09-11',
   tags: [GameTags.A, GameTags.C, GameTags.RETRO, GameTags.HS],
-  featured: true,
   seo: {
     title: 'Play Snake Online — Free Classic Arcade Game',
     description:

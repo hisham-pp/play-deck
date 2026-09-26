@@ -11,7 +11,6 @@ export const flappyArcadeGame = defineGameModule({
   players: getPCount(1),
   releaseDate: '2026-09-18',
   tags: [GameTags.A, GameTags.S, GameTags.HS, GameTags.RETRO],
-  featured: true,
   seo: {
     title: 'Play Flappy Arcade Online Free — Tap to Fly Game',
     description:

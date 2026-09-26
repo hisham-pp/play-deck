@@ -11,7 +11,6 @@ export const wordSearchArenaGame = defineGameModule({
   players: getPCount(1, 6),
   releaseDate: '2026-09-22',
   tags: [GameTags.M_P, GameTags.V_C, GameTags.S, GameTags.WP],
-  featured: true,
   seo: {
     title: 'Word Search Arena — Multiplayer Word Hunt Game',
     description:

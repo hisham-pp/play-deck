@@ -18,7 +18,6 @@ export const runicMemoryGame = defineGameModule({
     GameTags.V_C,
     GameTags.ARCANE,
   ],
-  featured: true,
   seo: {
     title: 'Play Runic Memory — Free Online Memory Match Game',
     description:

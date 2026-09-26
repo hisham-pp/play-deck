@@ -11,7 +11,6 @@ export const dontWakeTheGiantGame = defineGameModule({
   players: getPCount(3, 6),
   releaseDate: '2026-09-19',
   tags: [GameTags.M_P, GameTags.V_C, GameTags.CO, GameTags.AI, GameTags.LP],
-  featured: true,
   seo: {
     title: "Don't Wake the Giant — Co-op Stealth Party Game",
     description:

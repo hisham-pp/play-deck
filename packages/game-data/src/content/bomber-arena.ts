@@ -11,7 +11,6 @@ export const bomberArenaGame = defineGameModule({
   players: getPCount(1, 4),
   releaseDate: '2026-09-24',
   tags: [GameTags.A, GameTags.S, GameTags.LP, GameTags.M_P, GameTags.AI],
-  featured: true,
   seo: {
     title: 'Bomber Arena — Classic Arcade Action | PlayDeck',
     description:

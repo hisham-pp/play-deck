@@ -11,7 +11,6 @@ export const crosswordClashGame = defineGameModule({
   players: getPCount(1, 4),
   releaseDate: '2026-09-25',
   tags: [GameTags.WP, GameTags.M_P, GameTags.S, GameTags.AI, GameTags.V_C],
-  featured: true,
   seo: {
     title: 'Crossword Clash — Multiplayer Word Puzzle Game | PlayDeck',
     description:

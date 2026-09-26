@@ -18,7 +18,6 @@ export const summitRushGame = defineGameModule({
     GameTags.ONLINE_RACE,
     GameTags.V_C,
   ],
-  featured: true,
   seo: {
     title: 'Play Summit Rush — Free Hill Climb Racing Game',
     description:

@@ -11,7 +11,6 @@ export const pongGame = defineGameModule({
   players: getPCount(1, 2),
   releaseDate: '2026-09-17',
   tags: [GameTags.A, GameTags.C, GameTags.LP, GameTags.AI, GameTags.BALL_PHYSICS, GameTags.SR],
-  featured: true,
   seo: {
     title: 'Play Pong Online Free — 2 Player Paddle Duel',
     description:

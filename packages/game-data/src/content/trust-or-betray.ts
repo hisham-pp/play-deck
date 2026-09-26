@@ -11,7 +11,6 @@ export const trustOrBetrayGame = defineGameModule({
   players: getPCount(3, 8),
   releaseDate: '2026-09-20',
   tags: [GameTags.ST, GameTags.M_P, GameTags.V_C, GameTags.SD, GameTags.BLUFFING, GameTags.S],
-  featured: true,
   seo: {
     title: 'Trust or Betray — Social Deception Strategy | PlayDeck',
     description:

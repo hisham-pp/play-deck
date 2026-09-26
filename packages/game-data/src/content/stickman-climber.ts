@@ -18,7 +18,6 @@ export const stickmanClimberGame = defineGameModule({
     GameTags.BOSS_FIGHT,
     GameTags.HS,
   ],
-  featured: true,
   seo: {
     title: 'Stickman Climber — Vertical Action Game | PlayDeck',
     description:

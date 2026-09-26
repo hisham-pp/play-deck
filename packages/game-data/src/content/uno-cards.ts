@@ -11,7 +11,6 @@ export const unoCardsGame = defineGameModule({
   players: getPCount(2, 4),
   releaseDate: '2026-09-25',
   tags: [GameTags.P, GameTags.S, GameTags.LP, GameTags.AI, GameTags.M_P],
-  featured: true,
   seo: {
     title: 'UNO-Style Cards — Color & Number Shedding Game | PlayDeck',
     description:

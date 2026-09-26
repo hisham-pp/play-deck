@@ -11,7 +11,6 @@ export const stickmanRacingGame = defineGameModule({
   players: getPCount(1, 2),
   releaseDate: '2026-09-26',
   tags: [GameTags.ACT, GameTags.RACING, GameTags.SPEED, GameTags.REFLEXES, GameTags.HS],
-  featured: true,
   subtype: 'racing',
   difficultyPresets: ['easy', 'normal', 'hard'],
   seo: {

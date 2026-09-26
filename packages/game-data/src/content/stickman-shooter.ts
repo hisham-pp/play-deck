@@ -11,7 +11,6 @@ export const stickmanShooterGame = defineGameModule({
   players: getPCount(1),
   releaseDate: '2026-09-26',
   tags: [GameTags.ACT, GameTags.SHOOTER, GameTags.AIM, GameTags.REFLEXES, GameTags.HS],
-  featured: true,
   subtype: 'shooter',
   difficultyPresets: ['easy', 'normal', 'hard', 'expert'],
   seo: {

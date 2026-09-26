@@ -11,7 +11,6 @@ export const minesweeperGame = defineGameModule({
   players: getPCount(1),
   releaseDate: '2026-09-17',
   tags: [GameTags.PZ, GameTags.LOG, GameTags.S, GameTags.C, GameTags.SR, GameTags.KEYBOARD_READY],
-  featured: true,
   seo: {
     title: 'Play Minesweeper Online Free — Beginner to Expert',
     description:

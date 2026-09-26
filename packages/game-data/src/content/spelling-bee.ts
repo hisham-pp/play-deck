@@ -11,7 +11,6 @@ export const spellingBeeGame = defineGameModule({
   players: getPCount(1, 6),
   releaseDate: '2026-09-20',
   tags: [GameTags.M_P, GameTags.V_C, GameTags.S, GameTags.WP],
-  featured: true,
   seo: {
     title: 'Spelling Bee — Honeycomb Word Finder Puzzle Game',
     description:

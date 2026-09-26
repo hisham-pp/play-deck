@@ -11,7 +11,6 @@ export const tinyTankArenaGame = defineGameModule({
   players: getPCount(2, 6),
   releaseDate: '2026-09-20',
   tags: [GameTags.A, GameTags.M_P, GameTags.V_C, GameTags.PH, GameTags.LP],
-  featured: true,
   seo: {
     title: 'Tiny Tank Arena — Destructible Arena Tank Warfare | PlayDeck',
     description:

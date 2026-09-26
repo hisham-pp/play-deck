@@ -18,7 +18,6 @@ export const chessGame = defineGameModule({
     GameTags.ONLINE_1V1,
     GameTags.V_C,
   ],
-  featured: true,
   seo: {
     title: 'Play Master Chess Online — 3D Board, Full Rules',
     description:

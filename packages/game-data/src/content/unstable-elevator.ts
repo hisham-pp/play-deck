@@ -11,7 +11,6 @@ export const unstableElevatorGame = defineGameModule({
   players: getPCount(2, 4),
   releaseDate: '2026-09-18',
   tags: [GameTags.A, GameTags.PH, GameTags.M_P, GameTags.V_C, GameTags.AI, GameTags.LP],
-  featured: true,
   seo: {
     title: 'Unstable Elevator — Physics Cargo Stacking Online',
     description:

@@ -11,7 +11,6 @@ export const penFightGame = defineGameModule({
   players: getPCount(1, 2),
   releaseDate: '2026-09-12',
   tags: [GameTags.TD, GameTags.PH, GameTags.LP, GameTags.AI, GameTags.NOSTALGIA],
-  featured: true,
   seo: {
     title: 'Play Pen Fight Online — 3D Desk Duel Game',
     description:

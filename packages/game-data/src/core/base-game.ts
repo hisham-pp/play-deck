@@ -63,7 +63,7 @@ export class BaseGameEntry<TState = unknown> {
     this.bannerUrl = assets.bannerUrl;
 
     this.tags = options.tags ?? [];
-    this.featured = options.featured ?? false;
+    this.featured = options.featured ?? true;
     this.badge =
       options.badge ??
       (this.status === GameStatuses.AVAILABLE ? BADGE_READY_TO_PLAY : BADGE_COMING_SOON);
@@ -177,7 +177,7 @@ export function defineGameModule<TState = unknown>(
     status: options.status ?? GameStatuses.AVAILABLE,
     releaseDate: options.releaseDate,
     tags: options.tags,
-    featured: options.featured,
+    featured: options.featured ?? true,
     badge: options.badge,
     thumbnailUrl: options.thumbnailUrl,
     bannerUrl: options.bannerUrl,

@@ -18,7 +18,6 @@ export const ballBounceGame = defineGameModule({
     GameTags.TOUCH_READY,
     GameTags.KEYBOARD_READY,
   ],
-  featured: true,
   seo: {
     title: 'Play Ball Bounce — Free Brick Breaker Arcade Game',
     description:

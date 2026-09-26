@@ -11,7 +11,6 @@ export const floorIsLavaGame = defineGameModule({
   players: getPCount(1, 6),
   releaseDate: '2026-09-19',
   tags: [GameTags.A, GameTags.M_P, GameTags.V_C, GameTags.PH, GameTags.LP, GameTags.S],
-  featured: true,
   seo: {
     title: 'Floor Is Lava — Disappearing Tile Survival Battle | PlayDeck',
     description:

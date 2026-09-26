@@ -11,7 +11,6 @@ export const wordChainGame = defineGameModule({
   players: getPCount(1, 8),
   releaseDate: '2026-09-18',
   tags: [GameTags.WP, GameTags.PZ, GameTags.S, GameTags.LP, GameTags.M_P],
-  featured: true,
   seo: {
     title: 'Play Word Chain Online Free — Last Letter Word Game',
     description:

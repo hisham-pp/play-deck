@@ -11,7 +11,6 @@ export const ticTacToeGame = defineGameModule({
   players: getPCount(1, 2),
   releaseDate: '2026-09-12',
   tags: [GameTags.C, GameTags.TB, GameTags.QUICK_PLAY, GameTags.LP, GameTags.AI],
-  featured: true,
   seo: {
     title: 'Play Tic-Tac-Toe Online — 2 Player or vs AI',
     description:

@@ -11,7 +11,6 @@ export const imposterBuilderGame = defineGameModule({
   players: getPCount(4, 8),
   releaseDate: '2026-09-20',
   tags: [GameTags.M_P, GameTags.V_C, GameTags.P, GameTags.SD],
-  featured: true,
   seo: {
     title: 'Imposter Builder — Social Deduction Grid Building Party Game',
     description:

@@ -11,7 +11,6 @@ export const guessTheLieGame = defineGameModule({
   players: getPCount(3, 8),
   releaseDate: '2026-09-20',
   tags: [GameTags.M_P, GameTags.V_C, GameTags.P, GameTags.SD, GameTags.S],
-  featured: true,
   seo: {
     title: 'Guess the Lie — Social Deduction Q&A Party Game',
     description:

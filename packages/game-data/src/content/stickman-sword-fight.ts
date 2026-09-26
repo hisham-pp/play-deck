@@ -11,7 +11,6 @@ export const stickmanSwordFightGame = defineGameModule({
   players: getPCount(1, 2),
   releaseDate: '2026-09-26',
   tags: [GameTags.ACT, GameTags.COMBAT, GameTags.SWORD, GameTags.PARRY, GameTags.HS],
-  featured: true,
   subtype: 'sword-fight',
   difficultyPresets: ['easy', 'normal', 'hard', 'expert'],
   seo: {

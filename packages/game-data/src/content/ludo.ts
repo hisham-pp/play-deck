@@ -11,7 +11,6 @@ export const ludoGame = defineGameModule({
   players: getPCount(2, 6),
   releaseDate: '2026-09-12',
   tags: [GameTags.B, GameTags.DICE, GameTags.TD, GameTags.PH, GameTags.PLAYERS_2_6, GameTags.BOTS],
-  featured: true,
   seo: {
     title: 'Play Ludo Online Free — 2 to 6 Players with Bots',
     description:

@@ -11,7 +11,6 @@ export const sudokuGame = defineGameModule({
   players: getPCount(1),
   releaseDate: '2026-09-13',
   tags: [GameTags.PZ, GameTags.LOG, GameTags.S, GameTags.BRAIN_TRAINING, GameTags.LEVELS_7],
-  featured: true,
   seo: {
     title: 'Play Sudoku Online Free — 7 Difficulty Levels',
     description:

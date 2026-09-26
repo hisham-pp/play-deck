@@ -11,7 +11,6 @@ export const reactionArenaGame = defineGameModule({
   players: getPCount(1, 4),
   releaseDate: '2026-09-24',
   tags: [GameTags.A, GameTags.S, GameTags.LP, GameTags.HS, GameTags.AI],
-  featured: true,
   seo: {
     title: 'Reaction Arena — Fast Reflex Games | PlayDeck',
     description:

@@ -11,7 +11,6 @@ export const telephoneDrawingGame = defineGameModule({
   players: getPCount(3, 8),
   releaseDate: '2026-09-20',
   tags: [GameTags.M_P, GameTags.V_C, GameTags.P, GameTags.S],
-  featured: true,
   seo: {
     title: 'Telephone Drawing — Hilarious Chain Drawing Party Game',
     description:

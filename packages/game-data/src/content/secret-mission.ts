@@ -11,7 +11,6 @@ export const secretMissionGame = defineGameModule({
   players: getPCount(3, 8),
   releaseDate: '2026-09-20',
   tags: [GameTags.M_P, GameTags.V_C, GameTags.P, GameTags.SD],
-  featured: true,
   seo: {
     title: 'Secret Mission — Stealth Social Deduction Party Game',
     description:

@@ -18,7 +18,6 @@ export const kingdomDraftGame = defineGameModule({
     GameTags.CARD_DRAFTING,
     GameTags.GRID_BUILDING,
   ],
-  featured: true,
   seo: {
     title: 'Kingdom Draft — Spatial Strategy Realm Drafting | PlayDeck',
     description:

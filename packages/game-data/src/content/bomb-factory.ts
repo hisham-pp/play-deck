@@ -18,7 +18,6 @@ export const bombFactoryGame = defineGameModule({
     GameTags.PZ,
     GameTags.VOICE_ESSENTIAL,
   ],
-  featured: true,
   seo: {
     title: 'Bomb Factory — Asymmetric Co-op Assembly Online',
     description:

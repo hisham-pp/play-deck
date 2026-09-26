@@ -11,7 +11,6 @@ export const stickmanArcheryGame = defineGameModule({
   players: getPCount(1),
   releaseDate: '2026-09-24',
   tags: [GameTags.ACT, GameTags.PH, GameTags.BOW, GameTags.AIM, GameTags.HS],
-  featured: true,
   seo: {
     title: 'Stickman Archery — Bow & Arrow Physics Game | PlayDeck',
     description:

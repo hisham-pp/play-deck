@@ -11,7 +11,6 @@ export const towerBuilderGame = defineGameModule({
   players: getPCount(1, 4),
   releaseDate: '2026-09-24',
   tags: [GameTags.A, GameTags.PH, GameTags.HS, GameTags.S, GameTags.LP],
-  featured: true,
   seo: {
     title: 'Tower Builder — Physics Stacking Game | PlayDeck',
     description:

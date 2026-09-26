@@ -11,7 +11,6 @@ export const stickmanNinjaGame = defineGameModule({
   players: getPCount(1),
   releaseDate: '2026-09-26',
   tags: [GameTags.ACT, GameTags.STEALTH, GameTags.NINJA, GameTags.SHADOW, GameTags.HS],
-  featured: true,
   subtype: 'ninja',
   difficultyPresets: ['normal', 'hard', 'expert'],
   seo: {

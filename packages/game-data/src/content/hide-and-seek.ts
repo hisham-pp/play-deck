@@ -11,7 +11,6 @@ export const hideAndSeekGame = defineGameModule({
   players: getPCount(3, 8),
   releaseDate: '2026-09-25',
   tags: [GameTags.P, GameTags.M_P, GameTags.S, GameTags.AI, GameTags.V_C],
-  featured: true,
   seo: {
     title: 'Hide & Seek — Multiplayer Social Stealth Party Game | PlayDeck',
     description:

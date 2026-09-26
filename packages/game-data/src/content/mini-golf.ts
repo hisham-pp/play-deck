@@ -19,7 +19,6 @@ export const miniGolfGame = defineGameModule({
     GameTags.V_C,
     GameTags.ONLINE_MULTIPLAYER,
   ],
-  featured: true,
   seo: {
     title: 'Play Mini Golf Online Free — 2D Physics Arcade Game',
     description:

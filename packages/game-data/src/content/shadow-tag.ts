@@ -11,7 +11,6 @@ export const shadowTagGame = defineGameModule({
   players: getPCount(2, 6),
   releaseDate: '2026-09-18',
   tags: [GameTags.A, GameTags.M_P, GameTags.V_C, GameTags.AI, GameTags.LP],
-  featured: true,
   seo: {
     title: 'Shadow Tag — Stealth Arena Tag Game Online',
     description:

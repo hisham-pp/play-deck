@@ -11,7 +11,6 @@ export const humanConveyorBeltGame = defineGameModule({
   players: getPCount(2, 6),
   releaseDate: '2026-09-18',
   tags: [GameTags.M_P, GameTags.V_C, GameTags.PH, GameTags.CO],
-  featured: true,
   seo: {
     title: 'Human Conveyor Belt — Co-op Physics Online',
     description:

@@ -11,7 +11,6 @@ export const colorThiefGame = defineGameModule({
   players: getPCount(2, 6),
   releaseDate: '2026-09-18',
   tags: [GameTags.M_P, GameTags.V_C, GameTags.LP, GameTags.AI, GameTags.TB],
-  featured: true,
   seo: {
     title: 'Color Thief — Free Territory Control Game Online',
     description:

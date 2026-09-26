@@ -11,7 +11,6 @@ export const badArchitectGame = defineGameModule({
   players: getPCount(2, 8),
   releaseDate: '2026-09-20',
   tags: [GameTags.M_P, GameTags.V_C, GameTags.P, GameTags.CO, GameTags.S],
-  featured: true,
   seo: {
     title: 'Bad Architect — Voice-Only Construction Party Game',
     description:

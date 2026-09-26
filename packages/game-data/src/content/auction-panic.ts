@@ -11,7 +11,6 @@ export const auctionPanicGame = defineGameModule({
   players: getPCount(2, 6),
   releaseDate: '2026-09-20',
   tags: [GameTags.ST, GameTags.M_P, GameTags.V_C, GameTags.P, GameTags.S],
-  featured: true,
   seo: {
     title: 'Auction Panic — Mystery Bidding & Treasure Game | PlayDeck',
     description:

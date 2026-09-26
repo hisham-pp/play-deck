@@ -11,7 +11,6 @@ export const tinyIslandGame = defineGameModule({
   players: getPCount(2, 6),
   releaseDate: '2026-09-18',
   tags: [GameTags.M_P, GameTags.V_C, GameTags.AI, GameTags.LP, GameTags.SURVIVAL, GameTags.TB],
-  featured: true,
   seo: {
     title: 'Tiny Island — Sinking Island Survival Online',
     description:
