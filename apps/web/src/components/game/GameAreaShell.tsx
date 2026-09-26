@@ -54,6 +54,7 @@ import { SpellingBeeGame } from '@/features/games/spelling-bee';
 import { SpyNetworkGame } from '@/features/games/spy-network';
 import { StickmanArcheryGame } from '@/features/games/stickman-archery';
 import { StickmanClimberGame } from '@/features/games/stickman-climber';
+import { StickmanNinjaGame } from '@/features/games/stickman-ninja';
 import { StickmanParkourGame } from '@/features/games/stickman-parkour';
 import { StickmanPlatformerGame } from '@/features/games/stickman-platformer';
 import { StickmanRunnerGame } from '@/features/games/stickman-runner';
@@ -130,6 +131,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'snake-and-ladder': SnakeLadderGame,
   'stickman-archery': StickmanArcheryGame,
   'stickman-climber': StickmanClimberGame,
+  'stickman-ninja': StickmanNinjaGame,
   'stickman-parkour': StickmanParkourGame,
   'stickman-platformer': StickmanPlatformerGame,
   'stickman-runner': StickmanRunnerGame,

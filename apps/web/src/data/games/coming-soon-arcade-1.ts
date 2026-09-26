@@ -75,28 +75,6 @@ export const COMING_SOON_ARCADE_GAMES_1: GameDefinition[] = [
     ],
   },
   {
-    id: 'stickman-ninja',
-    name: 'Stickman Ninja',
-    slug: 'stickman-ninja',
-    description:
-      'Shadow stealth infiltration, throwing star trajectory physics, ceiling grappling, and silent takedowns.',
-    category: CATEGORY_ARCADE,
-    players: { min: 1, max: 1 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/stickman-archery/icon.svg',
-    bannerUrl: '/games/stickman-archery/cover.svg',
-    tags: ['Action', 'Stealth', 'Ninja', 'Shadow', TAG_HIGH_SCORE],
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-    subtype: 'ninja',
-    difficultyPresets: ['normal', 'hard', 'expert'],
-    controls: [
-      { action: 'Silent Movement', key: 'W / A / S / D', touchAction: 'Analog Joystick' },
-      { action: 'Shuriken Throw', key: 'Left Click', touchAction: 'Tap Target' },
-      { action: 'Smoke Bomb', key: 'E / Shift', touchAction: 'Tap Skill Icon' },
-    ],
-  },
-  {
     id: 'stickman-basketball',
     name: 'Stickman Basketball',
     slug: 'stickman-basketball',
