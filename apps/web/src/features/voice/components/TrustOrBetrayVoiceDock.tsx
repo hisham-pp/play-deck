@@ -11,6 +11,8 @@ export interface TrustOrBetrayVoiceDockProps {
   roomCode?: string | null;
   transport?: SupabaseTransportService | null;
   anchorClassName?: string;
+  variant?: 'floating' | 'inline';
+  defaultOpen?: boolean;
 }
 
 /**
@@ -21,7 +23,9 @@ export function TrustOrBetrayVoiceDock({
   roomCode: propRoomCode,
   transport: propTransport,
   anchorClassName,
-}: TrustOrBetrayVoiceDockProps) {
+  variant,
+  defaultOpen,
+}: TrustOrBetrayVoiceDockProps = {}) {
   const storeRoomCode = useTrustMultiplayerStore((state) => state.roomCode);
   const storeTransport = useTrustMultiplayerStore((state) => state.transport);
 
@@ -31,6 +35,12 @@ export function TrustOrBetrayVoiceDock({
   if (!roomCode) return null;
 
   return (
-    <VoiceChatDock roomCode={roomCode} transport={transport} anchorClassName={anchorClassName} />
+    <VoiceChatDock
+      roomCode={roomCode}
+      transport={transport}
+      anchorClassName={anchorClassName}
+      variant={variant}
+      defaultOpen={defaultOpen}
+    />
   );
 }

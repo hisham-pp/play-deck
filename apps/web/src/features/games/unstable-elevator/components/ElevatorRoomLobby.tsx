@@ -170,7 +170,7 @@ export function ElevatorRoomLobby({ onStartGame, onLeave }: ElevatorRoomLobbyPro
       </Card>
 
       {/* Warm the mesh up while seats fill, so voice is live before floor one. */}
-      <ElevatorVoiceDock anchorClassName="bottom-4 right-4" />
+      <ElevatorVoiceDock defaultOpen={true} />
 
       {showInvite && roomCode && (
         <InviteToRoomModal

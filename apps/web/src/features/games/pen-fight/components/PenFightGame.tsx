@@ -237,7 +237,7 @@ export function PenFightGame() {
 
       {/* Anchored below the back link so it clears the arena HUD on both rows. */}
       {state.mode === MODE_ONLINE && (
-        <RoomVoiceDock anchorClassName="left-3 top-16 sm:left-5 sm:top-20" />
+        <RoomVoiceDock anchorClassName="left-3 top-16 sm:left-5 sm:top-20" defaultOpen={false} />
       )}
 
       <PenFightResultOverlay

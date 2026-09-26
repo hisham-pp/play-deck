@@ -2,7 +2,9 @@
 
 import { useSearchParams } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
+import { OnlineRoomSetupCard } from '@/features/multiplayer/components/OnlineRoomSetupCard';
 import { useLootDashMultiplayerStore } from '@/stores/loot-dash-multiplayer.store';
+import { usePlayerStore } from '@/stores/player.store';
 import { useLootDashGame } from '../hooks/use-loot-dash-game';
 import { LootDashCanvas } from './LootDashCanvas';
 import { LootDashHud } from './LootDashHud';
@@ -14,6 +16,7 @@ import { LootDashVictoryModal } from './LootDashVictoryModal';
 export function LootDashGame() {
   const searchParams = useSearchParams();
   const roomParam = searchParams.get('room');
+  const player = usePlayerStore((s) => s.player);
 
   const [mode, setMode] = useState<'lobby' | 'online_room' | 'playing'>('lobby');
 
@@ -35,33 +38,45 @@ export function LootDashGame() {
     handleCanvasMouseMove,
   } = useLootDashGame('Sprinter');
 
-  const { roomCode, createRoom, joinRoomByCode } = useLootDashMultiplayerStore();
+  const { roomCode, error, createRoom, joinRoomByCode, leaveRoom } = useLootDashMultiplayerStore();
 
   // Handle URL room code parameter
   useEffect(() => {
     if (roomParam && !roomCode) {
       setMode('online_room');
       void joinRoomByCode(roomParam, {
-        id: `runner-${Date.now().toString().slice(-4)}`,
-        displayName: 'Guest Runner',
-        avatar: '🏃',
+        id: player?.id || `runner-${Date.now().toString().slice(-4)}`,
+        displayName: player?.displayName || 'Guest Runner',
+        avatar: player?.avatar || '🏃',
       });
     }
-  }, [roomParam, roomCode, joinRoomByCode]);
+  }, [roomParam, roomCode, joinRoomByCode, player]);
 
   const handleStartSolo = (customConfig?: Parameters<typeof startMatch>[0]) => {
     startMatch(customConfig);
     setMode('playing');
   };
 
-  const handleOpenOnlineRoom = async () => {
+  const handleOpenOnlineRoom = () => {
     setMode('online_room');
-    if (!roomCode) {
-      await createRoom({
-        id: `sprinter-${Date.now().toString().slice(-4)}`,
-        displayName: 'Host Sprinter',
-        avatar: '💎',
-      });
+  };
+
+  const handleHostRoom = async () => {
+    await createRoom({
+      id: player?.id || `sprinter-${Date.now().toString().slice(-4)}`,
+      displayName: player?.displayName || 'Host Sprinter',
+      avatar: player?.avatar || '💎',
+    });
+  };
+
+  const handleJoinRoom = async (code: string) => {
+    const joined = await joinRoomByCode(code, {
+      id: player?.id || `runner-${Date.now().toString().slice(-4)}`,
+      displayName: player?.displayName || 'Guest Runner',
+      avatar: player?.avatar || '🏃',
+    });
+    if (joined) {
+      setMode('online_room');
     }
   };
 
@@ -72,6 +87,7 @@ export function LootDashGame() {
 
   const handleReturnToLobby = () => {
     hookReturnToLobby();
+    leaveRoom();
     setMode('lobby');
   };
 
@@ -89,10 +105,26 @@ export function LootDashGame() {
         />
       )}
 
-      {mode === 'online_room' && (
+      {mode === 'online_room' && !roomCode && (
+        <div className="w-full max-w-xl py-6">
+          <OnlineRoomSetupCard
+            title="Loot Dash — Online Match"
+            description="Host a race for crystals or enter a 6-digit room code to join."
+            onHost={handleHostRoom}
+            onJoin={handleJoinRoom}
+            onBack={() => setMode('lobby')}
+            error={error}
+          />
+        </div>
+      )}
+
+      {mode === 'online_room' && roomCode && (
         <LootDashRoomLobby
           onStartMatch={handleStartMultiplayerMatch}
-          onBackToLobby={() => setMode('lobby')}
+          onBackToLobby={() => {
+            leaveRoom();
+            setMode('lobby');
+          }}
         />
       )}
 

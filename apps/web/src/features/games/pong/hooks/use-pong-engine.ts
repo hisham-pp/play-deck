@@ -20,18 +20,24 @@ import type {
 import { pongSoundService } from '../services/pong-sound.service';
 import { DEFAULT_PONG_STATS, pongStatsRepository } from '../services/pong-stats-repository';
 
+import type { PongSnapshotPayload } from './use-pong-multiplayer';
+
 export interface UsePongEngineProps {
   onGameOver?: (winner: 'left' | 'right', p1Score: number, p2Score: number) => void;
   inputs: PongInputs;
+  isGuest?: boolean;
 }
 
-export function usePongEngine({ onGameOver, inputs }: UsePongEngineProps) {
+export function usePongEngine({ onGameOver, inputs, isGuest = false }: UsePongEngineProps) {
   const [state, setState] = useState<PongState>(() => createInitialPongState());
   const [stats, setStats] = useState<PongStats>(DEFAULT_PONG_STATS);
   const [particles, setParticles] = useState<Particle[]>([]);
 
   const stateRef = useRef<PongState>(state);
   stateRef.current = state;
+
+  const isGuestRef = useRef(isGuest);
+  isGuestRef.current = isGuest;
 
   const inputsRef = useRef<PongInputs>(inputs);
   inputsRef.current = inputs;
@@ -114,7 +120,7 @@ export function usePongEngine({ onGameOver, inputs }: UsePongEngineProps) {
         setParticles(nextParticles);
       }
 
-      if (currentState.status === 'playing') {
+      if (currentState.status === 'playing' && !isGuestRef.current) {
         const { state: nextState, events } = stepPongGame(currentState, inputsRef.current, dt);
 
         if (events.length > 0) {
@@ -237,6 +243,57 @@ export function usePongEngine({ onGameOver, inputs }: UsePongEngineProps) {
     [restartGame],
   );
 
+  const applySnapshot = useCallback(
+    (snapshot: PongSnapshotPayload) => {
+      setState((prev) => {
+        const nextState: PongState = {
+          ...prev,
+          ball: snapshot.ball,
+          player1: snapshot.player1,
+          player2: snapshot.player2,
+          status: snapshot.status,
+          servePending: snapshot.servePending,
+          serverSide: snapshot.serverSide,
+          serveCountdown: snapshot.serveCountdown,
+          rally: snapshot.rally,
+          highestRallyInGame: snapshot.highestRallyInGame,
+          winner: snapshot.winner,
+        };
+
+        // Sound & particle feedback on guest
+        if (nextState.rally > prev.rally) {
+          pongSoundService.playPaddleHit(nextState.ball.speed);
+          const side = nextState.ball.vx > 0 ? 'left' : 'right';
+          const hitX =
+            side === 'left' ? nextState.player1.x + nextState.player1.width : nextState.player2.x;
+          spawnHitParticles(hitX, nextState.ball.y, side);
+        } else if (
+          nextState.player1.score > prev.player1.score ||
+          nextState.player2.score > prev.player2.score
+        ) {
+          pongSoundService.playScore(nextState.player1.score > prev.player1.score);
+        }
+
+        if (nextState.winner && !prev.winner) {
+          if (nextState.winner === 'right') {
+            pongSoundService.playVictory();
+          } else {
+            pongSoundService.playGameOver();
+          }
+          onGameOverRef.current?.(
+            nextState.winner,
+            nextState.player1.score,
+            nextState.player2.score,
+          );
+        }
+
+        stateRef.current = nextState;
+        return nextState;
+      });
+    },
+    [spawnHitParticles],
+  );
+
   return {
     state,
     stats,
@@ -249,5 +306,6 @@ export function usePongEngine({ onGameOver, inputs }: UsePongEngineProps) {
     setDifficulty,
     setWinningScore,
     refreshStats,
+    applySnapshot,
   };
 }

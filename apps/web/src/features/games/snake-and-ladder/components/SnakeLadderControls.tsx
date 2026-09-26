@@ -1,7 +1,8 @@
 'use client';
 
-import { LogOut, Pause, Play, RefreshCw } from 'lucide-react';
+import { LogOut, Pause, Play, RefreshCw, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@playdeck/ui';
+import { usePreferencesStore } from '@/stores/preferences.store';
 import { STATUS_PAUSED, STATUS_PLAYING } from '../engine/snake-ladder-constants';
 import type { SnakeLadderGameState } from '../types/snake-and-ladder.types';
 
@@ -26,6 +27,9 @@ export function SnakeLadderControls({
   onRestart,
   onLeave,
 }: SnakeLadderControlsProps) {
+  const soundEnabled = usePreferencesStore((s) => s.soundEnabled);
+  const toggleSound = usePreferencesStore((s) => s.toggleSound);
+
   return (
     <div className="flex flex-wrap items-center gap-2">
       {canPause && state.status === STATUS_PLAYING && (
@@ -38,6 +42,19 @@ export function SnakeLadderControls({
           <Play className={ICON_CLASS} /> Resume
         </Button>
       )}
+      <Button
+        variant={VARIANT_OUTLINE}
+        size="sm"
+        onClick={() => void toggleSound()}
+        title={soundEnabled ? 'Mute Sound FX' : 'Enable Sound FX'}
+        aria-label={soundEnabled ? 'Mute Sound FX' : 'Enable Sound FX'}
+      >
+        {soundEnabled ? (
+          <Volume2 className="h-4 w-4 text-amber-400" />
+        ) : (
+          <VolumeX className="h-4 w-4 text-slate-500" />
+        )}
+      </Button>
       <Button variant={VARIANT_OUTLINE} size="sm" onClick={onRestart}>
         <RefreshCw className={ICON_CLASS} /> Restart
       </Button>

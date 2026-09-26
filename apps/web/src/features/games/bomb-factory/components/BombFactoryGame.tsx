@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useMemo, useState } from 'react';
+import { OnlineRoomSetupCard } from '@/features/multiplayer/components/OnlineRoomSetupCard';
 import { BombFactoryVoiceDock } from '@/features/voice/components/BombFactoryVoiceDock';
 import { useBombFactoryMultiplayerStore } from '@/stores/bomb-factory-multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
@@ -44,6 +45,9 @@ function BombFactoryGameInner() {
   useBombFactorySound(state);
 
   const roomCode = useBombFactoryMultiplayerStore((s) => s.roomCode);
+  const createRoom = useBombFactoryMultiplayerStore((s) => s.createRoom);
+  const joinRoomByCode = useBombFactoryMultiplayerStore((s) => s.joinRoomByCode);
+  const error = useBombFactoryMultiplayerStore((s) => s.error);
   const transport = useBombFactoryMultiplayerStore((s) => s.transport);
   const localPlayerId = useBombFactoryMultiplayerStore((s) => s.localPlayerId);
   const isHost = useBombFactoryMultiplayerStore((s) => s.isHost());
@@ -96,11 +100,25 @@ function BombFactoryGameInner() {
     onSelectionBroadcast: broadcastSelection,
   });
 
-  const handleSelectOnline = async () => {
-    const store = useBombFactoryMultiplayerStore.getState();
-    const ok = await store.createRoom({
+  const handleOpenOnlineRoom = () => {
+    setScreen('online-room');
+  };
+
+  const handleHostOnline = async () => {
+    const ok = await createRoom({
       id: player?.id || 'host',
       displayName: player?.displayName || 'Host',
+      avatar: player?.avatar || '🛠️',
+    });
+    if (ok) {
+      setScreen('online-room');
+    }
+  };
+
+  const handleJoinOnline = async (code: string) => {
+    const ok = await joinRoomByCode(code, {
+      id: player?.id || `operator-${Date.now().toString().slice(-4)}`,
+      displayName: player?.displayName || 'Operator',
       avatar: player?.avatar || '🛠️',
     });
     if (ok) {
@@ -195,6 +213,20 @@ function BombFactoryGameInner() {
   }
 
   if (screen === 'online-room' || roomCode) {
+    if (!roomCode) {
+      return (
+        <div className="mx-auto w-full max-w-xl py-6">
+          <OnlineRoomSetupCard
+            title="Bomb Factory — Online Match"
+            description="Host a team assembly floor or join with a 6-digit room code."
+            onHost={handleHostOnline}
+            onJoin={handleJoinOnline}
+            onBack={() => setScreen('lobby')}
+            error={error}
+          />
+        </div>
+      );
+    }
     return (
       <div className="space-y-4">
         {roomCode && <BombFactoryVoiceDock />}
@@ -212,7 +244,7 @@ function BombFactoryGameInner() {
   return (
     <BombFactoryLobby
       onSelectLocal={() => setScreen('local-setup')}
-      onSelectOnline={handleSelectOnline}
+      onSelectOnline={handleOpenOnlineRoom}
     />
   );
 }

@@ -1,4 +1,4 @@
-export type PongMode = 'single-player' | 'local-2p';
+export type PongMode = 'single-player' | 'local-2p' | 'online';
 
 export type PongDifficulty = 'easy' | 'medium' | 'hard';
 

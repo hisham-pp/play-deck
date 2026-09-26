@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronDown, Headset } from 'lucide-react';
+import { ChevronDown, HeadphoneOff, Headset, MicOff } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import type { SupabaseTransportService } from '@/features/multiplayer/services/supabase-transport.service';
 import { usePlayerStore } from '@/stores/player.store';
@@ -12,23 +12,32 @@ import { VoiceAudioSink } from './VoiceAudioSink';
 import { VoiceJoinPanel } from './VoiceJoinPanel';
 import { VoiceLivePanel } from './VoiceLivePanel';
 
-interface VoiceChatDockProps {
+export interface VoiceChatDockProps {
   roomCode: string;
   transport: SupabaseTransportService | null;
-  /** Positioning classes, so each game can dodge its own HUD. */
+  /** Positioning classes, e.g. 'top-16 right-3 sm:top-20 sm:right-5' */
   anchorClassName?: string;
+  /** 'floating' (default, fixed overlay) or 'inline' (rendered within layout flow) */
+  variant?: 'floating' | 'inline';
+  /** Initial open state. If omitted, floating docks start collapsed as a compact pill; inline docks start open. */
+  defaultOpen?: boolean;
 }
 
-const PANEL =
-  'fixed z-40 w-64 overflow-hidden rounded-2xl border border-surface-border bg-surface-base shadow-2xl';
+const DEFAULT_FLOATING_ANCHOR = 'top-16 right-3 sm:top-20 sm:right-5';
 
 export function VoiceChatDock({
   roomCode,
   transport,
-  anchorClassName = 'bottom-4 left-4',
+  anchorClassName,
+  variant = 'floating',
+  defaultOpen,
 }: VoiceChatDockProps) {
+  const isInline = variant === 'inline' || Boolean(anchorClassName?.includes('static'));
+  const isFloating = !isInline;
+  const resolvedAnchor = anchorClassName || DEFAULT_FLOATING_ANCHOR;
+
+  const [isOpen, setIsOpen] = useState(() => (defaultOpen !== undefined ? defaultOpen : isInline));
   const player = usePlayerStore((state) => state.player);
-  const [isOpen, setIsOpen] = useState(true);
 
   const localPlayer = useMemo(
     () =>
@@ -79,21 +88,60 @@ export function VoiceChatDock({
 
   const connectedCount = countConnected(remotePeers);
 
-  return (
-    <div className={`${PANEL} ${anchorClassName}`}>
-      <button
-        type="button"
-        onClick={() => setIsOpen((open) => !open)}
-        className="flex w-full items-center justify-between border-b border-surface-border bg-surface-raised p-3 text-left transition-colors hover:bg-surface-overlay"
-      >
-        <span className="flex items-center gap-2">
-          <Headset className={`h-4 w-4 ${isActive ? 'text-emerald-400' : 'text-amber-400'}`} />
+  // Floating collapsed pill: compact, non-obstructive tactile audio control
+  if (isFloating && !isOpen) {
+    return (
+      <div className={`fixed z-50 ${resolvedAnchor}`}>
+        <button
+          type="button"
+          onClick={() => setIsOpen(true)}
+          className="group flex items-center gap-2 rounded-full border border-surface-border bg-surface-raised/95 px-3.5 py-1.5 shadow-xl backdrop-blur-md transition-all hover:scale-105 hover:border-amber-500/50 hover:bg-surface-overlay active:scale-95 cursor-pointer"
+          title="Open Voice Chat Audio Controls"
+          aria-label="Open Voice Chat Audio Controls"
+        >
+          <Headset
+            className={`h-4 w-4 transition-transform group-hover:scale-110 ${
+              isActive ? 'text-emerald-400 animate-pulse' : 'text-amber-400'
+            }`}
+          />
           <span className="font-mono text-xs font-bold uppercase tracking-wider text-deck-900 dark:text-deck-100">
             Voice
           </span>
           {isActive && (
             <span className="rounded-full bg-emerald-500/20 px-1.5 py-0.5 text-[9px] font-black text-emerald-300">
               {connectedCount + 1}
+            </span>
+          )}
+          {isMuted && <MicOff className="h-3.5 w-3.5 text-rose-400" />}
+          {isDeafened && <HeadphoneOff className="h-3.5 w-3.5 text-rose-400" />}
+          <ChevronDown className="h-3.5 w-3.5 text-deck-400 transition-transform rotate-180 group-hover:text-white" />
+        </button>
+        <VoiceAudioSink peers={remotePeers} isDeafened={isDeafened} />
+      </div>
+    );
+  }
+
+  const containerClasses = isFloating
+    ? `fixed z-50 w-64 sm:w-72 overflow-hidden rounded-2xl border border-surface-border bg-surface-base shadow-2xl backdrop-blur-md ${resolvedAnchor}`
+    : 'relative w-full max-w-sm overflow-hidden rounded-2xl border border-surface-border bg-surface-base shadow-lg';
+
+  return (
+    <div className={containerClasses}>
+      <button
+        type="button"
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="flex w-full items-center justify-between border-b border-surface-border bg-surface-raised p-3 text-left transition-colors hover:bg-surface-overlay cursor-pointer"
+        title={isOpen ? 'Collapse voice controls' : 'Expand voice controls'}
+        aria-label={isOpen ? 'Collapse voice controls' : 'Expand voice controls'}
+      >
+        <span className="flex items-center gap-2">
+          <Headset className={`h-4 w-4 ${isActive ? 'text-emerald-400' : 'text-amber-400'}`} />
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-deck-900 dark:text-deck-100">
+            Voice Chat
+          </span>
+          {isActive && (
+            <span className="rounded-full bg-emerald-500/20 px-1.5 py-0.5 text-[9px] font-black text-emerald-300">
+              {connectedCount + 1} live
             </span>
           )}
         </span>

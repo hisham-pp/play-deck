@@ -377,7 +377,7 @@ export const WordBattleGame: React.FC<WordBattleGameProps> = ({
   return (
     <div className="relative w-full max-w-4xl mx-auto flex flex-col items-center justify-start min-h-[640px] text-slate-100 font-sans p-2 sm:p-4 select-none">
       {/* PlayDeck Voice Dock */}
-      <RoomVoiceDock />
+      <RoomVoiceDock defaultOpen={false} />
 
       {/* ----------------- PHASE: LOBBY ----------------- */}
       {gameState.phase === 'lobby' && (

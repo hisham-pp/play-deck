@@ -6,6 +6,7 @@ import {
   ArrowRight,
   ArrowUp,
   Bot,
+  Globe,
   Pause,
   Play,
   RotateCcw,
@@ -18,6 +19,10 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { OnlineRoomSetupCard } from '@/features/multiplayer/components/OnlineRoomSetupCard';
+import { RoomVoiceDock } from '@/features/voice/components/RoomVoiceDock';
+import { useMultiplayerStore } from '@/stores/multiplayer.store';
+import { usePlayerStore } from '@/stores/player.store';
 import {
   createInitialFootballState,
   getFootballBotAction,
@@ -32,11 +37,25 @@ import {
   PITCH_PADDING_Y,
   PITCH_WIDTH,
 } from '../engine/football-engine';
+import {
+  type FootballSnapshotPayload,
+  useFootballMultiplayer,
+} from '../hooks/use-football-multiplayer';
+
+export type FootballMode = 'solo' | 'local2p' | 'online';
 
 export function PhysicsFootballGame() {
-  const [mode, setMode] = useState<'solo' | 'local2p'>('solo');
+  const { player, recordGamePlayed } = usePlayerStore();
+  const { roomCode, role, opponent, leaveRoom } = useMultiplayerStore();
+
+  const [seatedOnMount] = useState(() => Boolean(useMultiplayerStore.getState().roomCode));
+  const [mode, setMode] = useState<FootballMode>(() => (seatedOnMount ? 'online' : 'solo'));
   const [gameState, setGameState] = useState<FootballState>(() =>
-    createInitialFootballState('You (Blue)', 'StrikerBot (Red)', true),
+    createInitialFootballState(
+      seatedOnMount ? 'Host (Blue)' : 'You (Blue)',
+      seatedOnMount ? 'Challenger (Red)' : 'StrikerBot (Red)',
+      !seatedOnMount,
+    ),
   );
   const [isPaused, setIsPaused] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -126,15 +145,84 @@ export function PhysicsFootballGame() {
     [soundEnabled],
   );
 
-  const startNewMatch = useCallback((chosenMode: 'solo' | 'local2p') => {
-    setMode(chosenMode);
-    if (chosenMode === 'solo') {
-      setGameState(createInitialFootballState('You (Blue)', 'StrikerBot (Red)', true));
-    } else {
-      setGameState(createInitialFootballState('Player 1 (Blue)', 'Player 2 (Red)', false));
-    }
-    setIsPaused(false);
+  const startNewMatch = useCallback(
+    (chosenMode: FootballMode) => {
+      if (chosenMode !== 'online' && roomCode) {
+        leaveRoom();
+      }
+      setMode(chosenMode);
+      if (chosenMode === 'solo') {
+        setGameState(createInitialFootballState('You (Blue)', 'StrikerBot (Red)', true));
+      } else if (chosenMode === 'local2p') {
+        setGameState(createInitialFootballState('Player 1 (Blue)', 'Player 2 (Red)', false));
+      } else {
+        setGameState(createInitialFootballState('Host (Blue)', 'Challenger (Red)', false));
+      }
+      setIsPaused(false);
+    },
+    [roomCode, leaveRoom],
+  );
+
+  // Track remote guest action on host
+  const remoteGuestActionRef = useRef<FootballPlayerAction>({ moveX: 0, moveY: 0, kick: false });
+
+  const handleRemoteAction = useCallback((action: FootballPlayerAction) => {
+    remoteGuestActionRef.current = action;
   }, []);
+
+  const handleSnapshotReceived = useCallback(
+    (snapshot: FootballSnapshotPayload) => {
+      setGameState((prev) => {
+        if (snapshot.status === 'goal_scored' && prev.status === 'playing') {
+          playSound('goal');
+        }
+        if (snapshot.status === 'playing' && prev.status === 'kickoff') {
+          playSound('whistle');
+        }
+        if (snapshot.status === 'game_over' && prev.status !== 'game_over') {
+          playSound('win');
+        }
+        const prevBallSpeed = Math.hypot(prev.ball.vx, prev.ball.vy);
+        const currBallSpeed = Math.hypot(snapshot.ball.vx, snapshot.ball.vy);
+        if (currBallSpeed > 350 && prevBallSpeed < 200) {
+          playSound('kick');
+        }
+        return snapshot;
+      });
+    },
+    [playSound],
+  );
+
+  const handleRequestRestart = useCallback(() => {
+    startNewMatch('online');
+  }, [startNewMatch]);
+
+  const { sendAction, requestRestart, hasOpponent } = useFootballMultiplayer(
+    mode === 'online',
+    gameState,
+    {
+      onRemoteAction: handleRemoteAction,
+      onSnapshotReceived: handleSnapshotReceived,
+      onRequestRestart: handleRequestRestart,
+    },
+  );
+
+  // Record stats on match end
+  const gameOverHandledRef = useRef(false);
+  useEffect(() => {
+    if (gameState.status === 'game_over' && !gameOverHandledRef.current) {
+      gameOverHandledRef.current = true;
+      const isOnlineMatch = mode === 'online' && Boolean(roomCode);
+      const won = isOnlineMatch
+        ? role === 'host'
+          ? gameState.winnerTeam === 'blue'
+          : gameState.winnerTeam === 'red'
+        : gameState.winnerTeam === 'blue';
+      recordGamePlayed(won, 'arcade');
+    } else if (gameState.status !== 'game_over') {
+      gameOverHandledRef.current = false;
+    }
+  }, [gameState.status, gameState.winnerTeam, mode, roomCode, role, recordGamePlayed]);
 
   // Keyboard Event Listeners
   useEffect(() => {
@@ -158,6 +246,10 @@ export function PhysicsFootballGame() {
   }, []);
 
   // Physics & Animation Loop
+  const isOnline = mode === 'online' && Boolean(roomCode);
+  const isGuest = isOnline && role === 'guest';
+  const isHost = isOnline && role === 'host';
+
   useEffect(() => {
     let lastTime = performance.now();
     let animId: number;
@@ -166,8 +258,24 @@ export function PhysicsFootballGame() {
       const dt = Math.min((currentTime - lastTime) / 1000, 0.05);
       lastTime = currentTime;
 
+      const keys = keysDownRef.current;
+
+      // Guest sends local action to host and lets host simulate physics
+      if (isGuest) {
+        let p2X = 0;
+        let p2Y = 0;
+        if (keys.has('arrowup') || keys.has('w')) p2Y -= 1;
+        if (keys.has('arrowdown') || keys.has('s')) p2Y += 1;
+        if (keys.has('arrowleft') || keys.has('a')) p2X -= 1;
+        if (keys.has('arrowright') || keys.has('d')) p2X += 1;
+        const kick = keys.has('enter') || keys.has('e') || keys.has(' ') || keys.has('space');
+
+        sendAction({ moveX: p2X, moveY: p2Y, kick });
+        animId = requestAnimationFrame(loop);
+        return;
+      }
+
       if (!isPaused && gameState.status !== 'game_over') {
-        const keys = keysDownRef.current;
         const actions: Record<string, FootballPlayerAction> = {};
 
         // Blue Player (P1): WASD + Space
@@ -178,8 +286,8 @@ export function PhysicsFootballGame() {
         if (keys.has('a')) p1X -= 1;
         if (keys.has('d')) p1X += 1;
 
-        // If solo, also accept Arrow Keys for Blue player
-        if (mode === 'solo') {
+        // In solo or online host, also accept Arrow Keys for Blue player
+        if (mode === 'solo' || isHost) {
           if (keys.has('arrowup')) p1Y -= 1;
           if (keys.has('arrowdown')) p1Y += 1;
           if (keys.has('arrowleft')) p1X -= 1;
@@ -192,8 +300,10 @@ export function PhysicsFootballGame() {
           kick: keys.has(' ') || keys.has('space'),
         };
 
-        // Red Player (P2): Local 2-Player (Arrow Keys + Enter) or AI
-        if (mode === 'local2p') {
+        // Red Player (P2): Online Remote, Local 2-Player (Arrow Keys + Enter), or AI
+        if (isHost) {
+          actions['p2'] = remoteGuestActionRef.current;
+        } else if (mode === 'local2p') {
           let p2X = 0;
           let p2Y = 0;
           if (keys.has('arrowup')) p2Y -= 1;
@@ -243,7 +353,7 @@ export function PhysicsFootballGame() {
 
     animId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(animId);
-  }, [gameState, isPaused, mode, playSound]);
+  }, [gameState, isPaused, mode, isGuest, isHost, sendAction, playSound]);
 
   // Canvas Renderer
   useEffect(() => {
@@ -258,53 +368,13 @@ export function PhysicsFootballGame() {
     const stripeCount = 10;
     const stripeW = PITCH_WIDTH / stripeCount;
     for (let i = 0; i < stripeCount; i++) {
-      ctx.fillStyle = i % 2 === 0 ? '#064e3b' : '#047857';
+      ctx.fillStyle = i % 2 === 0 ? '#15803d' : '#16a34a';
       ctx.fillRect(i * stripeW, 0, stripeW, PITCH_HEIGHT);
     }
 
-    // 2. Goal Nets Behind Goalmouth
-    // Left Goal Net
-    ctx.fillStyle = 'rgba(15, 23, 42, 0.6)';
-    ctx.fillRect(PITCH_PADDING_X - 50, GOAL_Y_MIN, 50, GOAL_Y_MAX - GOAL_Y_MIN);
-    ctx.strokeStyle = '#e2e8f0';
-    ctx.lineWidth = 1;
-    for (let gx = PITCH_PADDING_X - 50; gx <= PITCH_PADDING_X; gx += 10) {
-      ctx.beginPath();
-      ctx.moveTo(gx, GOAL_Y_MIN);
-      ctx.lineTo(gx, GOAL_Y_MAX);
-      ctx.stroke();
-    }
-    for (let gy = GOAL_Y_MIN; gy <= GOAL_Y_MAX; gy += 10) {
-      ctx.beginPath();
-      ctx.moveTo(PITCH_PADDING_X - 50, gy);
-      ctx.lineTo(PITCH_PADDING_X, gy);
-      ctx.stroke();
-    }
-
-    // Right Goal Net
-    ctx.fillRect(PITCH_WIDTH - PITCH_PADDING_X, GOAL_Y_MIN, 50, GOAL_Y_MAX - GOAL_Y_MIN);
-    for (
-      let gx = PITCH_WIDTH - PITCH_PADDING_X;
-      gx <= PITCH_WIDTH - PITCH_PADDING_X + 50;
-      gx += 10
-    ) {
-      ctx.beginPath();
-      ctx.moveTo(gx, GOAL_Y_MIN);
-      ctx.lineTo(gx, GOAL_Y_MAX);
-      ctx.stroke();
-    }
-    for (let gy = GOAL_Y_MIN; gy <= GOAL_Y_MAX; gy += 10) {
-      ctx.beginPath();
-      ctx.moveTo(PITCH_WIDTH - PITCH_PADDING_X, gy);
-      ctx.lineTo(PITCH_WIDTH - PITCH_PADDING_X + 50, gy);
-      ctx.stroke();
-    }
-
-    // 3. Pitch Lines (White markings)
+    // Outer pitch border
     ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 3;
-
-    // Pitch Perimeter Boundary
     ctx.strokeRect(
       PITCH_PADDING_X,
       PITCH_PADDING_Y,
@@ -312,131 +382,116 @@ export function PhysicsFootballGame() {
       PITCH_HEIGHT - PITCH_PADDING_Y * 2,
     );
 
-    // Halfway Line
+    // Center Line & Center Circle
+    const midX = PITCH_WIDTH / 2;
+    const midY = PITCH_HEIGHT / 2;
+
     ctx.beginPath();
-    ctx.moveTo(PITCH_WIDTH * 0.5, PITCH_PADDING_Y);
-    ctx.lineTo(PITCH_WIDTH * 0.5, PITCH_HEIGHT - PITCH_PADDING_Y);
+    ctx.moveTo(midX, PITCH_PADDING_Y);
+    ctx.lineTo(midX, PITCH_HEIGHT - PITCH_PADDING_Y);
     ctx.stroke();
 
-    // Center Circle
     ctx.beginPath();
-    ctx.arc(PITCH_WIDTH * 0.5, PITCH_HEIGHT * 0.5, 70, 0, Math.PI * 2);
+    ctx.arc(midX, midY, 65, 0, Math.PI * 2);
     ctx.stroke();
 
-    // Center Spot
     ctx.fillStyle = '#ffffff';
     ctx.beginPath();
-    ctx.arc(PITCH_WIDTH * 0.5, PITCH_HEIGHT * 0.5, 4, 0, Math.PI * 2);
+    ctx.arc(midX, midY, 5, 0, Math.PI * 2);
     ctx.fill();
 
-    // Left Penalty Box
-    ctx.strokeRect(PITCH_PADDING_X, 140, 110, 220);
-    // Right Penalty Box
-    ctx.strokeRect(PITCH_WIDTH - PITCH_PADDING_X - 110, 140, 110, 220);
+    // Goal Areas & Penalty Boxes
+    // Blue side (Left)
+    ctx.strokeRect(PITCH_PADDING_X, midY - 90, 110, 180);
+    // Red side (Right)
+    ctx.strokeRect(PITCH_WIDTH - PITCH_PADDING_X - 110, midY - 90, 110, 180);
 
-    // Goalposts (4 posts)
-    for (const post of GOALPOSTS) {
-      ctx.save();
-      ctx.fillStyle = '#ffffff';
-      ctx.shadowColor = '#000000';
-      ctx.shadowBlur = 6;
+    // Goalmouth Nets
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+    // Left net
+    ctx.fillRect(PITCH_PADDING_X - 45, GOAL_Y_MIN, 45, GOAL_Y_MAX - GOAL_Y_MIN);
+    ctx.strokeRect(PITCH_PADDING_X - 45, GOAL_Y_MIN, 45, GOAL_Y_MAX - GOAL_Y_MIN);
+    // Right net
+    ctx.fillRect(PITCH_WIDTH - PITCH_PADDING_X, GOAL_Y_MIN, 45, GOAL_Y_MAX - GOAL_Y_MIN);
+    ctx.strokeRect(PITCH_WIDTH - PITCH_PADDING_X, GOAL_Y_MIN, 45, GOAL_Y_MAX - GOAL_Y_MIN);
+
+    // Goalposts (4 corner posts)
+    GOALPOSTS.forEach((post) => {
+      ctx.fillStyle = '#f8fafc';
       ctx.beginPath();
       ctx.arc(post.x, post.y, 8, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = '#334155';
+      ctx.strokeStyle = '#475569';
       ctx.lineWidth = 2;
       ctx.stroke();
-      ctx.restore();
-    }
+    });
 
-    // 4. Players
-    for (const player of gameState.players) {
-      const isBlue = player.team === 'blue';
-      const mainColor = isBlue ? '#3b82f6' : '#ef4444';
-      const shadowColor = isBlue ? '#1d4ed8' : '#b91c1c';
-
+    // 2. Render Players
+    gameState.players.forEach((p) => {
       ctx.save();
 
-      // Kick ring expansion effect
-      if (player.isKicking) {
-        ctx.strokeStyle = '#fbbf24';
-        ctx.lineWidth = 3;
+      // Shadow
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+      ctx.beginPath();
+      ctx.ellipse(p.x, p.y + p.radius * 0.7, p.radius * 1.1, p.radius * 0.5, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Kick Aura when kicking
+      if (p.isKicking) {
+        ctx.strokeStyle = p.team === 'blue' ? '#38bdf8' : '#f87171';
+        ctx.lineWidth = 4;
         ctx.beginPath();
-        ctx.arc(player.x, player.y, player.radius + 14, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.radius + 10, 0, Math.PI * 2);
         ctx.stroke();
       }
 
-      // Drop shadow
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
-      ctx.beginPath();
-      ctx.ellipse(
-        player.x,
-        player.y + player.radius * 0.75,
-        player.radius,
-        player.radius * 0.45,
-        0,
-        0,
-        Math.PI * 2,
+      // Player Body Disc
+      const gradient = ctx.createRadialGradient(
+        p.x - p.radius * 0.3,
+        p.y - p.radius * 0.3,
+        2,
+        p.x,
+        p.y,
+        p.radius,
       );
-      ctx.fill();
 
-      // Player circle
-      ctx.fillStyle = mainColor;
+      if (p.team === 'blue') {
+        gradient.addColorStop(0, '#60a5fa');
+        gradient.addColorStop(1, '#1d4ed8');
+      } else {
+        gradient.addColorStop(0, '#f87171');
+        gradient.addColorStop(1, '#b91c1c');
+      }
+
+      ctx.fillStyle = gradient;
       ctx.beginPath();
-      ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
       ctx.fill();
 
+      // Outline
       ctx.strokeStyle = '#ffffff';
       ctx.lineWidth = 2.5;
       ctx.stroke();
 
-      // Inner ring
-      ctx.strokeStyle = shadowColor;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.arc(player.x, player.y, player.radius * 0.65, 0, Math.PI * 2);
-      ctx.stroke();
-
-      // Direction pointer
-      const spd = Math.hypot(player.vx, player.vy);
-      if (spd > 10) {
-        const dirX = player.vx / spd;
-        const dirY = player.vy / spd;
-        ctx.fillStyle = '#ffffff';
-        ctx.beginPath();
-        ctx.arc(
-          player.x + dirX * (player.radius * 0.5),
-          player.y + dirY * (player.radius * 0.5),
-          4,
-          0,
-          Math.PI * 2,
-        );
-        ctx.fill();
-      }
-
-      // Label
+      // Team Ring / Core Indicator
       ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 10px sans-serif';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 6, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Jersey number or Bot tag
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 11px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(player.name, player.x, player.y - player.radius - 6);
+      ctx.textBaseline = 'middle';
+      ctx.fillText(p.team === 'blue' ? '10' : p.isAi ? 'AI' : '9', p.x, p.y - p.radius - 12);
 
       ctx.restore();
-    }
+    });
 
-    // 5. Ball
+    // 3. Render Ball
     const ball = gameState.ball;
     ctx.save();
-
-    // Ball speed trail
-    const ballSpeed = Math.hypot(ball.vx, ball.vy);
-    if (ballSpeed > 300) {
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-      ctx.lineWidth = ball.radius * 1.6;
-      ctx.beginPath();
-      ctx.moveTo(ball.x, ball.y);
-      ctx.lineTo(ball.x - (ball.vx / ballSpeed) * 35, ball.y - (ball.vy / ballSpeed) * 35);
-      ctx.stroke();
-    }
 
     // Ball shadow
     ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
@@ -490,6 +545,28 @@ export function PhysicsFootballGame() {
     }, 150);
   };
 
+  const handleRematch = () => {
+    if (isGuest) {
+      requestRestart();
+    } else {
+      startNewMatch(mode);
+    }
+  };
+
+  const blueLabel = isOnline
+    ? isHost
+      ? `${player?.displayName || 'Host'} (You)`
+      : opponent?.displayName || 'Host'
+    : 'BLUE';
+
+  const redLabel = isOnline
+    ? isGuest
+      ? `${player?.displayName || 'Guest'} (You)`
+      : opponent?.displayName || 'Challenger'
+    : mode === 'solo'
+      ? 'BOT'
+      : 'RED';
+
   return (
     <div className="flex w-full flex-col items-center justify-center p-3 sm:p-6 text-deck-100">
       <div className="flex w-full max-w-4xl flex-col gap-4">
@@ -498,6 +575,9 @@ export function PhysicsFootballGame() {
           <div className="flex items-center gap-3">
             <Link
               href="/games"
+              onClick={() => {
+                if (roomCode) leaveRoom();
+              }}
               className="flex h-9 w-9 items-center justify-center rounded-lg border border-deck-700 bg-deck-800 text-deck-300 transition-colors hover:bg-deck-700 hover:text-white"
               title="Return to Discovery"
             >
@@ -509,7 +589,7 @@ export function PhysicsFootballGame() {
                   PHYSICS FOOTBALL
                 </h1>
                 <span className="rounded bg-emerald-500/20 px-2 py-0.5 text-[10px] font-bold text-emerald-400">
-                  {mode === 'solo' ? 'SOLO VS BOT' : 'LOCAL 2P'}
+                  {mode === 'solo' ? 'SOLO VS BOT' : mode === 'local2p' ? 'LOCAL 2P' : 'ONLINE 1V1'}
                 </span>
               </div>
               <p className="text-xs text-deck-400">
@@ -520,22 +600,25 @@ export function PhysicsFootballGame() {
 
           <div className="flex items-center gap-2">
             <button
+              type="button"
               onClick={() => setSoundEnabled(!soundEnabled)}
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-deck-700 bg-deck-800 text-deck-300 transition-colors hover:bg-deck-700"
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-deck-700 bg-deck-800 text-deck-300 transition-colors hover:bg-deck-700 cursor-pointer"
               title={soundEnabled ? 'Mute Sound' : 'Enable Sound'}
             >
               {soundEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
             </button>
             <button
+              type="button"
               onClick={() => setIsPaused(!isPaused)}
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-deck-700 bg-deck-800 text-deck-300 transition-colors hover:bg-deck-700"
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-deck-700 bg-deck-800 text-deck-300 transition-colors hover:bg-deck-700 cursor-pointer"
               title={isPaused ? 'Resume' : 'Pause'}
             >
               {isPaused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
             </button>
             <button
-              onClick={() => startNewMatch(mode)}
-              className="flex h-9 items-center gap-1.5 rounded-lg border border-deck-700 bg-deck-800 px-3 text-xs font-semibold text-deck-200 transition-colors hover:bg-deck-700 hover:text-white"
+              type="button"
+              onClick={handleRematch}
+              className="flex h-9 items-center gap-1.5 rounded-lg border border-deck-700 bg-deck-800 px-3 text-xs font-semibold text-deck-200 transition-colors hover:bg-deck-700 hover:text-white cursor-pointer"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               Reset
@@ -543,195 +626,270 @@ export function PhysicsFootballGame() {
           </div>
         </div>
 
-        {/* Mode Selector & Scoreboard */}
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex gap-2">
-            <button
-              onClick={() => startNewMatch('solo')}
-              className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-bold transition-all ${
-                mode === 'solo'
-                  ? 'border-emerald-500 bg-emerald-500/10 text-emerald-300'
-                  : 'border-deck-800 bg-deck-900/50 text-deck-400 hover:bg-deck-800'
-              }`}
-            >
-              <User className="h-3.5 w-3.5" />
-              Solo vs AI
-            </button>
-            <button
-              onClick={() => startNewMatch('local2p')}
-              className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-bold transition-all ${
-                mode === 'local2p'
-                  ? 'border-emerald-500 bg-emerald-500/10 text-emerald-300'
-                  : 'border-deck-800 bg-deck-900/50 text-deck-400 hover:bg-deck-800'
-              }`}
-            >
-              <Users className="h-3.5 w-3.5" />
-              Local 2-Player
-            </button>
-          </div>
-
-          {/* Live Scoreboard */}
-          <div className="flex items-center justify-center gap-6 rounded-xl border border-deck-800 bg-deck-950/80 px-6 py-2 shadow-inner">
-            <div className="flex items-center gap-2">
-              <span className="font-arcade text-xs font-bold text-blue-400">BLUE</span>
-              <span className="font-arcade text-2xl font-black text-white">
-                {gameState.blueScore}
-              </span>
-            </div>
-            <div className="flex flex-col items-center">
-              <span className="font-mono text-sm font-bold text-amber-400">
-                {Math.ceil(gameState.timeRemainingSec)}s
-              </span>
-              <span className="text-[10px] text-deck-500">First to {gameState.targetScore}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="font-arcade text-2xl font-black text-white">
-                {gameState.redScore}
-              </span>
-              <span className="font-arcade text-xs font-bold text-red-400">RED</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Main Pitch Viewport */}
-        <div className="relative flex items-center justify-center overflow-hidden rounded-2xl border-4 border-deck-800 bg-deck-950 shadow-2xl">
-          <canvas
-            ref={canvasRef}
-            width={PITCH_WIDTH}
-            height={PITCH_HEIGHT}
-            className="aspect-[16/10] max-h-[65vh] w-full max-w-[800px] object-contain"
+        {/* Online Room Setup Card */}
+        {mode === 'online' && !roomCode ? (
+          <OnlineRoomSetupCard
+            title="Physics Football Online 1v1"
+            gameName="Physics Football"
+            subtitle="Host a match or enter a 6-digit code to challenge a friend."
+            description="Real-time arcade soccer duel with momentum physics, ricochet goalposts, and live voice chat."
+            onBack={() => startNewMatch('solo')}
           />
+        ) : (
+          <>
+            {/* Live WebRTC Voice Chat Dock */}
+            {mode === 'online' && roomCode && <RoomVoiceDock defaultOpen={false} />}
 
-          {/* Kickoff Overlay */}
-          {gameState.status === 'kickoff' && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[2px]">
-              <div className="rounded-xl border border-deck-700 bg-deck-900/90 px-6 py-3 font-arcade text-xl font-black text-amber-400 shadow-xl">
-                KICKOFF IN {Math.ceil(gameState.stateTimerSec)}
-              </div>
-            </div>
-          )}
-
-          {/* Goal Scored Celebration */}
-          {gameState.status === 'goal_scored' && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in zoom-in-90">
-              <div className="rounded-2xl border-2 border-amber-400 bg-deck-900/95 px-8 py-4 text-center shadow-2xl">
-                <span className="font-arcade text-3xl font-black tracking-wider text-amber-400 sm:text-4xl animate-bounce">
-                  GOAL!
-                </span>
-                <p className="mt-1 font-arcade text-sm font-bold text-white">
-                  {gameState.lastScorer === 'blue' ? 'BLUE TEAM SCORES!' : 'RED TEAM SCORES!'}
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Full-Time / Game Over Modal */}
-          {gameState.status === 'game_over' && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/85 p-6 text-center backdrop-blur-md animate-in fade-in zoom-in-95">
-              <div className="mb-2 flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500/20 text-amber-400 ring-2 ring-amber-500/40">
-                <Trophy className="h-8 w-8" />
-              </div>
-              <h2 className="font-arcade text-2xl font-black tracking-wider text-white">
-                {gameState.winnerTeam === 'blue'
-                  ? 'BLUE TEAM WINS!'
-                  : gameState.winnerTeam === 'red'
-                    ? 'RED TEAM WINS!'
-                    : 'DRAW MATCH!'}
-              </h2>
-              <p className="mt-1 text-sm text-deck-300">
-                Final Score: Blue {gameState.blueScore} – {gameState.redScore} Red
-              </p>
-
-              <div className="mt-6 flex gap-3">
+            {/* Mode Selector & Scoreboard */}
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex gap-2">
                 <button
-                  onClick={() => startNewMatch(mode)}
-                  className="flex items-center gap-2 rounded-xl bg-emerald-500 px-6 py-3 font-arcade text-xs font-bold text-deck-950 shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-400 active:scale-95"
+                  type="button"
+                  onClick={() => startNewMatch('solo')}
+                  className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-bold transition-all cursor-pointer ${
+                    mode === 'solo'
+                      ? 'border-emerald-500 bg-emerald-500/10 text-emerald-300'
+                      : 'border-deck-800 bg-deck-900/50 text-deck-400 hover:bg-deck-800'
+                  }`}
                 >
-                  <RotateCcw className="h-4 w-4" />
-                  REMATCH
+                  <User className="h-3.5 w-3.5" />
+                  Solo vs AI
                 </button>
-                <Link
-                  href="/games"
-                  className="flex items-center gap-2 rounded-xl border border-deck-700 bg-deck-800 px-5 py-3 text-xs font-bold text-deck-200 transition-colors hover:bg-deck-700 hover:text-white"
+                <button
+                  type="button"
+                  onClick={() => startNewMatch('local2p')}
+                  className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-bold transition-all cursor-pointer ${
+                    mode === 'local2p'
+                      ? 'border-emerald-500 bg-emerald-500/10 text-emerald-300'
+                      : 'border-deck-800 bg-deck-900/50 text-deck-400 hover:bg-deck-800'
+                  }`}
                 >
-                  DISCOVERY
-                </Link>
+                  <Users className="h-3.5 w-3.5" />
+                  Local 2-Player
+                </button>
+                <button
+                  type="button"
+                  onClick={() => startNewMatch('online')}
+                  className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-bold transition-all cursor-pointer ${
+                    mode === 'online'
+                      ? 'border-emerald-500 bg-emerald-500/10 text-emerald-300'
+                      : 'border-deck-800 bg-deck-900/50 text-deck-400 hover:bg-deck-800'
+                  }`}
+                >
+                  <Globe className="h-3.5 w-3.5" />
+                  Online 1v1
+                </button>
+              </div>
+
+              {/* Live Scoreboard */}
+              <div className="flex items-center justify-center gap-6 rounded-xl border border-deck-800 bg-deck-950/80 px-6 py-2 shadow-inner">
+                <div className="flex items-center gap-2">
+                  <span className="font-arcade text-xs font-bold text-blue-400">{blueLabel}</span>
+                  <span className="font-arcade text-2xl font-black text-white">
+                    {gameState.blueScore}
+                  </span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <span className="font-mono text-sm font-bold text-amber-400">
+                    {Math.ceil(gameState.timeRemainingSec)}s
+                  </span>
+                  <span className="text-[10px] text-deck-500">
+                    First to {gameState.targetScore}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="font-arcade text-2xl font-black text-white">
+                    {gameState.redScore}
+                  </span>
+                  <span className="font-arcade text-xs font-bold text-red-400">{redLabel}</span>
+                </div>
               </div>
             </div>
-          )}
-        </div>
 
-        {/* Mobile On-Screen Controls */}
-        <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-deck-800 bg-deck-900/60 p-4 sm:hidden">
-          <div className="flex items-center justify-between w-full">
-            {/* D-Pad */}
-            <div className="grid grid-cols-3 gap-1 w-32">
-              <div />
-              <button
-                onTouchStart={() => handleVirtualDirection('up')}
-                onTouchEnd={() => handleVirtualDirection('stop')}
-                className="flex h-10 items-center justify-center rounded-lg border border-deck-700 bg-deck-800 text-white active:bg-emerald-500 active:text-deck-950"
-              >
-                <ArrowUp className="h-5 w-5" />
-              </button>
-              <div />
+            {/* Main Pitch Viewport */}
+            <div className="relative flex items-center justify-center overflow-hidden rounded-2xl border-4 border-deck-800 bg-deck-950 shadow-2xl">
+              <canvas
+                ref={canvasRef}
+                width={PITCH_WIDTH}
+                height={PITCH_HEIGHT}
+                className="aspect-[16/10] max-h-[65vh] w-full max-w-[800px] object-contain"
+              />
 
-              <button
-                onTouchStart={() => handleVirtualDirection('left')}
-                onTouchEnd={() => handleVirtualDirection('stop')}
-                className="flex h-10 items-center justify-center rounded-lg border border-deck-700 bg-deck-800 text-white active:bg-emerald-500 active:text-deck-950"
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </button>
-              <div className="flex h-10 items-center justify-center rounded-lg bg-deck-900 border border-deck-800" />
-              <button
-                onTouchStart={() => handleVirtualDirection('right')}
-                onTouchEnd={() => handleVirtualDirection('stop')}
-                className="flex h-10 items-center justify-center rounded-lg border border-deck-700 bg-deck-800 text-white active:bg-emerald-500 active:text-deck-950"
-              >
-                <ArrowRight className="h-5 w-5" />
-              </button>
+              {/* Online Waiting for Opponent Overlay */}
+              {mode === 'online' && !hasOpponent && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm">
+                  <div className="rounded-2xl border border-amber-500/40 bg-deck-900/95 px-6 py-4 text-center font-arcade shadow-2xl">
+                    <span className="text-sm font-bold text-amber-400 block mb-1">
+                      WAITING FOR OPPONENT
+                    </span>
+                    <span className="font-mono text-xs text-deck-300">
+                      Share Room Code:{' '}
+                      <strong className="text-amber-300 font-bold tracking-widest">
+                        {roomCode}
+                      </strong>
+                    </span>
+                  </div>
+                </div>
+              )}
 
-              <div />
-              <button
-                onTouchStart={() => handleVirtualDirection('down')}
-                onTouchEnd={() => handleVirtualDirection('stop')}
-                className="flex h-10 items-center justify-center rounded-lg border border-deck-700 bg-deck-800 text-white active:bg-emerald-500 active:text-deck-950"
-              >
-                <ArrowDown className="h-5 w-5" />
-              </button>
-              <div />
+              {/* Kickoff Overlay */}
+              {gameState.status === 'kickoff' && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[2px]">
+                  <div className="rounded-xl border border-deck-700 bg-deck-900/90 px-6 py-3 font-arcade text-xl font-black text-amber-400 shadow-xl">
+                    KICKOFF IN {Math.ceil(gameState.stateTimerSec)}
+                  </div>
+                </div>
+              )}
+
+              {/* Goal Scored Celebration */}
+              {gameState.status === 'goal_scored' && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in zoom-in-90">
+                  <div className="rounded-2xl border-2 border-amber-400 bg-deck-900/95 px-8 py-4 text-center shadow-2xl">
+                    <span className="font-arcade text-3xl font-black tracking-wider text-amber-400 sm:text-4xl animate-bounce">
+                      GOAL!
+                    </span>
+                    <p className="mt-1 font-arcade text-sm font-bold text-white">
+                      {gameState.lastScorer === 'blue'
+                        ? `${blueLabel} SCORES!`
+                        : `${redLabel} SCORES!`}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Full-Time / Game Over Modal */}
+              {gameState.status === 'game_over' && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/85 p-6 text-center backdrop-blur-md animate-in fade-in zoom-in-95">
+                  <div className="mb-2 flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500/20 text-amber-400 ring-2 ring-amber-500/40">
+                    <Trophy className="h-8 w-8" />
+                  </div>
+                  <h2 className="font-arcade text-2xl font-black tracking-wider text-white">
+                    {gameState.winnerTeam === 'blue'
+                      ? `${blueLabel} WINS!`
+                      : gameState.winnerTeam === 'red'
+                        ? `${redLabel} WINS!`
+                        : 'DRAW MATCH!'}
+                  </h2>
+                  <p className="mt-1 text-sm text-deck-300">
+                    Final Score: Blue {gameState.blueScore} – {gameState.redScore} Red
+                  </p>
+
+                  <div className="mt-6 flex gap-3">
+                    <button
+                      type="button"
+                      onClick={handleRematch}
+                      className="flex items-center gap-2 rounded-xl bg-emerald-500 px-6 py-3 font-arcade text-xs font-bold text-deck-950 shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-400 active:scale-95 cursor-pointer"
+                    >
+                      <RotateCcw className="h-4 w-4" />
+                      REMATCH
+                    </button>
+                    <Link
+                      href="/games"
+                      onClick={() => {
+                        if (roomCode) leaveRoom();
+                      }}
+                      className="flex items-center gap-2 rounded-xl border border-deck-700 bg-deck-800 px-5 py-3 text-xs font-bold text-deck-200 transition-colors hover:bg-deck-700 hover:text-white"
+                    >
+                      DISCOVERY
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Kick Button */}
-            <button
-              onClick={handleVirtualKick}
-              className="flex h-16 w-16 flex-col items-center justify-center rounded-2xl border-2 border-emerald-400 bg-emerald-600/90 text-white shadow-lg shadow-emerald-600/30 active:scale-95 active:bg-emerald-500"
-            >
-              <Sparkles className="h-5 w-5" />
-              <span className="font-arcade text-[10px] font-black">KICK</span>
-            </button>
-          </div>
-        </div>
+            {/* Mobile On-Screen Controls */}
+            <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-deck-800 bg-deck-900/60 p-4 sm:hidden">
+              <div className="flex items-center justify-between w-full">
+                {/* D-Pad */}
+                <div className="grid grid-cols-3 gap-1 w-32">
+                  <div />
+                  <button
+                    type="button"
+                    onTouchStart={() => handleVirtualDirection('up')}
+                    onTouchEnd={() => handleVirtualDirection('stop')}
+                    className="flex h-10 items-center justify-center rounded-lg border border-deck-700 bg-deck-800 text-white active:bg-emerald-500 active:text-deck-950"
+                  >
+                    <ArrowUp className="h-5 w-5" />
+                  </button>
+                  <div />
 
-        {/* Controls Guide Ribbon */}
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-deck-800 bg-deck-900/40 p-3 text-xs text-deck-400">
-          <div>
-            <strong className="text-blue-400">Blue (P1):</strong> WASD to steer,{' '}
-            <strong className="text-white">SPACE</strong> to strike
-          </div>
-          {mode === 'local2p' ? (
-            <div>
-              <strong className="text-red-400">Red (P2):</strong> Arrow Keys to steer,{' '}
-              <strong className="text-white">ENTER</strong> to strike
+                  <button
+                    type="button"
+                    onTouchStart={() => handleVirtualDirection('left')}
+                    onTouchEnd={() => handleVirtualDirection('stop')}
+                    className="flex h-10 items-center justify-center rounded-lg border border-deck-700 bg-deck-800 text-white active:bg-emerald-500 active:text-deck-950"
+                  >
+                    <ArrowLeft className="h-5 w-5" />
+                  </button>
+                  <div className="flex h-10 items-center justify-center rounded-lg bg-deck-900 border border-deck-800" />
+                  <button
+                    type="button"
+                    onTouchStart={() => handleVirtualDirection('right')}
+                    onTouchEnd={() => handleVirtualDirection('stop')}
+                    className="flex h-10 items-center justify-center rounded-lg border border-deck-700 bg-deck-800 text-white active:bg-emerald-500 active:text-deck-950"
+                  >
+                    <ArrowRight className="h-5 w-5" />
+                  </button>
+
+                  <div />
+                  <button
+                    type="button"
+                    onTouchStart={() => handleVirtualDirection('down')}
+                    onTouchEnd={() => handleVirtualDirection('stop')}
+                    className="flex h-10 items-center justify-center rounded-lg border border-deck-700 bg-deck-800 text-white active:bg-emerald-500 active:text-deck-950"
+                  >
+                    <ArrowDown className="h-5 w-5" />
+                  </button>
+                  <div />
+                </div>
+
+                {/* Kick Button */}
+                <button
+                  type="button"
+                  onClick={handleVirtualKick}
+                  className="flex h-16 w-16 flex-col items-center justify-center rounded-2xl border-2 border-emerald-400 bg-emerald-600/90 text-white shadow-lg shadow-emerald-600/30 active:scale-95 active:bg-emerald-500 cursor-pointer"
+                >
+                  <Sparkles className="h-5 w-5" />
+                  <span className="font-arcade text-[10px] font-black">KICK</span>
+                </button>
+              </div>
             </div>
-          ) : (
-            <div className="flex items-center gap-1.5 text-deck-400">
-              <Bot className="h-3.5 w-3.5" />
-              <span>Red StrikerBot is AI-controlled</span>
+
+            {/* Controls Guide Ribbon */}
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-deck-800 bg-deck-900/40 p-3 text-xs text-deck-400">
+              {mode === 'online' ? (
+                <div>
+                  <strong className={isHost ? 'text-blue-400' : 'text-red-400'}>
+                    {isHost ? 'You (Blue):' : 'You (Red):'}
+                  </strong>{' '}
+                  WASD or Arrow Keys to steer,{' '}
+                  <strong className="text-white">SPACE or ENTER</strong> to strike
+                </div>
+              ) : (
+                <div>
+                  <strong className="text-blue-400">Blue (P1):</strong> WASD to steer,{' '}
+                  <strong className="text-white">SPACE</strong> to strike
+                </div>
+              )}
+              {mode === 'online' ? (
+                <div className="flex items-center gap-1.5 text-deck-400">
+                  <Globe className="h-3.5 w-3.5 text-emerald-400" />
+                  <span>Online Low-Latency Netcode + Voice</span>
+                </div>
+              ) : mode === 'local2p' ? (
+                <div>
+                  <strong className="text-red-400">Red (P2):</strong> Arrow Keys to steer,{' '}
+                  <strong className="text-white">ENTER</strong> to strike
+                </div>
+              ) : (
+                <div className="flex items-center gap-1.5 text-deck-400">
+                  <Bot className="h-3.5 w-3.5" />
+                  <span>Red StrikerBot is AI-controlled</span>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </>
+        )}
       </div>
     </div>
   );

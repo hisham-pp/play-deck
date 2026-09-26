@@ -204,7 +204,10 @@ export function ChessGame() {
           <>
             <RoomChatBox roomCode={online.roomCode} />
             {/* Left edge, clear of the player cards at the top and bottom. */}
-            <RoomVoiceDock anchorClassName="left-3 top-1/2 -translate-y-1/2 sm:left-5" />
+            <RoomVoiceDock
+              anchorClassName="left-3 top-1/2 -translate-y-1/2 sm:left-5"
+              defaultOpen={false}
+            />
           </>
         )}
       </ChessArena>

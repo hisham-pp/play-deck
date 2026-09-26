@@ -4,8 +4,14 @@ import React from 'react';
 import { useMultiplayerStore } from '@/stores/multiplayer.store';
 import { VoiceChatDock } from './VoiceChatDock';
 
-/** Voice for the games that share `multiplayer.store` (Tic-Tac-Toe, Connect Four, Pen Fight). */
-export function RoomVoiceDock({ anchorClassName }: { anchorClassName?: string }) {
+export interface RoomVoiceDockProps {
+  anchorClassName?: string;
+  variant?: 'floating' | 'inline';
+  defaultOpen?: boolean;
+}
+
+/** Voice for the games that share `multiplayer.store` (Tic-Tac-Toe, Connect Four, Pen Fight, Pong, Carrom, etc.). */
+export function RoomVoiceDock({ anchorClassName, variant, defaultOpen }: RoomVoiceDockProps = {}) {
   const roomCode = useMultiplayerStore((state) => state.roomCode);
   const getTransport = useMultiplayerStore((state) => state.getTransport);
 
@@ -16,6 +22,8 @@ export function RoomVoiceDock({ anchorClassName }: { anchorClassName?: string })
       roomCode={roomCode}
       transport={getTransport()}
       anchorClassName={anchorClassName}
+      variant={variant}
+      defaultOpen={defaultOpen}
     />
   );
 }

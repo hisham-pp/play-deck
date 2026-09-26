@@ -28,7 +28,7 @@ export interface CarromPocket {
 }
 
 export type CarromPlayer = 'player1' | 'player2';
-export type CarromGameMode = 'vs-ai' | 'pass-and-play' | 'practice';
+export type CarromGameMode = 'vs-ai' | 'pass-and-play' | 'practice' | 'online';
 export type CarromBotDifficulty = 'easy' | 'medium' | 'hard';
 export type CarromSetupType = 'classic' | 'blitz';
 

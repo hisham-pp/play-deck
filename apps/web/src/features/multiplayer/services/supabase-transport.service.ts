@@ -1,4 +1,4 @@
-import type { RealtimeChannel } from '@supabase/supabase-js';
+import type { RealtimeChannel, SupabaseClient } from '@supabase/supabase-js';
 import type { ChatMessage, VoiceSignal, VoiceSignalChannel } from '@playdeck/game-types';
 import { VOICE_SIGNAL_EVENT } from '@/features/voice/voice.constants';
 import { getSupabaseClient } from '@/lib/supabase/client';
@@ -31,16 +31,22 @@ export class SupabaseTransportService implements VoiceSignalChannel {
   /** Latest presence roster, so late subscribers (voice) do not wait for a sync. */
   private lastPresence: PlayerPresence[] = [];
   private namespace: string;
+  private clientOverride?: SupabaseClient | null;
 
-  constructor(namespace: string = 'tictactoe') {
+  constructor(namespace: string = 'tictactoe', clientOverride?: SupabaseClient | null) {
     this.namespace = namespace;
+    this.clientOverride = clientOverride;
   }
 
   async connect(roomCode: string, player: PlayerPresence): Promise<boolean> {
-    const supabase = getSupabaseClient();
+    const supabase = this.clientOverride ?? getSupabaseClient();
     if (!supabase) return false;
 
-    this.disconnect();
+    if (this.channel) {
+      supabase.removeChannel(this.channel);
+      this.channel = null;
+    }
+    this.lastPresence = [];
 
     const channelName = `game:${this.namespace}:${roomCode}`;
     this.channel = supabase.channel(channelName, {
