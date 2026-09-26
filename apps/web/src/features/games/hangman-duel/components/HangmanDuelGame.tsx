@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Badge, Button } from '@playdeck/ui';
 import { StorageService } from '@/lib/storage/storage';
 import { usePlayerStore } from '@/stores/player.store';
-import { getRandomWord } from './engine/hangman-bank';
+import { getRandomWord } from '../engine/hangman-bank';
 import {
   createInitialState,
   getMaskedWord,
@@ -12,14 +12,14 @@ import {
   proceedToNextRound,
   startRound,
   submitLetterGuess,
-} from './engine/hangman-engine';
+} from '../engine/hangman-engine';
 import type {
   HangmanCategory,
   HangmanDifficulty,
   HangmanMode,
   HangmanRules,
   HangmanState,
-} from './types/hangman-duel.types';
+} from '../types/hangman-duel.types';
 
 const STORAGE_HIGH_SCORE_KEY = 'hangman_duel_high_score';
 

@@ -13,7 +13,7 @@ import {
   type Shuriken,
   createInitialNinjaState,
   stepNinjaEngine,
-} from './engine/stickman-ninja-engine';
+} from '../engine/stickman-ninja-engine';
 
 const STORAGE_HIGH_SCORE_KEY = 'stickman_ninja_high_score';
 

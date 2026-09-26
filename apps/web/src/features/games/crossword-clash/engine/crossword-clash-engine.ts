@@ -1,5 +1,7 @@
 import {
   CROSSWORD_PUZZLES,
+  DIR_ACROSS,
+  DIR_DOWN,
   type CrosswordDifficulty,
   type CrosswordDirection,
   type CrosswordPuzzleDefinition,
@@ -16,6 +18,11 @@ export type {
 };
 
 export type CrosswordMode = 'solo' | 'race' | 'turn-based' | 'team';
+
+export const MODE_TURN_BASED: CrosswordMode = 'turn-based';
+export const MODE_TEAM: CrosswordMode = 'team';
+const TEAM_RED = 'red' as const;
+const TEAM_BLUE = 'blue' as const;
 
 export type CrosswordStatus = 'lobby' | 'countdown' | 'playing' | 'completed';
 
@@ -191,8 +198,8 @@ export function createInitialCrosswordState(config?: InitialCrosswordConfig): Cr
 
     // Populate solution chars
     for (let i = 0; i < raw.answer.length; i++) {
-      const r = raw.direction === 'across' ? raw.row : raw.row + i;
-      const c = raw.direction === 'across' ? raw.col + i : raw.col;
+      const r = raw.direction === DIR_ACROSS ? raw.row : raw.row + i;
+      const c = raw.direction === DIR_ACROSS ? raw.col + i : raw.col;
       const cell = cells[r][c];
 
       if (cell.isBlack) {
@@ -201,7 +208,7 @@ export function createInitialCrosswordState(config?: InitialCrosswordConfig): Cr
       }
       cell.solutionChar = raw.answer[i].toUpperCase();
 
-      if (raw.direction === 'across') {
+      if (raw.direction === DIR_ACROSS) {
         cell.acrossClueId = raw.id;
       } else {
         cell.downClueId = raw.id;
@@ -223,20 +230,20 @@ export function createInitialCrosswordState(config?: InitialCrosswordConfig): Cr
       ? config.players
       : [
           { id: 'player-1', name: 'Player 1', isBot: false },
-          ...(mode === 'race' || mode === 'turn-based'
+          ...(mode === 'race' || mode === MODE_TURN_BASED
             ? [
                 { id: 'bot-1', name: 'LexiBot', isBot: true },
                 { id: 'bot-2', name: 'WordSmith', isBot: true },
               ]
-            : mode === 'team'
+            : mode === MODE_TEAM
               ? [
-                  { id: 'bot-1', name: 'LexiBot (Red)', isBot: true, team: 'red' as const },
-                  { id: 'bot-2', name: 'ClueSeeker (Blue)', isBot: true, team: 'blue' as const },
+                  { id: 'bot-1', name: 'LexiBot (Red)', isBot: true, team: TEAM_RED },
+                  { id: 'bot-2', name: 'ClueSeeker (Blue)', isBot: true, team: TEAM_BLUE },
                   {
                     id: 'bot-3',
                     name: 'Cruciverbalist (Blue)',
                     isBot: true,
-                    team: 'blue' as const,
+                    team: TEAM_BLUE,
                   },
                 ]
               : []),
@@ -244,9 +251,9 @@ export function createInitialCrosswordState(config?: InitialCrosswordConfig): Cr
 
   const players: CrosswordPlayer[] = playerInputs.map((p, idx) => {
     let color: string;
-    if (mode === 'team') {
-      const team = p.team ?? (idx === 0 || idx === 1 ? 'red' : 'blue');
-      color = team === 'red' ? TEAM_COLORS.red : TEAM_COLORS.blue;
+    if (mode === MODE_TEAM) {
+      const team = p.team ?? (idx === 0 || idx === 1 ? TEAM_RED : TEAM_BLUE);
+      color = team === TEAM_RED ? TEAM_COLORS.red : TEAM_COLORS.blue;
     } else {
       color = PLAYER_COLORS[idx % PLAYER_COLORS.length];
     }
@@ -259,7 +266,7 @@ export function createInitialCrosswordState(config?: InitialCrosswordConfig): Cr
       score: 0,
       lettersSolved: 0,
       wordsCompleted: 0,
-      team: p.team ?? (mode === 'team' ? (idx % 2 === 0 ? 'red' : 'blue') : undefined),
+      team: p.team ?? (mode === MODE_TEAM ? (idx % 2 === 0 ? TEAM_RED : TEAM_BLUE) : undefined),
     };
   });
 
@@ -267,7 +274,7 @@ export function createInitialCrosswordState(config?: InitialCrosswordConfig): Cr
   const firstClue = clues[0];
   const initialRow = firstClue ? firstClue.row : 0;
   const initialCol = firstClue ? firstClue.col : 0;
-  const initialDirection = firstClue ? firstClue.direction : 'across';
+  const initialDirection = firstClue ? firstClue.direction : DIR_ACROSS;
   const initialClueId = firstClue ? firstClue.id : '';
 
   const initialTime = difficulty === 'easy' ? 180 : difficulty === 'medium' ? 240 : 300;
@@ -324,21 +331,21 @@ export function selectCrosswordCell(
   let newDirection = state.selectedDirection;
   if (row === state.selectedRow && col === state.selectedCol) {
     // Toggling direction if clicking already focused cell
-    if (newDirection === 'across' && cell.downClueId) {
-      newDirection = 'down';
-    } else if (newDirection === 'down' && cell.acrossClueId) {
-      newDirection = 'across';
+    if (newDirection === DIR_ACROSS && cell.downClueId) {
+      newDirection = DIR_DOWN;
+    } else if (newDirection === DIR_DOWN && cell.acrossClueId) {
+      newDirection = DIR_ACROSS;
     }
   } else {
     // If current direction has no clue at target cell, adapt
-    if (newDirection === 'across' && !cell.acrossClueId && cell.downClueId) {
-      newDirection = 'down';
-    } else if (newDirection === 'down' && !cell.downClueId && cell.acrossClueId) {
-      newDirection = 'across';
+    if (newDirection === DIR_ACROSS && !cell.acrossClueId && cell.downClueId) {
+      newDirection = DIR_DOWN;
+    } else if (newDirection === DIR_DOWN && !cell.downClueId && cell.acrossClueId) {
+      newDirection = DIR_ACROSS;
     }
   }
 
-  const clueId = newDirection === 'across' ? (cell.acrossClueId ?? '') : (cell.downClueId ?? '');
+  const clueId = newDirection === DIR_ACROSS ? (cell.acrossClueId ?? '') : (cell.downClueId ?? '');
 
   return {
     ...state,
@@ -358,8 +365,8 @@ export function selectCrosswordClue(state: CrosswordState, clueId: string): Cros
   let targetCol = clue.col;
 
   for (let i = 0; i < clue.length; i++) {
-    const r = clue.direction === 'across' ? clue.row : clue.row + i;
-    const c = clue.direction === 'across' ? clue.col + i : clue.col;
+    const r = clue.direction === DIR_ACROSS ? clue.row : clue.row + i;
+    const c = clue.direction === DIR_ACROSS ? clue.col + i : clue.col;
     const cell = state.cells[r][c];
     if (!cell.lockedChar) {
       targetRow = r;
@@ -504,8 +511,8 @@ export function inputCrosswordLetter(
     // Check if every cell in this clue is now locked
     let isFullyLocked = true;
     for (let i = 0; i < clue.length; i++) {
-      const cr = clue.direction === 'across' ? clue.row : clue.row + i;
-      const cc = clue.direction === 'across' ? clue.col + i : clue.col;
+      const cr = clue.direction === DIR_ACROSS ? clue.row : clue.row + i;
+      const cc = clue.direction === DIR_ACROSS ? clue.col + i : clue.col;
       if (!updatedCells[cr][cc].lockedChar) {
         isFullyLocked = false;
         break;
@@ -541,7 +548,7 @@ export function inputCrosswordLetter(
       };
     }
     // If in team mode, award team member points as well
-    if (state.mode === 'team' && p.team && p.team === player.team) {
+    if (state.mode === MODE_TEAM && p.team && p.team === player.team) {
       return {
         ...p,
         score: p.score + additionalPoints,
@@ -596,7 +603,7 @@ export function deleteCrosswordLetter(state: CrosswordState): CrosswordState {
   const clue = state.clues.find((c) => c.id === state.selectedClueId);
   if (!clue) return state;
 
-  const isAcross = state.selectedDirection === 'across';
+  const isAcross = state.selectedDirection === DIR_ACROSS;
   const currentIdx = isAcross ? state.selectedCol - clue.col : state.selectedRow - clue.row;
 
   if (currentIdx > 0) {
@@ -663,7 +670,7 @@ export function stepCrosswordEngine(state: CrosswordState, dt: number): Crosswor
   };
 
   // Turn-based mode turn timer
-  if (state.mode === 'turn-based') {
+  if (state.mode === MODE_TURN_BASED) {
     const nextTurnTimer = state.turnTimeRemaining - dt;
     if (nextTurnTimer <= 0) {
       const nextPlayerIdx = (state.activePlayerIndex + 1) % state.players.length;
@@ -695,12 +702,12 @@ export function stepCrosswordEngine(state: CrosswordState, dt: number): Crosswor
 
     // Identify active bot player
     let botToAct: CrosswordPlayer | undefined;
-    if (state.mode === 'turn-based') {
+    if (state.mode === MODE_TURN_BASED) {
       const current = state.players[state.activePlayerIndex];
       if (current && current.isBot) {
         botToAct = current;
       }
-    } else if (state.mode === 'race' || state.mode === 'team') {
+    } else if (state.mode === 'race' || state.mode === MODE_TEAM) {
       const bots = state.players.filter((p) => p.isBot);
       if (bots.length > 0) {
         botToAct = bots[Math.floor(Math.random() * bots.length)];
@@ -715,8 +722,8 @@ export function stepCrosswordEngine(state: CrosswordState, dt: number): Crosswor
         // Find empty cell in clue
         const emptyCells: Array<{ row: number; col: number; char: string }> = [];
         for (let i = 0; i < chosenClue.length; i++) {
-          const r = chosenClue.direction === 'across' ? chosenClue.row : chosenClue.row + i;
-          const c = chosenClue.direction === 'across' ? chosenClue.col + i : chosenClue.col;
+          const r = chosenClue.direction === DIR_ACROSS ? chosenClue.row : chosenClue.row + i;
+          const c = chosenClue.direction === DIR_ACROSS ? chosenClue.col + i : chosenClue.col;
           const cell = nextState.cells[r][c];
           if (!cell.lockedChar) {
             emptyCells.push({ row: r, col: c, char: cell.solutionChar });
@@ -735,7 +742,7 @@ export function stepCrosswordEngine(state: CrosswordState, dt: number): Crosswor
           };
           nextState = inputCrosswordLetter(botState, botToAct.id, target.char);
 
-          if (state.mode === 'turn-based') {
+          if (state.mode === MODE_TURN_BASED) {
             // End turn for bot
             nextState.activePlayerIndex =
               (nextState.activePlayerIndex + 1) % nextState.players.length;

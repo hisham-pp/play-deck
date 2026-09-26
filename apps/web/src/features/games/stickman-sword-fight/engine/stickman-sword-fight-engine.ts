@@ -1,91 +1,22 @@
-export type FighterAction =
-  | 'idle'
-  | 'walking'
-  | 'slashing'
-  | 'heavy_slashing'
-  | 'parrying'
-  | 'dashing'
-  | 'staggered'
-  | 'hit'
-  | 'dead';
+import {
+  ACTION_DASHING,
+  ACTION_DEAD,
+  ACTION_HEAVY_SLASHING,
+  ACTION_HIT,
+  ACTION_IDLE,
+  ACTION_PARRYING,
+  ACTION_SLASHING,
+  ACTION_STAGGERED,
+  ACTION_WALKING,
+  COLOR_SPARK_BLUE,
+  SOUND_BLOCK,
+  SOUND_HIT,
+  type Difficulty,
+  type Fighter,
+  type SwordFightState,
+} from '../types/stickman-sword-fight.types';
 
-export type Difficulty = 'easy' | 'normal' | 'hard' | 'expert';
-
-export interface Fighter {
-  id: 'p1' | 'p2';
-  name: string;
-  x: number;
-  y: number;
-  vy: number;
-  facing: 1 | -1;
-  health: number;
-  maxHealth: number;
-  posture: number;
-  maxPosture: number;
-  stamina: number;
-  maxStamina: number;
-  state: FighterAction;
-  stateTimer: number;
-  slashType: 'light' | 'heavy' | null;
-  parryWindowActive: boolean;
-  isGrounded: boolean;
-  roundsWon: number;
-  dashCooldown: number;
-  attackCooldown: number;
-  hitboxActive: boolean;
-}
-
-export interface SparkParticle {
-  id: string;
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  color: string;
-  size: number;
-  life: number;
-  maxLife: number;
-}
-
-export interface FloatingText {
-  id: string;
-  text: string;
-  x: number;
-  y: number;
-  color: string;
-  opacity: number;
-  life: number;
-}
-
-export type CombatSoundEvent =
-  | 'slash'
-  | 'heavy_slash'
-  | 'parry'
-  | 'block'
-  | 'hit'
-  | 'posture_break'
-  | 'dash'
-  | 'clash'
-  | 'round_win'
-  | 'match_win';
-
-export interface SwordFightState {
-  status: 'waiting' | 'countdown' | 'fighting' | 'round_over' | 'match_over';
-  countdownTimer: number;
-  round: number;
-  maxRounds: number;
-  p1: Fighter;
-  p2: Fighter;
-  sparks: SparkParticle[];
-  floatingTexts: FloatingText[];
-  soundEvents: CombatSoundEvent[];
-  difficulty: Difficulty;
-  isTwoPlayer: boolean;
-  roundWinner: 'p1' | 'p2' | null;
-  matchWinner: 'p1' | 'p2' | null;
-  score: number;
-  timeRemaining: number;
-}
+export * from '../types/stickman-sword-fight.types';
 
 export const ARENA_WIDTH = 800;
 export const ARENA_FLOOR_Y = 380;
@@ -118,7 +49,7 @@ export function createInitialFighter(
     maxPosture: 100,
     stamina: 100,
     maxStamina: 100,
-    state: 'idle',
+    state: ACTION_IDLE,
     stateTimer: 0,
     slashType: null,
     parryWindowActive: false,
@@ -173,18 +104,23 @@ export function handleFighterInput(
   state: SwordFightState,
 ): void {
   if (state.status !== 'fighting') return;
-  if (fighter.state === 'staggered' || fighter.state === 'hit' || fighter.state === 'dead') return;
+  if (
+    fighter.state === ACTION_STAGGERED ||
+    fighter.state === ACTION_HIT ||
+    fighter.state === ACTION_DEAD
+  )
+    return;
 
   // Attack inputs
   if (
     input.heavySlash &&
     fighter.attackCooldown <= 0 &&
     fighter.stamina >= 25 &&
-    fighter.state !== 'slashing' &&
-    fighter.state !== 'heavy_slashing' &&
-    fighter.state !== 'parrying'
+    fighter.state !== ACTION_SLASHING &&
+    fighter.state !== ACTION_HEAVY_SLASHING &&
+    fighter.state !== ACTION_PARRYING
   ) {
-    fighter.state = 'heavy_slashing';
+    fighter.state = ACTION_HEAVY_SLASHING;
     fighter.stateTimer = 0.55;
     fighter.slashType = 'heavy';
     fighter.stamina = Math.max(0, fighter.stamina - 25);
@@ -198,11 +134,11 @@ export function handleFighterInput(
     input.slash &&
     fighter.attackCooldown <= 0 &&
     fighter.stamina >= 12 &&
-    fighter.state !== 'slashing' &&
-    fighter.state !== 'heavy_slashing' &&
-    fighter.state !== 'parrying'
+    fighter.state !== ACTION_SLASHING &&
+    fighter.state !== ACTION_HEAVY_SLASHING &&
+    fighter.state !== ACTION_PARRYING
   ) {
-    fighter.state = 'slashing';
+    fighter.state = ACTION_SLASHING;
     fighter.stateTimer = 0.35;
     fighter.slashType = 'light';
     fighter.stamina = Math.max(0, fighter.stamina - 12);
@@ -215,12 +151,12 @@ export function handleFighterInput(
   // Parry input
   if (
     input.parry &&
-    fighter.state !== 'slashing' &&
-    fighter.state !== 'heavy_slashing' &&
-    fighter.state !== 'dashing'
+    fighter.state !== ACTION_SLASHING &&
+    fighter.state !== ACTION_HEAVY_SLASHING &&
+    fighter.state !== ACTION_DASHING
   ) {
-    if (fighter.state !== 'parrying') {
-      fighter.state = 'parrying';
+    if (fighter.state !== ACTION_PARRYING) {
+      fighter.state = ACTION_PARRYING;
       fighter.stateTimer = 0.4;
       fighter.parryWindowActive = true;
     }
@@ -232,9 +168,9 @@ export function handleFighterInput(
     input.dash &&
     fighter.dashCooldown <= 0 &&
     fighter.stamina >= 18 &&
-    fighter.state !== 'dashing'
+    fighter.state !== ACTION_DASHING
   ) {
-    fighter.state = 'dashing';
+    fighter.state = ACTION_DASHING;
     fighter.stateTimer = 0.22;
     fighter.stamina = Math.max(0, fighter.stamina - 18);
     fighter.dashCooldown = 0.75;
@@ -246,16 +182,16 @@ export function handleFighterInput(
   if (
     input.jump &&
     fighter.isGrounded &&
-    fighter.state !== 'slashing' &&
-    fighter.state !== 'heavy_slashing' &&
-    fighter.state !== 'dashing'
+    fighter.state !== ACTION_SLASHING &&
+    fighter.state !== ACTION_HEAVY_SLASHING &&
+    fighter.state !== ACTION_DASHING
   ) {
     fighter.vy = -13;
     fighter.isGrounded = false;
   }
 
   // Movement input
-  if (fighter.state === 'idle' || fighter.state === 'walking') {
+  if (fighter.state === ACTION_IDLE || fighter.state === ACTION_WALKING) {
     let moving = false;
     const speed = 220;
     if (input.moveLeft) {
@@ -267,7 +203,7 @@ export function handleFighterInput(
       moving = true;
     }
 
-    fighter.state = moving ? 'walking' : 'idle';
+    fighter.state = moving ? ACTION_WALKING : ACTION_IDLE;
 
     // Auto-face opponent
     if (fighter.x < otherFighter.x) {
@@ -280,7 +216,7 @@ export function handleFighterInput(
 
 export function updateAI(ai: Fighter, player: Fighter, state: SwordFightState, dt: number): void {
   if (state.status !== 'fighting') return;
-  if (ai.state === 'staggered' || ai.state === 'hit' || ai.state === 'dead') return;
+  if (ai.state === ACTION_STAGGERED || ai.state === ACTION_HIT || ai.state === ACTION_DEAD) return;
 
   const dist = Math.abs(ai.x - player.x);
   const diffMultiplier =
@@ -294,15 +230,15 @@ export function updateAI(ai: Fighter, player: Fighter, state: SwordFightState, d
 
   // React to player attacks (parry or dodge chance)
   if (
-    (player.state === 'slashing' || player.state === 'heavy_slashing') &&
+    (player.state === ACTION_SLASHING || player.state === ACTION_HEAVY_SLASHING) &&
     dist < ATTACK_RANGE + 20
   ) {
     if (
-      ai.state !== 'parrying' &&
-      ai.state !== 'dashing' &&
+      ai.state !== ACTION_PARRYING &&
+      ai.state !== ACTION_DASHING &&
       Math.random() < 0.65 * diffMultiplier
     ) {
-      if (player.state === 'heavy_slashing' && Math.random() < 0.6) {
+      if (player.state === ACTION_HEAVY_SLASHING && Math.random() < 0.6) {
         // Dash away from heavy attacks
         handleFighterInput(ai, { dash: true }, player, state);
       } else {
@@ -313,19 +249,19 @@ export function updateAI(ai: Fighter, player: Fighter, state: SwordFightState, d
   }
 
   // Tactical spacing
-  if (ai.state === 'idle' || ai.state === 'walking') {
+  if (ai.state === ACTION_IDLE || ai.state === ACTION_WALKING) {
     if (dist > ATTACK_RANGE - 15) {
       // Advance toward player
       const dir = ai.x < player.x ? 1 : -1;
       ai.x += dir * 180 * dt;
-      ai.state = 'walking';
+      ai.state = ACTION_WALKING;
     } else if (dist < 45 && Math.random() < 0.4) {
       // Step back if too close
       const dir = ai.x < player.x ? -1 : 1;
       ai.x += dir * 140 * dt;
-      ai.state = 'walking';
+      ai.state = ACTION_WALKING;
     } else {
-      ai.state = 'idle';
+      ai.state = ACTION_IDLE;
       // Attack opportunities
       if (ai.attackCooldown <= 0 && ai.stamina >= 20) {
         if (Math.random() < 0.5 * diffMultiplier) {
@@ -405,8 +341,8 @@ export function checkHitRegistration(
     // Clash detection: If defender is also slashing
     if (defender.hitboxActive) {
       defender.hitboxActive = false;
-      attacker.state = 'idle';
-      defender.state = 'idle';
+      attacker.state = ACTION_IDLE;
+      defender.state = ACTION_IDLE;
       attacker.x -= attacker.facing * 35;
       defender.x -= defender.facing * 35;
       spawnSparks(contactX, contactY, '#f59e0b', 16, state);
@@ -416,8 +352,8 @@ export function checkHitRegistration(
     }
 
     // Invulnerable during dash
-    if (defender.state === 'dashing') {
-      spawnFloatingText('EVADE', defender.x, ARENA_FLOOR_Y - 70, '#38bdf8', state);
+    if (defender.state === ACTION_DASHING) {
+      spawnFloatingText('EVADE', defender.x, ARENA_FLOOR_Y - 70, COLOR_SPARK_BLUE, state);
       return;
     }
 
@@ -426,9 +362,9 @@ export function checkHitRegistration(
     const postureDmg = isHeavy ? HEAVY_POSTURE_DAMAGE : LIGHT_POSTURE_DAMAGE;
 
     // Perfect Parry Check
-    if (defender.state === 'parrying' && defender.parryWindowActive) {
+    if (defender.state === ACTION_PARRYING && defender.parryWindowActive) {
       // Perfect parry! Deflect attacker
-      attacker.state = 'staggered';
+      attacker.state = ACTION_STAGGERED;
       attacker.stateTimer = 0.8;
       attacker.posture = Math.min(
         attacker.maxPosture,
@@ -437,8 +373,8 @@ export function checkHitRegistration(
       defender.posture = Math.max(0, defender.posture - 15);
       defender.stamina = Math.min(defender.maxStamina, defender.stamina + 20);
 
-      spawnSparks(contactX, contactY, '#38bdf8', 22, state);
-      spawnFloatingText('PERFECT PARRY!', defender.x, ARENA_FLOOR_Y - 80, '#38bdf8', state);
+      spawnSparks(contactX, contactY, COLOR_SPARK_BLUE, 22, state);
+      spawnFloatingText('PERFECT PARRY!', defender.x, ARENA_FLOOR_Y - 80, COLOR_SPARK_BLUE, state);
       state.soundEvents.push('parry');
 
       if (attacker.id === 'p2') {
@@ -448,35 +384,35 @@ export function checkHitRegistration(
     }
 
     // Guarding (holding block after window)
-    if (defender.state === 'parrying') {
+    if (defender.state === ACTION_PARRYING) {
       // Guard holds for light attacks, but heavy attacks crush through
       if (isHeavy) {
         defender.health = Math.max(0, defender.health - Math.floor(baseDamage * 0.6));
         defender.posture = Math.min(defender.maxPosture, defender.posture + postureDmg);
-        defender.state = 'hit';
+        defender.state = ACTION_HIT;
         defender.stateTimer = 0.3;
         spawnSparks(contactX, contactY, '#ef4444', 12, state);
         spawnFloatingText('GUARD CRUSH!', defender.x, ARENA_FLOOR_Y - 80, '#ef4444', state);
-        state.soundEvents.push('hit');
+        state.soundEvents.push(SOUND_HIT);
       } else {
         defender.posture = Math.min(defender.maxPosture, defender.posture + postureDmg);
         spawnSparks(contactX, contactY, '#94a3b8', 10, state);
         spawnFloatingText('BLOCKED', defender.x, ARENA_FLOOR_Y - 70, '#cbd5e1', state);
-        state.soundEvents.push('block');
+        state.soundEvents.push(SOUND_BLOCK);
       }
     } else {
       // Direct clean hit
-      const postureBonus = defender.state === 'staggered' ? 1.5 : 1.0;
+      const postureBonus = defender.state === ACTION_STAGGERED ? 1.5 : 1.0;
       const finalDmg = Math.floor(baseDamage * postureBonus);
       defender.health = Math.max(0, defender.health - finalDmg);
       defender.posture = Math.min(defender.maxPosture, defender.posture + postureDmg);
-      defender.state = defender.health <= 0 ? 'dead' : 'hit';
+      defender.state = defender.health <= 0 ? ACTION_DEAD : ACTION_HIT;
       defender.stateTimer = 0.35;
       defender.x += attacker.facing * (isHeavy ? 40 : 20);
 
       spawnSparks(contactX, contactY, '#f43f5e', 18, state);
       spawnFloatingText(`-${finalDmg}`, defender.x, ARENA_FLOOR_Y - 75, '#f43f5e', state);
-      state.soundEvents.push('hit');
+      state.soundEvents.push(SOUND_HIT);
 
       if (attacker.id === 'p1') {
         state.score += finalDmg * 10;
@@ -484,8 +420,8 @@ export function checkHitRegistration(
     }
 
     // Posture break check
-    if (defender.posture >= defender.maxPosture && defender.state !== 'dead') {
-      defender.state = 'staggered';
+    if (defender.posture >= defender.maxPosture && defender.state !== ACTION_DEAD) {
+      defender.state = ACTION_STAGGERED;
       defender.stateTimer = STAGGER_DURATION;
       defender.posture = 0;
       spawnFloatingText('POSTURE BROKEN!', defender.x, ARENA_FLOOR_Y - 95, '#eab308', state);
@@ -607,12 +543,16 @@ export function stepSwordFightEngine(
 
 function updateFighter(f: Fighter, dt: number): void {
   // Stamina regen
-  if (f.state !== 'slashing' && f.state !== 'heavy_slashing' && f.state !== 'dashing') {
+  if (
+    f.state !== ACTION_SLASHING &&
+    f.state !== ACTION_HEAVY_SLASHING &&
+    f.state !== ACTION_DASHING
+  ) {
     f.stamina = Math.min(f.maxStamina, f.stamina + 28 * dt);
   }
 
   // Posture decay if not blocking
-  if (f.state !== 'parrying' && f.state !== 'hit' && f.state !== 'staggered') {
+  if (f.state !== ACTION_PARRYING && f.state !== ACTION_HIT && f.state !== ACTION_STAGGERED) {
     f.posture = Math.max(0, f.posture - 12 * dt);
   }
 
@@ -636,18 +576,18 @@ function updateFighter(f: Fighter, dt: number): void {
     f.stateTimer -= dt;
 
     // Dash motion
-    if (f.state === 'dashing') {
+    if (f.state === ACTION_DASHING) {
       f.x += f.facing * -280 * dt; // quick backward evasion
     }
 
     // Attack hitbox activation window (impact frame)
-    if (f.state === 'slashing') {
+    if (f.state === ACTION_SLASHING) {
       if (f.stateTimer < 0.22 && f.stateTimer > 0.08) {
         f.hitboxActive = true;
       } else {
         f.hitboxActive = false;
       }
-    } else if (f.state === 'heavy_slashing') {
+    } else if (f.state === ACTION_HEAVY_SLASHING) {
       if (f.stateTimer < 0.25 && f.stateTimer > 0.08) {
         f.hitboxActive = true;
       } else {
@@ -656,12 +596,12 @@ function updateFighter(f: Fighter, dt: number): void {
     }
 
     // Parry window active for first 0.22s
-    if (f.state === 'parrying') {
+    if (f.state === ACTION_PARRYING) {
       f.parryWindowActive = f.stateTimer > 0.4 - PARRY_WINDOW_DURATION;
     }
 
     if (f.stateTimer <= 0) {
-      f.state = 'idle';
+      f.state = ACTION_IDLE;
       f.slashType = null;
       f.parryWindowActive = false;
       f.hitboxActive = false;
@@ -690,7 +630,7 @@ function handleRoundEnd(state: SwordFightState, winnerId: 'p1' | 'p2'): SwordFig
     `${winnerId === 'p1' ? state.p1.name : state.p2.name} WINS ROUND!`,
     ARENA_WIDTH / 2,
     ARENA_FLOOR_Y - 120,
-    winnerId === 'p1' ? '#38bdf8' : '#f43f5e',
+    winnerId === 'p1' ? COLOR_SPARK_BLUE : '#f43f5e',
     state,
   );
 
