@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const minesweeperGame = defineGameModule({
   id: 'minesweeper',
-  name: 'Minesweeper',
   description:
     'The definitive deduction classic. Clear hidden minefields with first-click safety, tactical chording, customizable boards, and record-tracking speedruns.',
   category: GameCategories.P,

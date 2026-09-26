@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const hangmanDuelGame = defineGameModule({
   id: 'hangman-duel',
-  name: 'Hangman Duel',
   description:
     'Polished multiplayer hangman game. Guess letters, deduce secret words, and survive the gallows in competitive word duels.',
   category: GameCategories.P,

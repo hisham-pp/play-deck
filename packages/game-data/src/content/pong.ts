@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const pongGame = defineGameModule({
   id: 'pong',
-  name: 'Pong',
   description:
     'The timeless paddle duel. Deflect the accelerating ball, master angular shots, and outrally the AI or your friend in local 2-player mode.',
   category: GameCategories.A,

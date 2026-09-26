@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const stickmanPlatformerGame = defineGameModule({
   id: 'stickman-platformer',
-  name: 'Stickman Platformer',
   description:
     'Leap across floating platforms, stomp patrol enemies, collect coins, and reach the exit portal in this 2D platforming adventure.',
   category: GameCategories.A,

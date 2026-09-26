@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const sudokuGame = defineGameModule({
   id: 'sudoku',
-  name: 'Sudoku',
   description:
     'Seven difficulty levels of freshly generated grids, each with exactly one solution. Pencil marks, conflict highlighting, mistake budgets and per-level best times.',
   category: GameCategories.P,

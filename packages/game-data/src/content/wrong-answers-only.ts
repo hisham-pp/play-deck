@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const wrongAnswersOnlyGame = defineGameModule({
   id: 'wrong-answers-only',
-  name: 'Wrong Answers Only',
   description:
     'A question appears. Players deliberately submit believable-but-wrong answers. Everyone votes for the funniest or most creative fake answer.',
   category: GameCategories.CS,

@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const flappyArcadeGame = defineGameModule({
   id: 'flappy-arcade',
-  name: 'Flappy Arcade',
   description:
     'Pilot the cyber-glider through hazardous energy conduits. Tap or press space to thrust against gravity, dodge pulsing pylons, and climb the flight leaderboards.',
   category: GameCategories.A,

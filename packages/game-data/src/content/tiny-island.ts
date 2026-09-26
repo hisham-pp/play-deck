@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const tinyIslandGame = defineGameModule({
   id: 'tiny-island',
-  name: 'Tiny Island',
   description:
     'The island shrinks every round. Players collect resources, build bridges, block paths, and steal from each other to survive.',
   category: GameCategories.S,

@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const lootDashGame = defineGameModule({
   id: 'loot-dash',
-  name: 'Loot Dash',
   description:
     'Sprint through hazard-filled arenas scooping coins, gems, and chests. Dodge retractable spikes, avoid sticky slime, and steal loot from rival sprinters.',
   category: GameCategories.A,

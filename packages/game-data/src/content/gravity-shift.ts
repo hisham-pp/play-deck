@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const gravityShiftGame = defineGameModule({
   id: 'gravity-shift',
-  name: 'Gravity Shift',
   description:
     'High-velocity 4-way gravity inverting race. Invert walls into floors, dodge laser gauntlets, and outmaneuver rivals in chaotic real-time multiplayer.',
   category: GameCategories.A,

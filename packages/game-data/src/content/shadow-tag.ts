@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const shadowTagGame = defineGameModule({
   id: 'shadow-tag',
-  name: 'Shadow Tag',
   description:
     'Stealth tag in the dark where runners are invisible. Track elongated shadows cast by orbiting spotlights to hunt or evade.',
   category: GameCategories.A,

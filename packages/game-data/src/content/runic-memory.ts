@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const runicMemoryGame = defineGameModule({
   id: 'runic-memory',
-  name: 'Runic Memory',
   description:
     'Test your cognitive recall across ancient glowing sigils. Flip pairs to clear the board in minimum turns.',
   category: GameCategories.P,

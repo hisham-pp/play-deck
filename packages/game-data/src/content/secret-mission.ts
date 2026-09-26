@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const secretMissionGame = defineGameModule({
   id: 'secret-mission',
-  name: 'Secret Mission',
   description:
     'Every player carries a secret objective to complete without being caught by the others. Stealth, bluffing, and sharp observation in a voice-driven social deduction game for 3–8 agents.',
   category: GameCategories.CS,

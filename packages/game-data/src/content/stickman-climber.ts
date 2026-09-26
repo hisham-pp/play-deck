@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const stickmanClimberGame = defineGameModule({
   id: 'stickman-climber',
-  name: 'Stickman Climber',
   description:
     'Scale a dangerous vertical tower, defeat escalating enemies, upgrade your weapon, and climb your way toward the next arena.',
   category: GameCategories.A,

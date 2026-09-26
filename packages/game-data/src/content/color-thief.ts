@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const colorThiefGame = defineGameModule({
   id: 'color-thief',
-  name: 'Color Thief',
   description:
     'Steal the grid one tile at a time. Paint that touches your own territory is cheap, isolated captures cost dearly, and every colour hides an ability nobody sees until it fires.',
   category: GameCategories.S,

@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const stickmanArcheryGame = defineGameModule({
   id: 'stickman-archery',
-  name: 'Stickman Archery',
   description:
     'Draw your bow, calculate crosswinds, and hit high-scoring bullseyes in this physics archery challenge.',
   category: GameCategories.A,

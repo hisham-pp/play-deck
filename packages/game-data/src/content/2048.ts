@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const game2048Game = defineGameModule({
   id: '2048',
-  name: '2048',
   description:
     'Slide, merge, and forge tiles on a 4x4 grid to reach the coveted 2048 milestone. Featuring undo, smooth transitions, and persistent records.',
   category: GameCategories.P,

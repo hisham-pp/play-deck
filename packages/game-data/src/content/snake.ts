@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const snakeGame = defineGameModule({
   id: 'snake',
-  name: 'Snake',
   description:
     'Guide the snake, eat energy pellets, and grow without crashing into walls or your own tail.',
   category: GameCategories.A,

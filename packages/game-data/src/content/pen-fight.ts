@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const penFightGame = defineGameModule({
   id: 'pen-fight',
-  name: 'Pen Fight',
   description:
     'The classic desktop duel, remade in 3D. Flick your pen to knock your rival off the arena table before they knock you off first.',
   category: GameCategories.A,

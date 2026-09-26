@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const tinyTankArenaGame = defineGameModule({
   id: 'tiny-tank-arena',
-  name: 'Tiny Tank Arena',
   description:
     'Small tanks fight in destructible arenas. Blast brick cover, detonate hazard barrels, scavenge unusual weapons, and be the last tank standing.',
   category: GameCategories.A,

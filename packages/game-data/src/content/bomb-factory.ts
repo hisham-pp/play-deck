@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const bombFactoryGame = defineGameModule({
   id: 'bomb-factory',
-  name: 'Bomb Factory',
   description:
     'Players collaboratively assemble machines under time pressure, but each player sees different information.',
   category: GameCategories.P,

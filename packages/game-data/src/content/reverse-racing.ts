@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const reverseRacingGame = defineGameModule({
   id: 'reverse-racing',
-  name: 'Reverse Racing',
   description:
     'High-octane arcade racing meets circular sabotage. Race down your circuit at full throttle while dropping hazards onto your rival’s track.',
   category: GameCategories.A,

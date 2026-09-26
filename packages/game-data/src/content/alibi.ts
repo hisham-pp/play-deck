@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const alibiGame = defineGameModule({
   id: 'alibi',
-  name: 'Alibi',
   description:
     "Everyone receives a slightly different version of an event. One player's alibi has deliberate inconsistencies. Compare details on voice chat and unmask the suspect!",
   category: GameCategories.CS,

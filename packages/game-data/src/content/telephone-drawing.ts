@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const telephoneDrawingGame = defineGameModule({
   id: 'telephone-drawing',
-  name: 'Telephone Drawing',
   description:
     'Player A gets a phrase → draws it → Player B describes the drawing → Player C draws that description → chain continues → final result is compared with the original phrase.',
   category: GameCategories.CS,

@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const carromGame = defineGameModule({
   id: 'carrom',
-  name: 'Carrom',
   description:
     'Play classic 2D Carrom on PlayDeck. Flick the striker, pot white and black coins, master bank shots, and cover the Queen in solo vs AI or local 2-player matches.',
   category: GameCategories.B,

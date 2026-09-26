@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const towerBuilderGame = defineGameModule({
   id: 'tower-builder',
-  name: 'Tower Builder',
   description:
     'Competitive physics-based skyscraper construction game. Time swinging crane releases, stack diverse blocks with center-of-mass balance, and reach high into the stratosphere.',
   category: GameCategories.A,

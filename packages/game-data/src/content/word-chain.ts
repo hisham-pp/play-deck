@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const wordChainGame = defineGameModule({
   id: 'word-chain',
-  name: 'Word Chain',
   description:
     'Take turns playing words that start where the last one ended. Miss the timer and you lose a life — last player standing wins.',
   category: GameCategories.P,

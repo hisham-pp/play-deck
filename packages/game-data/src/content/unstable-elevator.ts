@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const unstableElevatorGame = defineGameModule({
   id: 'unstable-elevator',
-  name: 'Unstable Elevator',
   description:
     'Cooperative physics cargo stacking. Balance awkward freight on an ascending elevator without tipping the stack over the edge.',
   category: GameCategories.A,

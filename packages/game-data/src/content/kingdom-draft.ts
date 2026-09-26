@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const kingdomDraftGame = defineGameModule({
   id: 'kingdom-draft',
-  name: 'Kingdom Draft',
   description:
     'Draft resources, construct 3x3 realm grids, trigger spatial adjacency synergies, and achieve secret objectives in 2–6 player rooms with WebRTC voice chat.',
   category: GameCategories.S,

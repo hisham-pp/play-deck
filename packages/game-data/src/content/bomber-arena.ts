@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const bomberArenaGame = defineGameModule({
   id: 'bomber-arena',
-  name: 'Bomber Arena',
   description:
     'Fast-paced multiplayer action in destructible arenas. Place bombs, collect power-ups, trigger chain reactions, and be the last player standing.',
   category: GameCategories.A,

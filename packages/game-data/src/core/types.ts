@@ -16,7 +16,7 @@ import type { GameStatus } from '../enums/status.enum';
 
 export interface GameEntryOptions<TState = unknown> {
   id: string;
-  name: string;
+  name?: string;
   slug?: string;
   description: string;
   category: GameCategory;
@@ -40,11 +40,11 @@ export interface GameEntryOptions<TState = unknown> {
 /**
  * Unified game module declaration combining definition metadata and editorial content.
  * Single source of truth for an entire game.
- * Note: `status` is optional and defaults to `'available'`.
+ * Note: `status` is optional and defaults to `'available'`, `featured` defaults to `true`, and `name` defaults to auto-formatted title from `id`.
  */
 export interface UnifiedGameModuleOptions<TState = unknown> {
   id: string;
-  name: string;
+  name?: string;
   slug?: string;
   description: string;
   category: GameCategory;

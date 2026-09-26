@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const stickmanNinjaGame = defineGameModule({
   id: 'stickman-ninja',
-  name: 'Stickman Ninja',
   description:
     'Shadow stealth infiltration, throwing star trajectory physics, ceiling grappling, and silent takedowns.',
   category: GameCategories.A,

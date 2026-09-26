@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const crosswordClashGame = defineGameModule({
   id: 'crossword-clash',
-  name: 'Crossword Clash',
   description:
     'Solve clues and race opponents in Crossword Clash on PlayDeck. Lock letters into shared grids, claim word completion bounties, and battle in real-time word duels.',
   category: GameCategories.P,

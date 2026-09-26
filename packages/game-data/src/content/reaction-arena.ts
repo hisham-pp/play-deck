@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const reactionArenaGame = defineGameModule({
   id: 'reaction-arena',
-  name: 'Reaction Arena',
   description:
     'Fast reflex mini-game collection. Compete across rapid-fire trials testing reaction speed, color matching, mental arithmetic, and visual focus.',
   category: GameCategories.A,

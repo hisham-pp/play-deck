@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const stickmanParkourGame = defineGameModule({
   id: 'stickman-parkour',
-  name: 'Stickman Parkour',
   description:
     'High-speed rooftop freerunning, precision wall vaults, momentum chaining, and gap leaps across skyline obstacles.',
   category: GameCategories.A,

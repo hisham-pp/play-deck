@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const stickmanSwordFightGame = defineGameModule({
   id: 'stickman-sword-fight',
-  name: 'Stickman Sword Fight',
   description:
     'Tactile sword duels featuring timed parries, counter-slashes, feints, and arena martial arts mastery.',
   category: GameCategories.A,

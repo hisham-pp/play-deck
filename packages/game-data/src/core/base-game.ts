@@ -9,6 +9,7 @@ import type {
   StickmanGameSubtype,
 } from '@playdeck/game-types';
 import { type GameStatus, GameStatuses } from '../enums/status.enum';
+import { formatGameName } from '../helpers/name.utils';
 import { resolveGameAssets } from './asset-resolver';
 import { BADGE_COMING_SOON, BADGE_READY_TO_PLAY } from './constants';
 import type {
@@ -46,7 +47,7 @@ export class BaseGameEntry<TState = unknown> {
 
   constructor(options: GameEntryOptions<TState>) {
     this.id = options.id.trim().toLowerCase();
-    this.name = options.name;
+    this.name = options.name?.trim() || formatGameName(this.id);
     this.slug = (options.slug ?? options.id).trim().toLowerCase();
     this.description = options.description;
     this.category = options.category;

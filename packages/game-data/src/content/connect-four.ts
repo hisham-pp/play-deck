@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const connectFourGame = defineGameModule({
   id: 'connect-four',
-  name: 'Connect Four',
   description:
     'A vertical gravity duel. Drop discs to align four in a row horizontally, vertically, or diagonally before your opponent.',
   category: GameCategories.S,

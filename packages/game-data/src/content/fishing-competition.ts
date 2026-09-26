@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const fishingCompetitionGame = defineGameModule({
   id: 'fishing-competition',
-  name: 'Fishing Competition',
   description:
     'Cast, strike, and reel in trophy fish in Fishing Competition on PlayDeck. Balance line tension, navigate weather events, and top the leaderboard across five waters.',
   category: GameCategories.CS,

@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const floorIsLavaGame = defineGameModule({
   id: 'floor-is-lava',
-  name: 'Floor Is Lava',
   description:
     'The ground collapses beneath your feet! Push rivals into rising molten lava, secure power-up tiles, and be the last player standing in frantic real-time combat.',
   category: GameCategories.A,

@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const pushYourLuckGame = defineGameModule({
   id: 'push-your-luck',
-  name: 'Push Your Luck',
   description:
     'Every draw pays out, and every draw after that is likelier to wipe you out. Bank your pot while it is safe, or push once more and gamble the whole round away.',
   category: GameCategories.CS,

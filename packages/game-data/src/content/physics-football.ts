@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const physicsFootballGame = defineGameModule({
   id: 'physics-football',
-  name: 'Physics Football',
   description:
     'Fast-paced 2D arcade soccer showdown. Control momentum, execute impulse strikes, bend shots off goalposts, and dominate the pitch in Physics Football on PlayDeck.',
   category: GameCategories.A,

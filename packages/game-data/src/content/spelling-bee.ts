@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const spellingBeeGame = defineGameModule({
   id: 'spelling-bee',
-  name: 'Spelling Bee',
   description:
     'Find as many words as possible using seven honeycomb letters. Every word must include the center letter in this addictive word puzzle and multiplayer game.',
   category: GameCategories.P,

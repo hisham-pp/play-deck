@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const stickmanBasketballGame = defineGameModule({
   id: 'stickman-basketball',
-  name: 'Stickman Basketball',
   description:
     'Arcade streetball showdown with gravity basketball trajectory, ankle-breaking crossovers, and rim-rocking dunks.',
   category: GameCategories.A,

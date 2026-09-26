@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const magnetMayhemGame = defineGameModule({
   id: 'magnet-mayhem',
-  name: 'Magnet Mayhem',
   description:
     'High-velocity magnetic arena combat. Sling around metallic anchors, fire repulsion shockwaves at rivals, and collect glowing target orbs.',
   category: GameCategories.A,

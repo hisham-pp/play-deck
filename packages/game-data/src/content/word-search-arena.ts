@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const wordSearchArenaGame = defineGameModule({
   id: 'word-search-arena',
-  name: 'Word Search Arena',
   description:
     'Race to find hidden words in a shared letter grid before your opponents do! Words hide in all 8 directions across 6 themes and 3 grid sizes.',
   category: GameCategories.P,

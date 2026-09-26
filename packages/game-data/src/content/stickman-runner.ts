@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const stickmanRunnerGame = defineGameModule({
   id: 'stickman-runner',
-  name: 'Stickman Runner',
   description:
     'Sprint through a rising gauntlet of hazards, time your jumps, and chase a new personal best in this endless arcade run.',
   category: GameCategories.A,

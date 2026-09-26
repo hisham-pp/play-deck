@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const trainRushGame = defineGameModule({
   id: 'train-rush',
-  name: 'Train Rush',
   description:
     'Build and connect railway tracks from start to terminus in Train Rush on PlayDeck. Rotate pieces, bridge rivers, avoid boulders, and race rival rail barons.',
   category: GameCategories.S,

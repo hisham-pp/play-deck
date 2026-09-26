@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const humanConveyorBeltGame = defineGameModule({
   id: 'human-conveyor-belt',
-  name: 'Human Conveyor Belt',
   description:
     'Players must position themselves to move objects through a constantly changing machine. Players ARE the machine parts.',
   category: GameCategories.CS,

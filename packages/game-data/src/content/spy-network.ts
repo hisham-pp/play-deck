@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const spyNetworkGame = defineGameModule({
   id: 'spy-network',
-  name: 'Spy Network',
   description:
     "One player is the spy who doesn't know the secret location. Players ask each other questions; the spy bluffs along. Vote for the spy before they guess the location!",
   category: GameCategories.CS,

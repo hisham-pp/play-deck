@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const gravityGolfGame = defineGameModule({
   id: 'gravity-golf',
-  name: 'Gravity Golf',
   description:
     'Manipulate cosmic gravity wells, repellers, and orbital fields to guide your golf orb into the galactic hole in the fewest placements.',
   category: GameCategories.A,

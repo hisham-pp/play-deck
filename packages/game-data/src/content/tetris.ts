@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const tetrisGame = defineGameModule({
   id: 'tetris',
-  name: 'Tetris',
   description:
     'Rotate and stack falling tetrominoes to clear lines before the board overflows. Speed ramps up with every level.',
   category: GameCategories.P,

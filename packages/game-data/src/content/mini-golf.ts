@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const miniGolfGame = defineGameModule({
   id: 'mini-golf',
-  name: 'Mini Golf',
   description:
     'Polished 2D physics mini golf with drag-to-aim putting, 18 championship holes, banking cushions, portals, online multiplayer, and integrated voice chat.',
   category: GameCategories.A,

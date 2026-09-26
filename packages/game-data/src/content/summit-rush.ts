@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const summitRushGame = defineGameModule({
   id: 'summit-rush',
-  name: 'Summit Rush',
   description:
     'Hill-climb through endless ridges in a springy dune buggy. Balance on the throttle, grab fuel, land flips, upgrade your ride, and race a friend online with voice chat.',
   category: GameCategories.A,

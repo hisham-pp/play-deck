@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const stickmanShooterGame = defineGameModule({
   id: 'stickman-shooter',
-  name: 'Stickman Shooter',
   description:
     'Tactical cover shooting, timed bullet dodges, and precision weapon recoil mastery in an escalating stickman warzone.',
   category: GameCategories.A,

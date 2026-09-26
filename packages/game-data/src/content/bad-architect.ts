@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const badArchitectGame = defineGameModule({
   id: 'bad-architect',
-  name: 'Bad Architect',
   description:
     'One player describes a secret blueprint using voice chat alone. Builders lay blocks on an 8x8 canvas, then reveal and vote on hilarious disasters.',
   category: GameCategories.CS,

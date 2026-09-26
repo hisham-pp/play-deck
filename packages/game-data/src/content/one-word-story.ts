@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const oneWordStoryGame = defineGameModule({
   id: 'one-word-story',
-  name: 'One Word Story',
   description:
     'Players collaboratively create a story, one word at a time. Unexpected combinations and deliberate chaos create hilarious results in 3–8 player voice rooms.',
   category: GameCategories.CS,

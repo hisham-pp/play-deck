@@ -116,4 +116,27 @@ describe('BaseGameEntry & Asset Resolution', () => {
     assert.equal(pkg.content?.id, 'bundled-game');
     assert.equal(pkg.content?.tagline, 'The ultimate test bundle');
   });
+
+  it('automatically formats game name from id when name is omitted', () => {
+    const game = defineGame({
+      id: 'super-cool-racing',
+      description: 'Auto-formatted name test.',
+      category: GameCategories.A,
+      players: { min: 1, max: 2 },
+    });
+
+    assert.equal(game.name, 'Super Cool Racing');
+  });
+
+  it('preserves custom name when explicitly provided', () => {
+    const game = defineGame({
+      id: 'custom-id',
+      name: "Custom's Game!",
+      description: 'Custom name test.',
+      category: GameCategories.A,
+      players: { min: 1, max: 2 },
+    });
+
+    assert.equal(game.name, "Custom's Game!");
+  });
 });

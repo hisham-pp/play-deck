@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const platformRaceGame = defineGameModule({
   id: 'platform-race',
-  name: 'Platform Race',
   description:
     'Race across neon obstacle courses in Platform Race on PlayDeck. Master moving platforms, spring launchers, and speed boosts to cross the finish line first.',
   category: GameCategories.A,

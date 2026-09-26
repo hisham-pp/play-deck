@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const ballBounceGame = defineGameModule({
   id: 'ball-bounce',
-  name: 'Ball Bounce',
   description:
     'Steer the paddle, keep the ball alive, and smash through ever-tougher block layouts. Chain combos, grab power-ups, and chase your high score.',
   category: GameCategories.A,

@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const secretSaboteurGame = defineGameModule({
   id: 'secret-saboteur',
-  name: 'Secret Saboteur',
   description:
     'Build the Reactor Core or trigger catastrophic meltdown. Hidden-role deduction for 4–8 players with anonymous card contributions and real-time voice accusation trials.',
   category: GameCategories.S,

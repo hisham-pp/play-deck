@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const ludoGame = defineGameModule({
   id: 'ludo',
-  name: 'Ludo',
   description:
     'Classic board race for 2 to 6 players featuring 3D physics dice, AI bot personalities, and custom rule configurations.',
   category: GameCategories.B,

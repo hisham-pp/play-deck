@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const auctionPanicGame = defineGameModule({
   id: 'auction-panic',
-  name: 'Auction Panic',
   description:
     'Bid on mystery items with limited coins, then discover what you actually bought. Uncover legendary treasures, avoid cursed junk, and trigger combo set bonuses in 2–6 player rooms.',
   category: GameCategories.S,

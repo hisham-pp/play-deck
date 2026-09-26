@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const imposterBuilderGame = defineGameModule({
   id: 'imposter-builder',
-  name: 'Imposter Builder',
   description:
     'Everyone builds the same thing on an 8x8 canvas — but one player got subtly different instructions. Reveal all builds, discuss on voice, and vote for the Imposter.',
   category: GameCategories.CS,

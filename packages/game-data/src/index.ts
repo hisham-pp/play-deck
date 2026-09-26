@@ -7,5 +7,6 @@ export * from './enums/category.enum';
 export * from './enums/tags.enum';
 export * from './enums/status.enum';
 export * from './helpers/players.utils';
+export * from './helpers/name.utils';
 export * from './content';
 export * from './registry';

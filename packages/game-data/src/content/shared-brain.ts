@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const sharedBrainGame = defineGameModule({
   id: 'shared-brain',
-  name: 'Shared Brain',
   description:
     'Two players control the same character, each controlling different abilities. Voice communication is essential — without it, the character is helpless.',
   category: GameCategories.CS,

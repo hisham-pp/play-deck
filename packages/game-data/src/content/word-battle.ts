@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const wordBattleGame = defineGameModule({
   id: 'word-battle',
-  name: 'Word Battle',
   description:
     'Race against opponents with shared letters in Word Battle on PlayDeck. Unearth rare words, outscore rival players, and clash in fast multiplayer anagram rounds.',
   category: GameCategories.P,

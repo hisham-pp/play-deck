@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const anagramSprintGame = defineGameModule({
   id: 'anagram-sprint',
-  name: 'Anagram Sprint',
   description:
     'Race to unscramble the word before anyone else. Speed scoring, streak bonuses and difficulty that climbs every round — solo or in a room of eight.',
   category: GameCategories.P,

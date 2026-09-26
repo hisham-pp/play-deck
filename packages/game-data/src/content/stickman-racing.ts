@@ -4,7 +4,6 @@ import { GameTags } from '../enums/tags.enum';
 import { getPCount } from '../helpers/players.utils';
 export const stickmanRacingGame = defineGameModule({
   id: 'stickman-racing',
-  name: 'Stickman Racing',
   description:
     'Fast-paced arcade sprint gauntlet with hurdle leaps, slipstream speed boosts, and hazard lane evasion.',
   category: GameCategories.A,
