@@ -9,6 +9,8 @@ import {
   ACTION_STAGGERED,
   ACTION_WALKING,
   COLOR_SPARK_BLUE,
+  SOUND_BLOCK,
+  SOUND_HIT,
   type Difficulty,
   type Fighter,
   type SwordFightState,
@@ -102,7 +104,12 @@ export function handleFighterInput(
   state: SwordFightState,
 ): void {
   if (state.status !== 'fighting') return;
-  if (fighter.state === ACTION_STAGGERED || fighter.state === ACTION_HIT || fighter.state === ACTION_DEAD) return;
+  if (
+    fighter.state === ACTION_STAGGERED ||
+    fighter.state === ACTION_HIT ||
+    fighter.state === ACTION_DEAD
+  )
+    return;
 
   // Attack inputs
   if (
@@ -386,12 +393,12 @@ export function checkHitRegistration(
         defender.stateTimer = 0.3;
         spawnSparks(contactX, contactY, '#ef4444', 12, state);
         spawnFloatingText('GUARD CRUSH!', defender.x, ARENA_FLOOR_Y - 80, '#ef4444', state);
-        state.soundEvents.push(ACTION_HIT);
+        state.soundEvents.push(SOUND_HIT);
       } else {
         defender.posture = Math.min(defender.maxPosture, defender.posture + postureDmg);
         spawnSparks(contactX, contactY, '#94a3b8', 10, state);
         spawnFloatingText('BLOCKED', defender.x, ARENA_FLOOR_Y - 70, '#cbd5e1', state);
-        state.soundEvents.push('block');
+        state.soundEvents.push(SOUND_BLOCK);
       }
     } else {
       // Direct clean hit
@@ -405,7 +412,7 @@ export function checkHitRegistration(
 
       spawnSparks(contactX, contactY, '#f43f5e', 18, state);
       spawnFloatingText(`-${finalDmg}`, defender.x, ARENA_FLOOR_Y - 75, '#f43f5e', state);
-      state.soundEvents.push(ACTION_HIT);
+      state.soundEvents.push(SOUND_HIT);
 
       if (attacker.id === 'p1') {
         state.score += finalDmg * 10;
@@ -536,7 +543,11 @@ export function stepSwordFightEngine(
 
 function updateFighter(f: Fighter, dt: number): void {
   // Stamina regen
-  if (f.state !== ACTION_SLASHING && f.state !== ACTION_HEAVY_SLASHING && f.state !== ACTION_DASHING) {
+  if (
+    f.state !== ACTION_SLASHING &&
+    f.state !== ACTION_HEAVY_SLASHING &&
+    f.state !== ACTION_DASHING
+  ) {
     f.stamina = Math.min(f.maxStamina, f.stamina + 28 * dt);
   }
 

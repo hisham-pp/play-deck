@@ -83,6 +83,17 @@ export type CombatSoundEvent =
   | 'round_win'
   | 'match_win';
 
+export const SOUND_SLASH: CombatSoundEvent = 'slash';
+export const SOUND_HEAVY_SLASH: CombatSoundEvent = 'heavy_slash';
+export const SOUND_PARRY: CombatSoundEvent = 'parry';
+export const SOUND_BLOCK: CombatSoundEvent = 'block';
+export const SOUND_HIT: CombatSoundEvent = 'hit';
+export const SOUND_POSTURE_BREAK: CombatSoundEvent = 'posture_break';
+export const SOUND_DASH: CombatSoundEvent = 'dash';
+export const SOUND_CLASH: CombatSoundEvent = 'clash';
+export const SOUND_ROUND_WIN: CombatSoundEvent = 'round_win';
+export const SOUND_MATCH_WIN: CombatSoundEvent = 'match_win';
+
 export interface SwordFightState {
   status: 'waiting' | 'countdown' | 'fighting' | 'round_over' | 'match_over';
   countdownTimer: number;
