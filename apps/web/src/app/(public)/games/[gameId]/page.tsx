@@ -1,12 +1,11 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import React from 'react';
+import { GAME_DEFINITIONS, getGameContent } from '@playdeck/game-data';
 import type { GameDefinition } from '@playdeck/game-types';
 import { GameTemplate } from '@/components/game/GameTemplate';
 import { pickRelatedGames, RelatedGames } from '@/components/game/RelatedGames';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { GAME_DEFINITIONS } from '@/data/games';
-import { getGameContent } from '@/data/games/content';
 import { DEFAULT_OG_IMAGE, gameOverviewPath, gamePlayPath, SITE_NAME } from '@/lib/seo/site';
 import {
   buildBreadcrumbSchema,

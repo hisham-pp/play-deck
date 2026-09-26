@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import React from 'react';
+import { GAME_DEFINITIONS } from '@playdeck/game-data';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { GAME_DEFINITIONS } from '@/data/games';
 import { SITE_NAME } from '@/lib/seo/site';
 import { buildGameListSchema } from '@/lib/seo/structured-data';
 import { GamesCatalogClient } from './GamesCatalogClient';

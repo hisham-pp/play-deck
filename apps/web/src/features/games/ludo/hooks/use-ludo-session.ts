@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react';
-import { GAME_DEFINITIONS } from '@/data/games';
+import { GAME_DEFINITIONS } from '@playdeck/game-data';
 import { useGameSessionStore } from '@/stores/game-session.store';
 import { useLibraryStore } from '@/stores/library.store';
 import { usePlayerStore } from '@/stores/player.store';

@@ -1,10 +1,11 @@
 import type { NextConfig } from 'next';
-import { GAME_DEFINITIONS } from './src/data/games';
+import { GAME_DEFINITIONS } from '@playdeck/game-data';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   transpilePackages: [
     '@playdeck/game-core',
+    '@playdeck/game-data',
     '@playdeck/game-types',
     '@playdeck/shared',
     '@playdeck/ui',

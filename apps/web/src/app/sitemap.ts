@@ -1,6 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { GAME_DEFINITIONS } from '@/data/games';
-import { getGameContent } from '@/data/games/content';
+import { GAME_DEFINITIONS, getGameContent } from '@playdeck/game-data';
 import { absoluteUrl, gameOverviewPath } from '@/lib/seo/site';
 
 /** Routes that exist independently of the catalog. */
