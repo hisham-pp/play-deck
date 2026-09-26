@@ -33,6 +33,14 @@ import {
   processItemPickup,
 } from '../engine/equipment';
 import {
+  CLIMBER_ACHIEVEMENTS,
+  type LevelUpEvent,
+  calculateStatsForLevel,
+  evaluateXpGain,
+  loadClimberProfile,
+  saveClimberProfile,
+} from '../engine/progression';
+import {
   FIRST_FIVE_LEVELS,
   INITIAL_CLIMBER_PROGRESS,
   type LevelCompleteResult,
@@ -44,8 +52,10 @@ import {
 import { EnemyCombatStage } from './EnemyCombatStage';
 import { LevelCompleteModal } from './LevelCompleteModal';
 import { LevelMapScreen } from './LevelMapScreen';
+import { LevelUpModal } from './LevelUpModal';
 import { LootDropStage } from './LootDropStage';
 import { PickupToastBanner } from './PickupToastBanner';
+import { PlayerProgressionCard } from './PlayerProgressionCard';
 import { WeaponLoadoutBar } from './WeaponLoadoutBar';
 
 export function StickmanClimberGame() {
@@ -59,6 +69,10 @@ export function StickmanClimberGame() {
   const [activeEnemy, setActiveEnemy] = useState<ActiveEnemyState>(() => createActiveEnemy(1));
   const [paused, setPaused] = useState(false);
   const [activeVictory, setActiveVictory] = useState<LevelCompleteResult | null>(null);
+  const [achievements, setAchievements] = useState<Record<string, { unlockedAt: string }>>({});
+
+  // Progression & Level-Up State
+  const [levelUpEvent, setLevelUpEvent] = useState<LevelUpEvent | null>(null);
 
   // Loot & Equipment Interaction State
   const [activeDrops, setActiveDrops] = useState<ItemDrop[]>([]);
@@ -67,15 +81,69 @@ export function StickmanClimberGame() {
   const [combatMessage, setCombatMessage] = useState<string | null>(null);
 
   const levelConfig = useMemo(() => getLevelConfig(selectedLevel), [selectedLevel]);
-  const levelProgress = Math.min(100, Math.round((xp % 100) + 15));
+  const playerStats = useMemo(() => calculateStatsForLevel(xp), [xp]);
   const activeWeapon = useMemo(
     () => getWeapon(inventory.equippedWeaponId),
     [inventory.equippedWeaponId],
   );
 
+  // Load persistent profile on mount
+  useEffect(() => {
+    async function initProfile() {
+      const saved = await loadClimberProfile();
+      if (saved) {
+        setXp(saved.totalXp);
+        setInventory({
+          equippedWeaponId: saved.equippedWeaponId,
+          storedWeapons: saved.storedWeapons,
+          armorShield: 0,
+          keys: 2,
+        });
+        setProgress((prev) => ({
+          ...prev,
+          unlockedLevels: saved.unlockedLevels,
+        }));
+        setAchievements(saved.achievements);
+      }
+    }
+    void initProfile();
+  }, []);
+
+  // Set active enemy on level change
   useEffect(() => {
     setActiveEnemy(createActiveEnemy(selectedLevel));
   }, [selectedLevel]);
+
+  // Auto-save persistent profile on significant state updates
+  useEffect(() => {
+    void saveClimberProfile({
+      totalXp: xp,
+      unlockedLevels: progress.unlockedLevels,
+      bestScores: Object.fromEntries(
+        Object.entries(progress.completedLevels).map(([k, v]) => [k, v.bestScore]),
+      ),
+      storedWeapons: inventory.storedWeapons,
+      equippedWeaponId: inventory.equippedWeaponId,
+      achievements,
+      lastSaved: new Date().toISOString(),
+    });
+  }, [xp, progress, inventory.storedWeapons, inventory.equippedWeaponId, achievements]);
+
+  const handleGainXp = (amount: number) => {
+    const event = evaluateXpGain(xp, amount);
+    setXp((prev) => prev + amount);
+
+    if (event.didLevelUp) {
+      setLevelUpEvent(event);
+      setHealth(event.stats.maxHealth);
+      if (event.newLevel >= 5 && !achievements['level_five']) {
+        setAchievements((prev) => ({
+          ...prev,
+          level_five: { unlockedAt: new Date().toISOString() },
+        }));
+      }
+    }
+  };
 
   const handleStartLevelFromMap = (levelId: number) => {
     setSelectedLevel(levelId);
@@ -91,6 +159,20 @@ export function StickmanClimberGame() {
     setInventory(updated);
     const weapon = getWeapon(weaponId);
     setPickupNotification(`Equipped ${weapon.name} (${weapon.damage} DMG)`);
+
+    // Check achievement for arsenal
+    if (updated.storedWeapons.length >= 3 && !achievements['arsenal_ready']) {
+      setAchievements((prev) => ({
+        ...prev,
+        arsenal_ready: { unlockedAt: new Date().toISOString() },
+      }));
+    }
+    if (weapon.id === 'legendary-sword' && !achievements['excalibur_wielder']) {
+      setAchievements((prev) => ({
+        ...prev,
+        excalibur_wielder: { unlockedAt: new Date().toISOString() },
+      }));
+    }
   };
 
   const handleCollectDrop = (drop: ItemDrop) => {
@@ -105,9 +187,12 @@ export function StickmanClimberGame() {
 
     setHealth(result.health);
     setCoins(result.coins);
-    setXp(result.xp);
     setInventory(result.inventory);
     setPickupNotification(result.notification);
+
+    if (drop.xpAmount) {
+      handleGainXp(drop.xpAmount);
+    }
 
     if (result.newWeapon) {
       setNewWeaponCandidate(result.newWeapon);
@@ -122,8 +207,8 @@ export function StickmanClimberGame() {
     let curHealth = health;
     let curShield = inventory.armorShield;
     let curCoins = coins;
-    let curXp = xp;
     let curInv = inventory;
+    let totalXpGained = 0;
     let foundWeapon: Weapon | undefined;
 
     for (const drop of activeDrops) {
@@ -132,25 +217,29 @@ export function StickmanClimberGame() {
         currentHealth: curHealth,
         currentShield: curShield,
         currentCoins: curCoins,
-        currentXp: curXp,
+        currentXp: xp,
         inventory: curInv,
       });
       curHealth = res.health;
       curShield = res.armorShield;
       curCoins = res.coins;
-      curXp = res.xp;
       curInv = res.inventory;
+      if (drop.xpAmount) totalXpGained += drop.xpAmount;
       if (res.newWeapon) foundWeapon = res.newWeapon;
     }
 
     setHealth(curHealth);
     setCoins(curCoins);
-    setXp(curXp);
     setInventory(curInv);
     setActiveDrops([]);
     setPickupNotification(
       foundWeapon ? `Acquired ${foundWeapon.name}!` : `Collected all ${activeDrops.length} items!`,
     );
+
+    if (totalXpGained > 0) {
+      handleGainXp(totalXpGained);
+    }
+
     if (foundWeapon) {
       setNewWeaponCandidate(foundWeapon);
     }
@@ -174,19 +263,20 @@ export function StickmanClimberGame() {
     if (paused || health <= 0) return;
 
     // Check weapon special ability trigger
-    let bonusDamage = 0;
+    let abilityBonusDamage = 0;
     if (activeWeapon.specialAbility && Math.random() < activeWeapon.specialAbility.procChance) {
       const ability = activeWeapon.specialAbility;
-      if (ability.bonusDamage) bonusDamage += ability.bonusDamage;
+      if (ability.bonusDamage) abilityBonusDamage += ability.bonusDamage;
       if (ability.multiplier) {
-        bonusDamage += Math.round(activeWeapon.damage * (ability.multiplier - 1));
+        abilityBonusDamage += Math.round(activeWeapon.damage * (ability.multiplier - 1));
       }
       if (ability.healAmount) {
-        setHealth((h) => Math.min(100, h + (ability.healAmount ?? 0)));
+        setHealth((h) => Math.min(playerStats.maxHealth, h + (ability.healAmount ?? 0)));
       }
     }
 
-    const totalWeaponDamage = activeWeapon.damage + bonusDamage;
+    // Weapon damage + player attack power bonus from progression leveling!
+    const totalWeaponDamage = activeWeapon.damage + playerStats.attackBonus + abilityBonusDamage;
 
     const turnResult = processCombatTurn({
       playerAction: action,
@@ -198,21 +288,33 @@ export function StickmanClimberGame() {
     setActiveEnemy(turnResult.enemyState);
     setCombatMessage(turnResult.actionMessage);
 
-    // Apply player health / shield delta
+    if (turnResult.shieldBroken && !achievements['shield_smasher']) {
+      setAchievements((prev) => ({
+        ...prev,
+        shield_smasher: { unlockedAt: new Date().toISOString() },
+      }));
+    }
+
+    // Apply player health / shield delta with defense armor buffer
     if (turnResult.playerHealthDelta < 0) {
-      const incomingRaw = Math.abs(turnResult.playerHealthDelta);
+      // Incoming damage reduced by defense armor
+      const rawIncoming = Math.max(
+        1,
+        Math.abs(turnResult.playerHealthDelta) - playerStats.defenseArmor,
+      );
       if (inventory.armorShield > 0) {
-        const absorbed = Math.min(inventory.armorShield, incomingRaw);
-        const unabsorbed = incomingRaw - absorbed;
+        const absorbed = Math.min(inventory.armorShield, rawIncoming);
+        const unabsorbed = rawIncoming - absorbed;
         setInventory((prev) => ({ ...prev, armorShield: prev.armorShield - absorbed }));
         setHealth((h) => Math.max(0, h - unabsorbed));
       } else {
-        setHealth((h) => Math.max(0, h - incomingRaw));
+        setHealth((h) => Math.max(0, h - rawIncoming));
       }
     }
 
-    // Award XP and coins per hit
-    setXp((x) => x + Math.round(turnResult.playerDamageDealt / 2));
+    // Award XP per hit and check leveling
+    const hitXp = Math.max(4, Math.round(turnResult.playerDamageDealt / 2));
+    handleGainXp(hitXp);
 
     if (turnResult.enemyDefeated) {
       // Generate loot drops
@@ -231,6 +333,23 @@ export function StickmanClimberGame() {
       setProgress(victory.progress);
       setActiveVictory(victory);
 
+      // Award completion XP
+      handleGainXp(victory.earnedXp);
+
+      // Achievement checks
+      if (selectedLevel === 1 && !achievements['first_ascent']) {
+        setAchievements((prev) => ({
+          ...prev,
+          first_ascent: { unlockedAt: new Date().toISOString() },
+        }));
+      }
+      if (selectedLevel === 5 && !achievements['summit_conqueror']) {
+        setAchievements((prev) => ({
+          ...prev,
+          summit_conqueror: { unlockedAt: new Date().toISOString() },
+        }));
+      }
+
       // Offer reward weapon if unlocked from level completion
       if (victory.unlockedWeapon) {
         const weapon = getWeapon(victory.unlockedWeapon);
@@ -245,7 +364,7 @@ export function StickmanClimberGame() {
     if (selectedLevel < 5) {
       const next = selectedLevel + 1;
       setSelectedLevel(next);
-      setHealth(100);
+      setHealth(playerStats.maxHealth);
       setActiveEnemy(createActiveEnemy(next));
       setActiveVictory(null);
       setActiveDrops([]);
@@ -258,7 +377,7 @@ export function StickmanClimberGame() {
   };
 
   const handleReplay = () => {
-    setHealth(100);
+    setHealth(playerStats.maxHealth);
     setActiveEnemy(createActiveEnemy(selectedLevel));
     setActiveVictory(null);
     setActiveDrops([]);
@@ -268,7 +387,7 @@ export function StickmanClimberGame() {
   };
 
   const handleRestart = () => {
-    setHealth(100);
+    setHealth(playerStats.maxHealth);
     setActiveEnemy(createActiveEnemy(selectedLevel));
     setActiveVictory(null);
     setActiveDrops([]);
@@ -364,7 +483,9 @@ export function StickmanClimberGame() {
                   <div className="absolute left-4 top-4 flex items-center gap-3">
                     <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400">
                       <Shield className="h-4 w-4" />
-                      <span>{health}% HP</span>
+                      <span>
+                        {health} / {playerStats.maxHealth} HP
+                      </span>
                     </div>
 
                     {inventory.armorShield > 0 && (
@@ -393,25 +514,9 @@ export function StickmanClimberGame() {
                     <span>Altitude: {levelConfig.heightMeters}m</span>
                   </div>
 
-                  {/* XP Meter */}
-                  <div className="absolute inset-x-4 top-16 rounded-xl border border-amber-500/50 bg-slate-900/80 p-3 shadow-[0_0_30px_rgba(245,158,11,0.12)]">
-                    <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-[0.18em] text-deck-400 font-mono">
-                      <span>Ascent Progress</span>
-                      <span>
-                        {xp} / {levelConfig.rewardXp} XP
-                      </span>
-                    </div>
-                    <div className="h-2.5 overflow-hidden rounded-full bg-slate-800">
-                      <div
-                        className="h-full rounded-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-300"
-                        style={{ width: `${levelProgress}%` }}
-                      />
-                    </div>
-                  </div>
-
                   {/* Combat Action Banner Message */}
                   {combatMessage && (
-                    <div className="absolute left-1/2 top-[120px] -translate-x-1/2 z-30 animate-in fade-in zoom-in-95 duration-200 rounded-full border border-amber-400 bg-slate-950/90 px-4 py-1 text-xs font-mono font-bold text-amber-300 backdrop-blur-md flex items-center gap-1.5 shadow-[0_0_20px_rgba(245,158,11,0.3)]">
+                    <div className="absolute left-1/2 top-14 -translate-x-1/2 z-30 animate-in fade-in zoom-in-95 duration-200 rounded-full border border-amber-400 bg-slate-950/90 px-4 py-1 text-xs font-mono font-bold text-amber-300 backdrop-blur-md flex items-center gap-1.5 shadow-[0_0_20px_rgba(245,158,11,0.3)]">
                       <Flame className="w-3.5 h-3.5 text-orange-400" />
                       <span>{combatMessage}</span>
                     </div>
@@ -460,7 +565,7 @@ export function StickmanClimberGame() {
                         disabled={health <= 0}
                         className="rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 text-xs font-black uppercase tracking-wider transition-all shadow-md shadow-amber-500/20 cursor-pointer disabled:opacity-50"
                       >
-                        Strike ({activeWeapon.damage})
+                        Strike ({activeWeapon.damage + playerStats.attackBonus})
                       </button>
 
                       {/* Flank */}
@@ -506,9 +611,17 @@ export function StickmanClimberGame() {
             />
           </div>
 
-          {/* Right Column: Interactive Level Route & Status */}
-          <aside className="space-y-4 rounded-2xl border border-surface-border bg-surface-raised p-4 shadow-arcade">
-            <div>
+          {/* Right Column: Player Progression Stats & Interactive Level Route */}
+          <aside className="space-y-3">
+            {/* Player Progression & Attributes Card */}
+            <PlayerProgressionCard
+              stats={playerStats}
+              achievementCount={Object.keys(achievements).length}
+              totalAchievements={Object.keys(CLIMBER_ACHIEVEMENTS).length}
+            />
+
+            {/* Ascent Route Progression */}
+            <div className="rounded-2xl border border-surface-border bg-surface-raised p-3.5 shadow-arcade">
               <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-deck-500 font-mono">
                 <span>Ascent Progression</span>
                 <button
@@ -518,7 +631,7 @@ export function StickmanClimberGame() {
                   Full Map →
                 </button>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {FIRST_FIVE_LEVELS.map((item) => {
                   const unlocked = isLevelUnlocked(item.id, progress.unlockedLevels);
                   const completion = progress.completedLevels[item.id];
@@ -531,13 +644,13 @@ export function StickmanClimberGame() {
                         if (unlocked) {
                           setSelectedLevel(item.id);
                           setActiveEnemy(createActiveEnemy(item.id));
-                          setHealth(100);
+                          setHealth(playerStats.maxHealth);
                           setActiveDrops([]);
                           setCombatMessage(null);
                         }
                       }}
                       disabled={!unlocked}
-                      className={`flex w-full items-center justify-between rounded-xl border px-3 py-2.5 text-left transition ${
+                      className={`flex w-full items-center justify-between rounded-xl border px-3 py-2 text-left transition ${
                         isCurrent
                           ? 'border-amber-500 bg-amber-500/15 text-white shadow-sm'
                           : unlocked
@@ -591,7 +704,7 @@ export function StickmanClimberGame() {
               <div className="text-[10px] uppercase tracking-[0.2em] text-deck-500 font-mono">
                 Level {selectedLevel} Briefing
               </div>
-              <ul className="space-y-1.5 text-deck-300 text-xs">
+              <ul className="space-y-1 text-deck-300 text-xs">
                 <li className="flex justify-between">
                   <span className="text-deck-500">Altitude:</span>
                   <span className="font-mono text-white">{levelConfig.heightMeters}m</span>
@@ -608,20 +721,6 @@ export function StickmanClimberGame() {
                   <span className="text-deck-500">Clear Reward:</span>
                   <span className="font-mono text-amber-400">+{levelConfig.rewardXp} XP</span>
                 </li>
-              </ul>
-            </div>
-
-            {/* Combat Actions & Tactical Guide */}
-            <div className="rounded-xl border border-surface-border bg-surface-base/80 p-3">
-              <div className="mb-2 text-[10px] uppercase tracking-[0.2em] text-deck-500 font-mono">
-                Tactical Guide
-              </div>
-              <ul className="space-y-1 text-xs text-deck-400 font-mono">
-                <li>• Strike: Direct weapon attack</li>
-                <li>• Flank: Evade telegraphed attack & bypass shield</li>
-                <li>• Cleave: Break enemy shields with heavy impact</li>
-                <li>• Parry: Counter-deflect and stagger foes</li>
-                <li>• Boss Phases: Escalate damage at 60% and 30% HP</li>
               </ul>
             </div>
           </aside>
@@ -642,6 +741,11 @@ export function StickmanClimberGame() {
           setNewWeaponCandidate(null);
         }}
       />
+
+      {/* Level-Up Celebration Modal */}
+      {levelUpEvent && (
+        <LevelUpModal event={levelUpEvent} onDismiss={() => setLevelUpEvent(null)} />
+      )}
 
       {/* Victory / Level Complete Modal */}
       {activeVictory && (
