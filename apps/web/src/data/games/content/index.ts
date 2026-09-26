@@ -52,6 +52,7 @@ import { stickmanClimberContent } from './stickman-climber';
 import { stickmanParkourContent } from './stickman-parkour';
 import { stickmanPlatformerContent } from './stickman-platformer';
 import { stickmanRunnerContent } from './stickman-runner';
+import { stickmanSwordFightContent } from './stickman-sword-fight';
 import { sudokuContent } from './sudoku';
 import { summitRushContent } from './summit-rush';
 import { telephoneDrawingContent } from './telephone-drawing';
@@ -134,6 +135,7 @@ const ALL_CONTENT: GameContent[] = [
   stickmanParkourContent,
   stickmanPlatformerContent,
   stickmanRunnerContent,
+  stickmanSwordFightContent,
   wordSearchArenaContent,
   drawingGuessingContent,
   fishingCompetitionContent,

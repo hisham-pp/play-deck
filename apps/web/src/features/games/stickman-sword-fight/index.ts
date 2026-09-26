@@ -1,0 +1,1 @@
+export { StickmanSwordFightGame } from './StickmanSwordFightGame';

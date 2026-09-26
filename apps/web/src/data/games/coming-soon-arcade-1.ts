@@ -53,28 +53,6 @@ export const COMING_SOON_ARCADE_GAMES_1: GameDefinition[] = [
     ],
   },
   {
-    id: 'stickman-sword-fight',
-    name: 'Stickman Sword Fight',
-    slug: 'stickman-sword-fight',
-    description:
-      'Tactile sword duels featuring timed parries, counter-slashes, feints, and arena martial arts mastery.',
-    category: CATEGORY_ARCADE,
-    players: { min: 1, max: 2 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/stickman-climber/icon.svg',
-    bannerUrl: '/games/stickman-climber/cover.svg',
-    tags: ['Action', 'Combat', 'Sword', 'Parry', TAG_HIGH_SCORE],
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-    subtype: 'sword-fight',
-    difficultyPresets: ['easy', 'normal', 'hard', 'expert'],
-    controls: [
-      { action: 'Slash / Strike', key: 'J / Left Click', touchAction: 'Tap Attack' },
-      { action: 'Parry Shield', key: 'K / Right Click', touchAction: 'Tap Block' },
-      { action: 'Dash Dodge', key: 'Space', touchAction: 'Double Tap Direction' },
-    ],
-  },
-  {
     id: 'stickman-ninja',
     name: 'Stickman Ninja',
     slug: 'stickman-ninja',
