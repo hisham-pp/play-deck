@@ -17,6 +17,12 @@ import {
 import Link from 'next/link';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
+  type ActiveEnemyState,
+  type PlayerCombatAction,
+  createActiveEnemy,
+  processCombatTurn,
+} from '../engine/enemies';
+import {
   INITIAL_INVENTORY,
   type ItemDrop,
   type PlayerInventory,
@@ -32,11 +38,10 @@ import {
   type LevelCompleteResult,
   type PlayerClimberProgress,
   completeLevel,
-  createEnemyWave,
   getLevelConfig,
   isLevelUnlocked,
-  resolveCombat,
 } from '../engine/stickman-climber-logic';
+import { EnemyCombatStage } from './EnemyCombatStage';
 import { LevelCompleteModal } from './LevelCompleteModal';
 import { LevelMapScreen } from './LevelMapScreen';
 import { LootDropStage } from './LootDropStage';
@@ -51,7 +56,7 @@ export function StickmanClimberGame() {
   const [xp, setXp] = useState(0);
   const [coins, setCoins] = useState(32);
   const [inventory, setInventory] = useState<PlayerInventory>(INITIAL_INVENTORY);
-  const [enemyHp, setEnemyHp] = useState<number>(() => createEnemyWave(1).enemy.hp);
+  const [activeEnemy, setActiveEnemy] = useState<ActiveEnemyState>(() => createActiveEnemy(1));
   const [paused, setPaused] = useState(false);
   const [activeVictory, setActiveVictory] = useState<LevelCompleteResult | null>(null);
 
@@ -59,10 +64,9 @@ export function StickmanClimberGame() {
   const [activeDrops, setActiveDrops] = useState<ItemDrop[]>([]);
   const [pickupNotification, setPickupNotification] = useState<string | null>(null);
   const [newWeaponCandidate, setNewWeaponCandidate] = useState<Weapon | null>(null);
-  const [recentProc, setRecentProc] = useState<{ name: string; bonusDamage: number } | null>(null);
+  const [combatMessage, setCombatMessage] = useState<string | null>(null);
 
   const levelConfig = useMemo(() => getLevelConfig(selectedLevel), [selectedLevel]);
-  const wave = useMemo(() => createEnemyWave(selectedLevel), [selectedLevel]);
   const levelProgress = Math.min(100, Math.round((xp % 100) + 15));
   const activeWeapon = useMemo(
     () => getWeapon(inventory.equippedWeaponId),
@@ -70,15 +74,16 @@ export function StickmanClimberGame() {
   );
 
   useEffect(() => {
-    setEnemyHp(wave.enemy.hp);
-  }, [wave]);
+    setActiveEnemy(createActiveEnemy(selectedLevel));
+  }, [selectedLevel]);
 
   const handleStartLevelFromMap = (levelId: number) => {
     setSelectedLevel(levelId);
-    setEnemyHp(createEnemyWave(levelId).enemy.hp);
+    setActiveEnemy(createActiveEnemy(levelId));
     setViewMode('stage');
     setActiveVictory(null);
     setActiveDrops([]);
+    setCombatMessage(null);
   };
 
   const handleEquipWeapon = (weaponId: string) => {
@@ -165,42 +170,64 @@ export function StickmanClimberGame() {
     setPickupNotification('Unlocked cache chest with Dungeon Key!');
   };
 
-  const handleAttack = () => {
-    if (paused) return;
+  const handleTacticalAction = (action: PlayerCombatAction) => {
+    if (paused || health <= 0) return;
 
-    const result = resolveCombat({
-      weapon: inventory.equippedWeaponId,
-      level: selectedLevel,
-      health,
-      xp,
-      coins,
-      enemyHp,
-      armorShield: inventory.armorShield,
-    });
-
-    setHealth(result.health);
-    setXp(result.xp);
-    setCoins(result.coins);
-    setEnemyHp(result.enemyHp);
-    setInventory((prev) => ({ ...prev, armorShield: result.armorShield }));
-
-    if (result.abilityProc) {
-      setRecentProc({
-        name: result.abilityProc.name,
-        bonusDamage: result.abilityProc.bonusDamage,
-      });
-      setTimeout(() => setRecentProc(null), 1800);
+    // Check weapon special ability trigger
+    let bonusDamage = 0;
+    if (activeWeapon.specialAbility && Math.random() < activeWeapon.specialAbility.procChance) {
+      const ability = activeWeapon.specialAbility;
+      if (ability.bonusDamage) bonusDamage += ability.bonusDamage;
+      if (ability.multiplier) {
+        bonusDamage += Math.round(activeWeapon.damage * (ability.multiplier - 1));
+      }
+      if (ability.healAmount) {
+        setHealth((h) => Math.min(100, h + (ability.healAmount ?? 0)));
+      }
     }
 
-    if (result.defeated) {
-      // Add defeated drops
-      if (result.drops.length > 0) {
-        setActiveDrops((prev) => [...prev, ...result.drops]);
+    const totalWeaponDamage = activeWeapon.damage + bonusDamage;
+
+    const turnResult = processCombatTurn({
+      playerAction: action,
+      playerWeaponDamage: totalWeaponDamage,
+      weaponType: activeWeapon.type,
+      enemyState: activeEnemy,
+    });
+
+    setActiveEnemy(turnResult.enemyState);
+    setCombatMessage(turnResult.actionMessage);
+
+    // Apply player health / shield delta
+    if (turnResult.playerHealthDelta < 0) {
+      const incomingRaw = Math.abs(turnResult.playerHealthDelta);
+      if (inventory.armorShield > 0) {
+        const absorbed = Math.min(inventory.armorShield, incomingRaw);
+        const unabsorbed = incomingRaw - absorbed;
+        setInventory((prev) => ({ ...prev, armorShield: prev.armorShield - absorbed }));
+        setHealth((h) => Math.max(0, h - unabsorbed));
+      } else {
+        setHealth((h) => Math.max(0, h - incomingRaw));
       }
+    }
+
+    // Award XP and coins per hit
+    setXp((x) => x + Math.round(turnResult.playerDamageDealt / 2));
+
+    if (turnResult.enemyDefeated) {
+      // Generate loot drops
+      const dropSource =
+        activeEnemy.definition.archetype === 'boss'
+          ? 'boss'
+          : activeEnemy.definition.shieldHp
+            ? 'brute'
+            : 'scout';
+      const enemyDrops = generateDrops(dropSource, selectedLevel);
+      setActiveDrops((prev) => [...prev, ...enemyDrops]);
 
       // Complete level and evaluate victory stars
-      const score = Math.max(100, result.health * 10 + result.xp);
-      const victory = completeLevel(selectedLevel, result.health, score, progress);
+      const score = Math.max(100, health * 10 + xp + activeEnemy.definition.rewardXp);
+      const victory = completeLevel(selectedLevel, health, score, progress);
       setProgress(victory.progress);
       setActiveVictory(victory);
 
@@ -219,9 +246,10 @@ export function StickmanClimberGame() {
       const next = selectedLevel + 1;
       setSelectedLevel(next);
       setHealth(100);
-      setEnemyHp(createEnemyWave(next).enemy.hp);
+      setActiveEnemy(createActiveEnemy(next));
       setActiveVictory(null);
       setActiveDrops([]);
+      setCombatMessage(null);
       setViewMode('stage');
     } else {
       setActiveVictory(null);
@@ -231,18 +259,20 @@ export function StickmanClimberGame() {
 
   const handleReplay = () => {
     setHealth(100);
-    setEnemyHp(createEnemyWave(selectedLevel).enemy.hp);
+    setActiveEnemy(createActiveEnemy(selectedLevel));
     setActiveVictory(null);
     setActiveDrops([]);
+    setCombatMessage(null);
     setPaused(false);
     setViewMode('stage');
   };
 
   const handleRestart = () => {
     setHealth(100);
-    setEnemyHp(createEnemyWave(selectedLevel).enemy.hp);
+    setActiveEnemy(createActiveEnemy(selectedLevel));
     setActiveVictory(null);
     setActiveDrops([]);
+    setCombatMessage(null);
     setPaused(false);
   };
 
@@ -379,26 +409,18 @@ export function StickmanClimberGame() {
                     </div>
                   </div>
 
-                  {/* Enemy Status Badge */}
-                  <div className="absolute left-4 top-[124px] rounded-lg border border-amber-500/40 bg-slate-900/80 px-2.5 py-1 text-[10px] uppercase tracking-[0.18em] text-amber-200 font-mono flex items-center gap-1.5">
-                    <span>{wave.enemy.name}:</span>
-                    <span className="font-bold text-white">{enemyHp} HP</span>
-                  </div>
-
-                  {/* Weapon Proc Floating Banner */}
-                  {recentProc && (
-                    <div className="absolute left-1/2 top-[120px] -translate-x-1/2 z-30 animate-bounce rounded-full border border-amber-400 bg-amber-500/30 px-3 py-1 text-xs font-black text-amber-300 backdrop-blur-md flex items-center gap-1.5 shadow-[0_0_20px_rgba(245,158,11,0.5)]">
+                  {/* Combat Action Banner Message */}
+                  {combatMessage && (
+                    <div className="absolute left-1/2 top-[120px] -translate-x-1/2 z-30 animate-in fade-in zoom-in-95 duration-200 rounded-full border border-amber-400 bg-slate-950/90 px-4 py-1 text-xs font-mono font-bold text-amber-300 backdrop-blur-md flex items-center gap-1.5 shadow-[0_0_20px_rgba(245,158,11,0.3)]">
                       <Flame className="w-3.5 h-3.5 text-orange-400" />
-                      <span>
-                        {recentProc.name}! (+{recentProc.bonusDamage} DMG)
-                      </span>
+                      <span>{combatMessage}</span>
                     </div>
                   )}
 
-                  {/* Center Stickman Fighter Avatar */}
-                  <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-amber-500/50 bg-[#0f172a]/70 shadow-[0_0_40px_rgba(245,158,11,0.22)]" />
+                  {/* Center Player Stickman Fighter */}
+                  <div className="absolute left-1/3 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-amber-500/50 bg-[#0f172a]/70 shadow-[0_0_40px_rgba(245,158,11,0.22)]" />
 
-                  <div className="absolute left-1/2 top-[56%] -translate-x-1/2 -translate-y-1/2">
+                  <div className="absolute left-1/3 top-[56%] -translate-x-1/2 -translate-y-1/2">
                     <div className="relative h-30 w-20">
                       <div className="absolute left-1/2 top-0 h-7 w-7 -translate-x-1/2 rounded-full border-4 border-slate-200 bg-slate-900 shadow-sm" />
                       <div className="absolute left-1/2 top-7 h-10 w-1 -translate-x-1/2 bg-slate-200" />
@@ -409,6 +431,9 @@ export function StickmanClimberGame() {
                     </div>
                   </div>
 
+                  {/* Opponent Enemy Stage */}
+                  <EnemyCombatStage enemyState={activeEnemy} />
+
                   {/* Active Loot Drops on Screen */}
                   <LootDropStage
                     drops={activeDrops}
@@ -416,31 +441,58 @@ export function StickmanClimberGame() {
                     onCollectAll={handleCollectAllDrops}
                   />
 
-                  {/* Opponent Pill */}
-                  <div className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-xl border border-amber-500/30 bg-slate-950/70 px-3.5 py-2 text-[10px] uppercase tracking-[0.18em] text-amber-200 font-mono">
-                    Target: {wave.enemy.name}
-                  </div>
-
-                  {/* Action Controls */}
-                  <div className="absolute bottom-5 right-5 flex gap-2">
+                  {/* Tactical Action Controls Bar */}
+                  <div className="absolute bottom-4 inset-x-4 flex items-center justify-between gap-2">
                     <button
                       onClick={handleScavengeChest}
                       disabled={inventory.keys <= 0}
                       title="Unlock treasure cache with 1 Key"
-                      className="rounded-xl border border-amber-500/40 bg-slate-900/90 hover:bg-slate-800 text-amber-300 px-3.5 py-2.5 text-xs font-bold transition-all cursor-pointer disabled:opacity-40 flex items-center gap-1.5"
+                      className="rounded-xl border border-amber-500/40 bg-slate-900/90 hover:bg-slate-800 text-amber-300 px-3 py-2 text-xs font-bold transition-all cursor-pointer disabled:opacity-40 flex items-center gap-1.5"
                     >
                       <PackageOpen className="w-3.5 h-3.5" />
                       <span>Open Cache</span>
                     </button>
 
-                    <button
-                      onClick={handleAttack}
-                      disabled={health <= 0}
-                      className="rounded-xl border border-surface-border bg-amber-500 hover:bg-amber-400 text-slate-950 px-5 py-2.5 text-xs font-black uppercase tracking-[0.18em] transition-all shadow-md shadow-amber-500/20 cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
-                    >
-                      <Swords className="w-3.5 h-3.5" />
-                      <span>Strike ({activeWeapon.damage})</span>
-                    </button>
+                    <div className="flex items-center gap-2">
+                      {/* Strike */}
+                      <button
+                        onClick={() => handleTacticalAction('strike')}
+                        disabled={health <= 0}
+                        className="rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 text-xs font-black uppercase tracking-wider transition-all shadow-md shadow-amber-500/20 cursor-pointer disabled:opacity-50"
+                      >
+                        Strike ({activeWeapon.damage})
+                      </button>
+
+                      {/* Flank */}
+                      <button
+                        onClick={() => handleTacticalAction('flank')}
+                        disabled={health <= 0}
+                        title="Dodge telegraphed attacks and bypass shields"
+                        className="rounded-xl border border-emerald-500/50 bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-300 px-3 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50"
+                      >
+                        Flank
+                      </button>
+
+                      {/* Cleave */}
+                      <button
+                        onClick={() => handleTacticalAction('cleave')}
+                        disabled={health <= 0}
+                        title="Heavy attack that smashes shields"
+                        className="rounded-xl border border-sky-500/50 bg-sky-950/60 hover:bg-sky-900/80 text-sky-300 px-3 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50"
+                      >
+                        Cleave
+                      </button>
+
+                      {/* Parry */}
+                      <button
+                        onClick={() => handleTacticalAction('parry')}
+                        disabled={health <= 0}
+                        title="Deflect and counter-stun"
+                        className="rounded-xl border border-purple-500/50 bg-purple-950/60 hover:bg-purple-900/80 text-purple-300 px-3 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50"
+                      >
+                        Parry
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -478,9 +530,10 @@ export function StickmanClimberGame() {
                       onClick={() => {
                         if (unlocked) {
                           setSelectedLevel(item.id);
-                          setEnemyHp(createEnemyWave(item.id).enemy.hp);
+                          setActiveEnemy(createActiveEnemy(item.id));
                           setHealth(100);
                           setActiveDrops([]);
+                          setCombatMessage(null);
                         }
                       }}
                       disabled={!unlocked}
@@ -558,16 +611,17 @@ export function StickmanClimberGame() {
               </ul>
             </div>
 
-            {/* Combat Actions & Keybindings */}
+            {/* Combat Actions & Tactical Guide */}
             <div className="rounded-xl border border-surface-border bg-surface-base/80 p-3">
               <div className="mb-2 text-[10px] uppercase tracking-[0.2em] text-deck-500 font-mono">
-                Tactical Moves & Gear
+                Tactical Guide
               </div>
               <ul className="space-y-1 text-xs text-deck-400 font-mono">
-                <li>• Strike: Strike with equipped weapon</li>
-                <li>• Quick Swap: Tap weapons in backpack</li>
-                <li>• Dungeon Keys: Open cache chests for gear</li>
-                <li>• Bosses: Drop guaranteed Epic/Legendary gear</li>
+                <li>• Strike: Direct weapon attack</li>
+                <li>• Flank: Evade telegraphed attack & bypass shield</li>
+                <li>• Cleave: Break enemy shields with heavy impact</li>
+                <li>• Parry: Counter-deflect and stagger foes</li>
+                <li>• Boss Phases: Escalate damage at 60% and 30% HP</li>
               </ul>
             </div>
           </aside>
