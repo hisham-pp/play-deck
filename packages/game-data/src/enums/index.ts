@@ -20,20 +20,20 @@ export const ControlKeys = GameControlKeys;
 export const Controls = GameControlKeys;
 
 export type {
-    GameCategory as Category,
-    GameTag as Tag,
-    GameStatus as Status,
-    GameReleaseDate as ReleaseDate,
-    GameControlKey as ControlKey,
+  GameCategory as Category,
+  GameTag as Tag,
+  GameStatus as Status,
+  GameReleaseDate as ReleaseDate,
+  GameControlKey as ControlKey,
 };
 
 // Aggregated namespace bundle
 export const Enums = {
-    Categories: GameCategories,
-    Tags: GameTags,
-    Statuses: GameStatuses,
-    ReleaseDates: GameReleaseDates,
-    Dates: GameReleaseDates,
-    ControlKeys: GameControlKeys,
-    Controls: GameControlKeys,
+  Categories: GameCategories,
+  Tags: GameTags,
+  Statuses: GameStatuses,
+  ReleaseDates: GameReleaseDates,
+  Dates: GameReleaseDates,
+  ControlKeys: GameControlKeys,
+  Controls: GameControlKeys,
 } as const;

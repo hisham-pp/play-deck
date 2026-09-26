@@ -83,4 +83,5 @@ export const GameTags = {
   LEVELS_7: '7 Levels',
 } as const;
 
-export type GameTags = (typeof GameTags)[keyof typeof GameTags];
+export type GameTag = (typeof GameTags)[keyof typeof GameTags];
+export type GameTags = GameTag;

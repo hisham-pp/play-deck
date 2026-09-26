@@ -12,4 +12,5 @@ export const GameCategories = {
   O: 'other',
 } as const;
 
-export type GameCategories = (typeof GameCategories)[keyof typeof GameCategories];
+export type GameCategory = (typeof GameCategories)[keyof typeof GameCategories];
+export type GameCategories = GameCategory;
