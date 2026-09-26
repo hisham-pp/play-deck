@@ -1,9 +1,10 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTinyTankMultiplayerStore } from '@/stores/tiny-tank-multiplayer.store';
 import { useTinyTankGame } from '../hooks/use-tiny-tank-game';
+import { DEFAULT_PLAYER_ID } from '../types/tiny-tank.types';
 import { TinyTankCanvas } from './TinyTankCanvas';
 import { TinyTankHud } from './TinyTankHud';
 import { TinyTankLobby } from './TinyTankLobby';
@@ -11,11 +12,17 @@ import { TinyTankRoomLobby } from './TinyTankRoomLobby';
 import { TinyTankToolbar } from './TinyTankToolbar';
 import { TinyTankVictoryModal } from './TinyTankVictoryModal';
 
+const MODE_LOBBY = 'lobby' as const;
+const MODE_ONLINE_ROOM = 'online_room' as const;
+const MODE_PLAYING = 'playing' as const;
+
+type TankGameMode = typeof MODE_LOBBY | typeof MODE_ONLINE_ROOM | typeof MODE_PLAYING;
+
 export function TinyTankGame() {
   const searchParams = useSearchParams();
   const roomParam = searchParams.get('room');
 
-  const [mode, setMode] = useState<'lobby' | 'online_room' | 'playing'>('lobby');
+  const [mode, setMode] = useState<TankGameMode>(MODE_LOBBY);
 
   const {
     arenaState,
@@ -39,25 +46,25 @@ export function TinyTankGame() {
 
   const { roomCode, createRoom, joinRoomByCode } = useTinyTankMultiplayerStore();
 
-  // Handle URL room code parameter
   useEffect(() => {
     if (roomParam && !roomCode) {
-      setMode('online_room');
       void joinRoomByCode(roomParam, {
-        id: `cadet-${Date.now().toString().slice(-4)}`,
-        displayName: 'Guest Tanker',
-        avatar: '🤖',
+        id: `commander-${Date.now().toString().slice(-4)}`,
+        displayName: 'Commander Tank',
+        avatar: '🛡️',
+      }).then((joined) => {
+        if (joined) setMode(MODE_ONLINE_ROOM);
       });
     }
   }, [roomParam, roomCode, joinRoomByCode]);
 
-  const handleStartSolo = (customConfig?: Parameters<typeof startMatch>[0]) => {
+  const handleStartSolo = (customConfig?: Partial<typeof config>) => {
     startMatch(customConfig);
-    setMode('playing');
+    setMode(MODE_PLAYING);
   };
 
   const handleOpenOnlineRoom = async () => {
-    setMode('online_room');
+    setMode(MODE_ONLINE_ROOM);
     if (!roomCode) {
       await createRoom({
         id: `commander-${Date.now().toString().slice(-4)}`,
@@ -69,17 +76,17 @@ export function TinyTankGame() {
 
   const handleStartMultiplayerMatch = () => {
     startMatch({ botCount: 3 });
-    setMode('playing');
+    setMode(MODE_PLAYING);
   };
 
   const handleReturnToLobby = () => {
     hookReturnToLobby();
-    setMode('lobby');
+    setMode(MODE_LOBBY);
   };
 
   return (
     <div className="w-full flex flex-col items-center justify-center min-h-[580px] p-2 sm:p-4">
-      {mode === 'lobby' && (
+      {mode === MODE_LOBBY && (
         <TinyTankLobby
           config={config}
           stats={stats}
@@ -91,25 +98,25 @@ export function TinyTankGame() {
         />
       )}
 
-      {mode === 'online_room' && (
+      {mode === MODE_ONLINE_ROOM && (
         <TinyTankRoomLobby
           onStartMatch={handleStartMultiplayerMatch}
-          onBackToLobby={() => setMode('lobby')}
+          onBackToLobby={() => setMode(MODE_LOBBY)}
         />
       )}
 
-      {mode === 'playing' && (
+      {mode === MODE_PLAYING && (
         <div className="w-full flex flex-col items-center">
           <TinyTankHud
             arenaState={arenaState}
-            localPlayerId="player-1"
+            localPlayerId={DEFAULT_PLAYER_ID}
             onSwitchWeapon={switchWeapon}
           />
 
           <TinyTankCanvas
             arenaState={arenaState}
             config={config}
-            localPlayerId="player-1"
+            localPlayerId={DEFAULT_PLAYER_ID}
             mousePos={mousePos}
             onMouseMove={handleCanvasMouseMove}
             onMouseDown={handleCanvasMouseDown}
@@ -131,7 +138,7 @@ export function TinyTankGame() {
           {arenaState.status === 'match_over' && (
             <TinyTankVictoryModal
               arenaState={arenaState}
-              localPlayerId="player-1"
+              localPlayerId={DEFAULT_PLAYER_ID}
               onRematch={restartMatch}
               onReturnToLobby={handleReturnToLobby}
             />

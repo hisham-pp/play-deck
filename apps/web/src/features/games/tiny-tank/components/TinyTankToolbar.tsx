@@ -15,6 +15,9 @@ interface TinyTankToolbarProps {
   onToggleReducedMotion: () => void;
 }
 
+const BTN_TYPE = 'button' as const;
+const HELP_LABEL_CLASS = 'font-bold text-amber-400';
+
 export function TinyTankToolbar({
   config,
   isPaused,
@@ -32,7 +35,7 @@ export function TinyTankToolbar({
     <div className="w-full max-w-[960px] mx-auto mt-3 flex flex-wrap items-center justify-between gap-2 p-2 bg-slate-900/60 rounded-xl border border-slate-800 text-xs">
       <div className="flex items-center gap-2">
         <button
-          type="button"
+          type={BTN_TYPE}
           onClick={isPaused ? onResume : onPause}
           className="px-3 py-1.5 rounded-lg font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all"
         >
@@ -40,7 +43,7 @@ export function TinyTankToolbar({
         </button>
 
         <button
-          type="button"
+          type={BTN_TYPE}
           onClick={onRestart}
           className="px-3 py-1.5 rounded-lg font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all"
         >
@@ -48,7 +51,7 @@ export function TinyTankToolbar({
         </button>
 
         <button
-          type="button"
+          type={BTN_TYPE}
           onClick={onReturnToLobby}
           className="px-3 py-1.5 rounded-lg font-semibold bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 border border-slate-700 transition-all"
         >
@@ -58,7 +61,7 @@ export function TinyTankToolbar({
 
       <div className="flex items-center gap-2">
         <button
-          type="button"
+          type={BTN_TYPE}
           onClick={onToggleSound}
           className={`px-2.5 py-1.5 rounded-lg font-medium border transition-all ${
             config.soundEnabled
@@ -70,7 +73,7 @@ export function TinyTankToolbar({
         </button>
 
         <button
-          type="button"
+          type={BTN_TYPE}
           onClick={onToggleHighContrast}
           className={`px-2.5 py-1.5 rounded-lg font-medium border transition-all ${
             config.highContrast
@@ -82,7 +85,7 @@ export function TinyTankToolbar({
         </button>
 
         <button
-          type="button"
+          type={BTN_TYPE}
           onClick={onToggleReducedMotion}
           className={`px-2.5 py-1.5 rounded-lg font-medium border transition-all ${
             config.reducedMotion
@@ -94,47 +97,27 @@ export function TinyTankToolbar({
         </button>
 
         <button
-          type="button"
+          type={BTN_TYPE}
           onClick={() => setShowHelp(!showHelp)}
           className="px-2.5 py-1.5 rounded-lg font-medium bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all"
         >
-          ❓ Controls
+          ❓ Help
         </button>
       </div>
 
       {showHelp && (
-        <div className="w-full mt-2 p-3 bg-slate-950/90 rounded-lg border border-slate-700/80 text-slate-300 grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11px]">
+        <div className="w-full mt-2 p-3 bg-slate-950/80 rounded-lg border border-slate-800 text-slate-300 grid grid-cols-2 md:grid-cols-4 gap-2 text-[11px]">
           <div>
-            <strong className="text-amber-400 block mb-1">Navigation</strong>
-            W / Up: Accelerate
-            <br />
-            S / Down: Reverse
-            <br />
-            A/D: Steer Hull
+            <span className={HELP_LABEL_CLASS}>Move:</span> WASD / Arrow Keys
           </div>
           <div>
-            <strong className="text-sky-400 block mb-1">Weapons & Fire</strong>
-            Mouse: Aim Turret
-            <br />
-            Left Click / Space: Fire
-            <br />
-            1–6 Keys: Select Arsenal
+            <span className={HELP_LABEL_CLASS}>Aim:</span> Mouse Cursor
           </div>
           <div>
-            <strong className="text-emerald-400 block mb-1">Terrain & Pickups</strong>
-            Red Bricks: Destructible
-            <br />
-            Barrels: Explosive Chain
-            <br />
-            Crates: Ammo & Weapons
+            <span className={HELP_LABEL_CLASS}>Fire:</span> Space / Left Click
           </div>
           <div>
-            <strong className="text-purple-400 block mb-1">Tactics</strong>
-            Bounce shots off walls
-            <br />
-            Drop mines in retreat
-            <br />
-            Shoot explosive barrels
+            <span className={HELP_LABEL_CLASS}>Weapons:</span> Keys 1-6
           </div>
         </div>
       )}
