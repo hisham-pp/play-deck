@@ -13,7 +13,7 @@ import {
   type SwordFightState,
   createInitialSwordFightState,
   stepSwordFightEngine,
-} from './engine/stickman-sword-fight-engine';
+} from '../engine/stickman-sword-fight-engine';
 
 const STORAGE_HIGH_SCORE_KEY = 'stickman_sword_fight_high_score';
 
