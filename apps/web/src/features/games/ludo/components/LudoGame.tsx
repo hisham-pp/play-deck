@@ -10,6 +10,7 @@ import { usePlayerStore } from '@/stores/player.store';
 import { STATUS_PLAYING } from '../engine/ludo-constants';
 import { useLudoBotTurn } from '../hooks/use-ludo-bot-turn';
 import { useLudoEngine } from '../hooks/use-ludo-engine';
+import { useLudoMultiplayer } from '../hooks/use-ludo-multiplayer';
 import { useLudoPieceSelection } from '../hooks/use-ludo-piece-selection';
 import { useLudoSession } from '../hooks/use-ludo-session';
 import { useLudoSound } from '../hooks/use-ludo-sound';
@@ -45,6 +46,12 @@ function useOpenOnlineRoom() {
 }
 
 export function LudoGame() {
+  const roomCode = useLudoMultiplayerStore((s) => s.roomCode);
+  const isHost = useLudoMultiplayerStore((s) => s.isHost());
+  const adoptSeats = useLudoMultiplayerStore((s) => s.adoptSeats);
+  const setRoomStatus = useLudoMultiplayerStore((s) => s.setStatus);
+  const leaveRoom = useLudoMultiplayerStore((s) => s.leaveRoom);
+
   // A player who arrives already seated (invite or join link) goes straight to the room.
   const [mode, setMode] = useState<GameMode>(() =>
     useLudoMultiplayerStore.getState().roomCode ? MODE_ONLINE_ROOM : MODE_LOBBY,
@@ -52,6 +59,8 @@ export function LudoGame() {
   const [configuredPlayers, setConfiguredPlayers] = useState<LudoPlayer[]>([]);
   const [isDiceSettling, setIsDiceSettling] = useState(false);
   const player = usePlayerStore((s) => s.player);
+
+  const isOnline = Boolean(roomCode);
 
   useEffect(() => {
     if (mode === MODE_PLAYING) {
@@ -62,10 +71,47 @@ export function LudoGame() {
     }
   }, [mode]);
 
-  const { engine, state, rollForPlayer, movePiece, pause, resume, restart } =
+  const { engine, state, rollForPlayer, applyRoll, movePiece, pause, resume, restart } =
     useLudoEngine(configuredPlayers);
 
-  const { botThinking } = useLudoBotTurn(engine, state, configuredPlayers);
+  const { requestRoll, requestMove, broadcastStart, broadcastRestart } = useLudoMultiplayer({
+    enabled: isOnline,
+    engine,
+    state,
+    players: configuredPlayers,
+    localPlayerId: player?.id ?? null,
+    applyRoll: (pId, val) => applyRoll(pId, val),
+    applyMove: (pId, pieceId) => movePiece(pId, pieceId),
+    onSeats: (seats) => {
+      setConfiguredPlayers(seats);
+      adoptSeats(seats);
+    },
+    onStart: (seats) => {
+      setConfiguredPlayers(seats);
+      adoptSeats(seats);
+      setRoomStatus('playing');
+      restart(seats);
+      setMode(MODE_PLAYING);
+    },
+  });
+
+  const { botThinking } = useLudoBotTurn(engine, state, configuredPlayers, {
+    enabled: !isOnline || isHost,
+    onBotRoll: (pId, val) => {
+      if (isOnline) {
+        requestRoll(pId);
+      } else {
+        applyRoll(pId, val);
+      }
+    },
+    onBotMove: (pId, pieceId) => {
+      if (isOnline) {
+        requestMove(pId, pieceId);
+      } else {
+        movePiece(pId, pieceId);
+      }
+    },
+  });
 
   useLudoSound(state);
   useLudoSession(state, configuredPlayers, player?.id ?? null);
@@ -83,9 +129,16 @@ export function LudoGame() {
   }, [rollsThisTurn]);
 
   const currentSeat = configuredPlayers[state.currentTurnSeatIndex];
-  // In human turn (offline or online), allow local human to roll
-  const isMyTurn = currentSeat ? currentSeat.type === 'human' : true;
-  const localSeatIndex = state.currentTurnSeatIndex;
+  // In human turn (offline or online), check if local player can act
+  const isMyTurn = isOnline
+    ? currentSeat?.id === player?.id
+    : currentSeat
+      ? currentSeat.type === 'human'
+      : true;
+
+  const localSeatIndex = isOnline
+    ? configuredPlayers.findIndex((p) => p.id === player?.id)
+    : state.currentTurnSeatIndex;
 
   const legalActions = engine ? engine.getLegalActions(state.currentTurnSeatIndex) : [];
   // Sorted so a piece keeps the same hotkey for as long as it stays movable,
@@ -107,23 +160,34 @@ export function LudoGame() {
 
   const handleStartOnlineGame = (players: LudoPlayer[]) => {
     setConfiguredPlayers(players);
+    adoptSeats(players);
+    setRoomStatus('playing');
+    broadcastStart(players);
     restart(players);
     setMode(MODE_PLAYING);
   };
 
   const handleRollDice = useCallback(() => {
     if (currentSeat) {
-      rollForPlayer(currentSeat.id);
+      if (isOnline) {
+        requestRoll(currentSeat.id);
+      } else {
+        rollForPlayer(currentSeat.id);
+      }
     }
-  }, [rollForPlayer, currentSeat]);
+  }, [isOnline, requestRoll, rollForPlayer, currentSeat]);
 
   const handleSelectPiece = useCallback(
     (pieceId: string) => {
       if (currentSeat) {
-        movePiece(currentSeat.id, pieceId);
+        if (isOnline) {
+          requestMove(currentSeat.id, pieceId);
+        } else {
+          movePiece(currentSeat.id, pieceId);
+        }
       }
     },
-    [movePiece, currentSeat],
+    [isOnline, requestMove, movePiece, currentSeat],
   );
 
   const canSelectPiece =
@@ -137,8 +201,18 @@ export function LudoGame() {
 
   const handleRestart = () => {
     if (configuredPlayers.length > 0) {
+      if (isOnline) {
+        broadcastRestart(configuredPlayers);
+      }
       restart(configuredPlayers);
     }
+  };
+
+  const handleLeaveGame = () => {
+    if (isOnline) {
+      leaveRoom();
+    }
+    setMode(MODE_LOBBY);
   };
 
   const openOnlineRoom = useOpenOnlineRoom();
@@ -224,7 +298,7 @@ export function LudoGame() {
               state={state}
               onPause={() => currentSeat && pause(currentSeat.id)}
               onResume={() => currentSeat && resume(currentSeat.id)}
-              onLeave={() => setMode(MODE_LOBBY)}
+              onLeave={handleLeaveGame}
             />
           </div>
         </div>
@@ -260,7 +334,7 @@ export function LudoGame() {
               </div>
 
               <div className="flex gap-3">
-                <Button variant="outline" className="flex-1" onClick={() => setMode(MODE_LOBBY)}>
+                <Button variant="outline" className="flex-1" onClick={handleLeaveGame}>
                   <LogOut className="w-4 h-4 mr-2" /> Exit
                 </Button>
                 <Button

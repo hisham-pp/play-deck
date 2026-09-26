@@ -21,7 +21,7 @@ export const CLASSIC_4_LAYOUT: BoardLayout = {
   arms: 4,
   cellsPerArm: 13,
   trackLength: 52,
-  homeStretchLength: 6,
+  homeStretchLength: 5,
   colors: ['red', 'green', 'yellow', 'blue'],
   entryOffsets: [0, 13, 26, 39],
   safeCellOffsets: [0, 8],
@@ -37,7 +37,7 @@ export const EXTENDED_6_LAYOUT: BoardLayout = {
   arms: 6,
   cellsPerArm: 9,
   trackLength: 54,
-  homeStretchLength: 6,
+  homeStretchLength: 5,
   colors: ['red', 'yellow', 'green', 'cyan', 'blue', 'purple'],
   entryOffsets: [0, 9, 18, 27, 36, 45],
   safeCellOffsets: [0, 4],
@@ -67,26 +67,26 @@ export function colorForSeat(seatIndex: number, seatCount: number): LudoColor {
 }
 
 export function finishSteps(layout: BoardLayout): number {
-  return layout.trackLength + layout.homeStretchLength + 1;
+  return layout.trackLength - 1 + layout.homeStretchLength + 1;
 }
 
-/** Global track index (0..trackLength-1) for a piece with `steps` in [1, trackLength]. */
+/** Global track index (0..trackLength-1) for a piece with `steps` in [1, trackLength - 1]. */
 export function globalTrackIndex(layout: BoardLayout, color: LudoColor, steps: number): number {
   const entry = layout.entryOffsets[layout.colors.indexOf(color)];
   return (entry + steps - 1) % layout.trackLength;
 }
 
-/** Home-stretch cell index (1..homeStretchLength) for steps beyond trackLength. */
+/** Home-stretch cell index (1..homeStretchLength) for steps beyond track steps. */
 export function homeStretchIndex(layout: BoardLayout, steps: number): number {
-  return steps - layout.trackLength;
+  return steps - (layout.trackLength - 1);
 }
 
 export function isTrackSteps(layout: BoardLayout, steps: number): boolean {
-  return steps >= 1 && steps <= layout.trackLength;
+  return steps >= 1 && steps <= layout.trackLength - 1;
 }
 
 export function isHomeStretchSteps(layout: BoardLayout, steps: number): boolean {
-  return steps > layout.trackLength && steps < finishSteps(layout);
+  return steps >= layout.trackLength && steps < finishSteps(layout);
 }
 
 export function isFinishedSteps(layout: BoardLayout, steps: number): boolean {

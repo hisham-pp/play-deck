@@ -65,6 +65,19 @@ export class LudoEngine implements BaseGameEngine<LudoGameState, LudoAction> {
     this.dispatch({ type: 'MOVE_PIECE', playerId, payload: { pieceId } });
   }
 
+  loadState(state: LudoGameState): void {
+    this.state = state;
+    this.notify();
+  }
+
+  canRoll(seatIndex: number): boolean {
+    return (
+      this.state.status === 'playing' &&
+      this.state.turnPhase === 'awaiting-roll' &&
+      this.state.currentTurnSeatIndex === seatIndex
+    );
+  }
+
   /**
    * Legal MOVE_PIECE actions for the seat currently awaiting a move, given
    * the already-rolled dice value. Empty outside the `awaiting-move` phase.

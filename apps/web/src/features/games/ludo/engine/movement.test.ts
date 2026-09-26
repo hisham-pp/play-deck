@@ -56,26 +56,26 @@ describe('Ludo Movement Tests', () => {
 
   describe('3. Exact-roll-to-finish rule', () => {
     it('rejects overshooting home when an exact roll is required', () => {
-      // finish = 52 + 6 + 1 = 59
-      const piece = basePiece({ location: 'home-stretch', steps: 57 });
+      // finish = 51 + 5 + 1 = 57
+      const piece = basePiece({ location: 'home-stretch', steps: 55 });
       assert.strictEqual(
         computeDestinationSteps(piece, 5, DEFAULT_RULE_SETTINGS, CLASSIC_4_LAYOUT),
         null,
       );
       assert.strictEqual(
         computeDestinationSteps(piece, 2, DEFAULT_RULE_SETTINGS, CLASSIC_4_LAYOUT),
-        59,
+        57,
       );
     });
 
     it('clamps to home on overshoot when exact roll is not required', () => {
-      const piece = basePiece({ location: 'home-stretch', steps: 57 });
+      const piece = basePiece({ location: 'home-stretch', steps: 55 });
       const settings = { ...DEFAULT_RULE_SETTINGS, requireExactRollToFinish: false };
-      assert.strictEqual(computeDestinationSteps(piece, 5, settings, CLASSIC_4_LAYOUT), 59);
+      assert.strictEqual(computeDestinationSteps(piece, 5, settings, CLASSIC_4_LAYOUT), 57);
     });
 
     it('never returns a legal move for a piece already home', () => {
-      const piece = basePiece({ location: 'home', steps: 59 });
+      const piece = basePiece({ location: 'home', steps: 57 });
       assert.strictEqual(
         computeDestinationSteps(piece, 6, DEFAULT_RULE_SETTINGS, CLASSIC_4_LAYOUT),
         null,

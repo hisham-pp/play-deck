@@ -121,14 +121,16 @@ function handleMovePiece(
 
   const captureResult = applyCaptureIfAny(next, layout, movedPiece);
   next = captureResult.state;
+  const hasCaptured = captureResult.capturedPieceIds.length > 0;
+  const reachedHome = nextLocation === 'home';
+
   next = {
     ...next,
-    lastMoveNote:
-      captureResult.capturedPieceIds.length > 0
-        ? 'A piece was captured and sent back to base!'
-        : nextLocation === 'home'
-          ? 'Piece reached home!'
-          : null,
+    lastMoveNote: hasCaptured
+      ? 'A piece was captured! Bonus roll awarded.'
+      : reachedHome
+        ? 'Piece reached home! Bonus roll awarded.'
+        : null,
   };
 
   next = checkPlayerFinished(next, seatIndex);
@@ -140,7 +142,8 @@ function handleMovePiece(
 
   const moverStillActive = getPlayerById(next, player.playerId);
   const earnedExtraTurn =
-    diceValue === 6 && next.settings.sixGrantsExtraTurn && !moverStillActive?.finished;
+    !moverStillActive?.finished &&
+    ((diceValue === 6 && next.settings.sixGrantsExtraTurn) || hasCaptured || reachedHome);
 
   if (earnedExtraTurn) {
     return grantExtraTurn(next, seatIndex);
