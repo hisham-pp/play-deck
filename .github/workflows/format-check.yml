@@ -6,6 +6,11 @@ on:
     branches:
       - main
       - 'feat/**'
+      - 'fix/**'
+      - 'refactor/**'
+      - 'chore/**'
+      - 'test/**'
+      - 'docs/**'
   workflow_dispatch:
 
 jobs:
