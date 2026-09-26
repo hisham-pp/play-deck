@@ -3,6 +3,7 @@
 import {
   BarChart2,
   Bot,
+  Globe,
   Pause,
   Play,
   RotateCcw,
@@ -66,6 +67,18 @@ export function PongControls({
           >
             <Users className="w-3.5 h-3.5" />
             <span>Local 2P</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => onModeChange('online')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all cursor-pointer ${
+              config.mode === 'online'
+                ? 'bg-amber-500 text-deck-950 shadow-sm'
+                : 'text-deck-400 hover:text-white'
+            }`}
+          >
+            <Globe className="w-3.5 h-3.5" />
+            <span>Online 1v1</span>
           </button>
         </div>
 

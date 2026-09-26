@@ -9,14 +9,34 @@ interface PongOverlayProps {
   onStart: () => void;
   onResume: () => void;
   onRestart: () => void;
+  isOnline?: boolean;
+  hasOpponent?: boolean;
+  roomCode?: string | null;
+  role?: 'host' | 'guest' | null;
+  p1Name?: string;
+  p2Name?: string;
 }
 
-export function PongOverlay({ state, onStart, onResume, onRestart }: PongOverlayProps) {
+export function PongOverlay({
+  state,
+  onStart,
+  onResume,
+  onRestart,
+  isOnline = false,
+  hasOpponent = false,
+  roomCode,
+  role,
+  p1Name,
+  p2Name,
+}: PongOverlayProps) {
   const { status, winner, player1, player2, highestRallyInGame, config } = state;
 
   if (status === 'playing') {
     return null;
   }
+
+  const isGuest = isOnline && role === 'guest';
+  const waitingForOpponent = isOnline && !hasOpponent;
 
   return (
     <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/75 backdrop-blur-sm rounded-2xl p-6 select-none transition-all">
@@ -28,38 +48,63 @@ export function PongOverlay({ state, onStart, onResume, onRestart }: PongOverlay
 
           <div>
             <h2 className="text-2xl font-black tracking-tight text-white font-display">
-              READY FOR PONG?
+              {waitingForOpponent ? 'WAITING FOR OPPONENT' : 'READY FOR PONG?'}
             </h2>
             <p className="text-xs text-deck-400 mt-1.5 leading-relaxed">
-              {config.mode === 'single-player'
-                ? `Challenge the AI (${config.difficulty}) in classic high-speed rally combat.`
-                : 'Two players on one device! P1 controls with W/S, P2 with Arrow keys.'}
+              {isOnline
+                ? waitingForOpponent
+                  ? `Share room code ${roomCode ?? ''} with a friend to begin!`
+                  : `Challenger connected! ${role === 'host' ? 'Press Start Match to begin.' : 'Waiting for host to start match.'}`
+                : config.mode === 'single-player'
+                  ? `Challenge the AI (${config.difficulty}) in classic high-speed rally combat.`
+                  : 'Two players on one device! P1 controls with W/S, P2 with Arrow keys.'}
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-2 w-full text-xs font-mono">
             <div className="p-2.5 rounded-lg bg-surface-raised border border-cyan-500/30 text-left">
-              <span className="text-[10px] text-cyan-400 font-bold block">P1 CONTROLS</span>
-              <span className="text-white font-semibold">W / S</span> or Touch Left
+              <span className="text-[10px] text-cyan-400 font-bold block">
+                {isOnline ? `${p1Name || 'Host'} (Left)` : 'P1 CONTROLS'}
+              </span>
+              <span className="text-white font-semibold">
+                {isGuest ? 'Remote Host' : 'W / S or Touch Left'}
+              </span>
             </div>
             <div className="p-2.5 rounded-lg bg-surface-raised border border-amber-500/30 text-left">
               <span className="text-[10px] text-amber-400 font-bold block">
-                {config.mode === 'single-player' ? 'OPPONENT' : 'P2 CONTROLS'}
+                {isOnline
+                  ? `${p2Name || 'Challenger'} (Right)`
+                  : config.mode === 'single-player'
+                    ? 'OPPONENT'
+                    : 'P2 CONTROLS'}
               </span>
               <span className="text-white font-semibold">
-                {config.mode === 'single-player' ? 'Smart CPU' : '↑ / ↓ or Touch Right'}
+                {isOnline
+                  ? isGuest
+                    ? '↑ / ↓ or Touch Right'
+                    : 'Remote Challenger'
+                  : config.mode === 'single-player'
+                    ? 'Smart CPU'
+                    : '↑ / ↓ or Touch Right'}
               </span>
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={onStart}
-            className="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-deck-950 font-bold text-sm tracking-wide shadow-arcade active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <Play className="w-4 h-4 fill-current" />
-            <span>START MATCH (SPACE)</span>
-          </button>
+          {waitingForOpponent ? (
+            <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-mono animate-pulse">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+              <span>Room Code: {roomCode} • Waiting for player…</span>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={onStart}
+              className="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-deck-950 font-bold text-sm tracking-wide shadow-arcade active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <Play className="w-4 h-4 fill-current" />
+              <span>{isGuest ? 'READY TO PLAY' : 'START MATCH (SPACE)'}</span>
+            </button>
+          )}
         </div>
       )}
 
@@ -112,11 +157,15 @@ export function PongOverlay({ state, onStart, onResume, onRestart }: PongOverlay
               FINAL SCORE {player1.score} - {player2.score}
             </span>
             <h2 className="text-3xl font-black tracking-tight text-white font-display mt-0.5">
-              {winner === 'left'
-                ? 'PLAYER 1 WINS!'
-                : config.mode === 'single-player'
-                  ? 'AI BOT WINS!'
-                  : 'PLAYER 2 WINS!'}
+              {isOnline
+                ? winner === 'left'
+                  ? `${p1Name || 'Host'} WINS!`
+                  : `${p2Name || 'Challenger'} WINS!`
+                : winner === 'left'
+                  ? 'PLAYER 1 WINS!'
+                  : config.mode === 'single-player'
+                    ? 'AI BOT WINS!'
+                    : 'PLAYER 2 WINS!'}
             </h2>
             <p className="text-xs text-deck-400 mt-1">
               Longest rally reached:{' '}

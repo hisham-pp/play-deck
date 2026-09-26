@@ -32,7 +32,7 @@ export function PongSettingsModal({
           <label className="text-xs font-semibold text-deck-300 uppercase tracking-wider block mb-2">
             Game Mode
           </label>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             <button
               type="button"
               onClick={() => onModeChange('single-player')}
@@ -42,7 +42,7 @@ export function PongSettingsModal({
                   : 'bg-surface-raised border-surface-border text-deck-400 hover:text-white'
               }`}
             >
-              vs Computer AI
+              vs AI
             </button>
             <button
               type="button"
@@ -53,7 +53,18 @@ export function PongSettingsModal({
                   : 'bg-surface-raised border-surface-border text-deck-400 hover:text-white'
               }`}
             >
-              Local Two-Player
+              Local 2P
+            </button>
+            <button
+              type="button"
+              onClick={() => onModeChange('online')}
+              className={`py-2 px-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
+                config.mode === 'online'
+                  ? 'bg-amber-500/20 border-amber-500/60 text-amber-400 font-bold'
+                  : 'bg-surface-raised border-surface-border text-deck-400 hover:text-white'
+              }`}
+            >
+              Online 1v1
             </button>
           </div>
         </div>

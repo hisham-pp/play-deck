@@ -6,11 +6,18 @@ import type { PongState } from '../engine/pong-types';
 
 interface PongScoreboardProps {
   state: PongState;
+  p1Name?: string;
+  p2Name?: string;
+  role?: 'host' | 'guest' | null;
 }
 
-export function PongScoreboard({ state }: PongScoreboardProps) {
+export function PongScoreboard({ state, p1Name, p2Name, role }: PongScoreboardProps) {
   const { player1, player2, config, rally, servePending, serverSide } = state;
   const isAi = config.mode === 'single-player';
+  const isOnline = config.mode === 'online';
+
+  const displayName1 = isOnline ? p1Name || 'Host' : 'Player 1';
+  const displayName2 = isOnline ? p2Name || 'Challenger' : isAi ? `CPU (${config.difficulty})` : 'Player 2';
 
   return (
     <div className="w-full bg-surface-raised/90 backdrop-blur-sm border border-surface-border rounded-xl p-3 md:p-4 shadow-arcade flex flex-col md:flex-row items-center justify-between gap-4">
@@ -22,14 +29,21 @@ export function PongScoreboard({ state }: PongScoreboardProps) {
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="text-sm font-semibold text-white">Player 1</span>
+              <span className="text-sm font-semibold text-white">{displayName1}</span>
+              {isOnline && role === 'host' && (
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-mono font-bold">
+                  YOU
+                </span>
+              )}
               {servePending && serverSide === 'left' && (
                 <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-mono font-bold animate-pulse">
                   SERVE
                 </span>
               )}
             </div>
-            <span className="text-[11px] text-deck-400 font-mono">W / S keys • Touch</span>
+            <span className="text-[11px] text-deck-400 font-mono">
+              {isOnline && role === 'guest' ? 'Opponent' : 'W / S keys • Touch'}
+            </span>
           </div>
         </div>
 
@@ -78,11 +92,20 @@ export function PongScoreboard({ state }: PongScoreboardProps) {
                 </span>
               )}
               <span className="text-sm font-semibold text-white">
-                {isAi ? `CPU (${config.difficulty})` : 'Player 2'}
+                {displayName2}
               </span>
+              {isOnline && role === 'guest' && (
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono font-bold">
+                  YOU
+                </span>
+              )}
             </div>
             <span className="text-[11px] text-deck-400 font-mono">
-              {isAi ? 'Smart Bot' : '↑ / ↓ keys • Touch'}
+              {isOnline && role === 'host'
+                ? 'Opponent'
+                : isAi
+                  ? 'Smart Bot'
+                  : '↑ / ↓ keys • Touch'}
             </span>
           </div>
 

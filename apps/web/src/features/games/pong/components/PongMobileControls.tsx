@@ -6,49 +6,57 @@ import type { PongMode } from '../engine/pong-types';
 
 interface PongMobileControlsProps {
   mode: PongMode;
+  role?: 'host' | 'guest' | null;
   onP1Move: (dir: 'up' | 'down', active: boolean) => void;
   onP2Move: (dir: 'up' | 'down', active: boolean) => void;
 }
 
-export function PongMobileControls({ mode, onP1Move, onP2Move }: PongMobileControlsProps) {
+export function PongMobileControls({ mode, role, onP1Move, onP2Move }: PongMobileControlsProps) {
+  const isOnlineGuest = mode === 'online' && role === 'guest';
+  const isOnlineHost = mode === 'online' && role === 'host';
+  const showP1 = mode !== 'online' || isOnlineHost;
+  const showP2 = mode === 'local-2p' || isOnlineGuest;
+
   return (
     <div className="w-full flex md:hidden items-center justify-between gap-4 mt-2 px-1 select-none">
       {/* Player 1 Left Controls */}
-      <div className="flex flex-col items-center gap-1.5 flex-1">
-        <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-wider">
-          P1 Control
-        </span>
-        <div className="flex gap-2 w-full max-w-[140px]">
-          <button
-            type="button"
-            className="flex-1 py-3 bg-surface-raised active:bg-cyan-500/20 border border-cyan-500/40 rounded-xl flex items-center justify-center text-cyan-400 active:scale-95 transition-all shadow-md cursor-pointer"
-            onTouchStart={() => onP1Move('up', true)}
-            onTouchEnd={() => onP1Move('up', false)}
-            onMouseDown={() => onP1Move('up', true)}
-            onMouseUp={() => onP1Move('up', false)}
-            aria-label="P1 Move Up"
-          >
-            <ChevronUp className="w-5 h-5" />
-          </button>
-          <button
-            type="button"
-            className="flex-1 py-3 bg-surface-raised active:bg-cyan-500/20 border border-cyan-500/40 rounded-xl flex items-center justify-center text-cyan-400 active:scale-95 transition-all shadow-md cursor-pointer"
-            onTouchStart={() => onP1Move('down', true)}
-            onTouchEnd={() => onP1Move('down', false)}
-            onMouseDown={() => onP1Move('down', true)}
-            onMouseUp={() => onP1Move('down', false)}
-            aria-label="P1 Move Down"
-          >
-            <ChevronDown className="w-5 h-5" />
-          </button>
+      {showP1 && (
+        <div className="flex flex-col items-center gap-1.5 flex-1">
+          <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-wider">
+            {mode === 'online' ? 'Your Paddle (P1)' : 'P1 Control'}
+          </span>
+          <div className="flex gap-2 w-full max-w-[140px]">
+            <button
+              type="button"
+              className="flex-1 py-3 bg-surface-raised active:bg-cyan-500/20 border border-cyan-500/40 rounded-xl flex items-center justify-center text-cyan-400 active:scale-95 transition-all shadow-md cursor-pointer"
+              onTouchStart={() => onP1Move('up', true)}
+              onTouchEnd={() => onP1Move('up', false)}
+              onMouseDown={() => onP1Move('up', true)}
+              onMouseUp={() => onP1Move('up', false)}
+              aria-label="P1 Move Up"
+            >
+              <ChevronUp className="w-5 h-5" />
+            </button>
+            <button
+              type="button"
+              className="flex-1 py-3 bg-surface-raised active:bg-cyan-500/20 border border-cyan-500/40 rounded-xl flex items-center justify-center text-cyan-400 active:scale-95 transition-all shadow-md cursor-pointer"
+              onTouchStart={() => onP1Move('down', true)}
+              onTouchEnd={() => onP1Move('down', false)}
+              onMouseDown={() => onP1Move('down', true)}
+              onMouseUp={() => onP1Move('down', false)}
+              aria-label="P1 Move Down"
+            >
+              <ChevronDown className="w-5 h-5" />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* If 2P Mode, show Player 2 Right Controls */}
-      {mode === 'local-2p' ? (
+      {/* If 2P or Online Guest Mode, show Player 2 Right Controls */}
+      {showP2 ? (
         <div className="flex flex-col items-center gap-1.5 flex-1">
           <span className="text-[10px] font-mono text-amber-400 font-bold uppercase tracking-wider">
-            P2 Control
+            {isOnlineGuest ? 'Your Paddle (P2)' : 'P2 Control'}
           </span>
           <div className="flex gap-2 w-full max-w-[140px]">
             <button
