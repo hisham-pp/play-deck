@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1f152b" />
+      <stop offset="70%" stop-color="#0f0c18" />
+      <stop offset="100%" stop-color="#050308" />
+    </radialGradient>
+    <radialGradient id="ballGrad" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#fed7aa" />
+      <stop offset="40%" stop-color="#f97316" />
+      <stop offset="90%" stop-color="#c2410c" />
+      <stop offset="100%" stop-color="#7c2d12" />
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3.5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="160" height="160" rx="36" fill="url(#bgGlow)" stroke="#f59e0b" stroke-opacity="0.35" stroke-width="2" />
+
+  <!-- Amber Hoop Glow -->
+  <circle cx="80" cy="88" r="48" fill="#f59e0b" fill-opacity="0.08" />
+
+  <!-- Basketball Hoop Rim (Orange) -->
+  <ellipse cx="80" cy="95" rx="42" ry="12" fill="none" stroke="#ea580c" stroke-width="5" filter="url(#glow)" />
+  <line x1="122" y1="95" x2="136" y2="85" stroke="#475569" stroke-width="5" />
+
+  <!-- Chain Net -->
+  <path d="M42,97 L54,135 L80,145 L106,135 L118,97" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6,3" fill="#f8fafc" fill-opacity="0.05" />
+  <line x1="60" y1="100" x2="100" y2="100" stroke="#cbd5e1" stroke-width="1.5" />
+  <line x1="68" y1="116" x2="92" y2="116" stroke="#cbd5e1" stroke-width="1.5" />
+
+  <!-- Basketball Dunking In Through Rim -->
+  <g transform="translate(80, 68)" filter="url(#glow)">
+    <circle cx="0" cy="0" r="30" fill="url(#ballGrad)" stroke="#431407" stroke-width="2" />
+    <!-- Seams -->
+    <line x1="-30" y1="0" x2="30" y2="0" stroke="#431407" stroke-width="2.5" />
+    <path d="M0,-30 Q-15,0 0,30" stroke="#431407" stroke-width="2.2" fill="none" />
+    <path d="M0,-30 Q15,0 0,30" stroke="#431407" stroke-width="2.2" fill="none" />
+  </g>
+
+  <!-- Motion Sparks -->
+  <circle cx="48" cy="50" r="2.5" fill="#fef08a" />
+  <circle cx="114" cy="46" r="3" fill="#f59e0b" filter="url(#glow)" />
+  <circle cx="80" cy="30" r="2" fill="#ffffff" />
+  <circle cx="126" cy="115" r="2.5" fill="#38bdf8" />
+</svg>

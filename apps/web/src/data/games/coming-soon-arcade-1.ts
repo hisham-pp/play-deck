@@ -96,26 +96,4 @@ export const COMING_SOON_ARCADE_GAMES_1: GameDefinition[] = [
       { action: 'Smoke Bomb', key: 'E / Shift', touchAction: 'Tap Skill Icon' },
     ],
   },
-  {
-    id: 'stickman-basketball',
-    name: 'Stickman Basketball',
-    slug: 'stickman-basketball',
-    description:
-      'Arcade streetball showdown with gravity basketball trajectory, ankle-breaking crossovers, and rim-rocking dunks.',
-    category: CATEGORY_ARCADE,
-    players: { min: 1, max: 2 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/stickman-runner/icon.svg',
-    bannerUrl: '/games/stickman-runner/cover.svg',
-    tags: ['Sports', 'Arcade', 'Physics', 'Basketball', TAG_HIGH_SCORE],
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-    subtype: 'basketball',
-    difficultyPresets: ['easy', 'normal', 'hard'],
-    controls: [
-      { action: 'Court Movement', key: 'Arrow Keys / WASD', touchAction: 'Virtual Joystick' },
-      { action: 'Shoot / Dunk', key: 'Space / J', touchAction: 'Hold & Release Button' },
-      { action: 'Crossover / Steal', key: 'K / Shift', touchAction: 'Swipe Skill' },
-    ],
-  },
 ];

@@ -53,6 +53,7 @@ import { SnakeLadderGame } from '@/features/games/snake-and-ladder';
 import { SpellingBeeGame } from '@/features/games/spelling-bee';
 import { SpyNetworkGame } from '@/features/games/spy-network';
 import { StickmanArcheryGame } from '@/features/games/stickman-archery';
+import { StickmanBasketballGame } from '@/features/games/stickman-basketball';
 import { StickmanClimberGame } from '@/features/games/stickman-climber';
 import { StickmanParkourGame } from '@/features/games/stickman-parkour';
 import { StickmanPlatformerGame } from '@/features/games/stickman-platformer';
@@ -129,6 +130,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   snake: SnakeGame,
   'snake-and-ladder': SnakeLadderGame,
   'stickman-archery': StickmanArcheryGame,
+  'stickman-basketball': StickmanBasketballGame,
   'stickman-climber': StickmanClimberGame,
   'stickman-parkour': StickmanParkourGame,
   'stickman-platformer': StickmanPlatformerGame,
