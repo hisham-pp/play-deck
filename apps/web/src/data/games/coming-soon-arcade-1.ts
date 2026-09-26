@@ -9,28 +9,6 @@ import {
 
 export const COMING_SOON_ARCADE_GAMES_1: GameDefinition[] = [
   {
-    id: 'stickman-shooter',
-    name: 'Stickman Shooter',
-    slug: 'stickman-shooter',
-    description:
-      'Tactical cover shooting, timed bullet dodges, and precision weapon recoil mastery in an escalating stickman warzone.',
-    category: CATEGORY_ARCADE,
-    players: { min: 1, max: 1 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/stickman-runner/icon.svg',
-    bannerUrl: '/games/stickman-runner/cover.svg',
-    tags: ['Action', 'Shooter', 'Aim', 'Reflexes', TAG_HIGH_SCORE],
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-    subtype: 'shooter',
-    difficultyPresets: ['easy', 'normal', 'hard', 'expert'],
-    controls: [
-      { action: 'Aim & Fire', key: 'Mouse Left Click', touchAction: 'Tap to aim and fire' },
-      { action: 'Duck / Cover', key: 'S / ArrowDown', touchAction: 'Swipe Down' },
-      { action: 'Reload Weapon', key: 'R', touchAction: 'Tap Ammo Indicator' },
-    ],
-  },
-  {
     id: 'stickman-parkour',
     name: 'Stickman Parkour',
     slug: 'stickman-parkour',

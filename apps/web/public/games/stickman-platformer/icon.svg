@@ -1,0 +1,19 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="160" height="160" rx="24" fill="#0B1220"/>
+  <rect x="14" y="14" width="132" height="132" rx="18" fill="#111827" stroke="#3B82F6" stroke-width="2"/>
+  <!-- Floating platforms -->
+  <rect x="24" y="118" width="50" height="14" rx="4" fill="#10B981" stroke="#34D399" stroke-width="2"/>
+  <rect x="90" y="86" width="48" height="14" rx="4" fill="#8B5CF6" stroke="#A78BFA" stroke-width="2"/>
+  <!-- Golden coin pickup -->
+  <circle cx="114" cy="56" r="8" fill="#FBBF24" stroke="#F59E0B" stroke-width="2"/>
+  <!-- Stickman mid-air jump pose -->
+  <circle cx="68" cy="54" r="14" fill="#F8FAFC"/>
+  <!-- Torso -->
+  <path d="M68 68V94" stroke="#F8FAFC" stroke-width="4" stroke-linecap="round"/>
+  <!-- Arms reaching up/out -->
+  <path d="M68 76L50 64" stroke="#F8FAFC" stroke-width="4" stroke-linecap="round"/>
+  <path d="M68 76L86 66" stroke="#3B82F6" stroke-width="4" stroke-linecap="round"/>
+  <!-- Legs bent in jump -->
+  <path d="M68 94L54 108" stroke="#F8FAFC" stroke-width="4" stroke-linecap="round"/>
+  <path d="M68 94L82 104L90 114" stroke="#3B82F6" stroke-width="4" stroke-linecap="round"/>
+</svg>
