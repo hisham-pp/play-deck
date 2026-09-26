@@ -27,4 +27,20 @@ export const AVAILABLE_STRATEGY_GAMES: GameDefinition[] = [
     badge: BADGE_READY_TO_PLAY,
     releaseDate: '2026-09-18',
   },
+  {
+    id: 'dont-pop-it',
+    name: "Don't Pop It",
+    slug: 'dont-pop-it',
+    description:
+      'Multiplayer push-your-luck strategy game where players take turns uncovering mystery tiles while dodging hidden pop hazards. Collect shields, bonus gems, and multipliers.',
+    category: CATEGORY_STRATEGY,
+    players: { min: 1, max: 4 },
+    status: STATUS_AVAILABLE,
+    thumbnailUrl: '/games/dont-pop-it/icon.svg',
+    bannerUrl: '/games/dont-pop-it/cover.svg',
+    tags: [TAG_LOCAL_PLAY, TAG_AI_OPPONENT, TAG_MULTIPLAYER, TAG_VOICE_CHAT, 'Turn-based'],
+    featured: true,
+    badge: BADGE_READY_TO_PLAY,
+    releaseDate: '2026-09-24',
+  },
 ];

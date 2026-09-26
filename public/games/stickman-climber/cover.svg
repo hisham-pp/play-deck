@@ -1,0 +1,25 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="36" fill="#090D16"/>
+  <rect x="40" y="40" width="1120" height="550" rx="28" fill="url(#paint0_linear)"/>
+  <path d="M180 500C260 430 282 350 370 280C462 208 540 150 628 112C720 72 796 88 898 140C980 180 1050 214 1088 246V500H180Z" fill="#162236"/>
+  <path d="M330 500L470 370L610 500H330Z" fill="#1F2937"/>
+  <path d="M620 500L760 212L890 500H620Z" fill="#111827"/>
+  <path d="M830 500L930 280L1035 500H830Z" fill="#0F172A"/>
+  <circle cx="650" cy="120" r="64" fill="#F8FAFC"/>
+  <path d="M650 184V284" stroke="#F8FAFC" stroke-width="10" stroke-linecap="round"/>
+  <path d="M650 208L560 268" stroke="#F8FAFC" stroke-width="10" stroke-linecap="round"/>
+  <path d="M650 208L740 268" stroke="#F8FAFC" stroke-width="10" stroke-linecap="round"/>
+  <path d="M650 284L590 380" stroke="#F8FAFC" stroke-width="10" stroke-linecap="round"/>
+  <path d="M650 284L710 380" stroke="#F8FAFC" stroke-width="10" stroke-linecap="round"/>
+  <path d="M560 338L620 312" stroke="#F59E0B" stroke-width="12" stroke-linecap="round"/>
+  <path d="M740 338L680 312" stroke="#F59E0B" stroke-width="12" stroke-linecap="round"/>
+  <text x="120" y="110" fill="#F59E0B" font-family="Arial, sans-serif" font-size="46" font-weight="700" letter-spacing="6">PLAYDECK</text>
+  <text x="120" y="420" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="96" font-weight="800">STICKMAN</text>
+  <text x="120" y="505" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="96" font-weight="800">CLIMBER</text>
+  <defs>
+    <linearGradient id="paint0_linear" x1="120" y1="60" x2="1080" y2="582" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111827"/>
+      <stop offset="1" stop-color="#0B1220"/>
+    </linearGradient>
+  </defs>
+</svg>

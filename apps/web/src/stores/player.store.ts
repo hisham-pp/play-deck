@@ -1,6 +1,7 @@
 import { create } from 'zustand';
-import type { Player, PlayerStats, GameCategory } from '@playdeck/game-types';
+import type { GameCategory, Player, PlayerStats } from '@playdeck/game-types';
 import { SupabaseAuthService } from '@/features/auth/services/supabase-auth.service';
+import { evaluateProgression, type ProgressionUpdateResult } from '@/features/player';
 import { STORAGE_KEYS } from '@/lib/storage/keys';
 import { StorageService } from '@/lib/storage/storage';
 import { DEFAULT_STATS, createGuestPlayer, persistPlayerAndStats } from './player-store.utils';
@@ -25,7 +26,13 @@ export interface PlayerState {
   continueAsGuest: () => Promise<void>;
   updateDisplayName: (name: string) => Promise<void>;
   updateAvatar: (avatar: string) => Promise<void>;
-  recordGamePlayed: (won: boolean, category?: GameCategory) => Promise<void>;
+  recordGamePlayed: (
+    won: boolean,
+    category?: GameCategory,
+    gameId?: string,
+    score?: number,
+  ) => Promise<ProgressionUpdateResult>;
+  resetStats: () => Promise<void>;
 }
 
 export const usePlayerStore = create<PlayerState>((set, get) => ({
@@ -115,7 +122,32 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
     if (!current) return;
     const updated = { ...current, displayName: name.trim() };
     set({ player: updated });
-    await persistPlayerAndStats(updated, get().stats);
+
+    // Evaluate customization achievement
+    const currentStats = get().stats;
+    const progressRes = evaluateProgression(currentStats);
+    if (!progressRes.updatedStats.unlockedAchievements?.includes('custom_identity')) {
+      const nowIso = new Date().toISOString();
+      const updatedAchievements = [
+        ...(progressRes.updatedStats.unlockedAchievements ?? []),
+        'custom_identity',
+      ];
+      const updatedAchievementsData = {
+        ...(progressRes.updatedStats.achievementsData ?? {}),
+        custom_identity: { unlockedAt: nowIso, progress: 1 },
+      };
+      const statsWithAchievement = {
+        ...progressRes.updatedStats,
+        unlockedAchievements: updatedAchievements,
+        achievementsData: updatedAchievementsData,
+        xp: (progressRes.updatedStats.xp ?? 0) + 50,
+      };
+      set({ stats: statsWithAchievement });
+      await persistPlayerAndStats(updated, statsWithAchievement);
+    } else {
+      await persistPlayerAndStats(updated, currentStats);
+    }
+
     if (!updated.isGuest) await SupabaseAuthService.savePlayerToTable(updated);
   },
 
@@ -124,19 +156,54 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
     if (!current) return;
     const updated = { ...current, avatar };
     set({ player: updated });
-    await persistPlayerAndStats(updated, get().stats);
+
+    // Evaluate customization achievement
+    const currentStats = get().stats;
+    const progressRes = evaluateProgression(currentStats);
+    if (!progressRes.updatedStats.unlockedAchievements?.includes('custom_identity')) {
+      const nowIso = new Date().toISOString();
+      const updatedAchievements = [
+        ...(progressRes.updatedStats.unlockedAchievements ?? []),
+        'custom_identity',
+      ];
+      const updatedAchievementsData = {
+        ...(progressRes.updatedStats.achievementsData ?? {}),
+        custom_identity: { unlockedAt: nowIso, progress: 1 },
+      };
+      const statsWithAchievement = {
+        ...progressRes.updatedStats,
+        unlockedAchievements: updatedAchievements,
+        achievementsData: updatedAchievementsData,
+        xp: (progressRes.updatedStats.xp ?? 0) + 50,
+      };
+      set({ stats: statsWithAchievement });
+      await persistPlayerAndStats(updated, statsWithAchievement);
+    } else {
+      await persistPlayerAndStats(updated, currentStats);
+    }
+
     if (!updated.isGuest) await SupabaseAuthService.savePlayerToTable(updated);
   },
 
-  recordGamePlayed: async (won: boolean, category?: GameCategory) => {
+  recordGamePlayed: async (
+    won: boolean,
+    category?: GameCategory,
+    gameId?: string,
+    score?: number,
+  ) => {
     const s = get().stats;
-    const updated: PlayerStats = {
-      gamesPlayed: s.gamesPlayed + 1,
-      wins: won ? s.wins + 1 : s.wins,
-      losses: won ? s.losses : s.losses + 1,
-      favoriteCategory: category || s.favoriteCategory,
-    };
-    set({ stats: updated });
-    if (get().player) await persistPlayerAndStats(get().player!, updated);
+    const result = evaluateProgression(s, { won, category, gameId, score });
+    set({ stats: result.updatedStats });
+    if (get().player) {
+      await persistPlayerAndStats(get().player!, result.updatedStats);
+    }
+    return result;
+  },
+
+  resetStats: async () => {
+    set({ stats: DEFAULT_STATS });
+    if (get().player) {
+      await persistPlayerAndStats(get().player!, DEFAULT_STATS);
+    }
   },
 }));

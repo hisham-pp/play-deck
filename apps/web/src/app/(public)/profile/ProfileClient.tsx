@@ -1,11 +1,15 @@
 'use client';
 
 import { Check, Users } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { useFriendsStore } from '@/stores/friends.store';
 import { usePlayerStore } from '@/stores/player.store';
 import { AccountStatusCard } from './components/AccountStatusCard';
+import { AchievementsCard } from './components/AchievementsCard';
+import { BestScoresCard } from './components/BestScoresCard';
+import { PlayerLevelCard } from './components/PlayerLevelCard';
+import { PreferencesCard } from './components/PreferencesCard';
 import { ProfileHeader } from './components/ProfileHeader';
 import { ProfileStatsCard } from './components/ProfileStatsCard';
 
@@ -47,8 +51,11 @@ export function ProfileClient() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto flex flex-col gap-8">
+    <div className="max-w-3xl mx-auto flex flex-col gap-8 pb-12">
       <ProfileHeader />
+
+      {/* Player Level & XP Progression */}
+      <PlayerLevelCard stats={stats} />
 
       <AccountStatusCard
         player={player}
@@ -58,7 +65,7 @@ export function ProfileClient() {
       />
 
       {/* Identity Card */}
-      <div className="p-6 rounded-xl border border-surface-border bg-surface-raised flex flex-col sm:flex-row items-start sm:items-center gap-6">
+      <div className="p-6 rounded-2xl border border-surface-border bg-surface-raised flex flex-col sm:flex-row items-start sm:items-center gap-6 shadow-xl">
         <div className="w-20 h-20 rounded-2xl bg-surface-overlay border border-surface-border flex items-center justify-center text-4xl shadow-sm">
           {player?.avatar || '🕹️'}
         </div>
@@ -91,7 +98,7 @@ export function ProfileClient() {
       </div>
 
       {/* Avatar Picker */}
-      <div className="p-6 rounded-xl border border-surface-border bg-surface-raised flex flex-col gap-4">
+      <div className="p-6 rounded-2xl border border-surface-border bg-surface-raised flex flex-col gap-4 shadow-xl">
         <h3 className="text-xs font-bold uppercase tracking-wider text-deck-500 font-display">
           Choose Your Avatar
         </h3>
@@ -100,9 +107,9 @@ export function ProfileClient() {
             <button
               key={av}
               onClick={() => updateAvatar(av)}
-              className={`w-12 h-12 rounded-lg border flex items-center justify-center text-2xl transition-all ${
+              className={`w-12 h-12 rounded-xl border flex items-center justify-center text-2xl transition-all ${
                 player?.avatar === av
-                  ? 'border-amber-500 bg-amber-500/10 scale-105'
+                  ? 'border-amber-500 bg-amber-500/10 scale-105 shadow-sm ring-2 ring-amber-400/40'
                   : 'border-surface-border bg-surface-overlay hover:border-surface-borderHover'
               }`}
             >
@@ -112,8 +119,20 @@ export function ProfileClient() {
         </div>
       </div>
 
+      {/* Overall Match Statistics */}
+      <ProfileStatsCard stats={stats} />
+
+      {/* Personal High Scores & Records */}
+      <BestScoresCard stats={stats} />
+
+      {/* Milestones & Achievements */}
+      <AchievementsCard stats={stats} />
+
+      {/* Preferences & Accessibility Settings */}
+      <PreferencesCard />
+
       {/* Friends Card */}
-      <div className="p-6 rounded-xl border border-surface-border bg-surface-raised flex items-center justify-between">
+      <div className="p-6 rounded-2xl border border-surface-border bg-surface-raised flex items-center justify-between shadow-xl">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
             <Users className="w-5 h-5" />
@@ -129,8 +148,6 @@ export function ProfileClient() {
           Manage Friends
         </Button>
       </div>
-
-      <ProfileStatsCard stats={stats} />
     </div>
   );
 }

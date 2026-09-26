@@ -11,15 +11,22 @@ import { AuctionPanicGame } from '@/features/games/auction-panic';
 import { BadArchitectGame } from '@/features/games/bad-architect';
 import { BallBounceGame } from '@/features/games/ball-bounce';
 import { BombFactoryGame } from '@/features/games/bomb-factory';
+import { BomberArenaGame } from '@/features/games/bomber-arena';
+import { CarromGame } from '@/features/games/carrom';
 import { ChessGame } from '@/features/games/chess';
 import { ColorThiefGame } from '@/features/games/color-thief';
 import { ConnectFourGame } from '@/features/games/connect-four';
+import { CrosswordClashGame } from '@/features/games/crossword-clash';
+import { DontPopItGame } from '@/features/games/dont-pop-it';
 import { GiantGame } from '@/features/games/dont-wake-the-giant';
+import { DrawingGuessingGame } from '@/features/games/drawing-guessing';
+import { FishingCompetitionGame } from '@/features/games/fishing-competition';
 import { FlappyArcadeGame } from '@/features/games/flappy-arcade';
 import { FloorIsLavaGame } from '@/features/games/floor-is-lava';
 import { GravityGolfGame } from '@/features/games/gravity-golf';
 import { GravityShiftGame } from '@/features/games/gravity-shift';
 import { GuessTheLieGame } from '@/features/games/guess-the-lie';
+import { HideSeekGame } from '@/features/games/hide-and-seek';
 import { HumanConveyorGame } from '@/features/games/human-conveyor-belt';
 import { ImposterBuilderGame } from '@/features/games/imposter-builder';
 import { KingdomDraftGame } from '@/features/games/kingdom-draft';
@@ -30,8 +37,11 @@ import { MinesweeperGame } from '@/features/games/minesweeper';
 import { MiniGolfGame } from '@/features/games/mini-golf';
 import { OneWordStoryGame } from '@/features/games/one-word-story';
 import { PenFightGame } from '@/features/games/pen-fight';
+import { PhysicsFootballGame } from '@/features/games/physics-football';
+import { PlatformRaceGame } from '@/features/games/platform-race';
 import { PongGame } from '@/features/games/pong';
 import { PushYourLuckGame } from '@/features/games/push-your-luck';
+import { ReactionArenaGame } from '@/features/games/reaction-arena';
 import { ReverseRacingGame } from '@/features/games/reverse-racing';
 import { RunicMemoryGame } from '@/features/games/runic-memory';
 import { SecretMissionGame } from '@/features/games/secret-mission';
@@ -42,6 +52,10 @@ import { SnakeGame } from '@/features/games/snake';
 import { SnakeLadderGame } from '@/features/games/snake-and-ladder';
 import { SpellingBeeGame } from '@/features/games/spelling-bee';
 import { SpyNetworkGame } from '@/features/games/spy-network';
+import { StickmanArcheryGame } from '@/features/games/stickman-archery';
+import { StickmanClimberGame } from '@/features/games/stickman-climber';
+import { StickmanPlatformerGame } from '@/features/games/stickman-platformer';
+import { StickmanRunnerGame } from '@/features/games/stickman-runner';
 import { SudokuGame } from '@/features/games/sudoku';
 import { SummitRushGame } from '@/features/games/summit-rush';
 import { TelephoneDrawingGame } from '@/features/games/telephone-drawing';
@@ -49,9 +63,13 @@ import { TetrisGame } from '@/features/games/tetris';
 import { TicTacToeGame } from '@/features/games/tic-tac-toe';
 import { TinyIslandGame } from '@/features/games/tiny-island';
 import { TinyTankGame } from '@/features/games/tiny-tank';
+import { TowerBuilderGame } from '@/features/games/tower-builder';
+import { TrainRushGame } from '@/features/games/train-rush';
 import { TrustOrBetrayGame } from '@/features/games/trust-or-betray';
+import { UnoCardsGame } from '@/features/games/uno-cards';
 import { ElevatorGame } from '@/features/games/unstable-elevator';
 import { WhoAmIGame } from '@/features/games/who-am-i';
+import { WordBattleGame } from '@/features/games/word-battle';
 import { WordChainGame } from '@/features/games/word-chain';
 import { WordSearchGame } from '@/features/games/word-search-arena';
 import { WrongAnswersGame } from '@/features/games/wrong-answers-only';
@@ -73,15 +91,22 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'bad-architect': BadArchitectGame,
   'ball-bounce': BallBounceGame,
   'bomb-factory': BombFactoryGame,
+  'bomber-arena': BomberArenaGame,
+  carrom: CarromGame,
   chess: ChessGame,
   'color-thief': ColorThiefGame,
   'connect-four': ConnectFourGame,
+  'crossword-clash': CrosswordClashGame,
+  'dont-pop-it': DontPopItGame,
   'dont-wake-the-giant': GiantGame,
+  'drawing-guessing': DrawingGuessingGame,
+  'fishing-competition': FishingCompetitionGame,
   'flappy-arcade': FlappyArcadeGame,
   'floor-is-lava': FloorIsLavaGame,
   'gravity-golf': GravityGolfGame,
   'gravity-shift': GravityShiftGame,
   'guess-the-lie': GuessTheLieGame,
+  'hide-and-seek': HideSeekGame,
   'human-conveyor-belt': HumanConveyorGame,
   'kingdom-draft': KingdomDraftGame,
   'loot-dash': LootDashGame,
@@ -91,23 +116,34 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
   'mini-golf': MiniGolfGame,
   'one-word-story': OneWordStoryGame,
   'pen-fight': PenFightGame,
+  'physics-football': PhysicsFootballGame,
+  'platform-race': PlatformRaceGame,
   pong: PongGame,
   'push-your-luck': PushYourLuckGame,
+  'reaction-arena': ReactionArenaGame,
   'reverse-racing': ReverseRacingGame,
   'runic-memory': RunicMemoryGame,
   'shadow-tag': ShadowTagGame,
   'shared-brain': SharedBrainGame,
   snake: SnakeGame,
   'snake-and-ladder': SnakeLadderGame,
+  'stickman-archery': StickmanArcheryGame,
+  'stickman-climber': StickmanClimberGame,
+  'stickman-platformer': StickmanPlatformerGame,
+  'stickman-runner': StickmanRunnerGame,
   sudoku: SudokuGame,
   'summit-rush': SummitRushGame,
   tetris: TetrisGame,
   'tic-tac-toe': TicTacToeGame,
   'tiny-island': TinyIslandGame,
   'tiny-tank-arena': TinyTankGame,
+  'tower-builder': TowerBuilderGame,
+  'train-rush': TrainRushGame,
   'trust-or-betray': TrustOrBetrayGame,
   'secret-saboteur': SecretSaboteurGame,
   'unstable-elevator': ElevatorGame,
+  'uno-cards': UnoCardsGame,
+  'word-battle': WordBattleGame,
   'word-chain': WordChainGame,
   'word-search-arena': WordSearchGame,
   'wrong-answers-only': WrongAnswersGame,
@@ -121,7 +157,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
 };
 
 export function GameAreaShell({ game }: { game: GameDefinition }) {
-  const { player } = usePlayerStore();
+  const { player, recordGamePlayed } = usePlayerStore();
   const { currentSession, startSession, endSession } = useGameSessionStore();
   const { addRecentSession } = useLibraryStore();
   const [status, setStatus] = useState<'idle' | 'running' | 'over'>('idle');
@@ -154,6 +190,7 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
     if (result && currentSession) {
       addRecentSession(currentSession);
     }
+    void recordGamePlayed(won, game.category, game.id, mockScore);
     setStatus('over');
   };
 

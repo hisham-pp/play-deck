@@ -1,0 +1,33 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="36" fill="#090D16"/>
+  <rect x="40" y="40" width="1120" height="550" rx="28" fill="url(#runner_gradient)"/>
+  <!-- Track and grid terrain -->
+  <path d="M40 480H1160" stroke="#334155" stroke-width="6" stroke-linecap="round"/>
+  <!-- Obstacles and neon lines -->
+  <rect x="880" y="400" width="40" height="80" rx="8" fill="#EF4444" stroke="#F87171" stroke-width="3"/>
+  <rect x="1020" y="360" width="36" height="120" rx="8" fill="#F59E0B" stroke="#FBBF24" stroke-width="3"/>
+  <!-- Sprinting Stickman figure -->
+  <circle cx="580" cy="220" r="54" fill="#F8FAFC"/>
+  <!-- Leaning torso -->
+  <path d="M570 274L530 380" stroke="#F8FAFC" stroke-width="12" stroke-linecap="round"/>
+  <!-- Sprint arms -->
+  <path d="M555 310L490 350L450 320" stroke="#F8FAFC" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M550 310L620 330L680 290" stroke="#10B981" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Running legs stride -->
+  <path d="M530 380L460 430L420 480" stroke="#F8FAFC" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M530 380L620 420L690 460" stroke="#10B981" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Speed lines -->
+  <path d="M260 270H380" stroke="#F59E0B" stroke-width="8" stroke-linecap="round"/>
+  <path d="M200 320H340" stroke="#F59E0B" stroke-width="8" stroke-linecap="round"/>
+  <path d="M240 370H370" stroke="#10B981" stroke-width="8" stroke-linecap="round"/>
+  <!-- Typography -->
+  <text x="120" y="110" fill="#F59E0B" font-family="Arial, sans-serif" font-size="46" font-weight="700" letter-spacing="6">PLAYDECK</text>
+  <text x="120" y="420" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="96" font-weight="800">STICKMAN</text>
+  <text x="120" y="505" fill="#10B981" font-family="Arial, sans-serif" font-size="96" font-weight="800">RUNNER</text>
+  <defs>
+    <linearGradient id="runner_gradient" x1="120" y1="60" x2="1080" y2="582" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111827"/>
+      <stop offset="1" stop-color="#0B1220"/>
+    </linearGradient>
+  </defs>
+</svg>

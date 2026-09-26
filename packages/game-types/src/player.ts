@@ -9,11 +9,33 @@ export interface Player {
   email?: string;
 }
 
+export interface Achievement {
+  id: string;
+  title: string;
+  description: string;
+  category: GameCategory | 'general';
+  icon: string;
+  xpReward: number;
+  unlockedAt?: string;
+  progress?: number;
+  maxProgress?: number;
+}
+
 export interface PlayerStats {
   gamesPlayed: number;
   wins: number;
   losses: number;
   favoriteCategory?: GameCategory;
+  totalScore?: number;
+  xp?: number;
+  level?: number;
+  title?: string;
+  currentStreak?: number;
+  bestStreak?: number;
+  bestScores?: Record<string, number>;
+  unlockedAchievements?: string[];
+  achievementsData?: Record<string, { unlockedAt: string; progress?: number }>;
+  categoryPlays?: Record<string, number>;
 }
 
 export interface PlayerPreferences {

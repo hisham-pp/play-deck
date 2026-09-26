@@ -1,0 +1,39 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="36" fill="#090D16"/>
+  <rect x="40" y="40" width="1120" height="550" rx="28" fill="url(#archery_bg)"/>
+  <!-- Shooting range background hills -->
+  <path d="M120 480C260 410 400 450 560 430C720 410 880 460 1100 440V550H120Z" fill="#131C2E"/>
+  <path d="M40 490H1160" stroke="#334155" stroke-width="6" stroke-linecap="round"/>
+  <!-- Target on right side -->
+  <rect x="940" y="220" width="24" height="230" rx="6" fill="#1E293B" stroke="#334155" stroke-width="3"/>
+  <circle cx="952" cy="270" r="70" fill="#1E293B" stroke="#3B82F6" stroke-width="8"/>
+  <circle cx="952" cy="270" r="46" fill="#F59E0B" stroke="#FBBF24" stroke-width="6"/>
+  <circle cx="952" cy="270" r="22" fill="#EF4444" stroke="#F87171" stroke-width="4"/>
+  <!-- Arrow stuck in target bullseye -->
+  <path d="M840 270H960" stroke="#F8FAFC" stroke-width="6" stroke-linecap="round"/>
+  <!-- Archer figure drawing bow -->
+  <circle cx="360" cy="250" r="48" fill="#F8FAFC"/>
+  <!-- Torso -->
+  <path d="M360 298V410" stroke="#F8FAFC" stroke-width="12" stroke-linecap="round"/>
+  <!-- Arms drawing bow -->
+  <path d="M360 330L270 350" stroke="#F8FAFC" stroke-width="12" stroke-linecap="round"/>
+  <path d="M360 330L440 335" stroke="#F8FAFC" stroke-width="12" stroke-linecap="round"/>
+  <!-- Bow -->
+  <path d="M440 220C475 275 475 395 440 450" stroke="#F59E0B" stroke-width="14" stroke-linecap="round"/>
+  <path d="M440 220L270 335L440 450" stroke="#94A3B8" stroke-width="6" stroke-linecap="round"/>
+  <!-- Planted legs -->
+  <path d="M360 410L300 490" stroke="#F8FAFC" stroke-width="12" stroke-linecap="round"/>
+  <path d="M360 410L420 490" stroke="#F8FAFC" stroke-width="12" stroke-linecap="round"/>
+  <!-- Wind trajectory curves -->
+  <path d="M480 320C620 280 750 260 880 270" stroke="#38BDF8" stroke-width="4" stroke-dasharray="12 12" stroke-linecap="round"/>
+  <!-- Typography -->
+  <text x="120" y="110" fill="#F59E0B" font-family="Arial, sans-serif" font-size="46" font-weight="700" letter-spacing="6">PLAYDECK</text>
+  <text x="120" y="420" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="96" font-weight="800">STICKMAN</text>
+  <text x="120" y="505" fill="#EF4444" font-family="Arial, sans-serif" font-size="96" font-weight="800">ARCHERY</text>
+  <defs>
+    <linearGradient id="archery_bg" x1="120" y1="60" x2="1080" y2="582" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111827"/>
+      <stop offset="1" stop-color="#0B1220"/>
+    </linearGradient>
+  </defs>
+</svg>

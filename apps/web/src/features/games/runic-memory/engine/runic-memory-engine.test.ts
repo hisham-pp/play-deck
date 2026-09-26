@@ -175,24 +175,30 @@ describe('Runic Memory Engine Tests', () => {
 
   describe('5. Cognitive AI Memory Unit Tests', () => {
     it('remembers cards with high retention in hard difficulty', () => {
-      const ai = new RunicMemoryAi('hard');
-      const deck = createRunicDeck('novice', 100);
+      const originalRandom = Math.random;
+      Math.random = () => 0.5;
+      try {
+        const ai = new RunicMemoryAi('hard');
+        const deck = createRunicDeck('novice', 100);
 
-      // AI observes both matching cards
-      const targetRune = deck[0].runeId;
-      const pair = deck.filter((c) => c.runeId === targetRune);
+        // AI observes both matching cards
+        const targetRune = deck[0].runeId;
+        const pair = deck.filter((c) => c.runeId === targetRune);
 
-      ai.observeCard(pair[0]);
-      ai.observeCard(pair[1]);
+        ai.observeCard(pair[0]);
+        ai.observeCard(pair[1]);
 
-      // Should pick the first card of known pair
-      const firstPick = ai.chooseCard(deck, []);
-      assert.ok(firstPick === pair[0].index || firstPick === pair[1].index);
+        // Should pick the first card of known pair
+        const firstPick = ai.chooseCard(deck, []);
+        assert.ok(firstPick === pair[0].index || firstPick === pair[1].index);
 
-      // Once first card is flipped, pick the second matching card
-      const secondPick = ai.chooseCard(deck, [firstPick]);
-      const expectedOther = firstPick === pair[0].index ? pair[1].index : pair[0].index;
-      assert.equal(secondPick, expectedOther);
+        // Once first card is flipped, pick the second matching card
+        const secondPick = ai.chooseCard(deck, [firstPick]);
+        const expectedOther = firstPick === pair[0].index ? pair[1].index : pair[0].index;
+        assert.equal(secondPick, expectedOther);
+      } finally {
+        Math.random = originalRandom;
+      }
     });
   });
 });

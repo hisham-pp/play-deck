@@ -17,9 +17,17 @@ export async function resolve(specifier, context, nextResolve) {
       return await nextResolve(target + '.ts', context);
     } catch {
       try {
-        return await nextResolve(target + '/index.ts', context);
+        return await nextResolve(target + '.tsx', context);
       } catch {
-        // Throw original error
+        try {
+          return await nextResolve(target + '/index.ts', context);
+        } catch {
+          try {
+            return await nextResolve(target + '/index.tsx', context);
+          } catch {
+            // Throw original error
+          }
+        }
       }
     }
     throw err;

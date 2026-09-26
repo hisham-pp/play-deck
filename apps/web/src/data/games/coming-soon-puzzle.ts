@@ -27,37 +27,4 @@ export const COMING_SOON_PUZZLE_GAMES: GameDefinition[] = [
     badge: BADGE_COMING_SOON,
     releaseDate: RELEASE_DATE_COMING_SOON,
   },
-
-  {
-    id: 'crossword-clash',
-    name: 'Crossword Clash',
-    slug: 'crossword-clash',
-    description:
-      'Competitive multiplayer crossword puzzle game. All players work on the same crossword grid simultaneously, racing to correctly fill the most cells before time runs out. Features themed clue categories, multiple difficulty levels, and puzzle generation.',
-    category: CATEGORY_PUZZLE,
-    players: { min: 1, max: 4 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/crossword-clash/icon.svg',
-    bannerUrl: '/games/crossword-clash/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT, TAG_SOLO, TAG_WORD_PUZZLE],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
-  {
-    id: 'word-battle',
-    name: 'Word Battle',
-    slug: 'word-battle',
-    description:
-      'Real-time multiplayer Word Battle. All players receive the same letters and compete to form valid words before the timer expires. Features multiple game modes, server-side validation, and duplicate-word scoring rules.',
-    category: CATEGORY_PUZZLE,
-    players: { min: 2, max: 8 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/word-battle/icon.svg',
-    bannerUrl: '/games/word-battle/cover.svg',
-    tags: [TAG_MULTIPLAYER, TAG_VOICE_CHAT],
-    featured: false,
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-  },
 ];

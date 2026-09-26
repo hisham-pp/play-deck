@@ -7,6 +7,16 @@ export const DEFAULT_STATS: PlayerStats = {
   gamesPlayed: 0,
   wins: 0,
   losses: 0,
+  totalScore: 0,
+  xp: 0,
+  level: 1,
+  title: 'Rookie Contender',
+  currentStreak: 0,
+  bestStreak: 0,
+  bestScores: {},
+  unlockedAchievements: [],
+  achievementsData: {},
+  categoryPlays: {},
 };
 
 export function createGuestPlayer(): Player {

@@ -1,0 +1,20 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="160" height="160" rx="24" fill="#0B1220"/>
+  <rect x="14" y="14" width="132" height="132" rx="18" fill="#111827" stroke="#10B981" stroke-width="2"/>
+  <!-- Ground track line -->
+  <path d="M24 126H136" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
+  <!-- Stickman runner pose -->
+  <circle cx="88" cy="44" r="16" fill="#F8FAFC"/>
+  <!-- Torso leaning forward -->
+  <path d="M84 60L72 92" stroke="#F8FAFC" stroke-width="4" stroke-linecap="round"/>
+  <!-- Arms sprinting -->
+  <path d="M80 72L60 84L48 76" stroke="#F8FAFC" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M78 72L98 80L112 68" stroke="#10B981" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Legs running stride -->
+  <path d="M72 92L52 110L42 126" stroke="#F8FAFC" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M72 92L96 104L114 116" stroke="#10B981" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Motion speed trails -->
+  <path d="M30 64H44" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
+  <path d="M22 76H38" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
+  <path d="M26 88H42" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
+</svg>

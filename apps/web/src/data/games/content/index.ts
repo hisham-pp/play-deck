@@ -6,14 +6,21 @@ import { auctionPanicContent } from './auction-panic';
 import { badArchitectContent } from './bad-architect';
 import { ballBounceContent } from './ball-bounce';
 import { bombFactoryContent } from './bomb-factory';
+import { bomberArenaContent } from './bomber-arena';
+import { carromContent } from './carrom';
 import { colorThiefContent } from './color-thief';
 import { connectFourContent } from './connect-four';
+import { crosswordClashContent } from './crossword-clash';
+import { dontPopItContent } from './dont-pop-it';
 import { dontWakeTheGiantContent } from './dont-wake-the-giant';
+import { drawingGuessingContent } from './drawing-guessing';
+import { fishingCompetitionContent } from './fishing-competition';
 import { flappyArcadeContent } from './flappy-arcade';
 import { floorIsLavaContent } from './floor-is-lava';
 import { gravityGolfContent } from './gravity-golf';
 import { gravityShiftContent } from './gravity-shift';
 import { guessTheLieContent } from './guess-the-lie';
+import { hideAndSeekContent } from './hide-and-seek';
 import { humanConveyorBeltContent } from './human-conveyor-belt';
 import { imposterBuilderContent } from './imposter-builder';
 import { kingdomDraftContent } from './kingdom-draft';
@@ -25,8 +32,11 @@ import { minesweeperContent } from './minesweeper';
 import { miniGolfContent } from './mini-golf';
 import { oneWordStoryContent } from './one-word-story';
 import { penFightContent } from './pen-fight';
+import { physicsFootballContent } from './physics-football';
+import { platformRaceContent } from './platform-race';
 import { pongContent } from './pong';
 import { pushYourLuckContent } from './push-your-luck';
+import { reactionArenaContent } from './reaction-arena';
 import { reverseRacingContent } from './reverse-racing';
 import { runicMemoryContent } from './runic-memory';
 import { secretMissionContent } from './secret-mission';
@@ -37,6 +47,10 @@ import { snakeContent } from './snake';
 import { snakeAndLadderContent } from './snake-and-ladder';
 import { spellingBeeContent } from './spelling-bee';
 import { spyNetworkContent } from './spy-network';
+import { stickmanArcheryContent } from './stickman-archery';
+import { stickmanClimberContent } from './stickman-climber';
+import { stickmanPlatformerContent } from './stickman-platformer';
+import { stickmanRunnerContent } from './stickman-runner';
 import { sudokuContent } from './sudoku';
 import { summitRushContent } from './summit-rush';
 import { telephoneDrawingContent } from './telephone-drawing';
@@ -44,9 +58,13 @@ import { tetrisContent } from './tetris';
 import { ticTacToeContent } from './tic-tac-toe';
 import { tinyIslandContent } from './tiny-island';
 import { tinyTankArenaContent } from './tiny-tank-arena';
+import { towerBuilderContent } from './tower-builder';
+import { trainRushContent } from './train-rush';
 import { trustOrBetrayContent } from './trust-or-betray';
+import { unoCardsContent } from './uno-cards';
 import { unstableElevatorContent } from './unstable-elevator';
 import { whoAmIContent } from './who-am-i';
+import { wordBattleContent } from './word-battle';
 import { wordChainContent } from './word-chain';
 import { wordSearchArenaContent } from './word-search-arena';
 import { wrongAnswersOnlyContent } from './wrong-answers-only';
@@ -56,6 +74,9 @@ const ALL_CONTENT: GameContent[] = [
   tetrisContent,
   ticTacToeContent,
   penFightContent,
+  physicsFootballContent,
+  platformRaceContent,
+  carromContent,
   ludoContent,
   sudokuContent,
   chessContent,
@@ -75,17 +96,22 @@ const ALL_CONTENT: GameContent[] = [
   wordChainContent,
   colorThiefContent,
   unstableElevatorContent,
+  unoCardsContent,
   shadowTagContent,
   bombFactoryContent,
+  bomberArenaContent,
   anagramSprintContent,
   gravityGolfContent,
+  reactionArenaContent,
   reverseRacingContent,
   sharedBrainContent,
   gravityShiftContent,
+  dontPopItContent,
   dontWakeTheGiantContent,
   floorIsLavaContent,
   magnetMayhemContent,
   tinyTankArenaContent,
+  towerBuilderContent,
   lootDashContent,
   trustOrBetrayContent,
   secretSaboteurContent,
@@ -102,7 +128,17 @@ const ALL_CONTENT: GameContent[] = [
   spyNetworkContent,
   alibiContent,
   spellingBeeContent,
+  stickmanArcheryContent,
+  stickmanClimberContent,
+  stickmanPlatformerContent,
+  stickmanRunnerContent,
   wordSearchArenaContent,
+  drawingGuessingContent,
+  fishingCompetitionContent,
+  hideAndSeekContent,
+  wordBattleContent,
+  trainRushContent,
+  crosswordClashContent,
 ];
 
 /**

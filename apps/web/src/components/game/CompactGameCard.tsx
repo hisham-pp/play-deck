@@ -1,15 +1,19 @@
 'use client';
 
-import { ArrowRight, Play } from 'lucide-react';
+import { ArrowRight, Play, Trophy } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { GameDefinition } from '@playdeck/game-types';
+import { usePlayerStore } from '@/stores/player.store';
 import { GameStatusBadge } from './GameBadge';
 
 export function CompactGameCard({ game }: { game: GameDefinition }) {
   const router = useRouter();
   const isAvailable = game.status === 'available';
+  const bestScore = usePlayerStore(
+    (s) => s.stats.bestScores?.[game.id] ?? s.stats.bestScores?.[game.slug],
+  );
 
   const handleClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
@@ -23,10 +27,25 @@ export function CompactGameCard({ game }: { game: GameDefinition }) {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      if (isAvailable) {
+        router.push(`/play/${game.slug}`);
+      } else {
+        router.push(`/games/${game.slug}`);
+      }
+    }
+  };
+
   return (
     <div
       onClick={handleClick}
-      className="flex items-center justify-between p-3.5 rounded-xl border border-surface-border bg-surface-raised hover:border-amber-500/40 hover:bg-surface-overlay transition-all duration-200 group cursor-pointer select-none"
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="button"
+      aria-label={`${game.name} - ${isAvailable ? 'Play Game' : 'Coming Soon'}`}
+      className="flex items-center justify-between p-3.5 rounded-xl border border-surface-border bg-surface-raised hover:border-amber-500/40 hover:bg-surface-overlay focus-visible:border-amber-500 focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none transition-all duration-200 group cursor-pointer select-none"
     >
       <div className="flex items-center gap-3.5">
         <div className="w-10 h-10 rounded-lg bg-surface-base border border-surface-border flex items-center justify-center p-1.5 text-lg group-hover:scale-105 transition-transform overflow-hidden flex-shrink-0">
@@ -53,6 +72,15 @@ export function CompactGameCard({ game }: { game: GameDefinition }) {
             <span className="capitalize">{game.category}</span>
             <span>•</span>
             <span>{game.players.max === 1 ? 'Solo' : `${game.players.max} Players`}</span>
+            {bestScore !== undefined && bestScore > 0 && (
+              <>
+                <span>•</span>
+                <span className="text-amber-400 font-mono font-bold flex items-center gap-0.5">
+                  <Trophy className="w-2.5 h-2.5 text-amber-500" />
+                  {bestScore.toLocaleString()}
+                </span>
+              </>
+            )}
           </div>
         </div>
       </div>
