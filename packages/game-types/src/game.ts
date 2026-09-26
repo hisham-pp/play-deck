@@ -7,6 +7,35 @@ export interface PlayerCapacity {
   max: number;
 }
 
+export type GameDifficultyPreset = 'easy' | 'normal' | 'hard' | 'expert';
+
+export type StickmanGameSubtype =
+  | 'runner'
+  | 'platformer'
+  | 'archery'
+  | 'climber'
+  | 'shooter'
+  | 'parkour'
+  | 'racing'
+  | 'sword-fight'
+  | 'ninja'
+  | 'basketball';
+
+export interface GameControlDefinition {
+  action: string;
+  key: string;
+  description?: string;
+  touchAction?: string;
+}
+
+export interface GameScorePayload {
+  score: number;
+  highScore?: number;
+  durationMs?: number;
+  metrics?: Record<string, number | string>;
+  rank?: string;
+}
+
 export interface GameDefinition<TState = unknown> {
   id: string;
   name: string;
@@ -21,6 +50,9 @@ export interface GameDefinition<TState = unknown> {
   featured?: boolean;
   releaseDate?: string;
   badge?: string;
+  controls?: GameControlDefinition[];
+  difficultyPresets?: GameDifficultyPreset[];
+  subtype?: StickmanGameSubtype | string;
   createGame?: () => TState;
 }
 
