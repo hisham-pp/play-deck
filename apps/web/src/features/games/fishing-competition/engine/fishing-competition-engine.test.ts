@@ -91,6 +91,9 @@ describe('Fishing Competition Engine', () => {
       const p1 = state.players[0];
       castLine(state, p1.id, 60);
       p1.status = 'reeling';
+      if (p1.targetFish) {
+        p1.targetFish.fightSpeed = 0;
+      }
 
       // Start reeling
       setReeling(p1, true);
