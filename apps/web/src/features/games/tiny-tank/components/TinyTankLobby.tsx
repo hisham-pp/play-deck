@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { TinyTankStats } from '../services/tank-stats-repository';
-import type { TinyTankConfig, BotDifficulty } from '../types/tiny-tank.types';
+import type { BotDifficulty, TinyTankConfig } from '../types/tiny-tank.types';
 
 interface TinyTankLobbyProps {
   config: TinyTankConfig;
@@ -13,6 +13,16 @@ interface TinyTankLobbyProps {
   onToggleHighContrast: () => void;
   onToggleReducedMotion: () => void;
 }
+
+const BTN_TYPE = 'button' as const;
+const STAT_ROW_CLASS =
+  'flex justify-between items-center py-2 border-b border-slate-800/80 text-xs';
+const LABEL_MUTED_CLASS = 'text-slate-400';
+const HIGHLIGHT_AMBER_CLASS = 'text-amber-300';
+
+const BOT_COUNTS = [1, 2, 3, 4, 5] as const;
+const BOT_DIFFICULTIES: BotDifficulty[] = ['easy', 'medium', 'hard'];
+const ROUND_DURATIONS = [60, 90, 120] as const;
 
 export function TinyTankLobby({
   config,
@@ -58,7 +68,7 @@ export function TinyTankLobby({
         </div>
 
         <button
-          type="button"
+          type={BTN_TYPE}
           onClick={onOpenOnlineRoom}
           className="px-5 py-3 rounded-xl font-bold text-sm bg-linear-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white shadow-lg shadow-sky-600/25 border border-sky-400/30 transition-all flex items-center justify-center gap-2"
         >
@@ -84,10 +94,10 @@ export function TinyTankLobby({
               </span>
             </div>
             <div className="flex gap-2">
-              {[1, 2, 3, 4, 5].map((cnt) => (
+              {BOT_COUNTS.map((cnt) => (
                 <button
                   key={cnt}
-                  type="button"
+                  type={BTN_TYPE}
                   onClick={() => setBotCount(cnt)}
                   className={`flex-1 py-2 rounded-lg text-xs font-bold border transition-all ${
                     botCount === cnt
@@ -105,10 +115,10 @@ export function TinyTankLobby({
           <div className="flex flex-col gap-2">
             <span className="text-xs font-semibold text-slate-300">AI COMBAT DIFFICULTY</span>
             <div className="flex gap-2">
-              {(['easy', 'medium', 'hard'] as BotDifficulty[]).map((diff) => (
+              {BOT_DIFFICULTIES.map((diff) => (
                 <button
                   key={diff}
-                  type="button"
+                  type={BTN_TYPE}
                   onClick={() => setDifficulty(diff)}
                   className={`flex-1 py-2 rounded-lg text-xs font-bold uppercase border transition-all ${
                     difficulty === diff
@@ -126,10 +136,10 @@ export function TinyTankLobby({
           <div className="flex flex-col gap-2">
             <span className="text-xs font-semibold text-slate-300">ROUND TIMER</span>
             <div className="flex gap-2">
-              {[60, 90, 120].map((sec) => (
+              {ROUND_DURATIONS.map((sec) => (
                 <button
                   key={sec}
-                  type="button"
+                  type={BTN_TYPE}
                   onClick={() => setDuration(sec)}
                   className={`flex-1 py-2 rounded-lg text-xs font-bold border transition-all ${
                     duration === sec
@@ -146,7 +156,7 @@ export function TinyTankLobby({
           {/* Accessibility & Audio Toggles */}
           <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-slate-800/80">
             <button
-              type="button"
+              type={BTN_TYPE}
               onClick={onToggleSound}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
                 config.soundEnabled
@@ -157,7 +167,7 @@ export function TinyTankLobby({
               {config.soundEnabled ? '🔊 Sound: ON' : '🔇 Sound: OFF'}
             </button>
             <button
-              type="button"
+              type={BTN_TYPE}
               onClick={onToggleHighContrast}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
                 config.highContrast
@@ -168,7 +178,7 @@ export function TinyTankLobby({
               {config.highContrast ? '👁️ High Contrast: ON' : '👁️ High Contrast: OFF'}
             </button>
             <button
-              type="button"
+              type={BTN_TYPE}
               onClick={onToggleReducedMotion}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
                 config.reducedMotion
@@ -181,7 +191,7 @@ export function TinyTankLobby({
           </div>
 
           <button
-            type="button"
+            type={BTN_TYPE}
             onClick={handleStart}
             className="w-full py-3.5 rounded-xl font-black text-sm tracking-wide uppercase bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 shadow-xl shadow-amber-500/20 border border-amber-300/40 transition-all mt-2"
           >
@@ -196,32 +206,32 @@ export function TinyTankLobby({
           </h2>
 
           <div className="flex flex-col gap-3">
-            <div className="flex justify-between items-center py-2 border-b border-slate-800/80 text-xs">
-              <span className="text-slate-400">Matches Played</span>
+            <div className={STAT_ROW_CLASS}>
+              <span className={LABEL_MUTED_CLASS}>Matches Played</span>
               <span className="font-mono font-bold text-slate-200">
                 {stats?.matchesPlayed ?? 0}
               </span>
             </div>
-            <div className="flex justify-between items-center py-2 border-b border-slate-800/80 text-xs">
-              <span className="text-slate-400">Victories</span>
+            <div className={STAT_ROW_CLASS}>
+              <span className={LABEL_MUTED_CLASS}>Victories</span>
               <span className="font-mono font-bold text-emerald-400">{stats?.matchesWon ?? 0}</span>
             </div>
-            <div className="flex justify-between items-center py-2 border-b border-slate-800/80 text-xs">
-              <span className="text-slate-400">Total Kills</span>
+            <div className={STAT_ROW_CLASS}>
+              <span className={LABEL_MUTED_CLASS}>Total Kills</span>
               <span className="font-mono font-bold text-red-400">{stats?.kills ?? 0}</span>
             </div>
-            <div className="flex justify-between items-center py-2 border-b border-slate-800/80 text-xs">
-              <span className="text-slate-400">Shots Landed</span>
+            <div className={STAT_ROW_CLASS}>
+              <span className={LABEL_MUTED_CLASS}>Shots Landed</span>
               <span className="font-mono font-bold text-sky-400">{stats?.shotsHit ?? 0}</span>
             </div>
-            <div className="flex justify-between items-center py-2 border-b border-slate-800/80 text-xs">
-              <span className="text-slate-400">Crates Scavenged</span>
-              <span className="font-mono font-bold text-amber-300">
+            <div className={STAT_ROW_CLASS}>
+              <span className={LABEL_MUTED_CLASS}>Crates Scavenged</span>
+              <span className={`font-mono font-bold ${HIGHLIGHT_AMBER_CLASS}`}>
                 {stats?.cratesCollected ?? 0}
               </span>
             </div>
             <div className="flex justify-between items-center py-2 text-xs">
-              <span className="text-slate-400">Career High Score</span>
+              <span className={LABEL_MUTED_CLASS}>Career High Score</span>
               <span className="font-mono font-bold text-amber-400">{stats?.highScore ?? 0}</span>
             </div>
           </div>
@@ -229,18 +239,18 @@ export function TinyTankLobby({
           <div className="mt-auto pt-4 border-t border-slate-800/80 text-[11px] text-slate-400 leading-relaxed">
             <strong className="text-slate-300">Tactical Controls:</strong>
             <p>
-              • Move: <span className="text-amber-300">WASD</span> or{' '}
-              <span className="text-amber-300">Arrow Keys</span>
+              • Move: <span className={HIGHLIGHT_AMBER_CLASS}>WASD</span> or{' '}
+              <span className={HIGHLIGHT_AMBER_CLASS}>Arrow Keys</span>
             </p>
             <p>
-              • Aim: <span className="text-amber-300">Mouse Cursor</span>
+              • Aim: <span className={HIGHLIGHT_AMBER_CLASS}>Mouse Cursor</span>
             </p>
             <p>
-              • Fire: <span className="text-amber-300">Left Click</span> or{' '}
-              <span className="text-amber-300">Spacebar</span>
+              • Fire: <span className={HIGHLIGHT_AMBER_CLASS}>Left Click</span> or{' '}
+              <span className={HIGHLIGHT_AMBER_CLASS}>Spacebar</span>
             </p>
             <p>
-              • Select Weapon: <span className="text-amber-300">1–6 Keys</span>
+              • Select Weapon: <span className={HIGHLIGHT_AMBER_CLASS}>1–6 Keys</span>
             </p>
           </div>
         </div>

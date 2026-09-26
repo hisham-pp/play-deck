@@ -9,6 +9,8 @@ interface TinyTankRoomLobbyProps {
   onBackToLobby: () => void;
 }
 
+const BTN_TYPE = 'button' as const;
+
 export function TinyTankRoomLobby({ onStartMatch, onBackToLobby }: TinyTankRoomLobbyProps) {
   const { roomCode, players, isHost, addBot, removeBot, leaveRoom } = useTinyTankMultiplayerStore();
 
@@ -46,7 +48,7 @@ export function TinyTankRoomLobby({ onStartMatch, onBackToLobby }: TinyTankRoomL
             {roomCode ?? '------'}
           </span>
           <button
-            type="button"
+            type={BTN_TYPE}
             onClick={handleCopyLink}
             className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all"
           >
@@ -68,7 +70,7 @@ export function TinyTankRoomLobby({ onStartMatch, onBackToLobby }: TinyTankRoomL
           </span>
           {host && players.length < 6 && (
             <button
-              type="button"
+              type={BTN_TYPE}
               onClick={addBot}
               className="px-3 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-amber-400 border border-slate-700 transition-all"
             >
@@ -106,7 +108,7 @@ export function TinyTankRoomLobby({ onStartMatch, onBackToLobby }: TinyTankRoomL
 
               {host && p.isBot && (
                 <button
-                  type="button"
+                  type={BTN_TYPE}
                   onClick={() => removeBot(p.id)}
                   className="text-xs text-red-400 hover:text-red-300 p-1"
                 >
@@ -131,7 +133,7 @@ export function TinyTankRoomLobby({ onStartMatch, onBackToLobby }: TinyTankRoomL
       {/* Footer Controls */}
       <div className="flex items-center justify-between pt-4 border-t border-slate-800">
         <button
-          type="button"
+          type={BTN_TYPE}
           onClick={handleLeave}
           className="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-slate-200 bg-slate-800/60 border border-slate-700/60 transition-all"
         >
@@ -140,7 +142,7 @@ export function TinyTankRoomLobby({ onStartMatch, onBackToLobby }: TinyTankRoomL
 
         {host ? (
           <button
-            type="button"
+            type={BTN_TYPE}
             disabled={players.length < 2}
             onClick={onStartMatch}
             className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${
@@ -149,10 +151,10 @@ export function TinyTankRoomLobby({ onStartMatch, onBackToLobby }: TinyTankRoomL
                 : 'bg-slate-800 text-slate-500 cursor-not-allowed'
             }`}
           >
-            Launch Arena Combat
+            Launch Arena Match
           </button>
         ) : (
-          <span className="text-xs text-amber-400/80 italic">
+          <span className="text-xs text-slate-500 italic">
             Waiting for host to launch battle...
           </span>
         )}

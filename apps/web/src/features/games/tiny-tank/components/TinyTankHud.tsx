@@ -18,6 +18,66 @@ const WEAPON_LABELS: Record<WeaponType, { name: string; icon: string; color: str
   rubber: { name: 'Rubber', icon: '🟣', color: 'text-purple-400' },
 };
 
+const STAT_LABEL_CLASS = 'text-[10px] uppercase font-bold tracking-widest text-slate-400';
+const STAT_CONTAINER_CLASS = 'flex flex-col items-center';
+
+function StatItem({
+  label,
+  value,
+  colorClass,
+}: {
+  label: string;
+  value: React.ReactNode;
+  colorClass: string;
+}) {
+  return (
+    <div className={STAT_CONTAINER_CLASS}>
+      <span className={STAT_LABEL_CLASS}>{label}</span>
+      <span className={`font-mono text-xl font-bold ${colorClass}`}>{value}</span>
+    </div>
+  );
+}
+
+function WeaponButton({
+  wep,
+  idx,
+  p1,
+  onSwitchWeapon,
+}: {
+  wep: WeaponType;
+  idx: number;
+  p1: NonNullable<TinyTankArenaState['players'][number]>;
+  onSwitchWeapon: (weapon: WeaponType) => void;
+}) {
+  const info = WEAPON_LABELS[wep];
+  const count = wep === 'cannon' ? '∞' : p1.weaponAmmo[wep] || 0;
+  const isAvailable = wep === 'cannon' || (p1.weaponAmmo[wep] || 0) > 0;
+  const isActive = p1.activeWeapon === wep;
+
+  const activeClass = isActive
+    ? 'bg-amber-500/20 border-amber-400 text-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.3)]'
+    : isAvailable
+      ? 'bg-slate-800/60 border-slate-700 text-slate-300 hover:bg-slate-700/60'
+      : 'bg-slate-900/40 border-slate-800/40 text-slate-600 opacity-40 cursor-not-allowed';
+
+  return (
+    <button
+      key={wep}
+      type="button"
+      onClick={() => onSwitchWeapon(wep)}
+      disabled={!isAvailable}
+      className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold transition-all duration-150 border ${activeClass}`}
+    >
+      <span className="text-slate-500 font-mono text-[10px]">{idx + 1}:</span>
+      <span>{info.icon}</span>
+      <span>{info.name}</span>
+      <span className="font-mono text-[10px] bg-slate-950/60 px-1.5 py-0.5 rounded text-slate-300">
+        {count}
+      </span>
+    </button>
+  );
+}
+
 export function TinyTankHud({ arenaState, localPlayerId, onSwitchWeapon }: TinyTankHudProps) {
   const p1 = arenaState.players.find((p) => p.id === localPlayerId);
   const p1Stats = arenaState.stats[localPlayerId];
@@ -61,50 +121,28 @@ export function TinyTankHud({ arenaState, localPlayerId, onSwitchWeapon }: TinyT
 
         {/* Center Match Stats & Timer */}
         <div className="flex items-center gap-6">
-          <div className="flex flex-col items-center">
-            <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400">
-              TIME
-            </span>
-            <span className="font-mono text-xl font-black text-amber-400">{formattedTime}</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400">
-              TANKS ALIVE
-            </span>
-            <span className="font-mono text-xl font-bold text-sky-300">
-              {aliveCount}/{arenaState.players.length}
-            </span>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400">
-              KILLS
-            </span>
-            <span className="font-mono text-xl font-bold text-red-400">{p1Stats?.kills ?? 0}</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400">
-              SCORE
-            </span>
-            <span className="font-mono text-xl font-bold text-amber-300">
-              {p1Stats?.score ?? 0}
-            </span>
-          </div>
+          <StatItem label="TIME" value={formattedTime} colorClass="font-black text-amber-400" />
+          <StatItem
+            label="TANKS ALIVE"
+            value={`${aliveCount}/${arenaState.players.length}`}
+            colorClass="text-sky-300"
+          />
+          <StatItem label="KILLS" value={p1Stats?.kills ?? 0} colorClass="text-red-400" />
+          <StatItem label="SCORE" value={p1Stats?.score ?? 0} colorClass="text-amber-300" />
         </div>
 
         {/* Ammo & Active Weapon Status */}
         <div className="flex items-center gap-3">
           <div className="flex flex-col items-end">
-            <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400">
-              STANDARD AMMO
-            </span>
+            <span className={STAT_LABEL_CLASS}>STANDARD AMMO</span>
             <div className="flex gap-1 mt-1">
               {[...Array(5)].map((_, i) => (
                 <div
                   key={i}
-                  className={`w-2.5 h-5 rounded-xs transition-all ${
-                    (p1?.ammo ?? 0) > i
-                      ? 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]'
-                      : 'bg-slate-800 border border-slate-700'
+                  className={`w-3.5 h-4 rounded-sm border ${
+                    p1 && i < Math.floor(p1.ammo)
+                      ? 'bg-amber-400 border-amber-300 shadow-[0_0_8px_rgba(251,191,36,0.5)]'
+                      : 'bg-slate-800/80 border-slate-700'
                   }`}
                 />
               ))}
@@ -113,39 +151,14 @@ export function TinyTankHud({ arenaState, localPlayerId, onSwitchWeapon }: TinyT
         </div>
       </div>
 
-      {/* Weapon Selector Row */}
-      <div className="flex items-center gap-2 pt-2 border-t border-slate-800/80 overflow-x-auto">
-        {(['cannon', 'bouncing', 'homing', 'mine', 'laser', 'rubber'] as WeaponType[]).map(
-          (wep) => {
-            const meta = WEAPON_LABELS[wep];
-            const isSelected = p1?.activeWeapon === wep;
-            const ammoCount = wep === 'cannon' ? '∞' : (p1?.weaponAmmo[wep] ?? 0);
-            const isAvailable = wep === 'cannon' || (p1?.weaponAmmo[wep] ?? 0) > 0;
-
-            return (
-              <button
-                key={wep}
-                type="button"
-                disabled={!isAvailable}
-                onClick={() => onSwitchWeapon(wep)}
-                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all border ${
-                  isSelected
-                    ? 'bg-amber-500/20 border-amber-400 text-amber-300 shadow-xs'
-                    : isAvailable
-                      ? 'bg-slate-800/60 hover:bg-slate-750 border-slate-700/80 text-slate-300'
-                      : 'bg-slate-900/40 border-slate-800/60 text-slate-600 cursor-not-allowed'
-                }`}
-              >
-                <span>{meta.icon}</span>
-                <span>{meta.name}</span>
-                <span className="font-mono text-[10px] ml-1 px-1.5 py-0.5 rounded-sm bg-black/40 text-slate-300">
-                  {ammoCount}
-                </span>
-              </button>
-            );
-          },
-        )}
-      </div>
+      {/* Weapon Inventory Bar */}
+      {p1 && (
+        <div className="flex items-center justify-center gap-2 pt-2 border-t border-slate-800/80">
+          {(Object.keys(WEAPON_LABELS) as WeaponType[]).map((wep, idx) => (
+            <WeaponButton key={wep} wep={wep} idx={idx} p1={p1} onSwitchWeapon={onSwitchWeapon} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

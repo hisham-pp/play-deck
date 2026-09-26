@@ -3,12 +3,45 @@ export interface Vector2D {
   y: number;
 }
 
-export type WeaponType = 'cannon' | 'bouncing' | 'homing' | 'mine' | 'laser' | 'rubber';
+export const WEAPON_CANNON = 'cannon' as const;
+export const WEAPON_BOUNCING = 'bouncing' as const;
+export const WEAPON_HOMING = 'homing' as const;
+export const WEAPON_MINE = 'mine' as const;
+export const WEAPON_LASER = 'laser' as const;
+export const WEAPON_RUBBER = 'rubber' as const;
 
-export type BlockType = 'steel' | 'brick' | 'barrel';
+export type WeaponType =
+  | typeof WEAPON_CANNON
+  | typeof WEAPON_BOUNCING
+  | typeof WEAPON_HOMING
+  | typeof WEAPON_MINE
+  | typeof WEAPON_LASER
+  | typeof WEAPON_RUBBER;
+
+export const BLOCK_STEEL = 'steel' as const;
+export const BLOCK_BRICK = 'brick' as const;
+export const BLOCK_BARREL = 'barrel' as const;
+
+export type BlockType = typeof BLOCK_STEEL | typeof BLOCK_BRICK | typeof BLOCK_BARREL;
+
+export const PICKUP_AMMO = 'ammo' as const;
+export const PICKUP_HEALTH = 'health' as const;
+export const PICKUP_SHIELD = 'shield' as const;
 
 export type PickupType =
-  'ammo' | 'health' | 'shield' | 'bouncing' | 'homing' | 'mine' | 'laser' | 'rubber';
+  | typeof PICKUP_AMMO
+  | typeof PICKUP_HEALTH
+  | typeof PICKUP_SHIELD
+  | typeof WEAPON_BOUNCING
+  | typeof WEAPON_HOMING
+  | typeof WEAPON_MINE
+  | typeof WEAPON_LASER
+  | typeof WEAPON_RUBBER;
+
+export const DEFAULT_PLAYER_ID = 'player-1' as const;
+
+export const TANK_COLOR_SLATE_800 = '#1e293b' as const;
+export const TANK_COLOR_SKY_400 = '#38bdf8' as const;
 
 export interface TankPlayer {
   id: string;

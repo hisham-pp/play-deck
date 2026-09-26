@@ -1,14 +1,20 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { createInitialArenaState, stepTinyTankArena } from '../engine/tank-engine';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  createInitialArenaState,
+  stepTinyTankArena,
+  type EngineEvent,
+} from '../engine/tank-engine';
 import { tankSoundService } from '../services/tank-sound.service';
 import { tankStatsRepository, type TinyTankStats } from '../services/tank-stats-repository';
-import type {
-  TinyTankArenaState,
-  TinyTankConfig,
-  TankInput,
-  Vector2D,
-  WeaponType,
+import {
+  DEFAULT_PLAYER_ID,
+  type TankInput,
+  type TinyTankArenaState,
+  type TinyTankConfig,
+  type Vector2D,
+  type WeaponType,
 } from '../types/tiny-tank.types';
+import { useTankKeyboardControls } from './use-tank-keyboard';
 
 export const DEFAULT_CONFIG: TinyTankConfig = {
   botCount: 3,
@@ -18,6 +24,46 @@ export const DEFAULT_CONFIG: TinyTankConfig = {
   highContrast: false,
   reducedMotion: false,
 };
+
+function playAudioEvents(events: EngineEvent[]) {
+  for (const ev of events) {
+    if (ev.type === 'fire') {
+      tankSoundService.playFire(ev.weapon);
+    } else if (ev.type === 'hit') {
+      tankSoundService.playHit();
+    } else if (ev.type === 'ricochet') {
+      tankSoundService.playRicochet();
+    } else if (ev.type === 'explosion' || ev.type === 'barrel_boom') {
+      tankSoundService.playExplosion();
+    } else if (ev.type === 'crate_pickup') {
+      tankSoundService.playCratePickup();
+    } else if (ev.type === 'tank_destroyed') {
+      tankSoundService.playTankDestroyed();
+    }
+  }
+}
+
+function handleMatchEndStats(
+  nextState: TinyTankArenaState,
+  setStats: (stats: TinyTankStats) => void,
+) {
+  const p1Stats = nextState.stats[DEFAULT_PLAYER_ID];
+  const won = nextState.winnerId === DEFAULT_PLAYER_ID;
+
+  if (p1Stats) {
+    void tankStatsRepository
+      .recordMatchCompletion(
+        won,
+        p1Stats.score,
+        p1Stats.kills,
+        p1Stats.damageDealt,
+        p1Stats.shotsFired,
+        p1Stats.shotsHit,
+        p1Stats.cratesCollected,
+      )
+      .then(setStats);
+  }
+}
 
 export function useTinyTankGame() {
   const [config, setConfig] = useState<TinyTankConfig>(DEFAULT_CONFIG);
@@ -38,7 +84,7 @@ export function useTinyTankGame() {
   isPausedRef.current = isPaused;
 
   const inputsRef = useRef<Record<string, TankInput>>({
-    'player-1': {
+    [DEFAULT_PLAYER_ID]: {
       moveForward: false,
       moveBackward: false,
       turnLeft: false,
@@ -52,17 +98,16 @@ export function useTinyTankGame() {
   const requestRef = useRef<number>(0);
   const recordedMatchRef = useRef(false);
 
-  // Load stats initially
   useEffect(() => {
     void tankStatsRepository.getStats().then(setStats);
   }, []);
 
-  // Update sound service state
   useEffect(() => {
     tankSoundService.setMuted(!config.soundEnabled);
   }, [config.soundEnabled]);
 
-  // Main 60 FPS animation loop
+  useTankKeyboardControls(inputsRef);
+
   const loop = useCallback((time: number) => {
     if (!lastTimeRef.current) lastTimeRef.current = time;
     const dt = Math.min(0.1, (time - lastTimeRef.current) / 1000);
@@ -77,44 +122,11 @@ export function useTinyTankGame() {
         dt,
       );
 
-      // Play audio events
-      for (const ev of events) {
-        if (ev.type === 'fire') {
-          tankSoundService.playFire(ev.weapon);
-        } else if (ev.type === 'hit') {
-          tankSoundService.playHit();
-        } else if (ev.type === 'ricochet') {
-          tankSoundService.playRicochet();
-        } else if (ev.type === 'explosion') {
-          tankSoundService.playExplosion();
-        } else if (ev.type === 'barrel_boom') {
-          tankSoundService.playExplosion();
-        } else if (ev.type === 'crate_pickup') {
-          tankSoundService.playCratePickup();
-        } else if (ev.type === 'tank_destroyed') {
-          tankSoundService.playTankDestroyed();
-        }
-      }
+      playAudioEvents(events);
 
-      // Record match end stats
       if (nextState.status === 'match_over' && !recordedMatchRef.current) {
         recordedMatchRef.current = true;
-        const p1Stats = nextState.stats['player-1'];
-        const won = nextState.winnerId === 'player-1';
-
-        if (p1Stats) {
-          void tankStatsRepository
-            .recordMatchCompletion(
-              won,
-              p1Stats.score,
-              p1Stats.kills,
-              p1Stats.damageDealt,
-              p1Stats.shotsFired,
-              p1Stats.shotsHit,
-              p1Stats.cratesCollected,
-            )
-            .then(setStats);
-        }
+        handleMatchEndStats(nextState, setStats);
       }
 
       setArenaState(nextState);
@@ -128,70 +140,22 @@ export function useTinyTankGame() {
     return () => cancelAnimationFrame(requestRef.current);
   }, [loop]);
 
-  // Keyboard and mouse handlers
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const p1 = inputsRef.current['player-1'];
-      if (!p1) return;
-
-      if (e.code === 'KeyW' || e.code === 'ArrowUp') p1.moveForward = true;
-      if (e.code === 'KeyS' || e.code === 'ArrowDown') p1.moveBackward = true;
-      if (e.code === 'KeyA' || e.code === 'ArrowLeft') p1.turnLeft = true;
-      if (e.code === 'KeyD' || e.code === 'ArrowRight') p1.turnRight = true;
-      if (e.code === 'Space') {
-        p1.fire = true;
-        e.preventDefault();
-      }
-
-      // Quick weapon switches
-      const weaponMap: Record<string, WeaponType> = {
-        Digit1: 'cannon',
-        Digit2: 'bouncing',
-        Digit3: 'homing',
-        Digit4: 'mine',
-        Digit5: 'laser',
-        Digit6: 'rubber',
-      };
-      if (weaponMap[e.code]) {
-        p1.switchWeapon = weaponMap[e.code];
-      }
-    };
-
-    const handleKeyUp = (e: KeyboardEvent) => {
-      const p1 = inputsRef.current['player-1'];
-      if (!p1) return;
-
-      if (e.code === 'KeyW' || e.code === 'ArrowUp') p1.moveForward = false;
-      if (e.code === 'KeyS' || e.code === 'ArrowDown') p1.moveBackward = false;
-      if (e.code === 'KeyA' || e.code === 'ArrowLeft') p1.turnLeft = false;
-      if (e.code === 'KeyD' || e.code === 'ArrowRight') p1.turnRight = false;
-      if (e.code === 'Space') p1.fire = false;
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
-    };
-  }, []);
-
   const handleCanvasMouseMove = useCallback((canvasX: number, canvasY: number) => {
     setMousePos({ x: canvasX, y: canvasY });
-    const p1 = stateRef.current.players.find((p) => p.id === 'player-1');
-    const input = inputsRef.current['player-1'];
+    const p1 = stateRef.current.players.find((p) => p.id === DEFAULT_PLAYER_ID);
+    const input = inputsRef.current[DEFAULT_PLAYER_ID];
     if (p1 && input) {
       input.turretAngle = Math.atan2(canvasY - p1.position.y, canvasX - p1.position.x);
     }
   }, []);
 
   const handleCanvasMouseDown = useCallback(() => {
-    const input = inputsRef.current['player-1'];
+    const input = inputsRef.current[DEFAULT_PLAYER_ID];
     if (input) input.fire = true;
   }, []);
 
   const handleCanvasMouseUp = useCallback(() => {
-    const input = inputsRef.current['player-1'];
+    const input = inputsRef.current[DEFAULT_PLAYER_ID];
     if (input) input.fire = false;
   }, []);
 
@@ -199,7 +163,7 @@ export function useTinyTankGame() {
     const finalConfig = { ...configRef.current, ...overrides };
     setConfig(finalConfig);
     recordedMatchRef.current = false;
-    inputsRef.current['player-1'] = {
+    inputsRef.current[DEFAULT_PLAYER_ID] = {
       moveForward: false,
       moveBackward: false,
       turnLeft: false,
@@ -210,10 +174,7 @@ export function useTinyTankGame() {
     setArenaState(createInitialArenaState(finalConfig));
   }, []);
 
-  const restartMatch = useCallback(() => {
-    startMatch();
-  }, [startMatch]);
-
+  const restartMatch = useCallback(() => startMatch(), [startMatch]);
   const pauseMatch = useCallback(() => setIsPaused(true), []);
   const resumeMatch = useCallback(() => setIsPaused(false), []);
   const returnToLobby = useCallback(() => {
@@ -233,7 +194,7 @@ export function useTinyTankGame() {
   }, []);
 
   const switchWeapon = useCallback((weapon: WeaponType) => {
-    const p1 = inputsRef.current['player-1'];
+    const p1 = inputsRef.current[DEFAULT_PLAYER_ID];
     if (p1) p1.switchWeapon = weapon;
   }, []);
 
