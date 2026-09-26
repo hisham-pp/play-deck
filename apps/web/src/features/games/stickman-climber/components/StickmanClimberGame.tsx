@@ -8,14 +8,19 @@ import {
   Map,
   Mountain,
   PackageOpen,
+  Pause,
   RotateCcw,
   Shield,
   Star,
   Swords,
+  Volume2,
+  VolumeX,
   Zap,
 } from 'lucide-react';
 import Link from 'next/link';
 import React, { useEffect, useMemo, useState } from 'react';
+import { usePreferencesStore } from '@/stores/preferences.store';
+import { playClimberSound } from '../engine/audio';
 import {
   type ActiveEnemyState,
   type PlayerCombatAction,
@@ -50,15 +55,27 @@ import {
   isLevelUnlocked,
 } from '../engine/stickman-climber-logic';
 import { EnemyCombatStage } from './EnemyCombatStage';
+import { GameOverModal } from './GameOverModal';
 import { LevelCompleteModal } from './LevelCompleteModal';
 import { LevelMapScreen } from './LevelMapScreen';
 import { LevelUpModal } from './LevelUpModal';
 import { LootDropStage } from './LootDropStage';
+import { PauseMenuModal } from './PauseMenuModal';
 import { PickupToastBanner } from './PickupToastBanner';
 import { PlayerProgressionCard } from './PlayerProgressionCard';
 import { WeaponLoadoutBar } from './WeaponLoadoutBar';
 
+interface FloatingNumber {
+  id: number;
+  text: string;
+  color: string;
+  isPlayer: boolean;
+}
+
 export function StickmanClimberGame() {
+  const { soundEnabled, reducedMotion, toggleSound, toggleReducedMotion, initPreferences } =
+    usePreferencesStore();
+
   const [viewMode, setViewMode] = useState<'stage' | 'map'>('stage');
   const [selectedLevel, setSelectedLevel] = useState(1);
   const [progress, setProgress] = useState<PlayerClimberProgress>(INITIAL_CLIMBER_PROGRESS);
@@ -80,6 +97,10 @@ export function StickmanClimberGame() {
   const [newWeaponCandidate, setNewWeaponCandidate] = useState<Weapon | null>(null);
   const [combatMessage, setCombatMessage] = useState<string | null>(null);
 
+  // Polish & Visual Feedback State
+  const [floatingNumbers, setFloatingNumbers] = useState<FloatingNumber[]>([]);
+  const [screenShake, setScreenShake] = useState(false);
+
   const levelConfig = useMemo(() => getLevelConfig(selectedLevel), [selectedLevel]);
   const playerStats = useMemo(() => calculateStatsForLevel(xp), [xp]);
   const activeWeapon = useMemo(
@@ -87,8 +108,9 @@ export function StickmanClimberGame() {
     [inventory.equippedWeaponId],
   );
 
-  // Load persistent profile on mount
+  // Initialize preferences and persistent profile on mount
   useEffect(() => {
+    void initPreferences();
     async function initProfile() {
       const saved = await loadClimberProfile();
       if (saved) {
@@ -107,7 +129,7 @@ export function StickmanClimberGame() {
       }
     }
     void initProfile();
-  }, []);
+  }, [initPreferences]);
 
   // Set active enemy on level change
   useEffect(() => {
@@ -129,11 +151,26 @@ export function StickmanClimberGame() {
     });
   }, [xp, progress, inventory.storedWeapons, inventory.equippedWeaponId, achievements]);
 
+  const spawnFloatingNumber = (text: string, color: string, isPlayer: boolean) => {
+    const id = Date.now() + Math.random();
+    setFloatingNumbers((prev) => [...prev, { id, text, color, isPlayer }]);
+    setTimeout(() => {
+      setFloatingNumbers((prev) => prev.filter((item) => item.id !== id));
+    }, 1200);
+  };
+
+  const triggerScreenShake = () => {
+    if (reducedMotion) return;
+    setScreenShake(true);
+    setTimeout(() => setScreenShake(false), 280);
+  };
+
   const handleGainXp = (amount: number) => {
     const event = evaluateXpGain(xp, amount);
     setXp((prev) => prev + amount);
 
     if (event.didLevelUp) {
+      playClimberSound('level_up', soundEnabled);
       setLevelUpEvent(event);
       setHealth(event.stats.maxHealth);
       if (event.newLevel >= 5 && !achievements['level_five']) {
@@ -148,6 +185,7 @@ export function StickmanClimberGame() {
   const handleStartLevelFromMap = (levelId: number) => {
     setSelectedLevel(levelId);
     setActiveEnemy(createActiveEnemy(levelId));
+    setHealth(playerStats.maxHealth);
     setViewMode('stage');
     setActiveVictory(null);
     setActiveDrops([]);
@@ -158,9 +196,9 @@ export function StickmanClimberGame() {
     const updated = equipWeapon(inventory, weaponId);
     setInventory(updated);
     const weapon = getWeapon(weaponId);
+    playClimberSound('strike', soundEnabled);
     setPickupNotification(`Equipped ${weapon.name} (${weapon.damage} DMG)`);
 
-    // Check achievement for arsenal
     if (updated.storedWeapons.length >= 3 && !achievements['arsenal_ready']) {
       setAchievements((prev) => ({
         ...prev,
@@ -185,6 +223,7 @@ export function StickmanClimberGame() {
       inventory,
     });
 
+    playClimberSound('coin', soundEnabled);
     setHealth(result.health);
     setCoins(result.coins);
     setInventory(result.inventory);
@@ -228,6 +267,7 @@ export function StickmanClimberGame() {
       if (res.newWeapon) foundWeapon = res.newWeapon;
     }
 
+    playClimberSound('coin', soundEnabled);
     setHealth(curHealth);
     setCoins(curCoins);
     setInventory(curInv);
@@ -254,6 +294,7 @@ export function StickmanClimberGame() {
     const updatedInv = { ...inventory, keys: inventory.keys - 1 };
     setInventory(updatedInv);
 
+    playClimberSound('coin', soundEnabled);
     const chestDrops = generateDrops('chest', selectedLevel);
     setActiveDrops((prev) => [...prev, ...chestDrops]);
     setPickupNotification('Unlocked cache chest with Dungeon Key!');
@@ -261,6 +302,22 @@ export function StickmanClimberGame() {
 
   const handleTacticalAction = (action: PlayerCombatAction) => {
     if (paused || health <= 0) return;
+
+    // Play tactile sound based on action
+    switch (action) {
+      case 'strike':
+        playClimberSound('strike', soundEnabled);
+        break;
+      case 'flank':
+        playClimberSound('flank', soundEnabled);
+        break;
+      case 'cleave':
+        playClimberSound('cleave', soundEnabled);
+        break;
+      case 'parry':
+        playClimberSound('parry', soundEnabled);
+        break;
+    }
 
     // Check weapon special ability trigger
     let abilityBonusDamage = 0;
@@ -272,10 +329,10 @@ export function StickmanClimberGame() {
       }
       if (ability.healAmount) {
         setHealth((h) => Math.min(playerStats.maxHealth, h + (ability.healAmount ?? 0)));
+        spawnFloatingNumber(`+${ability.healAmount} HP`, 'text-emerald-400', true);
       }
     }
 
-    // Weapon damage + player attack power bonus from progression leveling!
     const totalWeaponDamage = activeWeapon.damage + playerStats.attackBonus + abilityBonusDamage;
 
     const turnResult = processCombatTurn({
@@ -288,6 +345,10 @@ export function StickmanClimberGame() {
     setActiveEnemy(turnResult.enemyState);
     setCombatMessage(turnResult.actionMessage);
 
+    if (turnResult.playerDamageDealt > 0) {
+      spawnFloatingNumber(`-${turnResult.playerDamageDealt}`, 'text-amber-400', false);
+    }
+
     if (turnResult.shieldBroken && !achievements['shield_smasher']) {
       setAchievements((prev) => ({
         ...prev,
@@ -295,9 +356,11 @@ export function StickmanClimberGame() {
       }));
     }
 
-    // Apply player health / shield delta with defense armor buffer
+    // Apply player damage with defense armor and screen shake
     if (turnResult.playerHealthDelta < 0) {
-      // Incoming damage reduced by defense armor
+      playClimberSound('hit', soundEnabled);
+      triggerScreenShake();
+
       const rawIncoming = Math.max(
         1,
         Math.abs(turnResult.playerHealthDelta) - playerStats.defenseArmor,
@@ -307,17 +370,18 @@ export function StickmanClimberGame() {
         const unabsorbed = rawIncoming - absorbed;
         setInventory((prev) => ({ ...prev, armorShield: prev.armorShield - absorbed }));
         setHealth((h) => Math.max(0, h - unabsorbed));
+        spawnFloatingNumber(`-${unabsorbed}`, 'text-rose-400', true);
       } else {
         setHealth((h) => Math.max(0, h - rawIncoming));
+        spawnFloatingNumber(`-${rawIncoming}`, 'text-rose-400', true);
       }
     }
 
-    // Award XP per hit and check leveling
     const hitXp = Math.max(4, Math.round(turnResult.playerDamageDealt / 2));
     handleGainXp(hitXp);
 
     if (turnResult.enemyDefeated) {
-      // Generate loot drops
+      playClimberSound('victory', soundEnabled);
       const dropSource =
         activeEnemy.definition.archetype === 'boss'
           ? 'boss'
@@ -327,16 +391,13 @@ export function StickmanClimberGame() {
       const enemyDrops = generateDrops(dropSource, selectedLevel);
       setActiveDrops((prev) => [...prev, ...enemyDrops]);
 
-      // Complete level and evaluate victory stars
       const score = Math.max(100, health * 10 + xp + activeEnemy.definition.rewardXp);
       const victory = completeLevel(selectedLevel, health, score, progress);
       setProgress(victory.progress);
       setActiveVictory(victory);
 
-      // Award completion XP
       handleGainXp(victory.earnedXp);
 
-      // Achievement checks
       if (selectedLevel === 1 && !achievements['first_ascent']) {
         setAchievements((prev) => ({
           ...prev,
@@ -350,15 +411,67 @@ export function StickmanClimberGame() {
         }));
       }
 
-      // Offer reward weapon if unlocked from level completion
       if (victory.unlockedWeapon) {
         const weapon = getWeapon(victory.unlockedWeapon);
         setNewWeaponCandidate(weapon);
         const updatedInv = equipWeapon(inventory, weapon.id);
         setInventory(updatedInv);
       }
+    } else if (health <= 0) {
+      playClimberSound('game_over', soundEnabled);
     }
   };
+
+  // Keyboard navigation & accessibility hotkeys
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      // Ignore if typing in an input
+      if (
+        document.activeElement?.tagName === 'INPUT' ||
+        document.activeElement?.tagName === 'TEXTAREA'
+      ) {
+        return;
+      }
+
+      switch (e.code) {
+        case 'Space':
+        case 'Digit1':
+          e.preventDefault();
+          handleTacticalAction('strike');
+          break;
+        case 'KeyF':
+        case 'Digit2':
+          e.preventDefault();
+          handleTacticalAction('flank');
+          break;
+        case 'KeyC':
+        case 'Digit3':
+          e.preventDefault();
+          handleTacticalAction('cleave');
+          break;
+        case 'KeyP':
+        case 'Digit4':
+          e.preventDefault();
+          handleTacticalAction('parry');
+          break;
+        case 'KeyM':
+          e.preventDefault();
+          setViewMode((m) => (m === 'stage' ? 'map' : 'stage'));
+          break;
+        case 'Escape':
+          e.preventDefault();
+          setPaused((p) => !p);
+          break;
+        case 'KeyR':
+          e.preventDefault();
+          handleRestart();
+          break;
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  });
 
   const handleNextLevelFromModal = () => {
     if (selectedLevel < 5) {
@@ -396,7 +509,11 @@ export function StickmanClimberGame() {
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-3 py-4">
+    <div
+      role="region"
+      aria-label="Stickman Climber Game Hub"
+      className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-3 py-4"
+    >
       {/* Top Navigation Bar */}
       <div className="flex items-center justify-between">
         <Link
@@ -407,6 +524,20 @@ export function StickmanClimberGame() {
           <span>Back to catalog</span>
         </Link>
         <div className="flex items-center gap-3">
+          {/* Quick Sound Toggle */}
+          <button
+            type="button"
+            onClick={toggleSound}
+            aria-label={soundEnabled ? 'Mute sound effects' : 'Enable sound effects'}
+            className="p-1.5 rounded-lg border border-surface-border bg-surface-raised text-deck-400 hover:text-white transition-colors cursor-pointer"
+          >
+            {soundEnabled ? (
+              <Volume2 className="w-3.5 h-3.5 text-amber-400" />
+            ) : (
+              <VolumeX className="w-3.5 h-3.5" />
+            )}
+          </button>
+
           {/* Map view toggle button */}
           <button
             onClick={() => setViewMode((m) => (m === 'stage' ? 'map' : 'stage'))}
@@ -417,7 +548,7 @@ export function StickmanClimberGame() {
             }`}
           >
             <Map className="w-3.5 h-3.5" />
-            <span>{viewMode === 'map' ? 'Return to Climb' : 'Ascent Map'}</span>
+            <span>{viewMode === 'map' ? 'Return to Climb [M]' : 'Ascent Map [M]'}</span>
           </button>
 
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-amber-500">
@@ -461,9 +592,10 @@ export function StickmanClimberGame() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setPaused((value) => !value)}
-                    className="rounded-lg border border-surface-border bg-surface-overlay px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-deck-200 transition hover:border-amber-500 cursor-pointer"
+                    className="rounded-lg border border-surface-border bg-surface-overlay px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-deck-200 transition hover:border-amber-500 cursor-pointer flex items-center gap-1"
                   >
-                    {paused ? 'Resume' : 'Pause'}
+                    <Pause className="w-3 h-3" />
+                    <span>Pause</span>
                   </button>
                   <button
                     onClick={handleRestart}
@@ -475,8 +607,12 @@ export function StickmanClimberGame() {
                 </div>
               </div>
 
-              {/* Climbing Arena Stage */}
-              <div className="relative overflow-hidden rounded-2xl border border-surface-border bg-[#111827]">
+              {/* Climbing Arena Stage with Screen Shake */}
+              <div
+                className={`relative overflow-hidden rounded-2xl border border-surface-border bg-[#111827] transition-transform ${
+                  screenShake ? 'translate-x-1 translate-y-0.5 rotate-0.5' : ''
+                }`}
+              >
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(245,158,11,0.18),_transparent_40%),linear-gradient(180deg,_rgba(17,24,39,0.4),_rgba(2,6,23,0.95))]" />
                 <div className="relative h-[430px] w-full p-4">
                   {/* Top Stats Bar */}
@@ -514,9 +650,26 @@ export function StickmanClimberGame() {
                     <span>Altitude: {levelConfig.heightMeters}m</span>
                   </div>
 
+                  {/* Floating Damage Numbers */}
+                  <div className="pointer-events-none absolute inset-0 z-30">
+                    {floatingNumbers.map((fn) => (
+                      <div
+                        key={fn.id}
+                        className={`absolute animate-bounce font-mono text-base font-black ${fn.color} ${
+                          fn.isPlayer ? 'left-1/3 top-1/2' : 'right-1/4 top-1/2'
+                        }`}
+                      >
+                        {fn.text}
+                      </div>
+                    ))}
+                  </div>
+
                   {/* Combat Action Banner Message */}
                   {combatMessage && (
-                    <div className="absolute left-1/2 top-14 -translate-x-1/2 z-30 animate-in fade-in zoom-in-95 duration-200 rounded-full border border-amber-400 bg-slate-950/90 px-4 py-1 text-xs font-mono font-bold text-amber-300 backdrop-blur-md flex items-center gap-1.5 shadow-[0_0_20px_rgba(245,158,11,0.3)]">
+                    <div
+                      aria-live="polite"
+                      className="absolute left-1/2 top-14 -translate-x-1/2 z-30 animate-in fade-in zoom-in-95 duration-200 rounded-full border border-amber-400 bg-slate-950/90 px-4 py-1 text-xs font-mono font-bold text-amber-300 backdrop-blur-md flex items-center gap-1.5 shadow-[0_0_20px_rgba(245,158,11,0.3)]"
+                    >
                       <Flame className="w-3.5 h-3.5 text-orange-400" />
                       <span>{combatMessage}</span>
                     </div>
@@ -546,13 +699,13 @@ export function StickmanClimberGame() {
                     onCollectAll={handleCollectAllDrops}
                   />
 
-                  {/* Tactical Action Controls Bar */}
+                  {/* Tactical Action Controls Bar with Keyboard Hints */}
                   <div className="absolute bottom-4 inset-x-4 flex items-center justify-between gap-2">
                     <button
                       onClick={handleScavengeChest}
                       disabled={inventory.keys <= 0}
                       title="Unlock treasure cache with 1 Key"
-                      className="rounded-xl border border-amber-500/40 bg-slate-900/90 hover:bg-slate-800 text-amber-300 px-3 py-2 text-xs font-bold transition-all cursor-pointer disabled:opacity-40 flex items-center gap-1.5"
+                      className="rounded-xl border border-amber-500/40 bg-slate-900/90 hover:bg-slate-800 text-amber-300 px-3 py-2 text-xs font-bold transition-all cursor-pointer disabled:opacity-40 flex items-center gap-1.5 min-h-[44px]"
                     >
                       <PackageOpen className="w-3.5 h-3.5" />
                       <span>Open Cache</span>
@@ -563,9 +716,12 @@ export function StickmanClimberGame() {
                       <button
                         onClick={() => handleTacticalAction('strike')}
                         disabled={health <= 0}
-                        className="rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 text-xs font-black uppercase tracking-wider transition-all shadow-md shadow-amber-500/20 cursor-pointer disabled:opacity-50"
+                        className="rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 px-3.5 py-2 text-xs font-black uppercase tracking-wider transition-all shadow-md shadow-amber-500/20 cursor-pointer disabled:opacity-50 min-h-[44px] flex items-center gap-1.5"
                       >
-                        Strike ({activeWeapon.damage + playerStats.attackBonus})
+                        <span>Strike ({activeWeapon.damage + playerStats.attackBonus})</span>
+                        <kbd className="hidden sm:inline-block px-1 py-0.2 rounded bg-slate-950/30 text-[9px] font-mono">
+                          Space
+                        </kbd>
                       </button>
 
                       {/* Flank */}
@@ -573,9 +729,12 @@ export function StickmanClimberGame() {
                         onClick={() => handleTacticalAction('flank')}
                         disabled={health <= 0}
                         title="Dodge telegraphed attacks and bypass shields"
-                        className="rounded-xl border border-emerald-500/50 bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-300 px-3 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50"
+                        className="rounded-xl border border-emerald-500/50 bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-300 px-3 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50 min-h-[44px] flex items-center gap-1.5"
                       >
-                        Flank
+                        <span>Flank</span>
+                        <kbd className="hidden sm:inline-block px-1 py-0.2 rounded bg-emerald-900/60 text-[9px] font-mono">
+                          F
+                        </kbd>
                       </button>
 
                       {/* Cleave */}
@@ -583,9 +742,12 @@ export function StickmanClimberGame() {
                         onClick={() => handleTacticalAction('cleave')}
                         disabled={health <= 0}
                         title="Heavy attack that smashes shields"
-                        className="rounded-xl border border-sky-500/50 bg-sky-950/60 hover:bg-sky-900/80 text-sky-300 px-3 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50"
+                        className="rounded-xl border border-sky-500/50 bg-sky-950/60 hover:bg-sky-900/80 text-sky-300 px-3 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50 min-h-[44px] flex items-center gap-1.5"
                       >
-                        Cleave
+                        <span>Cleave</span>
+                        <kbd className="hidden sm:inline-block px-1 py-0.2 rounded bg-sky-900/60 text-[9px] font-mono">
+                          C
+                        </kbd>
                       </button>
 
                       {/* Parry */}
@@ -593,9 +755,12 @@ export function StickmanClimberGame() {
                         onClick={() => handleTacticalAction('parry')}
                         disabled={health <= 0}
                         title="Deflect and counter-stun"
-                        className="rounded-xl border border-purple-500/50 bg-purple-950/60 hover:bg-purple-900/80 text-purple-300 px-3 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50"
+                        className="rounded-xl border border-purple-500/50 bg-purple-950/60 hover:bg-purple-900/80 text-purple-300 px-3 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50 min-h-[44px] flex items-center gap-1.5"
                       >
-                        Parry
+                        <span>Parry</span>
+                        <kbd className="hidden sm:inline-block px-1 py-0.2 rounded bg-purple-900/60 text-[9px] font-mono">
+                          P
+                        </kbd>
                       </button>
                     </div>
                   </div>
@@ -628,7 +793,7 @@ export function StickmanClimberGame() {
                   onClick={() => setViewMode('map')}
                   className="text-amber-500 hover:underline cursor-pointer"
                 >
-                  Full Map →
+                  Full Map [M] →
                 </button>
               </div>
               <div className="space-y-1.5">
@@ -745,6 +910,37 @@ export function StickmanClimberGame() {
       {/* Level-Up Celebration Modal */}
       {levelUpEvent && (
         <LevelUpModal event={levelUpEvent} onDismiss={() => setLevelUpEvent(null)} />
+      )}
+
+      {/* Pause Menu Modal with Audio, Accessibility & Controls */}
+      {paused && (
+        <PauseMenuModal
+          soundEnabled={soundEnabled}
+          reducedMotion={reducedMotion}
+          onToggleSound={toggleSound}
+          onToggleReducedMotion={toggleReducedMotion}
+          onResume={() => setPaused(false)}
+          onRestart={handleRestart}
+          onReturnToMap={() => {
+            setPaused(false);
+            setViewMode('map');
+          }}
+        />
+      )}
+
+      {/* Game Over Modal */}
+      {health <= 0 && (
+        <GameOverModal
+          levelNumber={selectedLevel}
+          levelName={levelConfig.name}
+          altitudeMeters={levelConfig.heightMeters}
+          xpGained={xp}
+          onRetry={handleRestart}
+          onReturnToMap={() => {
+            setHealth(playerStats.maxHealth);
+            setViewMode('map');
+          }}
+        />
       )}
 
       {/* Victory / Level Complete Modal */}
