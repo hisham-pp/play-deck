@@ -1,6 +1,6 @@
 import { GameRegistry } from '@playdeck/game-core';
+import { GAME_DEFINITIONS } from '@playdeck/game-data';
 import { GameDefinition, GameFilter, GameCategory } from '@playdeck/game-types';
-import { GAME_DEFINITIONS } from '@/data/games';
 
 export interface GameRepository {
   getGames(filter?: GameFilter): Promise<GameDefinition[]>;

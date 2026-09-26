@@ -57,6 +57,7 @@ playdeck/
 │
 ├── packages/
 │   ├── ui/                                # Shared core component design system (@playdeck/ui)
+│   ├── game-data/                         # Game definitions, SEO content, base builder & registry (@playdeck/game-data)
 │   ├── game-types/                        # Pure TypeScript domain interfaces
 │   ├── game-core/                         # Framework-agnostic session & registry engines
 │   └── shared/                            # Zod schemas, validation, ID generators

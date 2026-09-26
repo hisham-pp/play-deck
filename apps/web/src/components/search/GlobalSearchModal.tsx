@@ -3,8 +3,8 @@
 import { Search, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useId, useMemo, useRef } from 'react';
+import { GAME_DEFINITIONS } from '@playdeck/game-data';
 import type { GameDefinition } from '@playdeck/game-types';
-import { GAME_DEFINITIONS } from '@/data/games';
 import { filterGames } from '@/features/games/services/search-games';
 import { useSearchStore } from '@/stores/search.store';
 import { SearchCategoryFilters } from './SearchCategoryFilters';

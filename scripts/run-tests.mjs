@@ -1,11 +1,18 @@
 import { spawnSync } from 'node:child_process';
-import { readdirSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 
-const rootDir = path.resolve('apps/web/src');
+const searchRoots = [
+  path.resolve('apps/web/src'),
+  path.resolve('packages/game-data/src'),
+  path.resolve('packages/game-core/src'),
+  path.resolve('packages/shared/src'),
+];
+
 const files = [];
 
 function collect(dir) {
+  if (!existsSync(dir)) return;
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) {
@@ -19,7 +26,9 @@ function collect(dir) {
   }
 }
 
-collect(rootDir);
+for (const root of searchRoots) {
+  collect(root);
+}
 files.sort();
 
 const result = spawnSync(

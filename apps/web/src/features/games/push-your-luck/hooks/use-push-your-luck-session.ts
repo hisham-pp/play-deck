@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
+import { GAME_DEFINITIONS } from '@playdeck/game-data';
 import type { GameDefinition, GameResult, GameSession, Player } from '@playdeck/game-types';
-import { GAME_DEFINITIONS } from '@/data/games';
 import { useGameSessionStore } from '@/stores/game-session.store';
 import { useLibraryStore } from '@/stores/library.store';
 import { usePlayerStore } from '@/stores/player.store';

@@ -5,6 +5,8 @@
  * pulls in its own content module.
  */
 
+import { GameCategory, GameStatus, PlayerCapacity } from './game';
+
 export interface GameSeoMeta {
   /** Overrides the `<title>`. Keep under ~60 chars. */
   title: string;
@@ -37,6 +39,15 @@ export interface GameFaqItem {
 export interface GameContent {
   /** Matches `GameDefinition.id`. */
   id: string;
+  name?: string;
+  category?: GameCategory;
+  players?: PlayerCapacity;
+  status?: GameStatus;
+  description?: string;
+  releaseDate?: string;
+  tags?: string[];
+  featured?: boolean;
+  badge?: string;
   seo: GameSeoMeta;
   /** One-line hook rendered under the H1. */
   tagline: string;

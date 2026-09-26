@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { GAME_DEFINITIONS } from '@/data/games';
+import { GAME_DEFINITIONS } from '@playdeck/game-data';
 import { DEFAULT_OG_IMAGE, gameOverviewPath, SITE_NAME } from '@/lib/seo/site';
 import { PlayGameClient } from './PlayGameClient';
 
