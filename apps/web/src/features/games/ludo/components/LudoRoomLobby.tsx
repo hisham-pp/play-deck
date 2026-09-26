@@ -149,7 +149,7 @@ export function LudoRoomLobby({ onStartGame, onLeave }: LudoRoomLobbyProps) {
       </Card>
 
       {/* Warm up voice while seats fill, so the mesh is live before the first roll. */}
-      <LudoVoiceDock anchorClassName="bottom-4 right-4" />
+      <LudoVoiceDock defaultOpen={true} />
 
       {showInviteModal && roomCode && (
         <InviteToRoomModal

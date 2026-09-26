@@ -115,7 +115,7 @@ export function ConnectFourGame() {
       {state.mode === MODE_MULTIPLAYER && roomCode && (
         <>
           <RoomChatBox roomCode={roomCode} />
-          <RoomVoiceDock />
+          <RoomVoiceDock defaultOpen={false} />
         </>
       )}
     </div>

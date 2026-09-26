@@ -182,7 +182,7 @@ export function SnakeLadderRoomLobby({ onStartGame, onLeave }: SnakeLadderRoomLo
       </Card>
 
       {/* Warm up voice while seats fill, so the mesh is live before the first roll. */}
-      <SnakeLadderVoiceDock anchorClassName="bottom-4 right-4" />
+      <SnakeLadderVoiceDock defaultOpen={true} />
 
       {showInvite && roomCode && (
         <InviteToRoomModal

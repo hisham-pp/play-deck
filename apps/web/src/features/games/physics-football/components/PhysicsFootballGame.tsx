@@ -658,7 +658,7 @@ export function PhysicsFootballGame() {
         ) : (
           <>
             {/* Live WebRTC Voice Chat Dock */}
-            {mode === 'online' && roomCode && <RoomVoiceDock />}
+            {mode === 'online' && roomCode && <RoomVoiceDock defaultOpen={false} />}
 
             {/* Mode Selector & Scoreboard */}
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

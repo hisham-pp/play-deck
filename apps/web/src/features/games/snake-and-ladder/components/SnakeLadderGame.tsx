@@ -248,7 +248,7 @@ export function SnakeLadderGame() {
         onLeave={handleLeave}
       />
 
-      {isOnline && roomCode && <SnakeLadderVoiceDock anchorClassName="bottom-4 right-4" />}
+      {isOnline && roomCode && <SnakeLadderVoiceDock defaultOpen={false} />}
 
       {state.status === STATUS_COMPLETED && (
         <SnakeLadderGameOver

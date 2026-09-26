@@ -343,8 +343,8 @@ export function LudoGame() {
         </div>
       </div>
 
-      {/* Top-right is the only corner Ludo's HUD leaves free at every breakpoint. */}
-      <LudoVoiceDock anchorClassName="right-3 top-3 sm:right-5 sm:top-5" />
+      {/* Top-right safe dock keeps the board, dice, and player panels completely clear. */}
+      <LudoVoiceDock defaultOpen={false} />
 
       {isGameOver && (
         <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-sm flex items-center justify-center p-4">

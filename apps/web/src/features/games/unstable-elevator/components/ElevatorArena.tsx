@@ -8,9 +8,12 @@ import {
   RotateCcw,
   RotateCw,
   Trophy,
+  Volume2,
+  VolumeX,
 } from 'lucide-react';
 import React from 'react';
 import { Button, Card, CardContent } from '@playdeck/ui';
+import { usePreferencesStore } from '@/stores/preferences.store';
 import { PHASE_COLLAPSE, PHASE_PLACING } from '../engine/elevator-constants';
 import { SEAT_HEX } from '../render/elevator-palette';
 import type { ElevatorGameState } from '../types/unstable-elevator.types';
@@ -47,6 +50,8 @@ export function ElevatorArena({
   onPointerUp,
 }: ElevatorArenaProps) {
   const activeSeat = state.seats.find((s) => s.id === state.activeSeatId);
+  const soundEnabled = usePreferencesStore((s) => s.soundEnabled);
+  const toggleSound = usePreferencesStore((s) => s.toggleSound);
 
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-4 py-2">
@@ -97,6 +102,21 @@ export function ElevatorArena({
                 </div>
               </div>
             )}
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => void toggleSound()}
+              className="gap-1 text-xs text-slate-400 hover:text-white"
+              title={soundEnabled ? 'Mute Sound FX' : 'Enable Sound FX'}
+              aria-label={soundEnabled ? 'Mute Sound FX' : 'Enable Sound FX'}
+            >
+              {soundEnabled ? (
+                <Volume2 className="h-3.5 w-3.5 text-amber-400" />
+              ) : (
+                <VolumeX className="h-3.5 w-3.5 text-slate-500" />
+              )}
+            </Button>
 
             <Button
               variant="outline"

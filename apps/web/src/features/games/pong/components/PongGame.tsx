@@ -300,7 +300,7 @@ export function PongGame() {
         <>
           {/* WebRTC Voice Chat Dock in Online Mode */}
           {state.config.mode === 'online' && roomCode && (
-            <RoomVoiceDock />
+            <RoomVoiceDock defaultOpen={false} />
           )}
 
           {/* Scoreboard */}

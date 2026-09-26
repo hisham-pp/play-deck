@@ -585,9 +585,7 @@ export function CarromGame() {
         <>
           {/* WebRTC Voice Chat Dock */}
           {mode === 'online' && roomCode && (
-            <div className="w-full max-w-5xl mb-3">
-              <RoomVoiceDock />
-            </div>
+            <RoomVoiceDock defaultOpen={false} />
           )}
 
           {/* Mode & Setup Selector Bar */}

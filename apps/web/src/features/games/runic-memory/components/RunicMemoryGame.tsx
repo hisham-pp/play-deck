@@ -193,7 +193,7 @@ export function RunicMemoryGame() {
       {isMultiplayer && roomCode && (
         <>
           <RoomChatBox roomCode={roomCode} />
-          <RoomVoiceDock />
+          <RoomVoiceDock defaultOpen={false} />
         </>
       )}
     </div>

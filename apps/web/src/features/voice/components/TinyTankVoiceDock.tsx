@@ -9,6 +9,8 @@ export interface TinyTankVoiceDockProps {
   roomCode?: string | null;
   transport?: SupabaseTransportService | null;
   anchorClassName?: string;
+  variant?: 'floating' | 'inline';
+  defaultOpen?: boolean;
 }
 
 /**
@@ -19,7 +21,9 @@ export function TinyTankVoiceDock({
   roomCode: propRoomCode,
   transport: propTransport,
   anchorClassName,
-}: TinyTankVoiceDockProps) {
+  variant,
+  defaultOpen,
+}: TinyTankVoiceDockProps = {}) {
   const storeRoomCode = useTinyTankMultiplayerStore((state) => state.roomCode);
   const storeTransport = useTinyTankMultiplayerStore((state) => state.transport);
 
@@ -29,6 +33,12 @@ export function TinyTankVoiceDock({
   if (!roomCode) return null;
 
   return (
-    <VoiceChatDock roomCode={roomCode} transport={transport} anchorClassName={anchorClassName} />
+    <VoiceChatDock
+      roomCode={roomCode}
+      transport={transport}
+      anchorClassName={anchorClassName}
+      variant={variant}
+      defaultOpen={defaultOpen}
+    />
   );
 }

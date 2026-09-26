@@ -283,7 +283,7 @@ export function TinyIslandGame() {
         </div>
 
         {/* Room Voice Dock if in an online match */}
-        {roomCode && <TinyIslandVoiceDock />}
+        {roomCode && <TinyIslandVoiceDock defaultOpen={false} />}
 
         {/* Main Game Arena */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">

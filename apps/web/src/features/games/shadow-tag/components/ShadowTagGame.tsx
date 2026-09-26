@@ -143,7 +143,7 @@ export function ShadowTagGame() {
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-4">
-      {isOnline && roomCode && <ShadowTagVoiceDock />}
+      {isOnline && roomCode && <ShadowTagVoiceDock defaultOpen={false} />}
       <ShadowTagArena
         canvasRef={game.canvasRef}
         hud={game.hud}

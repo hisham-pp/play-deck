@@ -235,7 +235,7 @@ export function ElevatorGame() {
 
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-4">
-      {isOnline && roomCode && <ElevatorVoiceDock />}
+      {isOnline && roomCode && <ElevatorVoiceDock defaultOpen={false} />}
       <ElevatorArena
         canvasRef={canvasRef}
         state={state}
