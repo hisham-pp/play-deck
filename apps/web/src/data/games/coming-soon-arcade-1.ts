@@ -31,32 +31,6 @@ export const COMING_SOON_ARCADE_GAMES_1: GameDefinition[] = [
     ],
   },
   {
-    id: 'stickman-parkour',
-    name: 'Stickman Parkour',
-    slug: 'stickman-parkour',
-    description:
-      'High-speed rooftop freerunning, precision wall vaults, momentum chaining, and gap leaps across skyline obstacles.',
-    category: CATEGORY_ARCADE,
-    players: { min: 1, max: 1 },
-    status: STATUS_COMING_SOON,
-    thumbnailUrl: '/games/stickman-platformer/icon.svg',
-    bannerUrl: '/games/stickman-platformer/cover.svg',
-    tags: ['Action', 'Parkour', 'Speedrun', 'Precision', TAG_HIGH_SCORE],
-    badge: BADGE_COMING_SOON,
-    releaseDate: RELEASE_DATE_COMING_SOON,
-    subtype: 'parkour',
-    difficultyPresets: ['normal', 'hard', 'expert'],
-    controls: [
-      {
-        action: 'Sprint / Run',
-        key: 'A / D or Left / Right',
-        touchAction: 'Tilt or Onscreen Joystick',
-      },
-      { action: 'Wall Jump & Leap', key: 'Space / W', touchAction: 'Tap Right Screen' },
-      { action: 'Slide / Roll', key: 'S / ArrowDown', touchAction: 'Swipe Down' },
-    ],
-  },
-  {
     id: 'stickman-racing',
     name: 'Stickman Racing',
     slug: 'stickman-racing',
