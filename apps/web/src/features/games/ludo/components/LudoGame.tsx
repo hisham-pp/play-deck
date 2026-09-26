@@ -4,6 +4,7 @@ import { Trophy, RefreshCw, LogOut, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { Button, Card, CardContent } from '@playdeck/ui';
+import { OnlineRoomSetupCard } from '@/features/multiplayer/components/OnlineRoomSetupCard';
 import { LudoVoiceDock } from '@/features/voice/components/LudoVoiceDock';
 import { useLudoMultiplayerStore } from '@/stores/ludo-multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
@@ -30,27 +31,18 @@ const MODE_LOBBY = 'lobby';
 const MODE_PLAYING = 'playing';
 const MODE_ONLINE_ROOM = 'online-room';
 
-/** Hosts a fresh online room for the local player, unless they are already in one. */
-function useOpenOnlineRoom() {
-  const player = usePlayerStore((s) => s.player);
-  const createRoom = useLudoMultiplayerStore((s) => s.createRoom);
-
-  return useCallback(() => {
-    if (!player || useLudoMultiplayerStore.getState().roomCode) return;
-    void createRoom({
-      id: player.id,
-      displayName: player.displayName,
-      avatar: player.avatar || '🕹️',
-    });
-  }, [createRoom, player]);
-}
-
 export function LudoGame() {
   const roomCode = useLudoMultiplayerStore((s) => s.roomCode);
   const isHost = useLudoMultiplayerStore((s) => s.isHost());
   const adoptSeats = useLudoMultiplayerStore((s) => s.adoptSeats);
   const setRoomStatus = useLudoMultiplayerStore((s) => s.setStatus);
   const leaveRoom = useLudoMultiplayerStore((s) => s.leaveRoom);
+  const createRoom = useLudoMultiplayerStore((s) => s.createRoom);
+  const joinRoomByCode = useLudoMultiplayerStore((s) => s.joinRoomByCode);
+
+  const [isHosting, setIsHosting] = useState(false);
+  const [isJoining, setIsJoining] = useState(false);
+  const [onlineError, setOnlineError] = useState<string | null>(null);
 
   // A player who arrives already seated (invite or join link) goes straight to the room.
   const [mode, setMode] = useState<GameMode>(() =>
@@ -215,10 +207,39 @@ export function LudoGame() {
     setMode(MODE_LOBBY);
   };
 
-  const openOnlineRoom = useOpenOnlineRoom();
+  const handleHostOnlineRoom = async () => {
+    if (!player) return;
+    setIsHosting(true);
+    setOnlineError(null);
+    const code = await createRoom({
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🕹️',
+    });
+    setIsHosting(false);
+    if (!code) {
+      setOnlineError(useLudoMultiplayerStore.getState().error || 'Failed to create room');
+    }
+  };
+
+  const handleJoinOnlineRoom = async (code: string) => {
+    if (!player) return;
+    setIsJoining(true);
+    setOnlineError(null);
+    const success = await joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🕹️',
+    });
+    setIsJoining(false);
+    if (!success) {
+      setOnlineError(useLudoMultiplayerStore.getState().error || 'Failed to join room. Please check the code.');
+    }
+  };
+
   const handleSelectOnline = () => {
     setMode(MODE_ONLINE_ROOM);
-    openOnlineRoom();
+    setOnlineError(null);
   };
 
   if (mode === MODE_LOBBY) {
@@ -235,6 +256,24 @@ export function LudoGame() {
   }
 
   if (mode === 'online-room') {
+    if (!roomCode) {
+      return (
+        <div className="mx-auto flex w-full max-w-2xl flex-col items-center gap-6 py-4">
+          <OnlineRoomSetupCard
+            gameName="Ludo"
+            gameIcon={<span>🎲</span>}
+            subtitle="Roll the dice with friends online with live voice chat!"
+            isHosting={isHosting}
+            isJoining={isJoining}
+            error={onlineError}
+            onHost={handleHostOnlineRoom}
+            onJoin={handleJoinOnlineRoom}
+            onBack={() => setMode(MODE_LOBBY)}
+          />
+        </div>
+      );
+    }
+
     return (
       <LudoRoomLobby onStartGame={handleStartOnlineGame} onLeave={() => setMode(MODE_LOBBY)} />
     );

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useMemo, useState } from 'react';
+import { OnlineRoomSetupCard } from '@/features/multiplayer/components/OnlineRoomSetupCard';
 import { ColorThiefVoiceDock } from '@/features/voice/components/ColorThiefVoiceDock';
 import { useColorThiefMultiplayerStore } from '@/stores/color-thief-multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
@@ -45,10 +46,15 @@ export function ColorThiefGame() {
 
   const roomCode = useColorThiefMultiplayerStore((s) => s.roomCode);
   const createRoom = useColorThiefMultiplayerStore((s) => s.createRoom);
+  const joinRoomByCode = useColorThiefMultiplayerStore((s) => s.joinRoomByCode);
   const leaveRoom = useColorThiefMultiplayerStore((s) => s.leaveRoom);
   const adoptSeats = useColorThiefMultiplayerStore((s) => s.adoptSeats);
   const setRoomStatus = useColorThiefMultiplayerStore((s) => s.setStatus);
   const isHost = useColorThiefMultiplayerStore((s) => s.isHost());
+
+  const [isHosting, setIsHosting] = useState(false);
+  const [isJoining, setIsJoining] = useState(false);
+  const [onlineError, setOnlineError] = useState<string | null>(null);
 
   const { engine, state, claimTile, useAbility, endTurn, pause, resume, restart } =
     useColorThiefEngine(seats, settings);
@@ -115,16 +121,40 @@ export function ColorThiefGame() {
     beginMatch(nextSeats);
   };
 
+  const handleHostOnlineRoom = async () => {
+    if (!player) return;
+    setIsHosting(true);
+    setOnlineError(null);
+    const code = await createRoom({
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || DEFAULT_AVATAR,
+    });
+    setIsHosting(false);
+    if (!code) {
+      setOnlineError(useColorThiefMultiplayerStore.getState().error || 'Failed to create room');
+    }
+  };
+
+  const handleJoinOnlineRoom = async (code: string) => {
+    if (!player) return;
+    setIsJoining(true);
+    setOnlineError(null);
+    const ok = await joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || DEFAULT_AVATAR,
+    });
+    setIsJoining(false);
+    if (!ok) {
+      setOnlineError(useColorThiefMultiplayerStore.getState().error || 'Failed to join room. Please check the code.');
+    }
+  };
+
   const handleOpenOnlineRoom = () => {
     setIsOnline(true);
     setScreen('online-room');
-    if (player && !useColorThiefMultiplayerStore.getState().roomCode) {
-      void createRoom({
-        id: player.id,
-        displayName: player.displayName,
-        avatar: player.avatar || DEFAULT_AVATAR,
-      });
-    }
+    setOnlineError(null);
   };
 
   const handleRestart = () => {
@@ -163,6 +193,27 @@ export function ColorThiefGame() {
   }
 
   if (screen === 'online-room') {
+    if (!roomCode) {
+      return (
+        <div className="mx-auto flex w-full max-w-2xl flex-col items-center gap-6 py-4">
+          <OnlineRoomSetupCard
+            gameName="Color Thief"
+            gameIcon={<span>🎨</span>}
+            subtitle="Steal the grid one tile at a time with friends online with live voice chat!"
+            isHosting={isHosting}
+            isJoining={isJoining}
+            error={onlineError}
+            onHost={handleHostOnlineRoom}
+            onJoin={handleJoinOnlineRoom}
+            onBack={() => {
+              setIsOnline(false);
+              setScreen(SCREEN_LOBBY);
+            }}
+          />
+        </div>
+      );
+    }
+
     return (
       <ColorThiefRoomLobby
         onStartGame={handleStartOnline}

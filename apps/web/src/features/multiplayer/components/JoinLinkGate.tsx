@@ -499,14 +499,16 @@ function useClearJoinParam() {
   return useCallback(() => {
     const next = new URLSearchParams(searchParams.toString());
     next.delete(JOIN_ROOM_PARAM);
+    next.delete('join');
     const query = next.toString();
     router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
   }, [pathname, router, searchParams]);
 }
 
-/** Joins the room named by the page's `?room=` link, once per link. */
+/** Joins the room named by the page's `?room=` or `?join=` link, once per link. */
 function useJoinLink(gameId: string) {
-  const rawParam = useSearchParams().get(JOIN_ROOM_PARAM);
+  const searchParams = useSearchParams();
+  const rawParam = searchParams.get(JOIN_ROOM_PARAM) ?? searchParams.get('join');
   const code = parseJoinCode(rawParam);
   const clearParam = useClearJoinParam();
   const player = usePlayerStore((state) => state.player);

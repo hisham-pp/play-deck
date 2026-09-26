@@ -2,6 +2,8 @@
 
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { OnlineRoomSetupCard } from '@/features/multiplayer/components/OnlineRoomSetupCard';
+import { usePlayerStore } from '@/stores/player.store';
 import { useTinyTankMultiplayerStore } from '@/stores/tiny-tank-multiplayer.store';
 import { useTinyTankGame } from '../hooks/use-tiny-tank-game';
 import { DEFAULT_PLAYER_ID } from '../types/tiny-tank.types';
@@ -21,6 +23,7 @@ type TankGameMode = typeof MODE_LOBBY | typeof MODE_ONLINE_ROOM | typeof MODE_PL
 export function TinyTankGame() {
   const searchParams = useSearchParams();
   const roomParam = searchParams.get('room');
+  const player = usePlayerStore((s) => s.player);
 
   const [mode, setMode] = useState<TankGameMode>(MODE_LOBBY);
 
@@ -44,33 +47,46 @@ export function TinyTankGame() {
     handleCanvasMouseUp,
   } = useTinyTankGame();
 
-  const { roomCode, createRoom, joinRoomByCode } = useTinyTankMultiplayerStore();
+  const { roomCode, error, createRoom, joinRoomByCode, leaveRoom } =
+    useTinyTankMultiplayerStore();
 
   useEffect(() => {
     if (roomParam && !roomCode) {
       void joinRoomByCode(roomParam, {
-        id: `commander-${Date.now().toString().slice(-4)}`,
-        displayName: 'Commander Tank',
-        avatar: '🛡️',
+        id: player?.id || `commander-${Date.now().toString().slice(-4)}`,
+        displayName: player?.displayName || 'Commander Tank',
+        avatar: player?.avatar || '🛡️',
       }).then((joined) => {
         if (joined) setMode(MODE_ONLINE_ROOM);
       });
     }
-  }, [roomParam, roomCode, joinRoomByCode]);
+  }, [roomParam, roomCode, joinRoomByCode, player]);
 
   const handleStartSolo = (customConfig?: Partial<typeof config>) => {
     startMatch(customConfig);
     setMode(MODE_PLAYING);
   };
 
-  const handleOpenOnlineRoom = async () => {
+  const handleOpenOnlineRoom = () => {
     setMode(MODE_ONLINE_ROOM);
-    if (!roomCode) {
-      await createRoom({
-        id: `commander-${Date.now().toString().slice(-4)}`,
-        displayName: 'Commander Tank',
-        avatar: '🛡️',
-      });
+  };
+
+  const handleHostRoom = async () => {
+    await createRoom({
+      id: player?.id || `commander-${Date.now().toString().slice(-4)}`,
+      displayName: player?.displayName || 'Commander Tank',
+      avatar: player?.avatar || '🛡️',
+    });
+  };
+
+  const handleJoinRoom = async (code: string) => {
+    const joined = await joinRoomByCode(code, {
+      id: player?.id || `commander-${Date.now().toString().slice(-4)}`,
+      displayName: player?.displayName || 'Commander Tank',
+      avatar: player?.avatar || '🛡️',
+    });
+    if (joined) {
+      setMode(MODE_ONLINE_ROOM);
     }
   };
 
@@ -81,6 +97,7 @@ export function TinyTankGame() {
 
   const handleReturnToLobby = () => {
     hookReturnToLobby();
+    leaveRoom();
     setMode(MODE_LOBBY);
   };
 
@@ -98,10 +115,26 @@ export function TinyTankGame() {
         />
       )}
 
-      {mode === MODE_ONLINE_ROOM && (
+      {mode === MODE_ONLINE_ROOM && !roomCode && (
+        <div className="w-full max-w-xl py-6">
+          <OnlineRoomSetupCard
+            title="Tiny Tank — Online Match"
+            description="Host an armored skirmish or enter a 6-digit room code to join."
+            onHost={handleHostRoom}
+            onJoin={handleJoinRoom}
+            onBack={() => setMode(MODE_LOBBY)}
+            error={error}
+          />
+        </div>
+      )}
+
+      {mode === MODE_ONLINE_ROOM && roomCode && (
         <TinyTankRoomLobby
           onStartMatch={handleStartMultiplayerMatch}
-          onBackToLobby={() => setMode(MODE_LOBBY)}
+          onBackToLobby={() => {
+            leaveRoom();
+            setMode(MODE_LOBBY);
+          }}
         />
       )}
 

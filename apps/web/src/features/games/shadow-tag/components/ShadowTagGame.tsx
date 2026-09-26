@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useState } from 'react';
+import { OnlineRoomSetupCard } from '@/features/multiplayer/components/OnlineRoomSetupCard';
 import { ShadowTagVoiceDock } from '@/features/voice/components/ShadowTagVoiceDock';
 import { usePlayerStore } from '@/stores/player.store';
 import { useShadowTagMultiplayerStore } from '@/stores/shadow-tag-multiplayer.store';
@@ -22,12 +23,16 @@ export function ShadowTagGame() {
   const [seats, setSeats] = useState<ShadowTagSeat[]>([]);
   const [arenaId, setArenaId] = useState('atrium');
   const [roundMs, setRoundMs] = useState(ROUND_MS);
-  const [isOnline, setIsOnline] = useState(false);
+  const [isOnline, setIsOnline] = useState(() =>
+    Boolean(useShadowTagMultiplayerStore.getState().roomCode),
+  );
 
   const player = usePlayerStore((s) => s.player);
   const roomCode = useShadowTagMultiplayerStore((s) => s.roomCode);
   const createRoom = useShadowTagMultiplayerStore((s) => s.createRoom);
+  const joinRoomByCode = useShadowTagMultiplayerStore((s) => s.joinRoomByCode);
   const leaveRoom = useShadowTagMultiplayerStore((s) => s.leaveRoom);
+  const error = useShadowTagMultiplayerStore((s) => s.error);
   const isHost = useShadowTagMultiplayerStore((s) => s.isHost());
   const storeSeats = useShadowTagMultiplayerStore((s) => s.seats);
 
@@ -50,7 +55,11 @@ export function ShadowTagGame() {
     onRoundEnd: handleRoundEnd,
   });
 
-  const handleSelectOnline = async () => {
+  const handleOpenOnlineRoom = () => {
+    setScreen('online-room');
+  };
+
+  const handleHostOnline = async () => {
     if (!player) return;
     const code = await createRoom({
       id: player.id,
@@ -58,6 +67,19 @@ export function ShadowTagGame() {
       avatar: player.avatar || '🕹️',
     });
     if (code) {
+      setIsOnline(true);
+      setScreen('online-room');
+    }
+  };
+
+  const handleJoinOnline = async (code: string) => {
+    if (!player) return;
+    const ok = await joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🕹️',
+    });
+    if (ok) {
       setIsOnline(true);
       setScreen('online-room');
     }
@@ -84,6 +106,7 @@ export function ShadowTagGame() {
     if (isOnline) {
       leaveRoom();
     }
+    setIsOnline(false);
     setScreen('lobby');
   };
 
@@ -91,7 +114,7 @@ export function ShadowTagGame() {
     return (
       <ShadowTagLobby
         onSelectOffline={() => setScreen('offline-setup')}
-        onSelectOnline={handleSelectOnline}
+        onSelectOnline={handleOpenOnlineRoom}
       />
     );
   }
@@ -101,6 +124,20 @@ export function ShadowTagGame() {
   }
 
   if (screen === 'online-room') {
+    if (!roomCode) {
+      return (
+        <div className="mx-auto w-full max-w-xl py-6">
+          <OnlineRoomSetupCard
+            title="Shadow Tag — Online Match"
+            description="Host a room in the shadows or join friends with a 6-digit room code."
+            onHost={handleHostOnline}
+            onJoin={handleJoinOnline}
+            onBack={() => setScreen('lobby')}
+            error={error}
+          />
+        </div>
+      );
+    }
     return <ShadowTagRoomLobby onStartGame={handleStartOnline} onLeave={handleLeaveGame} />;
   }
 

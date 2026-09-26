@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { OnlineRoomSetupCard } from '@/features/multiplayer/components/OnlineRoomSetupCard';
 import { ElevatorVoiceDock } from '@/features/voice/components/ElevatorVoiceDock';
 import { useElevatorMultiplayerStore } from '@/stores/elevator-multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
@@ -25,7 +26,9 @@ export function ElevatorGame() {
   const [screen, setScreen] = useState<Screen>(() =>
     useElevatorMultiplayerStore.getState().roomCode ? 'online-room' : 'lobby',
   );
-  const [isOnline, setIsOnline] = useState(false);
+  const [isOnline, setIsOnline] = useState(() =>
+    Boolean(useElevatorMultiplayerStore.getState().roomCode),
+  );
   const [seed, setSeed] = useState(() => String(Date.now()));
   const [slips, setSlips] = useState(DEFAULT_SLIPS);
   const [seats, setSeats] = useState<ElevatorSeat[]>([]);
@@ -38,7 +41,9 @@ export function ElevatorGame() {
 
   const roomCode = useElevatorMultiplayerStore((s) => s.roomCode);
   const createRoom = useElevatorMultiplayerStore((s) => s.createRoom);
+  const joinRoomByCode = useElevatorMultiplayerStore((s) => s.joinRoomByCode);
   const leaveRoom = useElevatorMultiplayerStore((s) => s.leaveRoom);
+  const error = useElevatorMultiplayerStore((s) => s.error);
   const isHost = useElevatorMultiplayerStore((s) => s.isHost());
   const storeSeats = useElevatorMultiplayerStore((s) => s.seats);
 
@@ -125,7 +130,11 @@ export function ElevatorGame() {
     onDrop: handleDrop,
   });
 
-  const handleSelectOnline = async () => {
+  const handleOpenOnlineRoom = () => {
+    setScreen('online-room');
+  };
+
+  const handleHostOnline = async () => {
     if (!player) return;
     const code = await createRoom({
       id: player.id,
@@ -133,6 +142,19 @@ export function ElevatorGame() {
       avatar: player.avatar || '🛗',
     });
     if (code) {
+      setIsOnline(true);
+      setScreen('online-room');
+    }
+  };
+
+  const handleJoinOnline = async (code: string) => {
+    if (!player) return;
+    const ok = await joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🛗',
+    });
+    if (ok) {
       setIsOnline(true);
       setScreen('online-room');
     }
@@ -176,6 +198,7 @@ export function ElevatorGame() {
 
   const handleLeaveGame = () => {
     if (isOnline) leaveRoom();
+    setIsOnline(false);
     setScreen('lobby');
   };
 
@@ -183,7 +206,7 @@ export function ElevatorGame() {
     return (
       <ElevatorLobby
         onSelectOffline={() => setScreen('offline-setup')}
-        onSelectOnline={handleSelectOnline}
+        onSelectOnline={handleOpenOnlineRoom}
       />
     );
   }
@@ -193,6 +216,20 @@ export function ElevatorGame() {
   }
 
   if (screen === 'online-room') {
+    if (!roomCode) {
+      return (
+        <div className="mx-auto w-full max-w-xl py-6">
+          <OnlineRoomSetupCard
+            title="Unstable Elevator — Online Match"
+            description="Host a shared lift with your crew or join with a 6-digit room code."
+            onHost={handleHostOnline}
+            onJoin={handleJoinOnline}
+            onBack={() => setScreen('lobby')}
+            error={error}
+          />
+        </div>
+      );
+    }
     return <ElevatorRoomLobby onStartGame={handleStartOnline} onLeave={handleLeaveGame} />;
   }
 

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useState } from 'react';
+import { OnlineRoomSetupCard } from '@/features/multiplayer/components/OnlineRoomSetupCard';
 import { GiantVoiceDock } from '@/features/voice/components/GiantVoiceDock';
 import { useGiantMultiplayerStore } from '@/stores/giant-multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
@@ -34,13 +35,17 @@ export function GiantGame() {
   const [seats, setSeats] = useState<GiantSeat[]>([]);
   const [mapId, setMapId] = useState(MAP_IDS[0]);
   const [heistMs, setHeistMs] = useState(HEIST_MS);
-  const [isOnline, setIsOnline] = useState(false);
+  const [isOnline, setIsOnline] = useState(() =>
+    Boolean(useGiantMultiplayerStore.getState().roomCode),
+  );
   const [outcome, setOutcome] = useState<Outcome | null>(null);
 
   const player = usePlayerStore((s) => s.player);
   const roomCode = useGiantMultiplayerStore((s) => s.roomCode);
   const createRoom = useGiantMultiplayerStore((s) => s.createRoom);
+  const joinRoomByCode = useGiantMultiplayerStore((s) => s.joinRoomByCode);
   const leaveRoom = useGiantMultiplayerStore((s) => s.leaveRoom);
+  const error = useGiantMultiplayerStore((s) => s.error);
   const isHost = useGiantMultiplayerStore((s) => s.isHost());
   const storeSeats = useGiantMultiplayerStore((s) => s.seats);
 
@@ -81,7 +86,11 @@ export function GiantGame() {
     onHeistEnd: handleHeistEnd,
   });
 
-  const handleSelectOnline = async () => {
+  const handleOpenOnlineRoom = () => {
+    setScreen('online-room');
+  };
+
+  const handleHostOnline = async () => {
     if (!player) return;
     const code = await createRoom({
       id: player.id,
@@ -89,6 +98,19 @@ export function GiantGame() {
       avatar: player.avatar || '🕯️',
     });
     if (code) {
+      setIsOnline(true);
+      setScreen('online-room');
+    }
+  };
+
+  const handleJoinOnline = async (code: string) => {
+    if (!player) return;
+    const ok = await joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🕯️',
+    });
+    if (ok) {
       setIsOnline(true);
       setScreen('online-room');
     }
@@ -120,6 +142,7 @@ export function GiantGame() {
 
   const handleLeaveGame = () => {
     if (isOnline) leaveRoom();
+    setIsOnline(false);
     setOutcome(null);
     setScreen('lobby');
   };
@@ -128,7 +151,7 @@ export function GiantGame() {
     return (
       <GiantLobby
         onSelectOffline={() => setScreen('offline-setup')}
-        onSelectOnline={handleSelectOnline}
+        onSelectOnline={handleOpenOnlineRoom}
       />
     );
   }
@@ -138,6 +161,20 @@ export function GiantGame() {
   }
 
   if (screen === 'online-room') {
+    if (!roomCode) {
+      return (
+        <div className="mx-auto w-full max-w-xl py-6">
+          <OnlineRoomSetupCard
+            title="Don't Wake the Giant — Online Match"
+            description="Host a heist with your crew or join with a 6-digit room code."
+            onHost={handleHostOnline}
+            onJoin={handleJoinOnline}
+            onBack={() => setScreen('lobby')}
+            error={error}
+          />
+        </div>
+      );
+    }
     return <GiantRoomLobby onStartGame={handleStartOnline} onLeave={handleLeaveGame} />;
   }
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
+import { OnlineRoomSetupCard } from '@/features/multiplayer/components/OnlineRoomSetupCard';
 import { SnakeLadderVoiceDock } from '@/features/voice/components/SnakeLadderVoiceDock';
 import { usePlayerStore } from '@/stores/player.store';
 import { usePreferencesStore } from '@/stores/preferences.store';
@@ -38,10 +39,15 @@ export function SnakeLadderGame() {
 
   const roomCode = useSnakeLadderMultiplayerStore((s) => s.roomCode);
   const createRoom = useSnakeLadderMultiplayerStore((s) => s.createRoom);
+  const joinRoomByCode = useSnakeLadderMultiplayerStore((s) => s.joinRoomByCode);
   const leaveRoom = useSnakeLadderMultiplayerStore((s) => s.leaveRoom);
   const adoptSeats = useSnakeLadderMultiplayerStore((s) => s.adoptSeats);
   const setRoomStatus = useSnakeLadderMultiplayerStore((s) => s.setStatus);
   const isHost = useSnakeLadderMultiplayerStore((s) => s.isHost());
+
+  const [isHosting, setIsHosting] = useState(false);
+  const [isJoining, setIsJoining] = useState(false);
+  const [onlineError, setOnlineError] = useState<string | null>(null);
 
   const { engine, state, rollForPlayer, applyRoll, pause, resume, restart } = useSnakeLadderEngine(
     seats,
@@ -122,16 +128,40 @@ export function SnakeLadderGame() {
     beginMatch(nextSeats);
   };
 
+  const handleHostOnlineRoom = async () => {
+    if (!player) return;
+    setIsHosting(true);
+    setOnlineError(null);
+    const code = await createRoom({
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🕹️',
+    });
+    setIsHosting(false);
+    if (!code) {
+      setOnlineError(useSnakeLadderMultiplayerStore.getState().error || 'Failed to create room');
+    }
+  };
+
+  const handleJoinOnlineRoom = async (code: string) => {
+    if (!player) return;
+    setIsJoining(true);
+    setOnlineError(null);
+    const ok = await joinRoomByCode(code, {
+      id: player.id,
+      displayName: player.displayName,
+      avatar: player.avatar || '🕹️',
+    });
+    setIsJoining(false);
+    if (!ok) {
+      setOnlineError(useSnakeLadderMultiplayerStore.getState().error || 'Failed to join room. Please check the code.');
+    }
+  };
+
   const handleOpenOnlineRoom = () => {
     setIsOnline(true);
     setScreen('online-room');
-    if (player && !useSnakeLadderMultiplayerStore.getState().roomCode) {
-      void createRoom({
-        id: player.id,
-        displayName: player.displayName,
-        avatar: player.avatar || '🕹️',
-      });
-    }
+    setOnlineError(null);
   };
 
   const handleRestart = () => {
@@ -167,6 +197,27 @@ export function SnakeLadderGame() {
   }
 
   if (screen === 'online-room') {
+    if (!roomCode) {
+      return (
+        <div className="mx-auto flex w-full max-w-2xl flex-col items-center gap-6 py-4">
+          <OnlineRoomSetupCard
+            gameName="Snake &amp; Ladder"
+            gameIcon={<span>🐍</span>}
+            subtitle="Climb ladders, dodge snakes with friends online with live voice chat!"
+            isHosting={isHosting}
+            isJoining={isJoining}
+            error={onlineError}
+            onHost={handleHostOnlineRoom}
+            onJoin={handleJoinOnlineRoom}
+            onBack={() => {
+              setIsOnline(false);
+              setScreen(SCREEN_LOBBY);
+            }}
+          />
+        </div>
+      );
+    }
+
     return (
       <SnakeLadderRoomLobby
         onStartGame={handleStartOnline}
