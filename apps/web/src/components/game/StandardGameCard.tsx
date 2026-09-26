@@ -1,16 +1,20 @@
 'use client';
 
-import { ArrowRight, Info, Play, Users } from 'lucide-react';
+import { ArrowRight, Info, Play, Trophy, Users } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { GameDefinition } from '@playdeck/game-types';
 import { Card } from '@/components/ui/Card';
+import { usePlayerStore } from '@/stores/player.store';
 import { GameStatusBadge, GameCategoryBadge } from './GameBadge';
 
 export function StandardGameCard({ game }: { game: GameDefinition }) {
   const router = useRouter();
   const isAvailable = game.status === 'available';
+  const bestScore = usePlayerStore(
+    (s) => s.stats.bestScores?.[game.id] ?? s.stats.bestScores?.[game.slug],
+  );
 
   const handleCardClick = (e: React.MouseEvent) => {
     // If user clicked inside an anchor or button (like the Details link), let it handle its own navigation
@@ -26,11 +30,26 @@ export function StandardGameCard({ game }: { game: GameDefinition }) {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      if (isAvailable) {
+        router.push(`/play/${game.slug}`);
+      } else {
+        router.push(`/games/${game.slug}`);
+      }
+    }
+  };
+
   return (
     <Card
       hoverable
       onClick={handleCardClick}
-      className="flex flex-col justify-between overflow-hidden group border-surface-border hover:border-amber-500/50 bg-surface-raised transition-all duration-300 hover:shadow-xl hover:shadow-amber-500/10 hover:-translate-y-1 select-none"
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="article"
+      aria-label={`${game.name} - ${isAvailable ? 'Play Game' : 'Coming Soon'}`}
+      className="flex flex-col justify-between overflow-hidden group border-surface-border hover:border-amber-500/50 focus-visible:border-amber-500 focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none bg-surface-raised transition-all duration-300 hover:shadow-xl hover:shadow-amber-500/10 hover:-translate-y-1 select-none cursor-pointer"
     >
       {/* 1. Cover Artwork Banner with Arcade Hover Play Button */}
       <div className="relative aspect-[16/9] w-full overflow-hidden bg-surface-overlay border-b border-surface-border">
@@ -91,13 +110,24 @@ export function StandardGameCard({ game }: { game: GameDefinition }) {
             <h4 className="text-base font-bold text-deck-950 dark:text-white font-display group-hover:text-amber-500 transition-colors">
               {game.name}
             </h4>
-            <div className="flex items-center gap-1 text-[11px] text-deck-400 bg-surface-base px-2 py-0.5 rounded border border-surface-border flex-shrink-0">
-              <Users className="w-3 h-3 text-deck-500" />
-              <span>
-                {game.players.min === game.players.max
-                  ? `${game.players.min}P`
-                  : `${game.players.min}-${game.players.max}P`}
-              </span>
+            <div className="flex items-center gap-1.5 flex-shrink-0">
+              {bestScore !== undefined && bestScore > 0 && (
+                <div
+                  className="flex items-center gap-1 text-[10px] font-mono font-bold text-amber-400 bg-amber-500/10 border border-amber-500/25 px-1.5 py-0.5 rounded shadow-sm"
+                  title={`Personal Best: ${bestScore.toLocaleString()}`}
+                >
+                  <Trophy className="w-3 h-3 text-amber-500" />
+                  <span>{bestScore.toLocaleString()}</span>
+                </div>
+              )}
+              <div className="flex items-center gap-1 text-[11px] text-deck-400 bg-surface-base px-2 py-0.5 rounded border border-surface-border">
+                <Users className="w-3 h-3 text-deck-500" />
+                <span>
+                  {game.players.min === game.players.max
+                    ? `${game.players.min}P`
+                    : `${game.players.min}-${game.players.max}P`}
+                </span>
+              </div>
             </div>
           </div>
 

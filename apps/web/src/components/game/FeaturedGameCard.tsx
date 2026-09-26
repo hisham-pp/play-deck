@@ -1,16 +1,20 @@
 'use client';
 
-import { Play, Sparkles, Users, Info } from 'lucide-react';
+import { Info, Play, Sparkles, Trophy, Users } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { GameDefinition } from '@playdeck/game-types';
 import { Card } from '@/components/ui/Card';
+import { usePlayerStore } from '@/stores/player.store';
 import { GameStatusBadge, GameCategoryBadge } from './GameBadge';
 
 export function FeaturedGameCard({ game }: { game: GameDefinition }) {
   const router = useRouter();
   const isAvailable = game.status === 'available';
+  const bestScore = usePlayerStore(
+    (s) => s.stats.bestScores?.[game.id] ?? s.stats.bestScores?.[game.slug],
+  );
 
   const handleCardClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
@@ -24,11 +28,26 @@ export function FeaturedGameCard({ game }: { game: GameDefinition }) {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      if (isAvailable) {
+        router.push(`/play/${game.slug}`);
+      } else {
+        router.push(`/games/${game.slug}`);
+      }
+    }
+  };
+
   return (
     <Card
       hoverable
       onClick={handleCardClick}
-      className="relative overflow-hidden group border-surface-border hover:border-amber-500/50 bg-surface-raised transition-all duration-300 select-none shadow-md hover:shadow-xl hover:shadow-amber-500/10"
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="article"
+      aria-label={`${game.name} - Featured Game`}
+      className="relative overflow-hidden group border-surface-border hover:border-amber-500/50 focus-visible:border-amber-500 focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none bg-surface-raised transition-all duration-300 select-none shadow-md hover:shadow-xl hover:shadow-amber-500/10 cursor-pointer"
     >
       {/* Background artwork banner layer with subtle parallax & gradient overlay */}
       {game.bannerUrl && (
@@ -90,6 +109,15 @@ export function FeaturedGameCard({ game }: { game: GameDefinition }) {
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               <span>Featured Game</span>
             </div>
+            {bestScore !== undefined && bestScore > 0 && (
+              <div
+                className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/25 text-amber-400 font-mono font-bold"
+                title={`Personal Best: ${bestScore.toLocaleString()}`}
+              >
+                <Trophy className="w-3.5 h-3.5 text-amber-500" />
+                <span>Best: {bestScore.toLocaleString()}</span>
+              </div>
+            )}
           </div>
 
           <div className="flex items-center gap-3">
