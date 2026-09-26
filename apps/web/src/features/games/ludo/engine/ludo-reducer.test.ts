@@ -163,6 +163,27 @@ describe('Ludo Engine/Reducer Integration Tests', () => {
       assert.strictEqual(greenPiece.steps, 0);
       assert.strictEqual(finalState.players[0].pieces[0].steps, 16);
       assert.match(finalState.lastMoveNote ?? '', /captured/i);
+      assert.strictEqual(finalState.currentTurnSeatIndex, 0, 'capturing grants bonus roll');
+      assert.strictEqual(finalState.turnPhase, 'awaiting-roll');
+    });
+  });
+
+  describe('10. Reaching home grants an extra turn', () => {
+    it('grants a bonus roll when a piece reaches home with a non-6 roll', () => {
+      const engine = new LudoEngine(makePlayers(2), { requireSixToExitBase: false });
+      engine.startGame('player-0');
+      // Set red-0 right before finish: finish is 57, so set steps to 55
+      const state = engine.getState();
+      state.players[0].pieces[0].location = 'home-stretch';
+      state.players[0].pieces[0].steps = 55;
+      engine.rollDice('player-0', 2); // 55 + 2 = 57 -> finishes to home
+      engine.movePiece('player-0', 'red-0');
+
+      const next = engine.getState();
+      assert.strictEqual(next.players[0].pieces[0].location, 'home');
+      assert.strictEqual(next.players[0].pieces[0].steps, 57);
+      assert.strictEqual(next.currentTurnSeatIndex, 0, 'reaching home grants bonus roll');
+      assert.strictEqual(next.turnPhase, 'awaiting-roll');
     });
   });
 });

@@ -7,6 +7,7 @@ export interface UseLudoEngineReturn {
   engine: LudoEngine;
   state: LudoGameState;
   rollForPlayer: (playerId: string) => void;
+  applyRoll: (playerId: string, value: number) => void;
   movePiece: (playerId: string, pieceId: string) => void;
   pause: (playerId: string) => void;
   resume: (playerId: string) => void;
@@ -60,6 +61,12 @@ export function useLudoEngine(
     }
   }, []);
 
+  const applyRoll = useCallback((playerId: string, value: number) => {
+    if (engineRef.current) {
+      engineRef.current.rollDice(playerId, value);
+    }
+  }, []);
+
   const movePiece = useCallback((playerId: string, pieceId: string) => {
     if (engineRef.current) {
       engineRef.current.movePiece(playerId, pieceId);
@@ -80,6 +87,7 @@ export function useLudoEngine(
     },
     state,
     rollForPlayer,
+    applyRoll,
     movePiece,
     pause,
     resume,

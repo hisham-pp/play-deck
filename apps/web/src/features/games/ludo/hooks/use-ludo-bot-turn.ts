@@ -27,7 +27,16 @@ export function useLudoBotTurn(
   engine: LudoEngine,
   state: LudoGameState,
   players: LudoPlayer[],
+  options?: {
+    enabled?: boolean;
+    onBotRoll?: (playerId: string, value: number) => void;
+    onBotMove?: (playerId: string, pieceId: string) => void;
+  },
 ): UseLudoBotTurnReturn {
+  const enabled = options?.enabled ?? true;
+  const onBotRoll = options?.onBotRoll;
+  const onBotMove = options?.onBotMove;
+
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const inFlightRef = useRef(false);
   const [botThinking, setBotThinking] = useState(false);
@@ -39,7 +48,7 @@ export function useLudoBotTurn(
       timeoutRef.current = null;
     }
 
-    if (state.status !== 'playing' || inFlightRef.current) {
+    if (!enabled || state.status !== 'playing' || inFlightRef.current) {
       return;
     }
 
@@ -75,13 +84,22 @@ export function useLudoBotTurn(
       }
 
       if (current.turnPhase === 'awaiting-roll') {
-        engine.rollDice(seatPlayer.id, DiceService.roll());
+        const val = DiceService.roll();
+        if (onBotRoll) {
+          onBotRoll(seatPlayer.id, val);
+        } else {
+          engine.rollDice(seatPlayer.id, val);
+        }
       } else if (current.turnPhase === 'awaiting-move') {
         const legalActions = engine.getLegalActions(current.currentTurnSeatIndex);
         if (legalActions.length > 0) {
           const chosen = botDef.strategy.chooseAction(current, seatPlayer.id, legalActions);
           if (chosen.type === 'MOVE_PIECE') {
-            engine.movePiece(seatPlayer.id, chosen.payload.pieceId);
+            if (onBotMove) {
+              onBotMove(seatPlayer.id, chosen.payload.pieceId);
+            } else {
+              engine.movePiece(seatPlayer.id, chosen.payload.pieceId);
+            }
           }
         }
       }
@@ -91,7 +109,7 @@ export function useLudoBotTurn(
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [engine, state, players]);
+  }, [engine, state, players, enabled, onBotRoll, onBotMove]);
 
   return { botThinking, thinkingBotName };
 }

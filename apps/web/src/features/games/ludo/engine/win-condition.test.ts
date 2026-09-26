@@ -24,7 +24,7 @@ function withAllPiecesHome(state: ReturnType<typeof createInitialLudoState>, sea
       p.seatIndex === seatIndex
         ? {
             ...p,
-            pieces: p.pieces.map((piece) => ({ ...piece, location: 'home' as const, steps: 59 })),
+            pieces: p.pieces.map((piece) => ({ ...piece, location: 'home' as const, steps: 57 })),
           }
         : p,
     ),

@@ -75,17 +75,17 @@ describe('Ludo Board Layout Tests', () => {
     it('classifies steps into track / home-stretch / finished buckets', () => {
       const layout = CLASSIC_4_LAYOUT;
       assert.strictEqual(isTrackSteps(layout, 1), true);
-      assert.strictEqual(isTrackSteps(layout, 52), true);
-      assert.strictEqual(isTrackSteps(layout, 53), false);
+      assert.strictEqual(isTrackSteps(layout, 51), true);
+      assert.strictEqual(isTrackSteps(layout, 52), false);
 
-      assert.strictEqual(isHomeStretchSteps(layout, 53), true);
-      assert.strictEqual(isHomeStretchSteps(layout, 58), true);
-      assert.strictEqual(isHomeStretchSteps(layout, 59), false);
+      assert.strictEqual(isHomeStretchSteps(layout, 52), true);
+      assert.strictEqual(isHomeStretchSteps(layout, 56), true);
+      assert.strictEqual(isHomeStretchSteps(layout, 57), false);
 
-      assert.strictEqual(finishSteps(layout), 59);
-      assert.strictEqual(isFinishedSteps(layout, 59), true);
-      assert.strictEqual(homeStretchIndex(layout, 53), 1);
-      assert.strictEqual(homeStretchIndex(layout, 58), 6);
+      assert.strictEqual(finishSteps(layout), 57);
+      assert.strictEqual(isFinishedSteps(layout, 57), true);
+      assert.strictEqual(homeStretchIndex(layout, 52), 1);
+      assert.strictEqual(homeStretchIndex(layout, 56), 5);
     });
   });
 
