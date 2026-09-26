@@ -138,7 +138,7 @@ class CrosswordAudio {
 const audio = new CrosswordAudio();
 
 export const CrosswordClashGame: React.FC<CrosswordClashGameProps> = ({
-  roomCode = 'WORD-CLASH',
+  roomCode: _roomCode = 'WORD-CLASH',
   initialPlayerName = 'Player 1',
   onExit,
 }) => {

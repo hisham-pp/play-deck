@@ -157,7 +157,7 @@ const GAME_COMPONENTS: Record<string, React.ComponentType> = {
 };
 
 export function GameAreaShell({ game }: { game: GameDefinition }) {
-  const { player } = usePlayerStore();
+  const { player, recordGamePlayed } = usePlayerStore();
   const { currentSession, startSession, endSession } = useGameSessionStore();
   const { addRecentSession } = useLibraryStore();
   const [status, setStatus] = useState<'idle' | 'running' | 'over'>('idle');
@@ -190,6 +190,7 @@ export function GameAreaShell({ game }: { game: GameDefinition }) {
     if (result && currentSession) {
       addRecentSession(currentSession);
     }
+    void recordGamePlayed(won, game.category, game.id, mockScore);
     setStatus('over');
   };
 
