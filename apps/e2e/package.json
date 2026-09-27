@@ -6,6 +6,7 @@
     "test": "playwright test"
   },
   "devDependencies": {
+    "@playdeck/game-data": "workspace:*",
     "@playwright/test": "^1.48.0"
   }
 }
