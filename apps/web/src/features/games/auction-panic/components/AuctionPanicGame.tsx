@@ -3,7 +3,10 @@
 import React, { useEffect } from 'react';
 
 import { RoomVoiceDock } from '@/features/voice/components/RoomVoiceDock';
-import { useAuctionMultiplayerStore } from '@/stores/auction-panic-multiplayer.store';
+import { AUCTION_PLAYER_COLORS, useAuctionMultiplayerStore } from '@/stores/auction-panic-multiplayer.store';
+import { usePlayerStore } from '@/stores/player.store';
+
+import { STARTING_BUDGET } from '../engine/auction-engine';
 
 import { useAuctionPanic } from '../hooks/use-auction-panic';
 import { AuctionBiddingStage } from './AuctionBiddingStage';
@@ -17,6 +20,7 @@ const DEFAULT_LOCAL_ID = 'player-local';
 
 export function AuctionPanicGame() {
   const mpStore = useAuctionMultiplayerStore();
+  const activePlayer = usePlayerStore((s) => s.player);
 
   const {
     phase,
@@ -36,12 +40,30 @@ export function AuctionPanicGame() {
 
   // Initialize local solo player if not in multiplayer room
   useEffect(() => {
-    if (!mpStore.roomCode && mpStore.players.length === 0) {
+    if (!mpStore.roomCode && mpStore.players.length === 0 && activePlayer) {
+      useAuctionMultiplayerStore.setState({
+        hostId: activePlayer.id,
+        localPlayerId: activePlayer.id,
+        players: [
+          {
+            id: activePlayer.id,
+            name: activePlayer.displayName,
+            avatar: activePlayer.avatar || '🎩',
+            color: AUCTION_PLAYER_COLORS[0]!,
+            isBot: false,
+            coins: STARTING_BUDGET,
+            startingCoins: STARTING_BUDGET,
+            wonItems: [],
+            currentBid: 0,
+            hasPassed: false,
+          },
+        ],
+      });
       mpStore.addBot();
       mpStore.addBot();
       mpStore.addBot();
     }
-  }, [mpStore]);
+  }, [mpStore, activePlayer]);
 
   return (
     <div className="relative min-h-screen bg-[#090d16] text-slate-100 flex flex-col items-center justify-start p-4 sm:p-6 select-none font-sans overflow-x-hidden">

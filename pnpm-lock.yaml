@@ -45,6 +45,9 @@ importers:
 
   apps/e2e:
     devDependencies:
+      '@playdeck/game-data':
+        specifier: workspace:*
+        version: link:../../packages/game-data
       '@playwright/test':
         specifier: ^1.48.0
         version: 1.63.0
