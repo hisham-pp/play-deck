@@ -1,5 +1,4 @@
 import { defineConfig, devices } from '@playwright/test';
-import path from 'path';
 
 export default defineConfig({
   testDir: './tests',
@@ -9,7 +8,7 @@ export default defineConfig({
     /**
      * Maximum time expect() should wait for the condition to be met.
      */
-    timeout: 5000
+    timeout: 5000,
   },
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -48,4 +47,3 @@ export default defineConfig({
     timeout: 120 * 1000,
   },
 });
-

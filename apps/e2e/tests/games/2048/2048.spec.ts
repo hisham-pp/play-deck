@@ -32,7 +32,7 @@ test.describe('2048 Game', () => {
 
     // After 4 moves, we should have more tiles or different values
     const newValues = await getTilesValues();
-    
+
     // Total count of tiles should increase (usually 1 tile spawns per move if a move was valid)
     // Or if they merged, the max value might be higher. Either way, the sum of values will be strictly greater.
     const initialSum = initialValues.reduce((a, b) => a + b, 0);
