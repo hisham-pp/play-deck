@@ -205,21 +205,32 @@ function getVehicleImage(modelId: string): HTMLImageElement | null {
   return img;
 }
 
+const SPRITE_CONFIGS: Record<string, { width: number; xOffset: number; yOffset: number }> = {
+  buggy: { width: 5.5, xOffset: -2.75, yOffset: 0.15 },
+  climber: { width: 5.8, xOffset: -2.9, yOffset: 0.3 },
+  speedster: { width: 5.6, xOffset: -2.8, yOffset: 0.1 },
+};
+
 function drawBody(ctx: CanvasRenderingContext2D, livery: Livery, modelId: string): void {
   const img = getVehicleImage(modelId);
   if (img && img.complete && img.naturalWidth > 0) {
-    // Determine bounds to roughly align the image wheels with the physics wheels
-    // Physics wheels are at roughly x=-0.9 and x=1.0. Radius 0.4.
-    // Typical image width should be about 4 meters to cover x from -1.8 to 2.2
-    const width = 4.2;
+    const config = SPRITE_CONFIGS[modelId] || { width: 5.5, xOffset: -2.75, yOffset: 0.2 };
+    const width = config.width;
     const height = width * (img.naturalHeight / img.naturalWidth);
+    
     // The physics canvas has Y pointing UP. drawImage expects +Y to point DOWN.
-    // The generated images face LEFT, but the car drives RIGHT. We flip X as well!
+    // The generated images face LEFT, so we scale X by -1 to make them face RIGHT.
     ctx.save();
     ctx.scale(-1, -1);
-    // Draw the image. The physics y=-0.4 becomes y=0.4 in the flipped space.
-    // We want the bottom of the image to sit at y=0.4, so the top is at 0.4 - height.
-    ctx.drawImage(img, -2.1, 0.4 - height, width, height);
+    
+    // config.yOffset is the physics Y coordinate where we want the center of the image.
+    // In scale(-1,-1) space, physics Y=0.2 becomes Y=-0.2.
+    const centerY = -config.yOffset;
+    const drawY = centerY - height / 2;
+    
+    // Because we flipped X, config.xOffset is also flipped.
+    // But since xOffset is typically -width/2 (centering it horizontally), it stays centered.
+    ctx.drawImage(img, config.xOffset, drawY, width, height);
     ctx.restore();
     return;
   }
