@@ -66,7 +66,7 @@ function createWheel(mount: Vec2, pos: Vec2): Wheel {
   };
 }
 
-export function createVehicle(spec: VehicleSpec, x: number, groundY: number): Vehicle {
+export function createVehicle(spec: VehicleSpec, x: number, groundY: number, color: string = '#14b8a6'): Vehicle {
   const pos = { x, y: groundY + WHEEL_RADIUS + spec.suspensionRest - REAR_MOUNT.y - 0.08 };
   const wheelAt = (m: Vec2) =>
     createWheel(m, toWorld(pos, 0, { x: m.x, y: m.y - spec.suspensionRest }));
@@ -79,6 +79,7 @@ export function createVehicle(spec: VehicleSpec, x: number, groundY: number): Ve
     spec,
     hullContact: false,
     squash: 0,
+    color,
   };
 }
 
