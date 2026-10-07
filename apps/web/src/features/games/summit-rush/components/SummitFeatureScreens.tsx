@@ -6,6 +6,39 @@ import { MAPS } from '../engine/maps';
 import type { SummitProgress } from '../engine/summit-types';
 import { summitLeaderboardRepository, type LeaderboardEntry } from '../services/summit-leaderboard-repository';
 
+function VehicleIcon({ color, className }: { color: string; className?: string }) {
+  return (
+    <svg viewBox="0 0 100 60" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M20 30L30 15H70L80 30H90C95.5228 30 100 34.4772 100 40V45H0V40C0 34.4772 4.47715 30 10 30H20Z"
+        fill={color}
+      />
+      <circle cx="25" cy="45" r="12" fill="#1e293b" />
+      <circle cx="25" cy="45" r="6" fill="#cbd5e1" />
+      <circle cx="75" cy="45" r="12" fill="#1e293b" />
+      <circle cx="75" cy="45" r="6" fill="#cbd5e1" />
+      <path d="M35 15H65L72 28H28L35 15Z" fill="#bae6fd" opacity="0.3" />
+    </svg>
+  );
+}
+
+function MapIcon({ type, className }: { type: 'meadows' | 'desert' | 'snow' | 'moon'; className?: string }) {
+  const colors = {
+    meadows: { bg: '#86efac', fg: '#22c55e' },
+    desert: { bg: '#fde047', fg: '#eab308' },
+    snow: { bg: '#e0f2fe', fg: '#38bdf8' },
+    moon: { bg: '#475569', fg: '#94a3b8' },
+  };
+  const c = colors[type] || colors.meadows;
+  
+  return (
+    <svg viewBox="0 0 100 60" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100" height="60" rx="8" fill={c.bg} opacity="0.3" />
+      <path d="M10 50L35 20L55 40L80 15L90 30" stroke={c.fg} strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function SummitVehicles({
   progress,
   onSelect,
@@ -47,8 +80,8 @@ export function SummitVehicles({
         <div className="flex flex-col gap-2 rounded-xl border border-white/10 bg-white/5 p-4">
           <div className="flex justify-between items-start">
             <div>
-              <h3 className="font-display text-2xl font-black text-white flex items-center gap-2">
-                <div className="w-5 h-5 rounded-sm" style={{ backgroundColor: activeVehicle.color }} />
+              <h3 className="font-display text-2xl font-black text-white flex items-center gap-3">
+                <VehicleIcon color={activeVehicle.color} className="w-12 h-12 drop-shadow-md" />
                 {activeVehicle.name}
               </h3>
               <p className="text-sm text-slate-300 mt-1">{activeVehicle.description}</p>
@@ -115,9 +148,9 @@ export function SummitVehicles({
               <button
                 key={v.id}
                 onClick={() => setPreviewId(v.id)}
-                className={`flex-none w-24 h-24 rounded-xl border p-2 flex flex-col items-center justify-center gap-2 transition snap-center relative ${isPreviewed ? 'border-amber-400 bg-amber-400/10' : 'border-white/10 bg-white/5 hover:bg-white/10'}`}
+                className={`flex-none w-24 h-24 rounded-xl border p-2 flex flex-col items-center justify-center gap-1 transition snap-center relative ${isPreviewed ? 'border-amber-400 bg-amber-400/10' : 'border-white/10 bg-white/5 hover:bg-white/10'}`}
               >
-                <div className="w-8 h-8 rounded-sm" style={{ backgroundColor: v.color }} />
+                <VehicleIcon color={v.color} className="w-10 h-10 mb-1" />
                 <span className="text-[10px] font-bold text-center leading-tight truncate w-full">{v.name}</span>
                 {isSelected && <Check className="absolute top-1.5 right-1.5 h-3 w-3 text-amber-500" />}
                 {!isUnlocked && <Lock className="absolute top-1.5 right-1.5 h-3 w-3 text-slate-500" />}
@@ -176,11 +209,14 @@ export function SummitMaps({
       <div className="mt-4 flex flex-col gap-3">
         <div className="flex flex-col gap-2 rounded-xl border border-white/10 bg-white/5 p-4">
           <div className="flex justify-between items-start">
-            <div>
-              <h3 className="font-display text-2xl font-black text-white">
-                {activeMap.name}
-              </h3>
-              <p className="text-sm text-slate-300 mt-1">{activeMap.description}</p>
+            <div className="flex gap-4">
+              <MapIcon type={activeMap.id as any} className="w-16 h-12" />
+              <div>
+                <h3 className="font-display text-2xl font-black text-white">
+                  {activeMap.name}
+                </h3>
+                <p className="text-sm text-slate-300 mt-1">{activeMap.description}</p>
+              </div>
             </div>
             <div className="flex gap-2">
               <span className="bg-white/10 text-white text-[10px] uppercase font-bold px-2 py-1 rounded">
@@ -226,9 +262,10 @@ export function SummitMaps({
               <button
                 key={m.id}
                 onClick={() => setPreviewId(m.id)}
-                className={`flex-none w-28 h-20 rounded-xl border p-2 flex flex-col items-center justify-center gap-1 transition snap-center relative ${isPreviewed ? 'border-amber-400 bg-amber-400/10' : 'border-white/10 bg-white/5 hover:bg-white/10'}`}
+                className={`flex-none w-28 h-24 rounded-xl border p-2 flex flex-col items-center justify-center gap-1 transition snap-center relative ${isPreviewed ? 'border-amber-400 bg-amber-400/10' : 'border-white/10 bg-white/5 hover:bg-white/10'}`}
               >
-                <span className="text-xs font-bold text-center leading-tight truncate w-full">{m.name}</span>
+                <MapIcon type={m.id as any} className="w-12 h-8 opacity-80" />
+                <span className="text-xs font-bold text-center leading-tight truncate w-full mt-1">{m.name}</span>
                 <span className="text-[10px] text-slate-400 uppercase">{m.environment}</span>
                 {isSelected && <Check className="absolute top-1.5 right-1.5 h-3 w-3 text-amber-500" />}
                 {!isUnlocked && <Lock className="absolute top-1.5 right-1.5 h-3 w-3 text-slate-500" />}
