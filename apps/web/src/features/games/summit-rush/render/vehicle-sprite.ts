@@ -45,49 +45,23 @@ const TIRE = '#1f2430';
 const TIRE_TREAD = '#3a4150';
 const RIM = '#e2e8f0';
 const HUB = '#f59e0b';
-const HELMET = '#f8fafc';
-const VISOR = '#0f172a';
+const vehicleImages: Record<string, HTMLImageElement> = {};
 
-function drawChassisShape(ctx: CanvasRenderingContext2D, modelId: string) {
-  ctx.beginPath();
-  if (modelId === 'buggy') {
-    ctx.moveTo(-1.5, -0.05);
-    ctx.lineTo(1.3, -0.05);
-    ctx.quadraticCurveTo(1.6, -0.05, 1.65, 0.2);
-    ctx.lineTo(1.56, 0.5);
-    ctx.quadraticCurveTo(1.2, 0.55, 0.6, 0.54);
-    ctx.quadraticCurveTo(0.4, 0.5, 0.34, 0.4);
-    ctx.lineTo(-0.55, 0.4);
-    ctx.quadraticCurveTo(-0.7, 0.4, -0.78, 0.56);
-    ctx.lineTo(-1.45, 0.56);
-    ctx.quadraticCurveTo(-1.52, 0.56, -1.52, 0.4);
-    ctx.lineTo(-1.5, -0.05);
-  } else if (modelId === 'speedster') {
-    ctx.moveTo(-1.4, -0.05);
-    ctx.lineTo(1.6, -0.05);
-    ctx.bezierCurveTo(1.8, -0.05, 1.9, 0.1, 1.8, 0.15);
-    ctx.quadraticCurveTo(1.6, 0.2, 1.4, 0.3);
-    ctx.lineTo(0.6, 0.35);
-    ctx.quadraticCurveTo(0.4, 0.38, 0.2, 0.4);
-    ctx.lineTo(-0.6, 0.4);
-    ctx.quadraticCurveTo(-1.0, 0.42, -1.2, 0.45);
-    ctx.lineTo(-1.5, 0.3);
-    ctx.lineTo(-1.4, -0.05);
-  } else if (modelId === 'climber') {
-    ctx.moveTo(-1.6, -0.05);
-    ctx.lineTo(1.4, -0.05);
-    ctx.quadraticCurveTo(1.5, -0.05, 1.5, 0.1);
-    ctx.lineTo(1.5, 0.4);
-    ctx.quadraticCurveTo(1.4, 0.65, 1.3, 0.65);
-    ctx.lineTo(0.7, 0.7);
-    ctx.quadraticCurveTo(0.5, 0.7, 0.4, 0.4);
-    ctx.lineTo(-0.6, 0.4);
-    ctx.quadraticCurveTo(-1.4, 0.4, -1.5, 0.7);
-    ctx.lineTo(-1.6, 0.6);
-    ctx.lineTo(-1.6, -0.05);
-  }
-  ctx.closePath();
+function getVehicleImage(modelId: string): HTMLImageElement | null {
+  if (typeof window === 'undefined') return null;
+  if (vehicleImages[modelId]) return vehicleImages[modelId];
+
+  const img = new Image();
+  img.src = `/images/vehicles/${modelId}.png`;
+  vehicleImages[modelId] = img;
+  return img;
 }
+
+const SPRITE_CONFIGS: Record<string, { width: number; xOffset: number; yOffset: number }> = {
+  buggy: { width: 3.4, xOffset: -1.7, yOffset: 0.15 },
+  climber: { width: 3.6, xOffset: -1.8, yOffset: 0.3 },
+  speedster: { width: 3.6, xOffset: -1.8, yOffset: 0.2 },
+};
 
 function drawStrut(ctx: CanvasRenderingContext2D, v: VehiclePose, w: WheelPose): void {
   const anchor = toWorld(v.pos, v.angle, w.mount);
@@ -212,268 +186,6 @@ function drawWheel(ctx: CanvasRenderingContext2D, w: WheelPose): void {
   ctx.restore();
 }
 
-function drawDriver(ctx: CanvasRenderingContext2D, livery: Livery, crashed: boolean, modelId: string): void {
-  const driverY = modelId === 'speedster' ? -0.2 : modelId === 'climber' ? -0.05 : 0;
-  ctx.save();
-  ctx.translate(0, driverY);
-  
-  // Torso and arm reaching for the wheel.
-  ctx.fillStyle = livery.jacket;
-  ctx.beginPath();
-  ctx.moveTo(-0.42, 0.38);
-  ctx.lineTo(0.02, 0.38);
-  ctx.lineTo(-0.02, 0.92);
-  ctx.lineTo(-0.32, 0.92);
-  ctx.closePath();
-  ctx.fill();
-  ctx.strokeStyle = livery.jacket;
-  ctx.lineWidth = 0.12;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.moveTo(-0.1, 0.82);
-  ctx.lineTo(0.28, 0.62);
-  ctx.stroke();
-  ctx.strokeStyle = '#1f2937';
-  ctx.lineWidth = 0.07;
-  ctx.beginPath();
-  ctx.moveTo(0.22, 0.46);
-  ctx.lineTo(0.36, 0.72);
-  ctx.stroke();
-
-  const { x, y } = HEAD_OFFSET;
-  ctx.fillStyle = HELMET;
-  ctx.beginPath();
-  ctx.arc(x, y, HEAD_RADIUS, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = livery.trim;
-  ctx.fillRect(x - HEAD_RADIUS * 0.95, y + 0.02, HEAD_RADIUS * 1.2, 0.07);
-  ctx.fillStyle = crashed ? '#ef4444' : VISOR;
-  ctx.beginPath();
-  ctx.ellipse(x + 0.12, y - 0.02, 0.14, 0.1, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.restore();
-}
-
-function drawCarPart(ctx: CanvasRenderingContext2D, livery: Livery, modelId: string, partId: string): void {
-  const isSpeedster = modelId === 'speedster';
-  const isClimber = modelId === 'climber';
-
-  if (partId === 'chassis') {
-    // Main body with metallic gradient
-    const grad = ctx.createLinearGradient(-1.5, 0.6, 1.5, -0.2);
-    grad.addColorStop(0, livery.body);
-    grad.addColorStop(0.3, livery.body);
-    grad.addColorStop(1, livery.shade);
-    
-    ctx.fillStyle = grad;
-    drawChassisShape(ctx, modelId);
-    ctx.fill();
-    
-    // Lower body shading
-    ctx.fillStyle = livery.shade;
-    ctx.fillRect(-1.5, -0.05, 3.1, 0.18);
-    
-    // Custom trim and styling
-    ctx.fillStyle = livery.trim;
-    if (isClimber) {
-      ctx.fillRect(-1.4, 0.3, 1.0, 0.1);
-      ctx.fillRect(0.6, 0.35, 0.8, 0.1);
-      ctx.strokeStyle = livery.shade;
-      ctx.lineWidth = 0.04;
-      ctx.strokeRect(-0.6, 0.15, 0.8, 0.4); 
-      ctx.strokeRect(0.25, 0.15, 0.5, 0.4); 
-    } else if (isSpeedster) {
-      ctx.fillRect(-1.4, 0.15, 3.0, 0.08);
-      ctx.fillStyle = '#fff';
-      ctx.fillRect(-1.4, 0.23, 3.0, 0.03);
-      ctx.fillStyle = '#1e293b';
-      ctx.fillRect(-0.8, 0.28, 0.1, 0.1);
-      ctx.fillRect(-0.65, 0.28, 0.1, 0.1);
-    } else {
-      ctx.fillRect(-1.45, 0.26, 1.0, 0.07);
-      ctx.fillRect(0.72, 0.3, 0.8, 0.07);
-      ctx.fillStyle = '#1e293b';
-      ctx.beginPath();
-      ctx.arc(-0.8, 0.2, 0.1, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // Fenders
-    ctx.strokeStyle = '#0f172a';
-    ctx.lineWidth = 0.18;
-    for (const fx of [-1.02, 1.08]) {
-      ctx.beginPath();
-      ctx.arc(fx, -0.1, 0.56, 0.2, Math.PI - 0.2);
-      ctx.stroke();
-      // Inner fender shadow
-      ctx.strokeStyle = 'rgba(0,0,0,0.3)';
-      ctx.lineWidth = 0.08;
-      ctx.beginPath();
-      ctx.arc(fx, -0.1, 0.48, 0.2, Math.PI - 0.2);
-      ctx.stroke();
-    }
-    
-    // Panel lines (doors, hood)
-    ctx.strokeStyle = 'rgba(0,0,0,0.2)';
-    ctx.lineWidth = 0.03;
-    ctx.beginPath();
-    if (isClimber) {
-      ctx.moveTo(-0.6, 0.4); ctx.lineTo(-0.6, 0); // back door seam
-      ctx.moveTo(0.25, 0.4); ctx.lineTo(0.25, 0); // front door seam
-      ctx.moveTo(1.2, 0.4); ctx.lineTo(1.2, 0.1); // hood seam
-    } else if (isSpeedster) {
-      ctx.moveTo(-0.2, 0.4); ctx.lineTo(-0.2, 0); // door seam
-      ctx.moveTo(0.9, 0.35); ctx.lineTo(1.2, 0.2); // hood seam
-    } else {
-      ctx.moveTo(-0.4, 0.4); ctx.lineTo(-0.4, 0); // buggy panel
-      ctx.moveTo(0.4, 0.45); ctx.lineTo(0.6, 0.1); // buggy hood
-    }
-    ctx.stroke();
-    
-    // Windows for enclosed cars
-    if (isClimber) {
-      ctx.fillStyle = 'rgba(148, 163, 184, 0.3)';
-      ctx.beginPath();
-      ctx.moveTo(-0.5, 0.4);
-      ctx.lineTo(-0.5, 0.6);
-      ctx.lineTo(0.3, 0.6);
-      ctx.lineTo(0.3, 0.4);
-      ctx.fill();
-    } else if (isSpeedster) {
-      ctx.fillStyle = 'rgba(148, 163, 184, 0.4)';
-      ctx.beginPath();
-      ctx.moveTo(0.2, 0.4);
-      ctx.lineTo(0.6, 0.4);
-      ctx.lineTo(0.9, 0.3);
-      ctx.lineTo(0.5, 0.3);
-      ctx.fill();
-    }
-    
-    // Decals & Text
-    ctx.save();
-    ctx.scale(1, -1); // Flip text to be upright in physics space
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    if (isClimber) {
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '900 0.2px sans-serif';
-      ctx.fillText('4x4', -1.0, -0.15);
-      ctx.font = '900 0.15px sans-serif';
-      ctx.fillStyle = livery.trim;
-      ctx.fillText('MNTN', -1.0, -0.35);
-    } else if (isSpeedster) {
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'italic 900 0.25px sans-serif';
-      ctx.fillText('99', 0, -0.15);
-      ctx.fillStyle = livery.trim;
-      ctx.font = '900 0.1px sans-serif';
-      ctx.fillText('TURBO', 0.8, -0.2);
-    } else {
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '900 0.2px sans-serif';
-      ctx.fillText('77', -0.2, -0.2);
-      ctx.fillStyle = livery.trim;
-      ctx.beginPath();
-      ctx.arc(-1.1, -0.25, 0.08, 0, Math.PI*2);
-      ctx.fill();
-    }
-    ctx.restore();
-    
-    // Lights
-    ctx.fillStyle = '#fef9c3';
-    ctx.beginPath();
-    if (isSpeedster) {
-      ctx.ellipse(1.5, 0.25, 0.15, 0.05, 0.2, 0, Math.PI * 2);
-    } else if (isClimber) {
-      ctx.fillRect(1.42, 0.45, 0.1, 0.15);
-    } else {
-      ctx.arc(1.54, 0.34, 0.08, 0, Math.PI * 2);
-    }
-    ctx.fill();
-
-    ctx.fillStyle = '#ef4444';
-    if (isClimber) {
-      ctx.fillRect(-1.6, 0.4, 0.08, 0.15);
-    } else {
-      ctx.beginPath();
-      ctx.arc(-1.48, 0.3, 0.05, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  } else if (partId === 'roof') {
-    ctx.strokeStyle = livery.cage;
-    ctx.lineWidth = 0.09;
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
-    
-    if (isClimber) {
-      ctx.beginPath();
-      ctx.moveTo(-0.7, 0.6);
-      ctx.lineTo(-0.6, 1.25);
-      ctx.lineTo(0.35, 1.25);
-      ctx.lineTo(0.65, 0.65);
-      ctx.moveTo(-0.6, 1.25);
-      ctx.lineTo(-1.3, 0.65);
-      ctx.stroke();
-      ctx.lineWidth = 0.05;
-      ctx.beginPath();
-      ctx.moveTo(-0.5, 1.3);
-      ctx.lineTo(0.2, 1.3);
-      ctx.moveTo(-0.4, 1.25);
-      ctx.lineTo(-0.4, 1.3);
-      ctx.moveTo(0.1, 1.25);
-      ctx.lineTo(0.1, 1.3);
-      ctx.stroke();
-    } else if (isSpeedster) {
-      ctx.beginPath();
-      ctx.moveTo(-0.8, 0.4);
-      ctx.lineTo(-0.5, 1.05);
-      ctx.lineTo(0.2, 1.05);
-      ctx.lineTo(0.5, 0.4);
-      ctx.moveTo(-0.5, 1.05);
-      ctx.lineTo(-1.1, 0.4);
-      ctx.stroke();
-    } else {
-      ctx.beginPath();
-      ctx.moveTo(-0.72, 0.5);
-      ctx.lineTo(-0.62, 1.18);
-      ctx.lineTo(0.3, 1.18);
-      ctx.lineTo(0.62, 0.52);
-      ctx.moveTo(-0.62, 1.18);
-      ctx.lineTo(-1.2, 0.56);
-      ctx.stroke();
-    }
-  } else if (partId === 'engine') {
-    ctx.fillStyle = '#475569';
-    ctx.fillRect(-1.48, 0.52, 0.5, 0.22);
-    ctx.fillStyle = '#94a3b8';
-    ctx.fillRect(-1.66, 0.58, 0.24, 0.08);
-    ctx.fillStyle = '#1e293b';
-    ctx.beginPath();
-    ctx.arc(-1.66, 0.62, 0.03, 0, Math.PI * 2);
-    ctx.fill();
-  } else if (partId === 'spoiler') {
-    if (isSpeedster) {
-      ctx.fillStyle = livery.trim;
-      ctx.fillRect(-1.7, 0.5, 0.5, 0.05);
-      ctx.strokeStyle = livery.cage;
-      ctx.lineWidth = 0.09;
-      ctx.beginPath();
-      ctx.moveTo(-1.45, 0.3);
-      ctx.lineTo(-1.45, 0.5);
-      ctx.stroke();
-    }
-  } else if (partId === 'driver') {
-    drawDriver(ctx, livery, true, modelId);
-  }
-}
-
-function drawBody(ctx: CanvasRenderingContext2D, livery: Livery, modelId: string): void {
-  drawCarPart(ctx, livery, modelId, 'roof');
-  drawCarPart(ctx, livery, modelId, 'engine');
-  drawCarPart(ctx, livery, modelId, 'spoiler');
-  drawCarPart(ctx, livery, modelId, 'chassis');
-}
-
 export function drawVehicle(
   ctx: CanvasRenderingContext2D,
   v: VehiclePose,
@@ -486,20 +198,53 @@ export function drawVehicle(
   }
   
   if (v.fragments && v.fragments.length > 0) {
-    for (const f of v.fragments) {
-      ctx.save();
-      ctx.translate(f.pos.x, f.pos.y);
-      ctx.rotate(f.angle);
-      drawCarPart(ctx, livery, modelId, f.partId);
-      ctx.restore();
+    const img = getVehicleImage(modelId);
+    if (img && img.complete && img.naturalWidth > 0) {
+      const config = SPRITE_CONFIGS[modelId] || { width: 3.4, xOffset: -1.7, yOffset: 0.2 };
+      const width = config.width;
+      const height = width * (img.naturalHeight / img.naturalWidth);
+      const centerY = -config.yOffset;
+      const drawY = centerY - height / 2;
+
+      for (const f of v.fragments) {
+        ctx.save();
+        ctx.translate(f.pos.x, f.pos.y);
+        ctx.rotate(f.angle);
+        ctx.scale(1, -1); // flip back for image drawing
+        
+        const sx = f.nx * img.naturalWidth;
+        const sy = f.ny * img.naturalHeight;
+        const sw = f.nw * img.naturalWidth;
+        const sh = f.nh * img.naturalHeight;
+        
+        const dx = config.xOffset + f.nx * width;
+        const dy = drawY + f.ny * height;
+        const dw = f.nw * width;
+        const dh = f.nh * height;
+        
+        ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
+        ctx.restore();
+      }
     }
   } else {
     ctx.save();
     ctx.translate(v.pos.x, v.pos.y);
     ctx.rotate(v.angle);
     ctx.scale(1 + v.squash * 0.05, 1 - v.squash * 0.1);
-    drawDriver(ctx, livery, crashed, modelId);
-    drawBody(ctx, livery, modelId);
+    
+    // We don't draw the stickman driver anymore because the AI art has no windows
+    // (except Buggy which is open, but AI art usually implies a driver or closed cabin).
+    const img = getVehicleImage(modelId);
+    if (img && img.complete && img.naturalWidth > 0) {
+      const config = SPRITE_CONFIGS[modelId] || { width: 3.4, xOffset: -1.7, yOffset: 0.2 };
+      const width = config.width;
+      const height = width * (img.naturalHeight / img.naturalWidth);
+      ctx.scale(1, -1);
+      const centerY = -config.yOffset;
+      const drawY = centerY - height / 2;
+      ctx.drawImage(img, config.xOffset, drawY, width, height);
+    }
+    
     ctx.restore();
   }
   
