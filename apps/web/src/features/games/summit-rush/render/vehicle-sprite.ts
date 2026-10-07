@@ -186,6 +186,48 @@ function drawWheel(ctx: CanvasRenderingContext2D, w: WheelPose): void {
   ctx.restore();
 }
 
+function drawDriver(ctx: CanvasRenderingContext2D, livery: Livery, crashed: boolean, modelId: string): void {
+  const driverY = modelId === 'speedster' ? -0.2 : modelId === 'climber' ? -0.05 : 0;
+  ctx.save();
+  ctx.translate(0, driverY);
+  
+  // Torso and arm reaching for the wheel.
+  ctx.fillStyle = livery.jacket;
+  ctx.beginPath();
+  ctx.moveTo(-0.42, 0.38);
+  ctx.lineTo(0.02, 0.38);
+  ctx.lineTo(-0.02, 0.92);
+  ctx.lineTo(-0.32, 0.92);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = livery.jacket;
+  ctx.lineWidth = 0.12;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(-0.1, 0.82);
+  ctx.lineTo(0.28, 0.62);
+  ctx.stroke();
+  ctx.strokeStyle = '#1f2937';
+  ctx.lineWidth = 0.07;
+  ctx.beginPath();
+  ctx.moveTo(0.22, 0.46);
+  ctx.lineTo(0.36, 0.72);
+  ctx.stroke();
+
+  const { x, y } = HEAD_OFFSET;
+  ctx.fillStyle = HELMET;
+  ctx.beginPath();
+  ctx.arc(x, y, HEAD_RADIUS, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = livery.trim;
+  ctx.fillRect(x - HEAD_RADIUS * 0.95, y + 0.02, HEAD_RADIUS * 1.2, 0.07);
+  ctx.fillStyle = crashed ? '#ef4444' : VISOR;
+  ctx.beginPath();
+  ctx.ellipse(x + 0.12, y - 0.02, 0.14, 0.1, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
 export function drawVehicle(
   ctx: CanvasRenderingContext2D,
   v: VehiclePose,
