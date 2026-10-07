@@ -199,186 +199,151 @@ function drawDriver(ctx: CanvasRenderingContext2D, livery: Livery, crashed: bool
   ctx.restore();
 }
 
-const vehicleImages: Record<string, HTMLImageElement> = {};
+function drawCarPart(ctx: CanvasRenderingContext2D, livery: Livery, modelId: string, partId: string): void {
+  const isSpeedster = modelId === 'speedster';
+  const isClimber = modelId === 'climber';
 
-function getVehicleImage(modelId: string): HTMLImageElement | null {
-  if (typeof window === 'undefined') return null;
-  if (vehicleImages[modelId]) return vehicleImages[modelId];
+  if (partId === 'chassis') {
+    // Main body with metallic gradient
+    const grad = ctx.createLinearGradient(-1.5, 0.6, 1.5, -0.2);
+    grad.addColorStop(0, livery.body);
+    grad.addColorStop(0.3, livery.body);
+    grad.addColorStop(1, livery.shade);
+    
+    ctx.fillStyle = grad;
+    const shape = isSpeedster ? SPEEDSTER_SHAPE : isClimber ? CLIMBER_SHAPE : BUGGY_SHAPE;
+    polygon(ctx, shape);
+    ctx.fill();
+    
+    // Lower body shading
+    ctx.fillStyle = livery.shade;
+    ctx.fillRect(-1.5, -0.05, 3.1, 0.18);
+    
+    // Custom trim and styling
+    ctx.fillStyle = livery.trim;
+    if (isClimber) {
+      ctx.fillRect(-1.4, 0.3, 1.0, 0.1);
+      ctx.fillRect(0.6, 0.35, 0.8, 0.1);
+      ctx.strokeStyle = livery.shade;
+      ctx.lineWidth = 0.04;
+      ctx.strokeRect(-0.6, 0.15, 0.8, 0.4); 
+      ctx.strokeRect(0.25, 0.15, 0.5, 0.4); 
+    } else if (isSpeedster) {
+      ctx.fillRect(-1.4, 0.15, 3.0, 0.08);
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(-1.4, 0.23, 3.0, 0.03);
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(-0.8, 0.28, 0.1, 0.1);
+      ctx.fillRect(-0.65, 0.28, 0.1, 0.1);
+    } else {
+      ctx.fillRect(-1.45, 0.26, 1.0, 0.07);
+      ctx.fillRect(0.72, 0.3, 0.8, 0.07);
+      ctx.fillStyle = '#1e293b';
+      ctx.beginPath();
+      ctx.arc(-0.8, 0.2, 0.1, 0, Math.PI * 2);
+      ctx.fill();
+    }
 
-  const img = new Image();
-  img.src = `/images/vehicles/${modelId}.png`;
-  vehicleImages[modelId] = img;
-  return img;
+    // Fenders
+    ctx.strokeStyle = '#0f172a';
+    ctx.lineWidth = 0.16;
+    for (const fx of [-1.02, 1.08]) {
+      ctx.beginPath();
+      ctx.arc(fx, -0.1, 0.56, 0.2, Math.PI - 0.2);
+      ctx.stroke();
+    }
+    
+    // Lights
+    ctx.fillStyle = '#fef9c3';
+    ctx.beginPath();
+    if (isSpeedster) {
+      ctx.ellipse(1.5, 0.25, 0.15, 0.05, 0.2, 0, Math.PI * 2);
+    } else if (isClimber) {
+      ctx.fillRect(1.42, 0.45, 0.1, 0.15);
+    } else {
+      ctx.arc(1.54, 0.34, 0.08, 0, Math.PI * 2);
+    }
+    ctx.fill();
+
+    ctx.fillStyle = '#ef4444';
+    if (isClimber) {
+      ctx.fillRect(-1.6, 0.4, 0.08, 0.15);
+    } else {
+      ctx.beginPath();
+      ctx.arc(-1.48, 0.3, 0.05, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  } else if (partId === 'roof') {
+    ctx.strokeStyle = livery.cage;
+    ctx.lineWidth = 0.09;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    
+    if (isClimber) {
+      ctx.beginPath();
+      ctx.moveTo(-0.7, 0.6);
+      ctx.lineTo(-0.6, 1.25);
+      ctx.lineTo(0.35, 1.25);
+      ctx.lineTo(0.65, 0.65);
+      ctx.moveTo(-0.6, 1.25);
+      ctx.lineTo(-1.3, 0.65);
+      ctx.stroke();
+      ctx.lineWidth = 0.05;
+      ctx.beginPath();
+      ctx.moveTo(-0.5, 1.3);
+      ctx.lineTo(0.2, 1.3);
+      ctx.moveTo(-0.4, 1.25);
+      ctx.lineTo(-0.4, 1.3);
+      ctx.moveTo(0.1, 1.25);
+      ctx.lineTo(0.1, 1.3);
+      ctx.stroke();
+    } else if (isSpeedster) {
+      ctx.beginPath();
+      ctx.moveTo(-0.8, 0.4);
+      ctx.lineTo(-0.5, 1.05);
+      ctx.lineTo(0.2, 1.05);
+      ctx.lineTo(0.5, 0.4);
+      ctx.moveTo(-0.5, 1.05);
+      ctx.lineTo(-1.1, 0.4);
+      ctx.stroke();
+    } else {
+      ctx.beginPath();
+      ctx.moveTo(-0.72, 0.5);
+      ctx.lineTo(-0.62, 1.18);
+      ctx.lineTo(0.3, 1.18);
+      ctx.lineTo(0.62, 0.52);
+      ctx.moveTo(-0.62, 1.18);
+      ctx.lineTo(-1.2, 0.56);
+      ctx.stroke();
+    }
+  } else if (partId === 'engine') {
+    ctx.fillStyle = '#475569';
+    ctx.fillRect(-1.48, 0.52, 0.5, 0.22);
+    ctx.fillStyle = '#94a3b8';
+    ctx.fillRect(-1.66, 0.58, 0.24, 0.08);
+    ctx.fillStyle = '#1e293b';
+    ctx.beginPath();
+    ctx.arc(-1.66, 0.62, 0.03, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (partId === 'spoiler') {
+    if (isSpeedster) {
+      ctx.fillStyle = livery.trim;
+      ctx.fillRect(-1.7, 0.5, 0.5, 0.05);
+      ctx.strokeStyle = livery.cage;
+      ctx.lineWidth = 0.09;
+      ctx.beginPath();
+      ctx.moveTo(-1.45, 0.3);
+      ctx.lineTo(-1.45, 0.5);
+      ctx.stroke();
+    }
+  }
 }
 
-const SPRITE_CONFIGS: Record<string, { width: number; xOffset: number; yOffset: number }> = {
-  buggy: { width: 3.4, xOffset: -1.7, yOffset: 0.15 },
-  climber: { width: 3.6, xOffset: -1.8, yOffset: 0.3 },
-  speedster: { width: 3.6, xOffset: -1.8, yOffset: 0.2 },
-};
-
 function drawBody(ctx: CanvasRenderingContext2D, livery: Livery, modelId: string): void {
-  const img = getVehicleImage(modelId);
-  if (img && img.complete && img.naturalWidth > 0) {
-    const config = SPRITE_CONFIGS[modelId] || { width: 3.4, xOffset: -1.7, yOffset: 0.2 };
-    const width = config.width;
-    const height = width * (img.naturalHeight / img.naturalWidth);
-    
-    // The physics canvas has Y pointing UP. drawImage expects +Y to point DOWN.
-    // The new images face RIGHT natively.
-    ctx.save();
-    ctx.scale(1, -1);
-    
-    // config.yOffset is the physics Y coordinate where we want the center of the image.
-    // In scale(1,-1) space, physics Y=0.2 becomes Y=-0.2.
-    const centerY = -config.yOffset;
-    const drawY = centerY - height / 2;
-    
-    // Because we flipped X, config.xOffset is also flipped.
-    // But since xOffset is typically -width/2 (centering it horizontally), it stays centered.
-    ctx.drawImage(img, config.xOffset, drawY, width, height);
-    ctx.restore();
-    return;
-  }
-
-  // Fallback to polygons if the image hasn't loaded yet!
-  // Roll cage behind the driver.
-  ctx.strokeStyle = livery.cage;
-  ctx.lineWidth = 0.09;
-  ctx.lineJoin = 'round';
-  
-  if (modelId === 'climber') {
-    // Tall, boxy SUV cage
-    ctx.beginPath();
-    ctx.moveTo(-0.7, 0.6);
-    ctx.lineTo(-0.6, 1.25);
-    ctx.lineTo(0.35, 1.25);
-    ctx.lineTo(0.65, 0.65);
-    ctx.moveTo(-0.6, 1.25);
-    ctx.lineTo(-1.3, 0.65);
-    ctx.stroke();
-    // Extra roof rack bars
-    ctx.lineWidth = 0.05;
-    ctx.beginPath();
-    ctx.moveTo(-0.5, 1.3);
-    ctx.lineTo(0.2, 1.3);
-    ctx.moveTo(-0.4, 1.25);
-    ctx.lineTo(-0.4, 1.3);
-    ctx.moveTo(0.1, 1.25);
-    ctx.lineTo(0.1, 1.3);
-    ctx.stroke();
-  } else if (modelId === 'speedster') {
-    // Low slanted cage
-    ctx.beginPath();
-    ctx.moveTo(-0.8, 0.4);
-    ctx.lineTo(-0.5, 1.05);
-    ctx.lineTo(0.2, 1.05);
-    ctx.lineTo(0.5, 0.4);
-    ctx.moveTo(-0.5, 1.05);
-    ctx.lineTo(-1.1, 0.4);
-    ctx.stroke();
-    // Spoiler
-    ctx.fillStyle = livery.trim;
-    ctx.fillRect(-1.7, 0.5, 0.5, 0.05);
-    ctx.strokeStyle = livery.cage;
-    ctx.beginPath();
-    ctx.moveTo(-1.45, 0.3);
-    ctx.lineTo(-1.45, 0.5);
-    ctx.stroke();
-  } else {
-    // Default Buggy Cage
-    ctx.beginPath();
-    ctx.moveTo(-0.72, 0.5);
-    ctx.lineTo(-0.62, 1.18);
-    ctx.lineTo(0.3, 1.18);
-    ctx.lineTo(0.62, 0.52);
-    ctx.moveTo(-0.62, 1.18);
-    ctx.lineTo(-1.2, 0.56);
-    ctx.stroke();
-  }
-
-  // Engine block and exhaust.
-  ctx.fillStyle = '#475569';
-  ctx.fillRect(-1.48, 0.52, 0.5, 0.22);
-  ctx.fillStyle = '#94a3b8';
-  ctx.fillRect(-1.66, 0.58, 0.24, 0.08);
-  
-  // Exhaust pipe detailing
-  ctx.fillStyle = '#1e293b'; // Pipe hole
-  ctx.beginPath();
-  ctx.arc(-1.66, 0.62, 0.03, 0, Math.PI * 2);
-  ctx.fill();
-
-  const shape = modelId === 'speedster' ? SPEEDSTER_SHAPE : modelId === 'climber' ? CLIMBER_SHAPE : BUGGY_SHAPE;
-  polygon(ctx, shape);
-  
-  ctx.fillStyle = livery.body;
-  ctx.fill();
-  
-  // Lower body shading
-  ctx.fillStyle = livery.shade;
-  ctx.fillRect(-1.5, -0.05, 3.1, 0.18);
-  
-  // Custom trim and styling
-  ctx.fillStyle = livery.trim;
-  if (modelId === 'climber') {
-    ctx.fillRect(-1.4, 0.3, 1.0, 0.1);
-    ctx.fillRect(0.6, 0.35, 0.8, 0.1);
-    // Extra door lines
-    ctx.strokeStyle = livery.shade;
-    ctx.lineWidth = 0.04;
-    ctx.strokeRect(-0.6, 0.15, 0.8, 0.4); // Back door
-    ctx.strokeRect(0.25, 0.15, 0.5, 0.4); // Front door
-  } else if (modelId === 'speedster') {
-    // Racing stripes
-    ctx.fillRect(-1.4, 0.15, 3.0, 0.08);
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(-1.4, 0.23, 3.0, 0.03);
-    // Vents
-    ctx.fillStyle = '#1e293b';
-    ctx.fillRect(-0.8, 0.28, 0.1, 0.1);
-    ctx.fillRect(-0.65, 0.28, 0.1, 0.1);
-  } else {
-    // Buggy trim
-    ctx.fillRect(-1.45, 0.26, 1.0, 0.07);
-    ctx.fillRect(0.72, 0.3, 0.8, 0.07);
-    // Vent
-    ctx.fillStyle = '#1e293b';
-    ctx.beginPath();
-    ctx.arc(-0.8, 0.2, 0.1, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  // Fenders over the wheels.
-  ctx.strokeStyle = '#1e293b'; // Dark fenders
-  ctx.lineWidth = 0.14;
-  for (const fx of [-1.02, 1.08]) {
-    ctx.beginPath();
-    ctx.arc(fx, -0.1, 0.56, 0.2, Math.PI - 0.2);
-    ctx.stroke();
-  }
-  
-  // Headlight & glow
-  ctx.fillStyle = '#fef9c3';
-  ctx.beginPath();
-  if (modelId === 'speedster') {
-    ctx.ellipse(1.5, 0.25, 0.15, 0.05, 0.2, 0, Math.PI * 2);
-  } else if (modelId === 'climber') {
-    ctx.fillRect(1.42, 0.45, 0.1, 0.15); // Square lights
-  } else {
-    ctx.arc(1.54, 0.34, 0.08, 0, Math.PI * 2); // Round
-  }
-  ctx.fill();
-
-  // Tail light
-  ctx.fillStyle = '#ef4444';
-  if (modelId === 'climber') {
-    ctx.fillRect(-1.6, 0.4, 0.08, 0.15);
-  } else {
-    ctx.beginPath();
-    ctx.arc(-1.48, 0.3, 0.05, 0, Math.PI * 2);
-    ctx.fill();
-  }
+  drawCarPart(ctx, livery, modelId, 'roof');
+  drawCarPart(ctx, livery, modelId, 'engine');
+  drawCarPart(ctx, livery, modelId, 'spoiler');
+  drawCarPart(ctx, livery, modelId, 'chassis');
 }
 
 export function drawVehicle(
@@ -393,33 +358,12 @@ export function drawVehicle(
   }
   
   if (v.fragments && v.fragments.length > 0) {
-    const img = getVehicleImage(modelId);
-    if (img && img.complete && img.naturalWidth > 0) {
-      const config = SPRITE_CONFIGS[modelId] || { width: 3.4, xOffset: -1.7, yOffset: 0.2 };
-      const width = config.width;
-      const height = width * (img.naturalHeight / img.naturalWidth);
-      const centerY = -config.yOffset;
-      const drawY = centerY - height / 2;
-
-      for (const f of v.fragments) {
-        ctx.save();
-        ctx.translate(f.pos.x, f.pos.y);
-        ctx.rotate(f.angle);
-        ctx.scale(1, -1);
-        
-        const sx = f.nx * img.naturalWidth;
-        const sy = f.ny * img.naturalHeight;
-        const sw = f.nw * img.naturalWidth;
-        const sh = f.nh * img.naturalHeight;
-        
-        const dx = config.xOffset + f.nx * width;
-        const dy = drawY + f.ny * height;
-        const dw = f.nw * width;
-        const dh = f.nh * height;
-        
-        ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
-        ctx.restore();
-      }
+    for (const f of v.fragments) {
+      ctx.save();
+      ctx.translate(f.pos.x, f.pos.y);
+      ctx.rotate(f.angle);
+      drawCarPart(ctx, livery, modelId, f.partId);
+      ctx.restore();
     }
   } else {
     ctx.save();

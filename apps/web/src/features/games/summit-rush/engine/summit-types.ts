@@ -50,11 +50,7 @@ export interface CarFragment {
   vel: Vec2;
   angle: number;
   angularVel: number;
-  // Normalized image coordinates [0..1]
-  nx: number;
-  ny: number;
-  nw: number;
-  nh: number;
+  partId: string;
 }
 
 export interface Vehicle {
