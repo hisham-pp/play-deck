@@ -214,6 +214,9 @@ function drawDriver(ctx: CanvasRenderingContext2D, livery: Livery, crashed: bool
   ctx.lineTo(0.36, 0.72);
   ctx.stroke();
 
+  const HELMET = '#f8fafc';
+  const VISOR = '#0f172a';
+
   const { x, y } = HEAD_OFFSET;
   ctx.fillStyle = HELMET;
   ctx.beginPath();
@@ -279,12 +282,10 @@ export function drawVehicle(
     ctx.rotate(v.angle);
     ctx.scale(1 + v.squash * 0.05, 1 - v.squash * 0.1);
     
-    // Draw driver behind the image if needed, or in front.
-    // For open cars like the Buggy, drawing it first makes it appear inside the seat if we had layers,
-    // but the image is flat. We'll just draw it first. If it overlaps, it might look like they are inside.
-    // Wait, the image is opaque, so if we draw the driver first, it will be hidden behind the car body!
-    // We MUST draw the driver after the image so they are visible!
-    
+    // Draw driver behind the image! For the Buggy, the windows are transparent,
+    // so the driver will sit perfectly behind the roll cage.
+    drawDriver(ctx, livery, crashed, modelId);
+
     const img = getVehicleImage(modelId);
     if (img && img.complete && img.naturalWidth > 0) {
       const config = SPRITE_CONFIGS[modelId] || { width: 3.4, xOffset: -1.7, yOffset: 0.2 };
@@ -298,8 +299,6 @@ export function drawVehicle(
       ctx.drawImage(img, config.xOffset, drawY, width, height);
       ctx.restore();
     }
-    
-    drawDriver(ctx, livery, crashed, modelId);
     
     ctx.restore();
   }
