@@ -113,7 +113,7 @@ export function triggerCrash(world: World, reason: CrashReason): void {
 
   if (reason !== 'fuel' && reason !== 'gap') {
     world.vehicle.fragments = [];
-    const parts = ['chassis', 'roof', 'engine', 'spoiler'];
+    const parts = ['chassis', 'roof', 'engine', 'spoiler', 'driver'];
     for (const partId of parts) {
       const vx = world.vehicle.vel.x + (Math.random() - 0.5) * 12;
       const vy = world.vehicle.vel.y + Math.random() * 8 + 4;

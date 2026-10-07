@@ -246,11 +246,53 @@ function drawCarPart(ctx: CanvasRenderingContext2D, livery: Livery, modelId: str
 
     // Fenders
     ctx.strokeStyle = '#0f172a';
-    ctx.lineWidth = 0.16;
+    ctx.lineWidth = 0.18;
     for (const fx of [-1.02, 1.08]) {
       ctx.beginPath();
       ctx.arc(fx, -0.1, 0.56, 0.2, Math.PI - 0.2);
       ctx.stroke();
+      // Inner fender shadow
+      ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+      ctx.lineWidth = 0.08;
+      ctx.beginPath();
+      ctx.arc(fx, -0.1, 0.48, 0.2, Math.PI - 0.2);
+      ctx.stroke();
+    }
+    
+    // Panel lines (doors, hood)
+    ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+    ctx.lineWidth = 0.03;
+    ctx.beginPath();
+    if (isClimber) {
+      ctx.moveTo(-0.6, 0.4); ctx.lineTo(-0.6, 0); // back door seam
+      ctx.moveTo(0.25, 0.4); ctx.lineTo(0.25, 0); // front door seam
+      ctx.moveTo(1.2, 0.4); ctx.lineTo(1.2, 0.1); // hood seam
+    } else if (isSpeedster) {
+      ctx.moveTo(-0.2, 0.4); ctx.lineTo(-0.2, 0); // door seam
+      ctx.moveTo(0.9, 0.35); ctx.lineTo(1.2, 0.2); // hood seam
+    } else {
+      ctx.moveTo(-0.4, 0.4); ctx.lineTo(-0.4, 0); // buggy panel
+      ctx.moveTo(0.4, 0.45); ctx.lineTo(0.6, 0.1); // buggy hood
+    }
+    ctx.stroke();
+    
+    // Windows for enclosed cars
+    if (isClimber) {
+      ctx.fillStyle = 'rgba(148, 163, 184, 0.3)';
+      ctx.beginPath();
+      ctx.moveTo(-0.5, 0.4);
+      ctx.lineTo(-0.5, 0.6);
+      ctx.lineTo(0.3, 0.6);
+      ctx.lineTo(0.3, 0.4);
+      ctx.fill();
+    } else if (isSpeedster) {
+      ctx.fillStyle = 'rgba(148, 163, 184, 0.4)';
+      ctx.beginPath();
+      ctx.moveTo(0.2, 0.4);
+      ctx.lineTo(0.6, 0.4);
+      ctx.lineTo(0.9, 0.3);
+      ctx.lineTo(0.5, 0.3);
+      ctx.fill();
     }
     
     // Lights
@@ -336,6 +378,8 @@ function drawCarPart(ctx: CanvasRenderingContext2D, livery: Livery, modelId: str
       ctx.lineTo(-1.45, 0.5);
       ctx.stroke();
     }
+  } else if (partId === 'driver') {
+    drawDriver(ctx, livery, true, modelId);
   }
 }
 
