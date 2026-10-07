@@ -48,45 +48,44 @@ const HUB = '#f59e0b';
 const HELMET = '#f8fafc';
 const VISOR = '#0f172a';
 
-const BUGGY_SHAPE: readonly Vec2[] = [
-  { x: -1.5, y: -0.02 },
-  { x: 1.4, y: -0.02 },
-  { x: 1.64, y: 0.22 },
-  { x: 1.56, y: 0.5 },
-  { x: 0.6, y: 0.54 },
-  { x: 0.34, y: 0.4 },
-  { x: -0.55, y: 0.4 },
-  { x: -0.78, y: 0.56 },
-  { x: -1.52, y: 0.56 },
-];
-
-const SPEEDSTER_SHAPE: readonly Vec2[] = [
-  { x: -1.4, y: -0.05 },
-  { x: 1.6, y: -0.05 },
-  { x: 1.8, y: 0.15 }, // Sharp nose
-  { x: 1.4, y: 0.3 },  // Low hood
-  { x: 0.6, y: 0.35 }, 
-  { x: 0.2, y: 0.4 },  // Cockpit
-  { x: -0.6, y: 0.4 },
-  { x: -1.2, y: 0.45 },
-  { x: -1.5, y: 0.3 }, // Spoiler mount
-];
-
-const CLIMBER_SHAPE: readonly Vec2[] = [
-  { x: -1.6, y: -0.05 },
-  { x: 1.4, y: -0.05 },
-  { x: 1.5, y: 0.4 },  // Tall flat front
-  { x: 1.3, y: 0.65 }, // High hood
-  { x: 0.7, y: 0.7 },
-  { x: 0.4, y: 0.4 },  // Cockpit cut
-  { x: -0.6, y: 0.4 },
-  { x: -1.5, y: 0.7 }, // High flat back
-];
-
-function polygon(ctx: CanvasRenderingContext2D, pts: readonly Vec2[]): void {
+function drawChassisShape(ctx: CanvasRenderingContext2D, modelId: string) {
   ctx.beginPath();
-  ctx.moveTo(pts[0].x, pts[0].y);
-  for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+  if (modelId === 'buggy') {
+    ctx.moveTo(-1.5, -0.05);
+    ctx.lineTo(1.3, -0.05);
+    ctx.quadraticCurveTo(1.6, -0.05, 1.65, 0.2);
+    ctx.lineTo(1.56, 0.5);
+    ctx.quadraticCurveTo(1.2, 0.55, 0.6, 0.54);
+    ctx.quadraticCurveTo(0.4, 0.5, 0.34, 0.4);
+    ctx.lineTo(-0.55, 0.4);
+    ctx.quadraticCurveTo(-0.7, 0.4, -0.78, 0.56);
+    ctx.lineTo(-1.45, 0.56);
+    ctx.quadraticCurveTo(-1.52, 0.56, -1.52, 0.4);
+    ctx.lineTo(-1.5, -0.05);
+  } else if (modelId === 'speedster') {
+    ctx.moveTo(-1.4, -0.05);
+    ctx.lineTo(1.6, -0.05);
+    ctx.bezierCurveTo(1.8, -0.05, 1.9, 0.1, 1.8, 0.15);
+    ctx.quadraticCurveTo(1.6, 0.2, 1.4, 0.3);
+    ctx.lineTo(0.6, 0.35);
+    ctx.quadraticCurveTo(0.4, 0.38, 0.2, 0.4);
+    ctx.lineTo(-0.6, 0.4);
+    ctx.quadraticCurveTo(-1.0, 0.42, -1.2, 0.45);
+    ctx.lineTo(-1.5, 0.3);
+    ctx.lineTo(-1.4, -0.05);
+  } else if (modelId === 'climber') {
+    ctx.moveTo(-1.6, -0.05);
+    ctx.lineTo(1.4, -0.05);
+    ctx.quadraticCurveTo(1.5, -0.05, 1.5, 0.1);
+    ctx.lineTo(1.5, 0.4);
+    ctx.quadraticCurveTo(1.4, 0.65, 1.3, 0.65);
+    ctx.lineTo(0.7, 0.7);
+    ctx.quadraticCurveTo(0.5, 0.7, 0.4, 0.4);
+    ctx.lineTo(-0.6, 0.4);
+    ctx.quadraticCurveTo(-1.4, 0.4, -1.5, 0.7);
+    ctx.lineTo(-1.6, 0.6);
+    ctx.lineTo(-1.6, -0.05);
+  }
   ctx.closePath();
 }
 
@@ -123,37 +122,93 @@ function drawWheel(ctx: CanvasRenderingContext2D, w: WheelPose): void {
   const r = w.radius;
   ctx.save();
   ctx.translate(w.pos.x, w.pos.y);
+  
+  // Brake Caliper (static, does not rotate with wheel)
+  ctx.save();
+  ctx.rotate(-w.angle); // counteract wheel rotation so it stays fixed relative to car... wait, wheel is rotated directly! 
+  // Actually, w.angle is the visual rotation of the wheel in world space.
+  // We want the caliper to be upright in the car's space. We don't have the car's angle here.
+  // We'll just keep it upright in world space.
+  ctx.fillStyle = '#94a3b8';
+  ctx.beginPath();
+  ctx.arc(0, 0, r * 0.4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#ef4444'; // Red brembo caliper
+  ctx.beginPath();
+  ctx.arc(0, 0, r * 0.42, -Math.PI / 6, Math.PI / 6);
+  ctx.lineTo(r * 0.3, Math.PI / 6);
+  ctx.arc(0, 0, r * 0.3, Math.PI / 6, -Math.PI / 6, true);
+  ctx.fill();
+  ctx.restore();
+
   ctx.rotate(w.angle);
-  ctx.fillStyle = TIRE;
+  
+  // Tire outer
+  ctx.fillStyle = '#111827';
   ctx.beginPath();
   ctx.arc(0, 0, r, 0, Math.PI * 2);
   ctx.fill();
-  // Chunky tread blocks make the rotation readable at speed.
-  ctx.fillStyle = TIRE_TREAD;
-  for (let i = 0; i < 10; i++) {
-    const a = (i / 10) * Math.PI * 2;
+  
+  // Aggressive off-road tread
+  ctx.fillStyle = '#1f2937';
+  for (let i = 0; i < 14; i++) {
+    const a = (i / 14) * Math.PI * 2;
     ctx.save();
     ctx.rotate(a);
-    ctx.fillRect(r * 0.78, -0.05, r * 0.22, 0.1);
+    ctx.beginPath();
+    ctx.moveTo(r * 0.8, -0.08);
+    ctx.lineTo(r * 1.05, -0.04);
+    ctx.lineTo(r * 1.05, 0.04);
+    ctx.lineTo(r * 0.8, 0.08);
+    ctx.fill();
     ctx.restore();
   }
-  ctx.fillStyle = RIM;
+  
+  // Tire inner sidewall ring
+  ctx.strokeStyle = '#374151';
+  ctx.lineWidth = 0.04;
   ctx.beginPath();
-  ctx.arc(0, 0, r * 0.52, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.strokeStyle = '#94a3b8';
-  ctx.lineWidth = 0.05;
-  ctx.beginPath();
-  for (let i = 0; i < 5; i++) {
-    const a = (i / 5) * Math.PI * 2;
-    ctx.moveTo(0, 0);
-    ctx.lineTo(Math.cos(a) * r * 0.48, Math.sin(a) * r * 0.48);
-  }
+  ctx.arc(0, 0, r * 0.75, 0, Math.PI * 2);
   ctx.stroke();
+
+  // Rim background (dark)
+  ctx.fillStyle = '#1e293b';
+  ctx.beginPath();
+  ctx.arc(0, 0, r * 0.55, 0, Math.PI * 2);
+  ctx.fill();
+  
+  // Spokes (positive metallic)
+  ctx.strokeStyle = '#cbd5e1';
+  ctx.lineWidth = 0.12;
+  ctx.lineCap = 'round';
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2;
+    ctx.save();
+    ctx.rotate(a);
+    ctx.beginPath();
+    ctx.moveTo(r * 0.15, 0);
+    ctx.lineTo(r * 0.5, 0);
+    ctx.stroke();
+    ctx.restore();
+  }
+  
+  // Outer Rim edge
+  ctx.strokeStyle = '#94a3b8';
+  ctx.lineWidth = 0.06;
+  ctx.beginPath();
+  ctx.arc(0, 0, r * 0.55, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // Hub cap
   ctx.fillStyle = HUB;
   ctx.beginPath();
-  ctx.arc(0, 0, r * 0.16, 0, Math.PI * 2);
+  ctx.arc(0, 0, r * 0.15, 0, Math.PI * 2);
   ctx.fill();
+  ctx.fillStyle = '#cbd5e1';
+  ctx.beginPath();
+  ctx.arc(0, 0, r * 0.05, 0, Math.PI * 2);
+  ctx.fill();
+  
   ctx.restore();
 }
 
@@ -211,8 +266,7 @@ function drawCarPart(ctx: CanvasRenderingContext2D, livery: Livery, modelId: str
     grad.addColorStop(1, livery.shade);
     
     ctx.fillStyle = grad;
-    const shape = isSpeedster ? SPEEDSTER_SHAPE : isClimber ? CLIMBER_SHAPE : BUGGY_SHAPE;
-    polygon(ctx, shape);
+    drawChassisShape(ctx, modelId);
     ctx.fill();
     
     // Lower body shading
@@ -294,6 +348,36 @@ function drawCarPart(ctx: CanvasRenderingContext2D, livery: Livery, modelId: str
       ctx.lineTo(0.5, 0.3);
       ctx.fill();
     }
+    
+    // Decals & Text
+    ctx.save();
+    ctx.scale(1, -1); // Flip text to be upright in physics space
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    if (isClimber) {
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '900 0.2px sans-serif';
+      ctx.fillText('4x4', -1.0, -0.15);
+      ctx.font = '900 0.15px sans-serif';
+      ctx.fillStyle = livery.trim;
+      ctx.fillText('MNTN', -1.0, -0.35);
+    } else if (isSpeedster) {
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'italic 900 0.25px sans-serif';
+      ctx.fillText('99', 0, -0.15);
+      ctx.fillStyle = livery.trim;
+      ctx.font = '900 0.1px sans-serif';
+      ctx.fillText('TURBO', 0.8, -0.2);
+    } else {
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '900 0.2px sans-serif';
+      ctx.fillText('77', -0.2, -0.2);
+      ctx.fillStyle = livery.trim;
+      ctx.beginPath();
+      ctx.arc(-1.1, -0.25, 0.08, 0, Math.PI*2);
+      ctx.fill();
+    }
+    ctx.restore();
     
     // Lights
     ctx.fillStyle = '#fef9c3';
