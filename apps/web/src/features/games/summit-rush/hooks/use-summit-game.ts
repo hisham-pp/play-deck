@@ -1,6 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { PLAYDECK_ACHIEVEMENTS } from '@/data/achievements';
+import { useAchievementsStore } from '@/stores/achievements.store';
 import { useMultiplayerStore } from '@/stores/multiplayer.store';
 import { usePlayerStore } from '@/stores/player.store';
 import type { PlayMode } from '../components/SummitOverlays';
@@ -11,8 +13,6 @@ import { summitSoundService } from '../services/summit-sound.service';
 import { sampleHud, type HudSnapshot } from './use-summit-loop';
 import { useSummitProgress } from './use-summit-progress';
 import { useSummitRace } from './use-summit-race';
-import { useAchievementsStore } from '@/stores/achievements.store';
-import { PLAYDECK_ACHIEVEMENTS } from '@/data/achievements';
 
 export type SummitPhase = 'menu' | 'countdown' | 'playing' | 'paused' | 'over' | 'upgrades' | 'vehicles' | 'maps' | 'leaderboard';
 

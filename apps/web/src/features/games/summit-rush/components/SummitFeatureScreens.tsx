@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
 import { ArrowLeft, Car, Map, Play, Trophy, Lock, Check } from 'lucide-react';
-import { OverlayShell, PRIMARY_BTN, SECONDARY_BTN } from './SummitOverlays';
-import { VEHICLES } from '../engine/vehicles';
+import React, { useEffect, useState } from 'react';
 import { MAPS } from '../engine/maps';
+import { VEHICLES } from '../engine/vehicles';
+import { OverlayShell, PRIMARY_BTN } from './SummitOverlays';
 function VehicleIcon({ id, className }: { id: string; className?: string }) {
   return (
     <img src={`/images/vehicles/${id}-ui.png`} className={className} alt={id} style={{ objectFit: 'contain' }} />
@@ -197,7 +197,7 @@ export function SummitMaps({
         <div className="flex flex-col gap-2 rounded-xl border border-white/10 bg-white/5 p-4">
           <div className="flex justify-between items-start">
             <div className="flex gap-4">
-              <MapIcon type={activeMap.id as any} className="w-16 h-12" />
+              <MapIcon type={activeMap.id as 'meadows'} className="w-16 h-12" />
               <div>
                 <h3 className="font-display text-2xl font-black text-white">
                   {activeMap.name}
@@ -251,7 +251,7 @@ export function SummitMaps({
                 onClick={() => setPreviewId(m.id)}
                 className={`flex-none w-28 h-24 rounded-xl border p-2 flex flex-col items-center justify-center gap-1 transition snap-center relative ${isPreviewed ? 'border-amber-400 bg-amber-400/10' : 'border-white/10 bg-white/5 hover:bg-white/10'}`}
               >
-                <MapIcon type={m.id as any} className="w-12 h-8 opacity-80" />
+                <MapIcon type={m.id as 'meadows'} className="w-12 h-8 opacity-80" />
                 <span className="text-xs font-bold text-center leading-tight truncate w-full mt-1">{m.name}</span>
                 <span className="text-[10px] text-slate-400 uppercase">{m.environment}</span>
                 {isSelected && <Check className="absolute top-1.5 right-1.5 h-3 w-3 text-amber-500" />}

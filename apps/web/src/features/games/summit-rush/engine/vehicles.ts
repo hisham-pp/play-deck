@@ -1,4 +1,3 @@
-import type { VehicleSpec } from './summit-types';
 import {
   BASE_BRAKE_TORQUE,
   BASE_DRIVE_TORQUE,
@@ -12,6 +11,7 @@ import {
   BASE_SUSPENSION_MIN,
   BASE_SUSPENSION_REST,
 } from './summit-constants';
+import type { VehicleSpec } from './summit-types';
 
 export interface VehicleDefinition {
   id: string;

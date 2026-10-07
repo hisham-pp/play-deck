@@ -11,19 +11,19 @@ import { usePreferencesStore } from '@/stores/preferences.store';
 import { useSummitGame } from '../hooks/use-summit-game';
 import { useSummitInput } from '../hooks/use-summit-input';
 import { useSummitLoop } from '../hooks/use-summit-loop';
+import { SummitVehicles, SummitMaps, SummitLeaderboard } from './SummitFeatureScreens';
 import { SummitGameOver, type RaceSummary } from './SummitGameOver';
 import { SummitHud } from './SummitHud';
 import { SummitOnlinePanel } from './SummitOnlinePanel';
 import { CountdownOverlay, PauseScreen, StartScreen } from './SummitOverlays';
 import { SummitPedals } from './SummitPedals';
 import { SummitUpgrades } from './SummitUpgrades';
-import { SummitVehicles, SummitMaps, SummitLeaderboard } from './SummitFeatureScreens';
 
 const HUD_INSET = 84;
 
 export function SummitRushGame() {
   const game = useSummitGame();
-  const { phase, mode, race, inRace, hud, result, progress, progressRef } = game;
+  const { phase, mode, race, inRace, hud, result, progress } = game;
   const player = usePlayerStore((s) => s.player);
   const soundEnabled = usePreferencesStore((s) => s.soundEnabled);
   const reducedMotion = usePreferencesStore((s) => s.reducedMotion);

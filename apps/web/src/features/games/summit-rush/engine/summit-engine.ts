@@ -1,5 +1,6 @@
 import { paletteAt } from './biomes';
 import { populateFeature, pruneCollectibles, updatePickups } from './collectibles';
+import { MAPS } from './maps';
 import { spawnDust, updateParticles, updatePopups } from './particles';
 import { detectCrash, drainFuel, runScore, updateAirState } from './run-rules';
 import {
@@ -27,7 +28,6 @@ import { groundHeightAt } from './terrain-query';
 import { buildVehicleSpec } from './upgrades';
 import { createVehicle, stepVehicle } from './vehicle-physics';
 import { VEHICLES } from './vehicles';
-import { MAPS } from './maps';
 
 const START_X = 0;
 const PRUNE_BATCH = 64;

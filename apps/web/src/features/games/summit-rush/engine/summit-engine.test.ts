@@ -232,10 +232,10 @@ describe('Summit Rush — run rules', () => {
       selectedMapId: 'meadows',
       mapRecords: { meadows: { bestDistance: 100, bestScore: 0 } },
     };
-    const result = buildRunResult(world, progress as any);
+    const result = buildRunResult(world, progress as unknown as SummitProgress);
     assert.equal(result.isNewBest, true);
     assert.equal(result.reason, 'gap');
-    const next = applyRunToProgress(progress as any, result, 'meadows');
+    const next = applyRunToProgress(progress as unknown as SummitProgress, result, 'meadows');
     assert.deepEqual(
       [next.coins, next.bestDistance, next.totalRuns, next.totalDistance],
       [50, 123, 3, 423],

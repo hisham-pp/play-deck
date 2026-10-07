@@ -1,15 +1,5 @@
 import {
-  BASE_BRAKE_TORQUE,
-  BASE_DRIVE_TORQUE,
   BASE_FUEL_CAPACITY,
-  BASE_GRIP,
-  BASE_MAX_SPIN,
-  BASE_REVERSE_SPIN,
-  BASE_SPRING_DAMPING,
-  BASE_SPRING_K,
-  BASE_SUSPENSION_MAX,
-  BASE_SUSPENSION_MIN,
-  BASE_SUSPENSION_REST,
 } from './summit-constants';
 import type { UpgradeId, UpgradeLevels, VehicleSpec } from './summit-types';
 
