@@ -47,7 +47,7 @@ const HUB = '#f59e0b';
 const HELMET = '#f8fafc';
 const VISOR = '#0f172a';
 
-const BODY_SHAPE: readonly Vec2[] = [
+const BUGGY_SHAPE: readonly Vec2[] = [
   { x: -1.5, y: -0.02 },
   { x: 1.4, y: -0.02 },
   { x: 1.64, y: 0.22 },
@@ -57,6 +57,29 @@ const BODY_SHAPE: readonly Vec2[] = [
   { x: -0.55, y: 0.4 },
   { x: -0.78, y: 0.56 },
   { x: -1.52, y: 0.56 },
+];
+
+const SPEEDSTER_SHAPE: readonly Vec2[] = [
+  { x: -1.4, y: -0.05 },
+  { x: 1.6, y: -0.05 },
+  { x: 1.8, y: 0.15 }, // Sharp nose
+  { x: 1.4, y: 0.3 },  // Low hood
+  { x: 0.6, y: 0.35 }, 
+  { x: 0.2, y: 0.4 },  // Cockpit
+  { x: -0.6, y: 0.4 },
+  { x: -1.2, y: 0.45 },
+  { x: -1.5, y: 0.3 }, // Spoiler mount
+];
+
+const CLIMBER_SHAPE: readonly Vec2[] = [
+  { x: -1.6, y: -0.05 },
+  { x: 1.4, y: -0.05 },
+  { x: 1.5, y: 0.4 },  // Tall flat front
+  { x: 1.3, y: 0.65 }, // High hood
+  { x: 0.7, y: 0.7 },
+  { x: 0.4, y: 0.4 },  // Cockpit cut
+  { x: -0.6, y: 0.4 },
+  { x: -1.5, y: 0.7 }, // High flat back
 ];
 
 function polygon(ctx: CanvasRenderingContext2D, pts: readonly Vec2[]): void {
@@ -170,48 +193,144 @@ function drawDriver(ctx: CanvasRenderingContext2D, livery: Livery, crashed: bool
   ctx.fill();
 }
 
-function drawBody(ctx: CanvasRenderingContext2D, livery: Livery): void {
+function drawBody(ctx: CanvasRenderingContext2D, livery: Livery, modelId: string): void {
   // Roll cage behind the driver.
   ctx.strokeStyle = livery.cage;
   ctx.lineWidth = 0.09;
   ctx.lineJoin = 'round';
-  ctx.beginPath();
-  ctx.moveTo(-0.72, 0.5);
-  ctx.lineTo(-0.62, 1.18);
-  ctx.lineTo(0.3, 1.18);
-  ctx.lineTo(0.62, 0.52);
-  ctx.moveTo(-0.62, 1.18);
-  ctx.lineTo(-1.2, 0.56);
-  ctx.stroke();
+  
+  if (modelId === 'climber') {
+    // Tall, boxy SUV cage
+    ctx.beginPath();
+    ctx.moveTo(-0.7, 0.6);
+    ctx.lineTo(-0.6, 1.25);
+    ctx.lineTo(0.35, 1.25);
+    ctx.lineTo(0.65, 0.65);
+    ctx.moveTo(-0.6, 1.25);
+    ctx.lineTo(-1.3, 0.65);
+    ctx.stroke();
+    // Extra roof rack bars
+    ctx.lineWidth = 0.05;
+    ctx.beginPath();
+    ctx.moveTo(-0.5, 1.3);
+    ctx.lineTo(0.2, 1.3);
+    ctx.moveTo(-0.4, 1.25);
+    ctx.lineTo(-0.4, 1.3);
+    ctx.moveTo(0.1, 1.25);
+    ctx.lineTo(0.1, 1.3);
+    ctx.stroke();
+  } else if (modelId === 'speedster') {
+    // Low slanted cage
+    ctx.beginPath();
+    ctx.moveTo(-0.8, 0.4);
+    ctx.lineTo(-0.5, 1.05);
+    ctx.lineTo(0.2, 1.05);
+    ctx.lineTo(0.5, 0.4);
+    ctx.moveTo(-0.5, 1.05);
+    ctx.lineTo(-1.1, 0.4);
+    ctx.stroke();
+    // Spoiler
+    ctx.fillStyle = livery.trim;
+    ctx.fillRect(-1.7, 0.5, 0.5, 0.05);
+    ctx.strokeStyle = livery.cage;
+    ctx.beginPath();
+    ctx.moveTo(-1.45, 0.3);
+    ctx.lineTo(-1.45, 0.5);
+    ctx.stroke();
+  } else {
+    // Default Buggy Cage
+    ctx.beginPath();
+    ctx.moveTo(-0.72, 0.5);
+    ctx.lineTo(-0.62, 1.18);
+    ctx.lineTo(0.3, 1.18);
+    ctx.lineTo(0.62, 0.52);
+    ctx.moveTo(-0.62, 1.18);
+    ctx.lineTo(-1.2, 0.56);
+    ctx.stroke();
+  }
 
   // Engine block and exhaust.
   ctx.fillStyle = '#475569';
   ctx.fillRect(-1.48, 0.52, 0.5, 0.22);
   ctx.fillStyle = '#94a3b8';
   ctx.fillRect(-1.66, 0.58, 0.24, 0.08);
+  
+  // Exhaust pipe detailing
+  ctx.fillStyle = '#1e293b'; // Pipe hole
+  ctx.beginPath();
+  ctx.arc(-1.66, 0.62, 0.03, 0, Math.PI * 2);
+  ctx.fill();
 
-  polygon(ctx, BODY_SHAPE);
+  const shape = modelId === 'speedster' ? SPEEDSTER_SHAPE : modelId === 'climber' ? CLIMBER_SHAPE : BUGGY_SHAPE;
+  polygon(ctx, shape);
+  
   ctx.fillStyle = livery.body;
   ctx.fill();
+  
+  // Lower body shading
   ctx.fillStyle = livery.shade;
-  ctx.fillRect(-1.5, -0.02, 2.95, 0.16);
+  ctx.fillRect(-1.5, -0.05, 3.1, 0.18);
+  
+  // Custom trim and styling
   ctx.fillStyle = livery.trim;
-  ctx.fillRect(-1.45, 0.26, 1.0, 0.07);
-  ctx.fillRect(0.72, 0.3, 0.8, 0.07);
+  if (modelId === 'climber') {
+    ctx.fillRect(-1.4, 0.3, 1.0, 0.1);
+    ctx.fillRect(0.6, 0.35, 0.8, 0.1);
+    // Extra door lines
+    ctx.strokeStyle = livery.shade;
+    ctx.lineWidth = 0.04;
+    ctx.strokeRect(-0.6, 0.15, 0.8, 0.4); // Back door
+    ctx.strokeRect(0.25, 0.15, 0.5, 0.4); // Front door
+  } else if (modelId === 'speedster') {
+    // Racing stripes
+    ctx.fillRect(-1.4, 0.15, 3.0, 0.08);
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(-1.4, 0.23, 3.0, 0.03);
+    // Vents
+    ctx.fillStyle = '#1e293b';
+    ctx.fillRect(-0.8, 0.28, 0.1, 0.1);
+    ctx.fillRect(-0.65, 0.28, 0.1, 0.1);
+  } else {
+    // Buggy trim
+    ctx.fillRect(-1.45, 0.26, 1.0, 0.07);
+    ctx.fillRect(0.72, 0.3, 0.8, 0.07);
+    // Vent
+    ctx.fillStyle = '#1e293b';
+    ctx.beginPath();
+    ctx.arc(-0.8, 0.2, 0.1, 0, Math.PI * 2);
+    ctx.fill();
+  }
 
   // Fenders over the wheels.
-  ctx.strokeStyle = livery.shade;
-  ctx.lineWidth = 0.12;
+  ctx.strokeStyle = '#1e293b'; // Dark fenders
+  ctx.lineWidth = 0.14;
   for (const fx of [-1.02, 1.08]) {
     ctx.beginPath();
     ctx.arc(fx, -0.1, 0.56, 0.2, Math.PI - 0.2);
     ctx.stroke();
   }
-  // Headlight.
+  
+  // Headlight & glow
   ctx.fillStyle = '#fef9c3';
   ctx.beginPath();
-  ctx.arc(1.54, 0.34, 0.08, 0, Math.PI * 2);
+  if (modelId === 'speedster') {
+    ctx.ellipse(1.5, 0.25, 0.15, 0.05, 0.2, 0, Math.PI * 2);
+  } else if (modelId === 'climber') {
+    ctx.fillRect(1.42, 0.45, 0.1, 0.15); // Square lights
+  } else {
+    ctx.arc(1.54, 0.34, 0.08, 0, Math.PI * 2); // Round
+  }
   ctx.fill();
+
+  // Tail light
+  ctx.fillStyle = '#ef4444';
+  if (modelId === 'climber') {
+    ctx.fillRect(-1.6, 0.4, 0.08, 0.15);
+  } else {
+    ctx.beginPath();
+    ctx.arc(-1.48, 0.3, 0.05, 0, Math.PI * 2);
+    ctx.fill();
+  }
 }
 
 export function drawVehicle(
@@ -219,6 +338,7 @@ export function drawVehicle(
   v: VehiclePose,
   crashed: boolean,
   livery: Livery = PLAYER_LIVERY,
+  modelId: string = 'buggy'
 ): void {
   for (const w of v.wheels) drawStrut(ctx, v, w);
   ctx.save();
@@ -226,7 +346,7 @@ export function drawVehicle(
   ctx.rotate(v.angle);
   ctx.scale(1 + v.squash * 0.05, 1 - v.squash * 0.1);
   drawDriver(ctx, livery, crashed);
-  drawBody(ctx, livery);
+  drawBody(ctx, livery, modelId);
   ctx.restore();
   for (const w of v.wheels) drawWheel(ctx, w);
 }

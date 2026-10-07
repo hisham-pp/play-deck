@@ -44,7 +44,7 @@ export function createWorld(
   const vehicleDef = VEHICLES.find(v => v.id === vehicleId) || VEHICLES[0];
   const terrain = createTerrain(seed, mapDef.difficultyMultiplier);
   const spec = buildVehicleSpec(upgrades, vehicleDef.baseSpec);
-  const vehicle = createVehicle(spec, START_X, groundHeightAt(terrain, START_X), vehicleDef.color);
+  const vehicle = createVehicle(spec, START_X, groundHeightAt(terrain, START_X), vehicleDef.color, vehicleDef.id);
   const world: World = {
     time: 0,
     status: 'running',

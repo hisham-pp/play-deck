@@ -57,6 +57,7 @@ export interface Vehicle {
   /** Squash factor for the landing animation (0..1). */
   squash: number;
   color: string;
+  modelId: string;
 }
 
 export type TerrainFeatureKind =

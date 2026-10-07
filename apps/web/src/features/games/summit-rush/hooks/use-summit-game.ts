@@ -85,10 +85,12 @@ export function useSummitGame() {
   const race = useSummitRace({ enabled: mode === 'online', onRaceStart });
   const inRace = mode === 'online' && race.raceId !== null && Boolean(race.roomCode);
 
-  // A fresh menu course whenever upgrades load, so the parked buggy matches the garage.
+  // A fresh menu course whenever upgrades load, or when selected vehicle/map changes.
   useEffect(() => {
-    if (isLoaded && phaseRef.current === 'menu') beginWorld(randomSeed());
-  }, [isLoaded, beginWorld]);
+    if (isLoaded && ['menu', 'vehicles', 'maps', 'upgrades'].includes(phase)) {
+      beginWorld(randomSeed());
+    }
+  }, [isLoaded, phase, progress.selectedVehicleId, progress.selectedMapId, beginWorld]);
 
   useEffect(() => {
     if (phase !== 'countdown') return;

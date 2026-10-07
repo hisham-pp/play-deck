@@ -141,7 +141,7 @@ export function renderWorld(
   drawCollectibles(ctx, world.collectibles, bounds, world.time);
   drawGhostVehicles(ctx, opts.ghosts, bounds);
   const playerLivery = { ...PLAYER_LIVERY, body: world.vehicle.color };
-  drawVehicle(ctx, world.vehicle, world.crashReason === 'head', playerLivery);
+  drawVehicle(ctx, world.vehicle, world.crashReason === 'head', playerLivery, world.vehicle.modelId);
   if (world.crashReason === 'head' || world.crashReason === 'flipped') {
     drawDizzyStars(ctx, world.vehicle, world.time);
   }
