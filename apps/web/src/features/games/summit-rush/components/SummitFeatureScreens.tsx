@@ -3,56 +3,9 @@ import { ArrowLeft, Car, Map, Play, Trophy, Lock, Check } from 'lucide-react';
 import { OverlayShell, PRIMARY_BTN, SECONDARY_BTN } from './SummitOverlays';
 import { VEHICLES } from '../engine/vehicles';
 import { MAPS } from '../engine/maps';
-import type { SummitProgress } from '../engine/summit-types';
-import { summitLeaderboardRepository, type LeaderboardEntry } from '../services/summit-leaderboard-repository';
-
-function VehicleIcon({ id, color, className }: { id: string; color: string; className?: string }) {
-  if (id === 'speedster') {
-    return (
-      <svg viewBox="0 0 100 60" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M5 30 L25 30 L40 18 H65 L85 30 H95 C98 30 100 32 100 35 V45 H5 V35 C5 32 7 30 10 30 Z"
-          fill={color}
-        />
-        <path d="M5 30 L0 20 H20 L25 30 Z" fill={color} opacity="0.8" />
-        <circle cx="25" cy="45" r="12" fill="#1e293b" />
-        <circle cx="25" cy="45" r="6" fill="#cbd5e1" />
-        <circle cx="75" cy="45" r="12" fill="#1e293b" />
-        <circle cx="75" cy="45" r="6" fill="#cbd5e1" />
-        <path d="M43 18 H62 L75 30 H32 Z" fill="#bae6fd" opacity="0.3" />
-      </svg>
-    );
-  }
-
-  if (id === 'climber') {
-    return (
-      <svg viewBox="0 0 100 60" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M5 45 V20 C5 15 10 10 15 10 H60 C65 10 68 15 70 20 L75 30 H95 C98 30 100 32 100 35 V45 Z"
-          fill={color}
-        />
-        <rect x="15" y="4" width="45" height="4" rx="2" fill="#1e293b" />
-        <circle cx="25" cy="45" r="14" fill="#1e293b" />
-        <circle cx="25" cy="45" r="6" fill="#cbd5e1" />
-        <circle cx="75" cy="45" r="14" fill="#1e293b" />
-        <circle cx="75" cy="45" r="6" fill="#cbd5e1" />
-        <path d="M15 12 H55 C58 12 60 15 62 18 L68 28 H15 Z" fill="#bae6fd" opacity="0.3" />
-      </svg>
-    );
-  }
-
+function VehicleIcon({ id, className }: { id: string; className?: string }) {
   return (
-    <svg viewBox="0 0 100 60" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M20 30L30 15H70L80 30H90C95.5228 30 100 34.4772 100 40V45H0V40C0 34.4772 4.47715 30 10 30H20Z"
-        fill={color}
-      />
-      <circle cx="25" cy="45" r="12" fill="#1e293b" />
-      <circle cx="25" cy="45" r="6" fill="#cbd5e1" />
-      <circle cx="75" cy="45" r="12" fill="#1e293b" />
-      <circle cx="75" cy="45" r="6" fill="#cbd5e1" />
-      <path d="M35 15H65L72 28H28L35 15Z" fill="#bae6fd" opacity="0.3" />
-    </svg>
+    <img src={`/images/vehicles/${id}.png`} className={className} alt={id} style={{ objectFit: 'contain' }} />
   );
 }
 
@@ -115,7 +68,7 @@ export function SummitVehicles({
           <div className="flex justify-between items-start">
             <div>
               <h3 className="font-display text-2xl font-black text-white flex items-center gap-3">
-                <VehicleIcon id={activeVehicle.id} color={activeVehicle.color} className="w-12 h-12 drop-shadow-md" />
+                <VehicleIcon id={activeVehicle.id} className="w-12 h-12 drop-shadow-md" />
                 {activeVehicle.name}
               </h3>
               <p className="text-sm text-slate-300 mt-1">{activeVehicle.description}</p>
@@ -184,7 +137,7 @@ export function SummitVehicles({
                 onClick={() => setPreviewId(v.id)}
                 className={`flex-none w-24 h-24 rounded-xl border p-2 flex flex-col items-center justify-center gap-1 transition snap-center relative ${isPreviewed ? 'border-amber-400 bg-amber-400/10' : 'border-white/10 bg-white/5 hover:bg-white/10'}`}
               >
-                <VehicleIcon id={v.id} color={v.color} className="w-10 h-10 mb-1" />
+                <VehicleIcon id={v.id} className="w-10 h-10 mb-1" />
                 <span className="text-[10px] font-bold text-center leading-tight truncate w-full">{v.name}</span>
                 {isSelected && <Check className="absolute top-1.5 right-1.5 h-3 w-3 text-amber-500" />}
                 {!isUnlocked && <Lock className="absolute top-1.5 right-1.5 h-3 w-3 text-slate-500" />}

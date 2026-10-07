@@ -193,7 +193,32 @@ function drawDriver(ctx: CanvasRenderingContext2D, livery: Livery, crashed: bool
   ctx.fill();
 }
 
+const vehicleImages: Record<string, HTMLImageElement> = {};
+
+function getVehicleImage(modelId: string): HTMLImageElement | null {
+  if (typeof window === 'undefined') return null;
+  if (vehicleImages[modelId]) return vehicleImages[modelId];
+
+  const img = new Image();
+  img.src = `/images/vehicles/${modelId}.png`;
+  vehicleImages[modelId] = img;
+  return img;
+}
+
 function drawBody(ctx: CanvasRenderingContext2D, livery: Livery, modelId: string): void {
+  const img = getVehicleImage(modelId);
+  if (img && img.complete && img.naturalWidth > 0) {
+    // Determine bounds to roughly align the image wheels with the physics wheels
+    // Physics wheels are at roughly x=-0.9 and x=1.0. Radius 0.4.
+    // Typical image width should be about 4 meters to cover x from -1.8 to 2.2
+    const width = 4.2;
+    const height = width * (img.naturalHeight / img.naturalWidth);
+    // Offset slightly so the wheels align
+    ctx.drawImage(img, -2.1, -0.4, width, height);
+    return;
+  }
+
+  // Fallback to polygons if the image hasn't loaded yet!
   // Roll cage behind the driver.
   ctx.strokeStyle = livery.cage;
   ctx.lineWidth = 0.09;
