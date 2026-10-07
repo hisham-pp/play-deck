@@ -213,8 +213,14 @@ function drawBody(ctx: CanvasRenderingContext2D, livery: Livery, modelId: string
     // Typical image width should be about 4 meters to cover x from -1.8 to 2.2
     const width = 4.2;
     const height = width * (img.naturalHeight / img.naturalWidth);
-    // Offset slightly so the wheels align
-    ctx.drawImage(img, -2.1, -0.4, width, height);
+    // The physics canvas has Y pointing UP. drawImage expects +Y to point DOWN.
+    // We flip the Y axis locally so the image draws right-side up.
+    ctx.save();
+    ctx.scale(1, -1);
+    // Draw the image. The physics y=-0.4 becomes y=0.4 in the flipped space.
+    // We want the bottom of the image to sit at y=0.4, so the top is at 0.4 - height.
+    ctx.drawImage(img, -2.1, 0.4 - height, width, height);
+    ctx.restore();
     return;
   }
 
