@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import { ProfileHeader } from './components/ProfileHeader';
-import { ProfileNav } from './components/ProfileNav';
-import { ProfileInit } from './components/ProfileInit';
+import { ProfileHeader } from '@/features/player/components/profile/ProfileHeader';
+import { ProfileNav } from '@/features/player/components/profile/ProfileNav';
+import { ProfileInit } from '@/features/player/components/profile/ProfileInit';
 
 export const metadata: Metadata = {
   title: 'Player Profile',

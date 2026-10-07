@@ -4,9 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { usePlayerStore } from '@/stores/player.store';
-import { PlayerLevelCard } from './components/PlayerLevelCard';
-import { ProfileStatsCard } from './components/ProfileStatsCard';
-import { BestScoresCard } from './components/BestScoresCard';
+import { PlayerLevelCard } from '@/features/player/components/profile/PlayerLevelCard';
+import { ProfileStatsCard } from '@/features/player/components/profile/ProfileStatsCard';
+import { BestScoresCard } from '@/features/player/components/profile/BestScoresCard';
 
 const AVATARS = ['🕹️', '👾', '🚀', '♟️', '🎲', '🎯', '⚡', '🐉', '🦊'];
 

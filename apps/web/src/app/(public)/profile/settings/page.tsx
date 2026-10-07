@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { usePlayerStore } from '@/stores/player.store';
-import { AccountStatusCard } from '../components/AccountStatusCard';
-import { PreferencesCard } from '../components/PreferencesCard';
+import { AccountStatusCard } from '@/features/player/components/profile/AccountStatusCard';
+import { PreferencesCard } from '@/features/player/components/profile/PreferencesCard';
 
 export default function ProfileSettingsPage() {
   const { player, isLoadingAuth, setAuthModalOpen, signOut } = usePlayerStore();
