@@ -102,6 +102,7 @@ function physicsStep(world: World, dt: number): void {
     world.terrain,
     { gas: input.gas, brake: input.brake, hasFuel: world.fuel > 0 },
     dt,
+    world.status !== 'running'
   );
   updateAirState(world, contact, dt);
   if (!running) return;

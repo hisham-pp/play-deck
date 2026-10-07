@@ -45,6 +45,18 @@ export interface Wheel {
   normalImpulse: number;
 }
 
+export interface CarFragment {
+  pos: Vec2;
+  vel: Vec2;
+  angle: number;
+  angularVel: number;
+  // Normalized image coordinates [0..1]
+  nx: number;
+  ny: number;
+  nw: number;
+  nh: number;
+}
+
 export interface Vehicle {
   pos: Vec2;
   vel: Vec2;
@@ -58,6 +70,7 @@ export interface Vehicle {
   squash: number;
   color: string;
   modelId: string;
+  fragments?: CarFragment[];
 }
 
 export type TerrainFeatureKind =

@@ -110,6 +110,29 @@ export function triggerCrash(world: World, reason: CrashReason): void {
   world.crashTimer = reason === 'fuel' ? 0.5 : CRASH_LINGER_TIME;
   if (reason !== 'fuel') world.camera.shake = 1;
   world.events.push({ type: 'crash', reason });
+
+  if (reason !== 'fuel' && reason !== 'gap') {
+    world.vehicle.fragments = [];
+    const rows = 2;
+    const cols = 3;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const nx = c / cols;
+        const ny = r / rows;
+        const nw = 1 / cols;
+        const nh = 1 / rows;
+        const vx = world.vehicle.vel.x + (Math.random() - 0.5) * 12;
+        const vy = world.vehicle.vel.y + Math.random() * 8 + 4;
+        world.vehicle.fragments.push({
+          pos: { x: world.vehicle.pos.x, y: world.vehicle.pos.y },
+          vel: { x: vx, y: vy },
+          angle: world.vehicle.angle + (Math.random() - 0.5),
+          angularVel: (Math.random() - 0.5) * 15,
+          nx, ny, nw, nh,
+        });
+      }
+    }
+  }
 }
 
 /** Rollover, helmet, gap and fuel-stall detection. */

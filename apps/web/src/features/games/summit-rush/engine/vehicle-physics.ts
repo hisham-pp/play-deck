@@ -230,10 +230,13 @@ export function stepVehicle(
   terrain: Terrain,
   input: DriveInput,
   dt: number,
+  isCrashed: boolean = false
 ): StepContact {
   const airborne = !v.wheels[0].grounded && !v.wheels[1].grounded && !v.hullContact;
-  const torque = { value: applyDrive(v, input, airborne, dt) };
-  for (const w of v.wheels) applySuspension(v, w, dt, torque);
+  const torque = { value: isCrashed ? 0 : applyDrive(v, input, airborne, dt) };
+  if (!isCrashed) {
+    for (const w of v.wheels) applySuspension(v, w, dt, torque);
+  }
 
   v.vel.y -= GRAVITY * dt;
   v.angVel += (torque.value / CHASSIS_INERTIA) * dt;
@@ -278,6 +281,30 @@ export function stepVehicle(
   const headHit = circleContact(terrain, head, HEAD_RADIUS) !== null;
 
   v.squash = Math.max(0, v.squash - dt * 4);
+  
+  if (v.fragments) {
+    for (const f of v.fragments) {
+      f.vel.y -= GRAVITY * dt;
+      f.pos.x += f.vel.x * dt;
+      f.pos.y += f.vel.y * dt;
+      f.angle += f.angularVel * dt;
+      // Simple ground collision
+      const c = circleContact(terrain, f.pos, 0.2);
+      if (c) {
+        f.pos.x += c.normal.x * c.depth;
+        f.pos.y += c.normal.y * c.depth;
+        const vn = f.vel.x * c.normal.x + f.vel.y * c.normal.y;
+        if (vn < 0) {
+          f.vel.x -= c.normal.x * vn * 1.5;
+          f.vel.y -= c.normal.y * vn * 1.5;
+          f.vel.x *= 0.8;
+          f.vel.y *= 0.8;
+          f.angularVel *= 0.8;
+        }
+      }
+    }
+  }
+
   return { wheelsGrounded, headHit, impact };
 }
 

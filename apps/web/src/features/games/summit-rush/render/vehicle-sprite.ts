@@ -1,5 +1,5 @@
 import { HEAD_OFFSET, HEAD_RADIUS, toWorld } from '../engine/summit-constants';
-import type { Vec2 } from '../engine/summit-types';
+import type { Vec2, CarFragment } from '../engine/summit-types';
 
 export interface Livery {
   body: string;
@@ -38,6 +38,7 @@ export interface VehiclePose {
   angle: number;
   squash: number;
   wheels: readonly WheelPose[];
+  fragments?: CarFragment[];
 }
 
 const TIRE = '#1f2430';
@@ -156,7 +157,11 @@ function drawWheel(ctx: CanvasRenderingContext2D, w: WheelPose): void {
   ctx.restore();
 }
 
-function drawDriver(ctx: CanvasRenderingContext2D, livery: Livery, crashed: boolean): void {
+function drawDriver(ctx: CanvasRenderingContext2D, livery: Livery, crashed: boolean, modelId: string): void {
+  const driverY = modelId === 'speedster' ? -0.2 : modelId === 'climber' ? -0.05 : 0;
+  ctx.save();
+  ctx.translate(0, driverY);
+  
   // Torso and arm reaching for the wheel.
   ctx.fillStyle = livery.jacket;
   ctx.beginPath();
@@ -191,6 +196,7 @@ function drawDriver(ctx: CanvasRenderingContext2D, livery: Livery, crashed: bool
   ctx.beginPath();
   ctx.ellipse(x + 0.12, y - 0.02, 0.14, 0.1, 0, 0, Math.PI * 2);
   ctx.fill();
+  ctx.restore();
 }
 
 const vehicleImages: Record<string, HTMLImageElement> = {};
@@ -382,14 +388,49 @@ export function drawVehicle(
   livery: Livery = PLAYER_LIVERY,
   modelId: string = 'buggy'
 ): void {
-  for (const w of v.wheels) drawStrut(ctx, v, w);
-  ctx.save();
-  ctx.translate(v.pos.x, v.pos.y);
-  ctx.rotate(v.angle);
-  ctx.scale(1 + v.squash * 0.05, 1 - v.squash * 0.1);
-  drawDriver(ctx, livery, crashed);
-  drawBody(ctx, livery, modelId);
-  ctx.restore();
+  if (!crashed) {
+    for (const w of v.wheels) drawStrut(ctx, v, w);
+  }
+  
+  if (v.fragments && v.fragments.length > 0) {
+    const img = getVehicleImage(modelId);
+    if (img && img.complete && img.naturalWidth > 0) {
+      const config = SPRITE_CONFIGS[modelId] || { width: 3.4, xOffset: -1.7, yOffset: 0.2 };
+      const width = config.width;
+      const height = width * (img.naturalHeight / img.naturalWidth);
+      const centerY = -config.yOffset;
+      const drawY = centerY - height / 2;
+
+      for (const f of v.fragments) {
+        ctx.save();
+        ctx.translate(f.pos.x, f.pos.y);
+        ctx.rotate(f.angle);
+        ctx.scale(1, -1);
+        
+        const sx = f.nx * img.naturalWidth;
+        const sy = f.ny * img.naturalHeight;
+        const sw = f.nw * img.naturalWidth;
+        const sh = f.nh * img.naturalHeight;
+        
+        const dx = config.xOffset + f.nx * width;
+        const dy = drawY + f.ny * height;
+        const dw = f.nw * width;
+        const dh = f.nh * height;
+        
+        ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
+        ctx.restore();
+      }
+    }
+  } else {
+    ctx.save();
+    ctx.translate(v.pos.x, v.pos.y);
+    ctx.rotate(v.angle);
+    ctx.scale(1 + v.squash * 0.05, 1 - v.squash * 0.1);
+    drawDriver(ctx, livery, crashed, modelId);
+    drawBody(ctx, livery, modelId);
+    ctx.restore();
+  }
+  
   for (const w of v.wheels) drawWheel(ctx, w);
 }
 
