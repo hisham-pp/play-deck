@@ -40,6 +40,7 @@ interface SummitGameOverProps {
   onPlayAgain: () => void;
   onUpgrades: () => void;
   onMenu: () => void;
+  onLeaderboard?: () => void;
 }
 
 function Row({ label, value, icon }: { label: string; value: string; icon?: ReactNode }) {
@@ -122,6 +123,7 @@ export function SummitGameOver({
   onPlayAgain,
   onUpgrades,
   onMenu,
+  onLeaderboard,
 }: SummitGameOverProps) {
   const toBest = progress.bestDistance - result.distance;
   return (
@@ -184,6 +186,11 @@ export function SummitGameOver({
             <Home className="h-4 w-4" /> Menu
           </button>
         </div>
+        {onLeaderboard && (
+          <button type="button" className={SECONDARY_BTN} onClick={onLeaderboard}>
+            <Trophy className="h-4 w-4 text-amber-400" /> Leaderboard
+          </button>
+        )}
       </div>
     </OverlayShell>
   );

@@ -11,6 +11,7 @@ import { usePreferencesStore } from '@/stores/preferences.store';
 import { useSummitGame } from '../hooks/use-summit-game';
 import { useSummitInput } from '../hooks/use-summit-input';
 import { useSummitLoop } from '../hooks/use-summit-loop';
+import { SummitVehicles, SummitMaps, SummitLeaderboard } from './SummitFeatureScreens';
 import { SummitGameOver, type RaceSummary } from './SummitGameOver';
 import { SummitHud } from './SummitHud';
 import { SummitOnlinePanel } from './SummitOnlinePanel';
@@ -34,8 +35,8 @@ export function SummitRushGame() {
 
   const isDriving = phase === 'playing';
   const handleConfirm = useCallback(() => {
-    if (phase === 'menu' && mode === 'solo') game.startSolo();
-    else if (phase === 'over' && !inRace) game.startSolo();
+    if (phase === 'menu' && mode === 'solo') game.toVehicles();
+    else if (phase === 'over' && !inRace) game.toVehicles();
   }, [game, inRace, mode, phase]);
 
   const { inputRef, setPedal } = useSummitInput(phase !== 'upgrades', {
@@ -169,9 +170,41 @@ export function SummitRushGame() {
             progress={progress}
             mode={mode}
             onModeChange={game.setMode}
-            onStart={game.startSolo}
+            onStart={game.toVehicles}
             onUpgrades={() => game.openUpgrades('menu')}
             onlinePanel={onlinePanel}
+          />
+        )}
+        {phase === 'vehicles' && (
+          <SummitVehicles
+            progress={progress}
+            onSelect={game.selectVehicle}
+            onUnlock={(id, cost) => {
+              if (game.unlockVehicle(id, cost)) {
+                // optional success sound
+              }
+            }}
+            onNext={game.toMaps}
+            onBack={game.toMenu}
+          />
+        )}
+        {phase === 'maps' && (
+          <SummitMaps
+            progress={progress}
+            onSelect={game.selectMap}
+            onUnlock={(id, cost) => {
+              if (game.unlockMap(id, cost)) {
+                // optional success sound
+              }
+            }}
+            onStart={game.startSolo}
+            onBack={game.toVehicles}
+          />
+        )}
+        {phase === 'leaderboard' && (
+          <SummitLeaderboard
+            mapId={progress.selectedMapId}
+            onBack={game.toMenu}
           />
         )}
         {phase === 'paused' && (
@@ -186,9 +219,10 @@ export function SummitRushGame() {
             result={result}
             progress={progress}
             race={raceSummary}
-            onPlayAgain={game.startSolo}
+            onPlayAgain={game.toVehicles}
             onUpgrades={() => game.openUpgrades('over')}
             onMenu={game.toMenu}
+            onLeaderboard={game.toLeaderboard}
           />
         )}
         {phase === 'upgrades' && (

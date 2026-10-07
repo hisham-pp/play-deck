@@ -110,6 +110,38 @@ export function triggerCrash(world: World, reason: CrashReason): void {
   world.crashTimer = reason === 'fuel' ? 0.5 : CRASH_LINGER_TIME;
   if (reason !== 'fuel') world.camera.shake = 1;
   world.events.push({ type: 'crash', reason });
+
+  if (reason !== 'fuel' && reason !== 'gap') {
+    world.vehicle.fragments = [];
+    const gridSize = 3;
+    for (let gy = 0; gy < gridSize; gy++) {
+      for (let gx = 0; gx < gridSize; gx++) {
+        const nx = gx / gridSize;
+        const ny = gy / gridSize;
+        const nw = 1 / gridSize;
+        const nh = 1 / gridSize;
+        
+        const vx = world.vehicle.vel.x + (Math.random() - 0.5) * 12;
+        const vy = world.vehicle.vel.y + Math.random() * 8 + 4;
+        
+        world.vehicle.fragments.push({
+          pos: { x: world.vehicle.pos.x, y: world.vehicle.pos.y },
+          vel: { x: vx, y: vy },
+          angle: world.vehicle.angle + (Math.random() - 0.5),
+          angularVel: (Math.random() - 0.5) * 15,
+          partId: `frag_${gx}_${gy}`,
+          nx, ny, nw, nh,
+        });
+      }
+    }
+    world.vehicle.fragments.push({
+      pos: { x: world.vehicle.pos.x, y: world.vehicle.pos.y },
+      vel: { x: world.vehicle.vel.x + (Math.random() - 0.5) * 12, y: world.vehicle.vel.y + Math.random() * 8 + 4 },
+      angle: world.vehicle.angle + (Math.random() - 0.5),
+      angularVel: (Math.random() - 0.5) * 15,
+      partId: 'driver',
+    });
+  }
 }
 
 /** Rollover, helmet, gap and fuel-stall detection. */

@@ -6,8 +6,7 @@ import { drawBackground, type ScreenView } from './background-layer';
 import { drawCollectibles, drawParticles } from './effects-layer';
 import { drawGhostTags, drawGhostVehicles, type GhostView } from './ghost-layer';
 import { drawMarkers, drawTerrain, type MarkerLabel, type WorldBounds } from './terrain-layer';
-import { drawDizzyStars, drawVehicle } from './vehicle-sprite';
-
+import { drawDizzyStars, drawVehicle, PLAYER_LIVERY } from './vehicle-sprite';
 export interface Viewport {
   width: number;
   height: number;
@@ -102,7 +101,7 @@ export function renderWorld(
   const shake = opts.reducedMotion ? 0 : camera.shake * MAX_SHAKE_PX;
   const shakeX = shake ? (Math.random() - 0.5) * shake : 0;
   const shakeY = shake ? (Math.random() - 0.5) * shake : 0;
-  const palette = paletteAt(camera.x - world.startX);
+  const palette = paletteAt(camera.x - world.startX, world.mapBiomeIndex);
 
   const view: ScreenView = {
     width: vp.width,
@@ -141,7 +140,8 @@ export function renderWorld(
   drawTerrain(ctx, world.terrain, bounds, palette);
   drawCollectibles(ctx, world.collectibles, bounds, world.time);
   drawGhostVehicles(ctx, opts.ghosts, bounds);
-  drawVehicle(ctx, world.vehicle, world.crashReason === 'head');
+  const playerLivery = { ...PLAYER_LIVERY, body: world.vehicle.color };
+  drawVehicle(ctx, world.vehicle, world.crashReason === 'head', playerLivery, world.vehicle.modelId);
   if (world.crashReason === 'head' || world.crashReason === 'flipped') {
     drawDizzyStars(ctx, world.vehicle, world.time);
   }

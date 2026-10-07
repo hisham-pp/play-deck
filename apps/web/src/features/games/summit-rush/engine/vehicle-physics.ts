@@ -28,6 +28,8 @@ import {
   WHEEL_RADIUS,
   WHEEL_RESTITUTION,
   WHEEL_SPIN_DRAG,
+  AERO_DRAG_COEFF,
+  AERO_DOWNFORCE_COEFF,
 } from './summit-constants';
 import type { Terrain, Vec2, Vehicle, VehicleSpec, Wheel } from './summit-types';
 import { circleContact, pointContact } from './terrain-query';
@@ -64,7 +66,7 @@ function createWheel(mount: Vec2, pos: Vec2): Wheel {
   };
 }
 
-export function createVehicle(spec: VehicleSpec, x: number, groundY: number): Vehicle {
+export function createVehicle(spec: VehicleSpec, x: number, groundY: number, color: string = '#14b8a6', modelId: string = 'buggy'): Vehicle {
   const pos = { x, y: groundY + WHEEL_RADIUS + spec.suspensionRest - REAR_MOUNT.y - 0.08 };
   const wheelAt = (m: Vec2) =>
     createWheel(m, toWorld(pos, 0, { x: m.x, y: m.y - spec.suspensionRest }));
@@ -77,6 +79,8 @@ export function createVehicle(spec: VehicleSpec, x: number, groundY: number): Ve
     spec,
     hullContact: false,
     squash: 0,
+    color,
+    modelId,
   };
 }
 
@@ -98,7 +102,11 @@ function applySuspension(v: Vehicle, w: Wheel, dt: number, torque: { value: numb
 
   const extension = dot(delta, axis);
   const extRate = dot(rel, axis);
-  let axial = spec.springK * (extension - spec.suspensionRest) + spec.springDamping * extRate;
+  
+  // Progressive suspension: stiffer as it compresses further
+  const progressiveK = spec.springK * (1 + Math.max(0, -extension) * 0.5);
+  let axial = progressiveK * (extension - spec.suspensionRest) + spec.springDamping * extRate;
+  
   if (extension < spec.suspensionMin) {
     axial +=
       BUMP_STOP_STIFFNESS * (extension - spec.suspensionMin) + spec.springDamping * 2 * extRate;
@@ -222,14 +230,33 @@ export function stepVehicle(
   terrain: Terrain,
   input: DriveInput,
   dt: number,
+  isCrashed: boolean = false
 ): StepContact {
   const airborne = !v.wheels[0].grounded && !v.wheels[1].grounded && !v.hullContact;
-  const torque = { value: applyDrive(v, input, airborne, dt) };
-  for (const w of v.wheels) applySuspension(v, w, dt, torque);
+  const torque = { value: isCrashed ? 0 : applyDrive(v, input, airborne, dt) };
+  if (!isCrashed) {
+    for (const w of v.wheels) applySuspension(v, w, dt, torque);
+  }
 
   v.vel.y -= GRAVITY * dt;
   v.angVel += (torque.value / CHASSIS_INERTIA) * dt;
-  v.vel.x *= 1 - CHASSIS_LINEAR_DRAG * dt;
+  
+  // Aerodynamic drag (quadratic) and downforce
+  const speedSq = v.vel.x * v.vel.x + v.vel.y * v.vel.y;
+  const speed = Math.sqrt(speedSq);
+  if (speed > 0.1) {
+    const dragForce = speedSq * AERO_DRAG_COEFF;
+    v.vel.x -= (v.vel.x / speed) * (dragForce / CHASSIS_MASS) * dt;
+    v.vel.y -= (v.vel.y / speed) * (dragForce / CHASSIS_MASS) * dt;
+    
+    // Downforce pushes the car perpendicular to its hull (inward against terrain)
+    const downforce = speedSq * AERO_DOWNFORCE_COEFF;
+    const localDown = rotate({ x: 0, y: -1 }, v.angle);
+    v.vel.x += (localDown.x * downforce / CHASSIS_MASS) * dt;
+    v.vel.y += (localDown.y * downforce / CHASSIS_MASS) * dt;
+  }
+  
+  v.vel.x *= 1 - CHASSIS_LINEAR_DRAG * dt; // Base linear rolling friction
   v.angVel *= 1 - (airborne ? AIR_ANGULAR_DAMPING : GROUND_ANGULAR_DAMPING) * dt;
   v.angVel = clamp(v.angVel, -MAX_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY);
 
@@ -254,6 +281,30 @@ export function stepVehicle(
   const headHit = circleContact(terrain, head, HEAD_RADIUS) !== null;
 
   v.squash = Math.max(0, v.squash - dt * 4);
+  
+  if (v.fragments) {
+    for (const f of v.fragments) {
+      f.vel.y -= GRAVITY * dt;
+      f.pos.x += f.vel.x * dt;
+      f.pos.y += f.vel.y * dt;
+      f.angle += f.angularVel * dt;
+      // Simple ground collision
+      const c = circleContact(terrain, f.pos, 0.2);
+      if (c) {
+        f.pos.x += c.normal.x * c.depth;
+        f.pos.y += c.normal.y * c.depth;
+        const vn = f.vel.x * c.normal.x + f.vel.y * c.normal.y;
+        if (vn < 0) {
+          f.vel.x -= c.normal.x * vn * 1.5;
+          f.vel.y -= c.normal.y * vn * 1.5;
+          f.vel.x *= 0.8;
+          f.vel.y *= 0.8;
+          f.angularVel *= 0.8;
+        }
+      }
+    }
+  }
+
   return { wheelsGrounded, headHit, impact };
 }
 

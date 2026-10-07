@@ -1,5 +1,6 @@
 import { paletteAt } from './biomes';
 import { populateFeature, pruneCollectibles, updatePickups } from './collectibles';
+import { MAPS } from './maps';
 import { spawnDust, updateParticles, updatePopups } from './particles';
 import { detectCrash, drainFuel, runScore, updateAirState } from './run-rules';
 import {
@@ -26,16 +27,24 @@ import { createTerrain, generateFeature } from './terrain-generator';
 import { groundHeightAt } from './terrain-query';
 import { buildVehicleSpec } from './upgrades';
 import { createVehicle, stepVehicle } from './vehicle-physics';
+import { VEHICLES } from './vehicles';
 
 const START_X = 0;
 const PRUNE_BATCH = 64;
 const EXHAUST_OFFSET = { x: -1.6, y: 0.62 };
 const EXHAUST_COLOR = '#b8bcc6';
 
-export function createWorld(seed: number, upgrades: UpgradeLevels): World {
-  const terrain = createTerrain(seed);
-  const spec = buildVehicleSpec(upgrades);
-  const vehicle = createVehicle(spec, START_X, groundHeightAt(terrain, START_X));
+export function createWorld(
+  seed: number, 
+  upgrades: UpgradeLevels,
+  vehicleId: string = 'buggy',
+  mapId: string = 'meadows'
+): World {
+  const mapDef = MAPS.find(m => m.id === mapId) || MAPS[0];
+  const vehicleDef = VEHICLES.find(v => v.id === vehicleId) || VEHICLES[0];
+  const terrain = createTerrain(seed, mapDef.difficultyMultiplier);
+  const spec = buildVehicleSpec(upgrades, vehicleDef.baseSpec);
+  const vehicle = createVehicle(spec, START_X, groundHeightAt(terrain, START_X), vehicleDef.color, vehicleDef.id);
   const world: World = {
     time: 0,
     status: 'running',
@@ -60,6 +69,7 @@ export function createWorld(seed: number, upgrades: UpgradeLevels): World {
     accumulator: 0,
     lastFeature: null,
     lastSpeed: 0,
+    mapBiomeIndex: mapDef.biomeIndex,
   };
   ensureTerrain(world, vehicle.pos.x);
   return world;
@@ -92,6 +102,7 @@ function physicsStep(world: World, dt: number): void {
     world.terrain,
     { gas: input.gas, brake: input.brake, hasFuel: world.fuel > 0 },
     dt,
+    world.status !== 'running'
   );
   updateAirState(world, contact, dt);
   if (!running) return;
@@ -108,7 +119,7 @@ function emitDust(world: World): void {
     const pipe = toWorld(vehicle.pos, vehicle.angle, EXHAUST_OFFSET);
     spawnDust(world, pipe, 1, 0.35, EXHAUST_COLOR);
   }
-  const color = paletteAt(world.stats.distance).dust;
+  const color = paletteAt(world.stats.distance, world.mapBiomeIndex).dust;
   for (const w of world.vehicle.wheels) {
     if (!w.grounded) continue;
     const speed = Math.abs(w.spin * w.radius);
@@ -196,7 +207,16 @@ export function buildRunResult(world: World, progress: SummitProgress): RunResul
 }
 
 /** Folds a finished run into persistent progress (pure). */
-export function applyRunToProgress(progress: SummitProgress, result: RunResult): SummitProgress {
+export function applyRunToProgress(progress: SummitProgress, result: RunResult, mapId?: string): SummitProgress {
+  const mapRecord = mapId ? progress.mapRecords[mapId] : null;
+  const bestMapDist = Math.max(mapRecord?.bestDistance ?? 0, result.distance);
+  const bestMapScore = Math.max(mapRecord?.bestScore ?? 0, result.score);
+
+  const newRecords = { ...progress.mapRecords };
+  if (mapId) {
+    newRecords[mapId] = { bestDistance: bestMapDist, bestScore: bestMapScore };
+  }
+
   return {
     ...progress,
     coins: progress.coins + result.coins,
@@ -204,6 +224,7 @@ export function applyRunToProgress(progress: SummitProgress, result: RunResult):
     bestScore: Math.max(progress.bestScore, result.score),
     totalRuns: progress.totalRuns + 1,
     totalDistance: progress.totalDistance + result.distance,
+    mapRecords: newRecords,
   };
 }
 

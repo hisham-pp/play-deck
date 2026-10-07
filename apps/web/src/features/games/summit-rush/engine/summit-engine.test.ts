@@ -24,7 +24,7 @@ function run(world: World, input: typeof GAS, seconds: number): void {
 }
 
 function features(seed: number, untilX: number): TerrainFeature[] {
-  const terrain = createTerrain(seed);
+  const terrain = createTerrain(seed, 1);
   const list: TerrainFeature[] = [];
   while (terrain.cursor.x < untilX) list.push(generateFeature(terrain, list.at(-1)?.kind ?? null));
   return list;
@@ -32,8 +32,8 @@ function features(seed: number, untilX: number): TerrainFeature[] {
 
 describe('Summit Rush — terrain', () => {
   it('is deterministic for a seed so online rivals share a course', () => {
-    const a = createTerrain(42);
-    const b = createTerrain(42);
+    const a = createTerrain(42, 1);
+    const b = createTerrain(42, 1);
     for (let i = 0; i < 30; i++) {
       generateFeature(a, null);
       generateFeature(b, null);
@@ -55,7 +55,7 @@ describe('Summit Rush — terrain', () => {
   it('never generates climbs steeper than stock tires can grip', () => {
     const maxSlope = BASE_GRIP * 0.95;
     for (let seed = 1; seed <= 10; seed++) {
-      const terrain = createTerrain(seed);
+      const terrain = createTerrain(seed, 1);
       while (terrain.cursor.x < 4000) generateFeature(terrain, null);
       const pts = terrain.points;
       for (let i = 1; i < pts.length; i++) {
@@ -70,7 +70,7 @@ describe('Summit Rush — terrain', () => {
   });
 
   it('interpolates height and reports circle / point contacts', () => {
-    const terrain = createTerrain(7);
+    const terrain = createTerrain(7, 1);
     const h = groundHeightAt(terrain, 5);
     assert.equal(h, 0);
     assert.equal(circleContact(terrain, { x: 5, y: 2 }, 0.5), null);
@@ -226,11 +226,16 @@ describe('Summit Rush — run rules', () => {
       totalRuns: 2,
       totalDistance: 300,
       upgrades: DEFAULT_UPGRADES,
+      unlockedVehicles: ['buggy'],
+      selectedVehicleId: 'buggy',
+      unlockedMaps: ['meadows'],
+      selectedMapId: 'meadows',
+      mapRecords: { meadows: { bestDistance: 100, bestScore: 0 } },
     };
-    const result = buildRunResult(world, progress);
+    const result = buildRunResult(world, progress as unknown as SummitProgress);
     assert.equal(result.isNewBest, true);
     assert.equal(result.reason, 'gap');
-    const next = applyRunToProgress(progress, result);
+    const next = applyRunToProgress(progress as unknown as SummitProgress, result, 'meadows');
     assert.deepEqual(
       [next.coins, next.bestDistance, next.totalRuns, next.totalDistance],
       [50, 123, 3, 423],

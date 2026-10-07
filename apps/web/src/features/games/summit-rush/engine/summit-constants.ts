@@ -10,6 +10,8 @@ export const GRAVITY = 13;
 export const CHASSIS_MASS = 160;
 export const CHASSIS_INERTIA = 240;
 export const CHASSIS_LINEAR_DRAG = 0.04;
+export const AERO_DRAG_COEFF = 0.015;
+export const AERO_DOWNFORCE_COEFF = 0.02;
 export const AIR_ANGULAR_DAMPING = 0.35;
 export const MAX_ANGULAR_VELOCITY = 7.5;
 export const AIR_CONTROL_TORQUE = 950;
@@ -70,10 +72,10 @@ export const FUEL_SPACING_START = 105;
 export const FUEL_SPACING_END = 175;
 
 // ── Crash / rollover detection ───────────────────────────
-export const FLIP_CRASH_TIME = 1.1;
-export const STALL_CRASH_TIME = 2.2;
-export const OUT_OF_FUEL_STALL_TIME = 2.2;
-export const CRASH_LINGER_TIME = 1.3;
+export const FLIP_CRASH_TIME = 0.5;
+export const STALL_CRASH_TIME = 1.5;
+export const OUT_OF_FUEL_STALL_TIME = 1.5;
+export const CRASH_LINGER_TIME = 0.6;
 export const GAP_FALL_DEPTH = 3.2;
 export const AIRBORNE_GRACE = 0.14;
 

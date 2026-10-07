@@ -1,15 +1,5 @@
 import {
-  BASE_BRAKE_TORQUE,
-  BASE_DRIVE_TORQUE,
   BASE_FUEL_CAPACITY,
-  BASE_GRIP,
-  BASE_MAX_SPIN,
-  BASE_REVERSE_SPIN,
-  BASE_SPRING_DAMPING,
-  BASE_SPRING_K,
-  BASE_SUSPENSION_MAX,
-  BASE_SUSPENSION_MIN,
-  BASE_SUSPENSION_REST,
 } from './summit-constants';
 import type { UpgradeId, UpgradeLevels, VehicleSpec } from './summit-types';
 
@@ -75,24 +65,24 @@ export function upgradeCost(info: UpgradeInfo, currentLevel: number): number | n
   return Math.round((info.baseCost * Math.pow(n, 1.55)) / 10) * 10;
 }
 
-export function buildVehicleSpec(levels: UpgradeLevels): VehicleSpec {
+export function buildVehicleSpec(levels: UpgradeLevels, baseSpec: VehicleSpec): VehicleSpec {
   const e = clampLevel(levels.engine);
   const s = clampLevel(levels.suspension);
   const t = clampLevel(levels.tires);
   const f = clampLevel(levels.fuel);
   const travel = 1 + s * SUSPENSION_STEP;
   return {
-    driveTorque: BASE_DRIVE_TORQUE * (1 + e * ENGINE_TORQUE_STEP),
-    maxWheelSpin: BASE_MAX_SPIN * (1 + e * ENGINE_SPEED_STEP),
-    reverseSpin: BASE_REVERSE_SPIN,
-    brakeTorque: BASE_BRAKE_TORQUE * (1 + e * 0.05),
-    springK: BASE_SPRING_K * (1 + s * 0.03),
-    springDamping: BASE_SPRING_DAMPING * (1 + s * SUSPENSION_STEP * 1.4),
-    suspensionRest: BASE_SUSPENSION_REST * (1 + s * 0.02),
-    suspensionMin: BASE_SUSPENSION_MIN,
-    suspensionMax: BASE_SUSPENSION_MAX * travel,
-    grip: BASE_GRIP * (1 + t * GRIP_STEP),
-    fuelCapacity: BASE_FUEL_CAPACITY * (1 + f * FUEL_STEP),
+    driveTorque: baseSpec.driveTorque * (1 + e * ENGINE_TORQUE_STEP),
+    maxWheelSpin: baseSpec.maxWheelSpin * (1 + e * ENGINE_SPEED_STEP),
+    reverseSpin: baseSpec.reverseSpin,
+    brakeTorque: baseSpec.brakeTorque * (1 + e * 0.05),
+    springK: baseSpec.springK * (1 + s * 0.03),
+    springDamping: baseSpec.springDamping * (1 + s * SUSPENSION_STEP * 1.4),
+    suspensionRest: baseSpec.suspensionRest * (1 + s * 0.02),
+    suspensionMin: baseSpec.suspensionMin,
+    suspensionMax: baseSpec.suspensionMax * travel,
+    grip: baseSpec.grip * (1 + t * GRIP_STEP),
+    fuelCapacity: baseSpec.fuelCapacity * (1 + f * FUEL_STEP),
   };
 }
 

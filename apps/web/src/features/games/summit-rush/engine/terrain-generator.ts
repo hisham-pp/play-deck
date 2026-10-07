@@ -44,11 +44,11 @@ function range(terrain: Terrain, min: number, max: number): number {
   return min + (max - min) * nextRandom(terrain);
 }
 
-export function difficultyAt(x: number): number {
-  return clamp(x / DIFFICULTY_RAMP_DISTANCE, 0, 1);
+export function difficultyAt(terrain: Terrain, x: number): number {
+  return clamp(x / DIFFICULTY_RAMP_DISTANCE, 0, 1) * terrain.difficultyMultiplier;
 }
 
-export function createTerrain(seed: number): Terrain {
+export function createTerrain(seed: number, difficultyMultiplier: number): Terrain {
   const terrain: Terrain = {
     points: [],
     seed,
@@ -56,6 +56,7 @@ export function createTerrain(seed: number): Terrain {
     cursor: { x: -40, y: 0 },
     nextFuelX: 70,
     gaps: [],
+    difficultyMultiplier,
   };
   terrain.points.push({ ...terrain.cursor });
   appendSpans(terrain, [{ len: 40 + START_FLAT_LENGTH, dy: 0 }], 0);
@@ -219,7 +220,7 @@ export function generateFeature(
   terrain: Terrain,
   previous: TerrainFeatureKind | null,
 ): TerrainFeature {
-  const d = difficultyAt(terrain.cursor.x);
+  const d = difficultyAt(terrain, terrain.cursor.x);
   const kind = pickKind(terrain, d, previous);
   const startX = terrain.cursor.x;
   if (kind === 'jump' || kind === 'gap') return appendJump(terrain, d, kind === 'gap');

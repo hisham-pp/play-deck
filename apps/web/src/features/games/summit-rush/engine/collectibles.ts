@@ -103,7 +103,7 @@ function placeFuel(world: World, feature: TerrainFeature): void {
   const terrain = world.terrain;
   if (terrain.nextFuelX > feature.endX) return;
   add(world, 'fuel', fuelPosition(world, feature));
-  const spacing = lerp(FUEL_SPACING_START, FUEL_SPACING_END, difficultyAt(feature.endX));
+  const spacing = lerp(FUEL_SPACING_START, FUEL_SPACING_END, difficultyAt(terrain, feature.endX));
   terrain.nextFuelX = feature.endX + spacing * (0.85 + nextRandom(terrain) * 0.3);
 }
 
