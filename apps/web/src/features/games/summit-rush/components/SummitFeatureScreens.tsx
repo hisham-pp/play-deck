@@ -5,7 +5,7 @@ import { VEHICLES } from '../engine/vehicles';
 import { MAPS } from '../engine/maps';
 function VehicleIcon({ id, className }: { id: string; className?: string }) {
   return (
-    <img src={`/images/vehicles/${id}-ui.png`} className={className} alt={id} style={{ objectFit: 'contain' }} />
+    <img src={`/images/vehicles/${id}-ui.png`} className={className} alt={id} style={{ objectFit: 'contain', transform: 'scaleX(-1)' }} />
   );
 }
 

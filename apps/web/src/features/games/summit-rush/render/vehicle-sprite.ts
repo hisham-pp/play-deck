@@ -214,9 +214,9 @@ function drawBody(ctx: CanvasRenderingContext2D, livery: Livery, modelId: string
     const width = 4.2;
     const height = width * (img.naturalHeight / img.naturalWidth);
     // The physics canvas has Y pointing UP. drawImage expects +Y to point DOWN.
-    // We flip the Y axis locally so the image draws right-side up.
+    // The generated images face LEFT, but the car drives RIGHT. We flip X as well!
     ctx.save();
-    ctx.scale(1, -1);
+    ctx.scale(-1, -1);
     // Draw the image. The physics y=-0.4 becomes y=0.4 in the flipped space.
     // We want the bottom of the image to sit at y=0.4, so the top is at 0.4 - height.
     ctx.drawImage(img, -2.1, 0.4 - height, width, height);
