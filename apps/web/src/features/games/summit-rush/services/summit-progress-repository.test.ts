@@ -10,10 +10,11 @@ import {
   upgradeCost,
 } from '../engine/upgrades';
 import {
-  LocalSummitProgressRepository,
+  HybridSummitProgressRepository,
   normalizeProgress,
   purchaseUpgrade,
 } from './summit-progress-repository';
+import { VEHICLES } from '../engine/vehicles';
 
 class MemoryStorageAdapter implements StorageAdapter {
   private map = new Map<string, unknown>();
@@ -53,17 +54,18 @@ describe('Summit Rush — upgrades', () => {
   });
 
   it('each upgrade improves its own stats', () => {
-    const base = buildVehicleSpec(DEFAULT_UPGRADES);
+    const baseSpec = VEHICLES[0].baseSpec;
+    const base = buildVehicleSpec(DEFAULT_UPGRADES, baseSpec);
     const max = MAX_UPGRADE_LEVEL;
     assert.ok(
-      buildVehicleSpec({ ...DEFAULT_UPGRADES, engine: max }).driveTorque > base.driveTorque,
+      buildVehicleSpec({ ...DEFAULT_UPGRADES, engine: max }, baseSpec).driveTorque > base.driveTorque,
     );
     assert.ok(
-      buildVehicleSpec({ ...DEFAULT_UPGRADES, suspension: max }).suspensionMax > base.suspensionMax,
+      buildVehicleSpec({ ...DEFAULT_UPGRADES, suspension: max }, baseSpec).suspensionMax > base.suspensionMax,
     );
-    assert.ok(buildVehicleSpec({ ...DEFAULT_UPGRADES, tires: max }).grip > base.grip);
+    assert.ok(buildVehicleSpec({ ...DEFAULT_UPGRADES, tires: max }, baseSpec).grip > base.grip);
     assert.ok(
-      buildVehicleSpec({ ...DEFAULT_UPGRADES, fuel: max }).fuelCapacity > base.fuelCapacity,
+      buildVehicleSpec({ ...DEFAULT_UPGRADES, fuel: max }, baseSpec).fuelCapacity > base.fuelCapacity,
     );
   });
 
@@ -96,14 +98,14 @@ describe('Summit Rush — progress repository', () => {
   });
 
   it('returns defaults when nothing is saved', async () => {
-    const repo = new LocalSummitProgressRepository();
+    const repo = new HybridSummitProgressRepository();
     const progress = await repo.load();
     assert.equal(progress.coins, 0);
     assert.deepEqual(progress.upgrades, DEFAULT_UPGRADES);
   });
 
   it('persists coins, upgrades and best distance', async () => {
-    const repo = new LocalSummitProgressRepository();
+    const repo = new HybridSummitProgressRepository();
     await repo.save(
       normalizeProgress({
         coins: 420,
@@ -111,7 +113,7 @@ describe('Summit Rush — progress repository', () => {
         upgrades: { ...DEFAULT_UPGRADES, tires: 3 },
       }),
     );
-    const loaded = await new LocalSummitProgressRepository().load();
+    const loaded = await new HybridSummitProgressRepository().load();
     assert.equal(loaded.coins, 420);
     assert.equal(loaded.bestDistance, 1337);
     assert.equal(loaded.upgrades.tires, 3);
@@ -134,7 +136,7 @@ describe('Summit Rush — progress repository', () => {
   });
 
   it('resets progress', async () => {
-    const repo = new LocalSummitProgressRepository();
+    const repo = new HybridSummitProgressRepository();
     await repo.save(normalizeProgress({ coins: 50 }));
     const reset = await repo.reset();
     assert.equal(reset.coins, 0);

@@ -5,6 +5,7 @@ export * from './storage';
 export * from './multiplayer';
 export * from './friend';
 export * from './chat';
+export * from './achievement';
 export * from './bot';
 export * from './voice';
 export * from './game-content';

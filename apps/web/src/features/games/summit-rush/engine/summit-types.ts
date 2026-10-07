@@ -71,6 +71,8 @@ export interface Terrain {
   nextFuelX: number;
   /** Gap rims used for fall detection and warning signs. */
   gaps: GapInfo[];
+  /** Map difficulty multiplier */
+  difficultyMultiplier: number;
 }
 
 export interface GapInfo {
@@ -172,6 +174,8 @@ export interface World {
   accumulator: number;
   lastFeature: TerrainFeatureKind | null;
   lastSpeed: number;
+  /** Fixed biome index for the selected map */
+  mapBiomeIndex: number;
 }
 
 export interface SummitProgress {
@@ -181,6 +185,11 @@ export interface SummitProgress {
   totalRuns: number;
   totalDistance: number;
   upgrades: UpgradeLevels;
+  unlockedVehicles: string[];
+  selectedVehicleId: string;
+  unlockedMaps: string[];
+  selectedMapId: string;
+  mapRecords: Record<string, { bestDistance: number; bestScore: number }>;
 }
 
 export interface RunResult {

@@ -123,8 +123,11 @@ export function biomeIndexAt(distance: number): number {
   return Math.floor(Math.max(0, distance) / BIOME_LENGTH) % BIOMES.length;
 }
 
-/** Palette at a distance, blending smoothly into the next biome. */
-export function paletteAt(distance: number): Biome {
+/** Palette at a distance, blending smoothly into the next biome. If fixedIndex is provided, forces that biome. */
+export function paletteAt(distance: number, fixedIndex?: number): Biome {
+  if (fixedIndex !== undefined && fixedIndex >= 0 && fixedIndex < BIOMES.length) {
+    return BIOMES[fixedIndex];
+  }
   const d = Math.max(0, distance);
   const index = Math.floor(d / BIOME_LENGTH);
   const from = BIOMES[index % BIOMES.length];

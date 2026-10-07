@@ -28,6 +28,8 @@ import {
   WHEEL_RADIUS,
   WHEEL_RESTITUTION,
   WHEEL_SPIN_DRAG,
+  AERO_DRAG_COEFF,
+  AERO_DOWNFORCE_COEFF,
 } from './summit-constants';
 import type { Terrain, Vec2, Vehicle, VehicleSpec, Wheel } from './summit-types';
 import { circleContact, pointContact } from './terrain-query';
@@ -98,7 +100,11 @@ function applySuspension(v: Vehicle, w: Wheel, dt: number, torque: { value: numb
 
   const extension = dot(delta, axis);
   const extRate = dot(rel, axis);
-  let axial = spec.springK * (extension - spec.suspensionRest) + spec.springDamping * extRate;
+  
+  // Progressive suspension: stiffer as it compresses further
+  const progressiveK = spec.springK * (1 + Math.max(0, -extension) * 0.5);
+  let axial = progressiveK * (extension - spec.suspensionRest) + spec.springDamping * extRate;
+  
   if (extension < spec.suspensionMin) {
     axial +=
       BUMP_STOP_STIFFNESS * (extension - spec.suspensionMin) + spec.springDamping * 2 * extRate;
@@ -229,7 +235,23 @@ export function stepVehicle(
 
   v.vel.y -= GRAVITY * dt;
   v.angVel += (torque.value / CHASSIS_INERTIA) * dt;
-  v.vel.x *= 1 - CHASSIS_LINEAR_DRAG * dt;
+  
+  // Aerodynamic drag (quadratic) and downforce
+  const speedSq = v.vel.x * v.vel.x + v.vel.y * v.vel.y;
+  const speed = Math.sqrt(speedSq);
+  if (speed > 0.1) {
+    const dragForce = speedSq * AERO_DRAG_COEFF;
+    v.vel.x -= (v.vel.x / speed) * (dragForce / CHASSIS_MASS) * dt;
+    v.vel.y -= (v.vel.y / speed) * (dragForce / CHASSIS_MASS) * dt;
+    
+    // Downforce pushes the car perpendicular to its hull (inward against terrain)
+    const downforce = speedSq * AERO_DOWNFORCE_COEFF;
+    const localDown = rotate({ x: 0, y: -1 }, v.angle);
+    v.vel.x += (localDown.x * downforce / CHASSIS_MASS) * dt;
+    v.vel.y += (localDown.y * downforce / CHASSIS_MASS) * dt;
+  }
+  
+  v.vel.x *= 1 - CHASSIS_LINEAR_DRAG * dt; // Base linear rolling friction
   v.angVel *= 1 - (airborne ? AIR_ANGULAR_DAMPING : GROUND_ANGULAR_DAMPING) * dt;
   v.angVel = clamp(v.angVel, -MAX_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY);
 

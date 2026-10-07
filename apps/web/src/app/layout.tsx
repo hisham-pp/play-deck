@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/next';
 import type { Metadata, Viewport } from 'next';
 import { Footer } from '@/components/layout/Footer';
 import { Navbar } from '@/components/layout/Navbar';
+import { AchievementToastOverlay } from '@/components/layout/AchievementToastOverlay';
 import './globals.css';
 
 const APP_NAME = 'PlayDeck';
@@ -120,6 +121,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <AchievementToastOverlay />
         <Analytics />
       </body>
     </html>

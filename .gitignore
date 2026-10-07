@@ -22,3 +22,4 @@ apps/web/CLAUDE.md
 
 # Generated game assets (see scripts/generate-word-chain-dictionary.mjs)
 apps/web/public/games/word-chain/dictionary/
+supabase/.temp

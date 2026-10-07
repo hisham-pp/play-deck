@@ -102,7 +102,7 @@ export function renderWorld(
   const shake = opts.reducedMotion ? 0 : camera.shake * MAX_SHAKE_PX;
   const shakeX = shake ? (Math.random() - 0.5) * shake : 0;
   const shakeY = shake ? (Math.random() - 0.5) * shake : 0;
-  const palette = paletteAt(camera.x - world.startX);
+  const palette = paletteAt(camera.x - world.startX, world.mapBiomeIndex);
 
   const view: ScreenView = {
     width: vp.width,
