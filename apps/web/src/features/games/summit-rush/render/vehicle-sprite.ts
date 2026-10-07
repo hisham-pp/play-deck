@@ -186,11 +186,34 @@ function drawWheel(ctx: CanvasRenderingContext2D, w: WheelPose): void {
   ctx.restore();
 }
 
-function drawDriver(ctx: CanvasRenderingContext2D, livery: Livery, crashed: boolean, modelId: string): void {
+function drawDriver(
+  ctx: CanvasRenderingContext2D,
+  livery: Livery,
+  crashed: boolean,
+  modelId: string,
+  squash: number = 0,
+  distance: number = 0
+): void {
   const driverY = modelId === 'speedster' ? -0.2 : modelId === 'climber' ? -0.05 : 0;
   ctx.save();
   ctx.translate(0, driverY);
   
+  // Legs (Dark pants)
+  ctx.strokeStyle = '#1e293b';
+  ctx.lineWidth = 0.16;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(-0.15, 0.38); // Hip
+  ctx.lineTo(0.2, 0.15); // Knee
+  // Foot (if crashed, legs flail)
+  if (crashed) {
+    ctx.lineTo(0.4, 0.4);
+  } else {
+    ctx.lineTo(0.4, 0.1); 
+  }
+  ctx.stroke();
+
   // Torso and arm reaching for the wheel.
   ctx.fillStyle = livery.jacket;
   ctx.beginPath();
@@ -200,6 +223,7 @@ function drawDriver(ctx: CanvasRenderingContext2D, livery: Livery, crashed: bool
   ctx.lineTo(-0.32, 0.92);
   ctx.closePath();
   ctx.fill();
+  
   ctx.strokeStyle = livery.jacket;
   ctx.lineWidth = 0.12;
   ctx.lineCap = 'round';
@@ -207,6 +231,7 @@ function drawDriver(ctx: CanvasRenderingContext2D, livery: Livery, crashed: bool
   ctx.moveTo(-0.1, 0.82);
   ctx.lineTo(0.28, 0.62);
   ctx.stroke();
+  
   ctx.strokeStyle = '#1f2937';
   ctx.lineWidth = 0.07;
   ctx.beginPath();
@@ -217,16 +242,21 @@ function drawDriver(ctx: CanvasRenderingContext2D, livery: Livery, crashed: bool
   const HELMET = '#f8fafc';
   const VISOR = '#0f172a';
 
-  const { x, y } = HEAD_OFFSET;
+  // Head bobbing based on distance and squash
+  const bobX = crashed ? 0 : Math.sin(distance * 3) * 0.03 + squash * 0.1;
+  const bobY = crashed ? 0 : Math.abs(Math.cos(distance * 3)) * 0.04 - squash * 0.2;
+  const hx = HEAD_OFFSET.x + bobX;
+  const hy = HEAD_OFFSET.y + bobY;
+
   ctx.fillStyle = HELMET;
   ctx.beginPath();
-  ctx.arc(x, y, HEAD_RADIUS, 0, Math.PI * 2);
+  ctx.arc(hx, hy, HEAD_RADIUS, 0, Math.PI * 2);
   ctx.fill();
   ctx.fillStyle = livery.trim;
-  ctx.fillRect(x - HEAD_RADIUS * 0.95, y + 0.02, HEAD_RADIUS * 1.2, 0.07);
+  ctx.fillRect(hx - HEAD_RADIUS * 0.95, hy + 0.02, HEAD_RADIUS * 1.2, 0.07);
   ctx.fillStyle = crashed ? '#ef4444' : VISOR;
   ctx.beginPath();
-  ctx.ellipse(x + 0.12, y - 0.02, 0.14, 0.1, 0, 0, Math.PI * 2);
+  ctx.ellipse(hx + 0.12, hy - 0.02, 0.14, 0.1, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.restore();
 }
@@ -257,7 +287,7 @@ export function drawVehicle(
         ctx.rotate(f.angle);
         
         if (f.partId === 'driver') {
-          drawDriver(ctx, livery, true, modelId);
+          drawDriver(ctx, livery, true, modelId, 0, f.pos.x);
         } else {
           ctx.scale(1, -1); // flip back for image drawing
           
@@ -284,7 +314,7 @@ export function drawVehicle(
     
     // Draw driver behind the image! For the Buggy, the windows are transparent,
     // so the driver will sit perfectly behind the roll cage.
-    drawDriver(ctx, livery, crashed, modelId);
+    drawDriver(ctx, livery, crashed, modelId, v.squash, v.pos.x);
 
     const img = getVehicleImage(modelId);
     if (img && img.complete && img.naturalWidth > 0) {
