@@ -41,9 +41,6 @@ export interface VehiclePose {
   fragments?: CarFragment[];
 }
 
-const TIRE = '#1f2430';
-const TIRE_TREAD = '#3a4150';
-const RIM = '#e2e8f0';
 const HUB = '#f59e0b';
 const vehicleImages: Record<string, HTMLImageElement> = {};
 

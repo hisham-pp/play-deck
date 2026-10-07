@@ -9,12 +9,12 @@ import {
   UPGRADES,
   upgradeCost,
 } from '../engine/upgrades';
+import { VEHICLES } from '../engine/vehicles';
 import {
   HybridSummitProgressRepository,
   normalizeProgress,
   purchaseUpgrade,
 } from './summit-progress-repository';
-import { VEHICLES } from '../engine/vehicles';
 
 class MemoryStorageAdapter implements StorageAdapter {
   private map = new Map<string, unknown>();
