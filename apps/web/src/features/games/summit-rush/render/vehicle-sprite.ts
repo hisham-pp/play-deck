@@ -206,25 +206,25 @@ function getVehicleImage(modelId: string): HTMLImageElement | null {
 }
 
 const SPRITE_CONFIGS: Record<string, { width: number; xOffset: number; yOffset: number }> = {
-  buggy: { width: 5.5, xOffset: -2.75, yOffset: 0.15 },
-  climber: { width: 5.8, xOffset: -2.9, yOffset: 0.3 },
-  speedster: { width: 5.6, xOffset: -2.8, yOffset: 0.1 },
+  buggy: { width: 3.4, xOffset: -1.7, yOffset: 0.15 },
+  climber: { width: 3.6, xOffset: -1.8, yOffset: 0.3 },
+  speedster: { width: 3.6, xOffset: -1.8, yOffset: 0.2 },
 };
 
 function drawBody(ctx: CanvasRenderingContext2D, livery: Livery, modelId: string): void {
   const img = getVehicleImage(modelId);
   if (img && img.complete && img.naturalWidth > 0) {
-    const config = SPRITE_CONFIGS[modelId] || { width: 5.5, xOffset: -2.75, yOffset: 0.2 };
+    const config = SPRITE_CONFIGS[modelId] || { width: 3.4, xOffset: -1.7, yOffset: 0.2 };
     const width = config.width;
     const height = width * (img.naturalHeight / img.naturalWidth);
     
     // The physics canvas has Y pointing UP. drawImage expects +Y to point DOWN.
-    // The generated images face LEFT, so we scale X by -1 to make them face RIGHT.
+    // The new images face RIGHT natively.
     ctx.save();
-    ctx.scale(-1, -1);
+    ctx.scale(1, -1);
     
     // config.yOffset is the physics Y coordinate where we want the center of the image.
-    // In scale(-1,-1) space, physics Y=0.2 becomes Y=-0.2.
+    // In scale(1,-1) space, physics Y=0.2 becomes Y=-0.2.
     const centerY = -config.yOffset;
     const drawY = centerY - height / 2;
     
