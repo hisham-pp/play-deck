@@ -210,19 +210,24 @@ export function drawVehicle(
         ctx.save();
         ctx.translate(f.pos.x, f.pos.y);
         ctx.rotate(f.angle);
-        ctx.scale(1, -1); // flip back for image drawing
         
-        const sx = f.nx * img.naturalWidth;
-        const sy = f.ny * img.naturalHeight;
-        const sw = f.nw * img.naturalWidth;
-        const sh = f.nh * img.naturalHeight;
-        
-        const dx = config.xOffset + f.nx * width;
-        const dy = drawY + f.ny * height;
-        const dw = f.nw * width;
-        const dh = f.nh * height;
-        
-        ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
+        if (f.partId === 'driver') {
+          drawDriver(ctx, livery, true, modelId);
+        } else {
+          ctx.scale(1, -1); // flip back for image drawing
+          
+          const sx = f.nx * img.naturalWidth;
+          const sy = f.ny * img.naturalHeight;
+          const sw = f.nw * img.naturalWidth;
+          const sh = f.nh * img.naturalHeight;
+          
+          const dx = config.xOffset + f.nx * width;
+          const dy = drawY + f.ny * height;
+          const dw = f.nw * width;
+          const dh = f.nh * height;
+          
+          ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
+        }
         ctx.restore();
       }
     }
@@ -232,18 +237,27 @@ export function drawVehicle(
     ctx.rotate(v.angle);
     ctx.scale(1 + v.squash * 0.05, 1 - v.squash * 0.1);
     
-    // We don't draw the stickman driver anymore because the AI art has no windows
-    // (except Buggy which is open, but AI art usually implies a driver or closed cabin).
+    // Draw driver behind the image if needed, or in front.
+    // For open cars like the Buggy, drawing it first makes it appear inside the seat if we had layers,
+    // but the image is flat. We'll just draw it first. If it overlaps, it might look like they are inside.
+    // Wait, the image is opaque, so if we draw the driver first, it will be hidden behind the car body!
+    // We MUST draw the driver after the image so they are visible!
+    
     const img = getVehicleImage(modelId);
     if (img && img.complete && img.naturalWidth > 0) {
       const config = SPRITE_CONFIGS[modelId] || { width: 3.4, xOffset: -1.7, yOffset: 0.2 };
       const width = config.width;
       const height = width * (img.naturalHeight / img.naturalWidth);
+      
+      ctx.save();
       ctx.scale(1, -1);
       const centerY = -config.yOffset;
       const drawY = centerY - height / 2;
       ctx.drawImage(img, config.xOffset, drawY, width, height);
+      ctx.restore();
     }
+    
+    drawDriver(ctx, livery, crashed, modelId);
     
     ctx.restore();
   }
